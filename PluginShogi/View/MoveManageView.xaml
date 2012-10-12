@@ -1,0 +1,66 @@
+﻿<Window x:Class="VoteSystem.PluginShogi.View.MoveManageView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:sm="clr-namespace:VoteSystem.PluginShogi.Model"
+        xmlns:svm="clr-namespace:VoteSystem.PluginShogi.ViewModel"
+        mc:Ignorable="d"
+        Title="将棋コントロール"
+        Height="308" Width="426">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Ragnarok.Presentation;component/Themes/Common.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- スタイル + コンテキストメニュー -->
+            <Style x:Key="variationStyle" TargetType="Label">
+                <Setter Property="Content" Value="{Binding Label}" />
+                <Setter Property="Padding" Value="1" />
+                <!--<Setter Property="IsHitTestVisible" Value="{Binding CanShow}" />-->
+                <Setter Property="ContextMenu">
+                    <Setter.Value>
+                        <ContextMenu>
+                            <MenuItem Header="この局面に移動"
+                                      CommandTarget="{Binding Path=PlacementTarget,
+                                                              RelativeSource={RelativeSource
+                                                              AncestorType=ContextMenu}}"
+                                      Command="{x:Static svm:Commands.MoveToVariationState}"
+                                      CommandParameter="{Binding}" />                
+                            <MenuItem Header="変化を自動的に再生"
+                                      CommandTarget="{Binding Path=PlacementTarget,
+                                                              RelativeSource={RelativeSource
+                                                              AncestorType=ContextMenu}}"
+                                      Command="{x:Static svm:Commands.PlayVariation}"
+                                      CommandParameter="{Binding}" />
+                        </ContextMenu>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- 一つの変化を表示します。-->
+            <DataTemplate x:Key="variationTemplate" DataType="sm:Variation">
+                <Label Style="{StaticResource variationStyle}"
+                       MouseDoubleClick="Variation_MouseDoubleClick">
+                </Label>
+            </DataTemplate>
+
+            <!-- 各状態の変化を並べます。-->
+            <HierarchicalDataTemplate x:Key="stateTemplate"
+                                      ItemsSource="{Binding VariationList}"
+                                      ItemTemplate="{StaticResource variationTemplate}">
+                <Label Content="{Binding Label}"
+                       Padding="1"
+                       IsHitTestVisible="True"
+                       MouseDoubleClick="State_MouseDoubleClick" />
+            </HierarchicalDataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid>
+        <TreeView Grid.Row="5" Grid.ColumnSpan="3"
+                  ItemsSource="{Binding MoveManager.CurrentStateList}"
+                  ItemTemplate="{StaticResource stateTemplate}" />
+    </Grid>
+</Window>

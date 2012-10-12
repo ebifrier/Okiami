@@ -1,0 +1,13 @@
+//
+//
+//
+
+package VoteSystem.Protocol.Vote;
+
+enum VoteMode { VoteMode_Unknown = 0; }
+
+message VoterList {}
+message VoteResult {}
+message VoteRoomInfo {}
+message VoteParticipantInfo {}
+message VoteLiveOwnerInfo {}

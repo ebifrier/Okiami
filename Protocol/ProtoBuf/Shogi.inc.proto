@@ -1,0 +1,8 @@
+//
+//
+//
+
+package Ragnarok.Shogi;
+
+message Board {}
+message Move {}

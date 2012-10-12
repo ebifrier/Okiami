@@ -1,0 +1,645 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A1036139-2DAE-4C31-9684-C5A0C5FDFC69}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VoteSystem.Client</RootNamespace>
+    <AssemblyName>VoteClient</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>VoteClient.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>VoteClient.xml</DocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>VoteClient.xml</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>VoteClient.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>VoteClient.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AppLimit.NetSparkle.Net40, Version=1.0.22.0, Culture=neutral, PublicKeyToken=5c5d0601981e3847, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\externals\AppLimit.NetSparkle.Net40.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="protobuf-net, Version=1.0.0.280, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Ragnarok\externals\net\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Command\Commands.cs" />
+    <Compile Include="Command\LiveCommands.cs" />
+    <Compile Include="Command\UtilCommand.cs" />
+    <Compile Include="Command\VoteCommands.cs" />
+    <Compile Include="IPlugin.cs" />
+    <Compile Include="Model\AddressPort.cs" />
+    <Compile Include="Model\CommenterCommentClient.cs" />
+    <Compile Include="Model\CommenterManager.cs" />
+    <Compile Include="Model\ConnectionCounter.cs" />
+    <Compile Include="Model\EndRollList.cs" />
+    <Compile Include="Model\ImageSetInfo.cs" />
+    <Compile Include="Model\InfoBase.cs" />
+    <Compile Include="Model\Live\LiveClient.cs" />
+    <Compile Include="Model\Live\LiveNicoClient.cs" />
+    <Compile Include="Model\MainModel.cs" />
+    <Compile Include="Model\SoundManager.cs" />
+    <Compile Include="Model\SystemMessage.cs" />
+    <Compile Include="Model\SoundSetInfo.cs" />
+    <Compile Include="Resources\Image\ImageConstants.cs" />
+    <Compile Include="Model\VoteClient.cs" />
+    <Compile Include="Global.cs" />
+    <Compile Include="Settings.part.cs" />
+    <Compile Include="UpdateChecker.cs" />
+    <Compile Include="ViewModel\EvaluateWindowViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\VoteResultWindowViewModel.cs" />
+    <Compile Include="ViewModel\VoteRoomInfoViewModel.cs" />
+    <Compile Include="View\Control\BoolToSignConverter.cs" />
+    <Compile Include="View\Control\CommenterSettingControl.xaml.cs">
+      <DependentUpon>CommenterSettingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MessageUtil.cs" />
+    <Compile Include="View\Control\EvaluationWindowSettingDialog.xaml.cs">
+      <DependentUpon>EvaluationWindowSettingDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\LiveOwnerControl.xaml.cs">
+      <DependentUpon>LiveOwnerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\SoundSettingControl.xaml.cs">
+      <DependentUpon>SoundSettingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\SystemMessageSettingControl.xaml.cs">
+      <DependentUpon>SystemMessageSettingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\VoteRoomMeConverter.cs" />
+    <Compile Include="View\Control\VoteRoomOwnerConverter.cs" />
+    <Compile Include="View\Control\VoteControl.xaml.cs">
+      <DependentUpon>VoteControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\VoteLoginControl.xaml.cs">
+      <DependentUpon>VoteLoginControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\VoteRoomWithParticipantConverter.cs" />
+    <Compile Include="View\Control\PointToStringConverter.cs" />
+    <Compile Include="View\EndRollWindow.xaml.cs">
+      <DependentUpon>EndRollWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EvaluationWindow.xaml.cs">
+      <DependentUpon>EvaluationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
+    <Compile Include="View\SelectImageWindow.xaml.cs">
+      <DependentUpon>SelectImageWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingDialog.xaml.cs">
+      <DependentUpon>SettingDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SplashWindow.xaml.cs">
+      <DependentUpon>SplashWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TimeSpanWindow.xaml.cs">
+      <DependentUpon>TimeSpanWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\VoteResultSettingDialog.xaml.cs">
+      <DependentUpon>VoteResultSettingDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\VoteResultWindow.xaml.cs">
+      <DependentUpon>VoteResultWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VoteClientException.cs" />
+    <Page Include="View\Control\EvaluationWindowSettingDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Control\InfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Control\LiveControlTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Control\SoundSettingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Control\SystemMessageSettingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EndRollWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\EvaluationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SettingDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SplashWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TimeSpanWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\VoteResultSettingDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\VoteResultWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Resource Include="View\CommonDictionary.xaml">
+      <SubType>Designer</SubType>
+    </Resource>
+    <Page Include="View\Control\CommenterSettingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Control\LiveOwnerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Control\VoteControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Control\VoteLoginControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Control\VoteRoomInfoTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\SelectImageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Resource Include="Resources\Image\vote_addtotaltime.png" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Data\Image\Hassy\info.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\IbukiSuika\info.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Ruka\info.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\info.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\info.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="VoteClient.exe.nlog">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="VoteClient.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Ragnarok\Ragnarok.Extra\Ragnarok.Extra.csproj">
+      <Project>{8EBDC79A-607B-4B56-A298-1471CD6753DB}</Project>
+      <Name>Ragnarok.Extra</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ragnarok\Ragnarok.Presentation\Ragnarok.Presentation.csproj">
+      <Project>{2E5515A8-7B34-44A2-9C50-F423C5F87798}</Project>
+      <Name>Ragnarok.Presentation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ragnarok\Ragnarok.Shogi\Ragnarok.Shogi.csproj">
+      <Project>{38ABBDA5-B22F-41B7-A415-2A909D0A6A35}</Project>
+      <Name>Ragnarok.Shogi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ragnarok\Ragnarok\Ragnarok.csproj">
+      <Project>{A348968A-DD91-47B4-9420-C7D370A2BE92}</Project>
+      <Name>Ragnarok</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Protocol\Protocol.csproj">
+      <Project>{06216C89-D40E-417D-847B-A4D982472D8C}</Project>
+      <Name>Protocol</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 および x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows インストーラー 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ikpFlac.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ikpMP3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Resources\Image\clear_evaluation.png" />
+    <Resource Include="Resources\Image\endroll_close.png" />
+    <Resource Include="Resources\Image\endroll_start.png" />
+    <Resource Include="Resources\Image\clear_time_extend.png" />
+    <Resource Include="Resources\Image\clear_vote.png" />
+    <Resource Include="Resources\Image\endroll_pause.png" />
+    <Resource Include="Resources\Image\endroll_stop.png" />
+    <Resource Include="Resources\Image\has_password.png" />
+    <Resource Include="Resources\Image\koma\koma_cat_b.png" />
+    <Resource Include="Resources\Image\koma\koma_cat_g.png" />
+    <Resource Include="Resources\Image\koma\koma_cat_k.png" />
+    <Resource Include="Resources\Image\koma\koma_cat_o.png" />
+    <Resource Include="Resources\Image\koma\koma_cat_p.png" />
+    <Resource Include="Resources\Image\koma\koma_cat_pi.png" />
+    <Resource Include="Resources\Image\koma\koma_cat_r.png" />
+    <Resource Include="Resources\Image\koma\koma_cat_w.png" />
+    <Resource Include="Resources\Image\koma\koma_cat_y.png" />
+    <Resource Include="Resources\Image\koma\koma_moe_gyoku.png" />
+    <Resource Include="Resources\Image\koma\koma_noimage.png" />
+    <Resource Include="Resources\Image\koma\koma_panda_b.png" />
+    <Resource Include="Resources\Image\koma\koma_panda_g.png" />
+    <Resource Include="Resources\Image\koma\koma_panda_k.png" />
+    <Resource Include="Resources\Image\koma\koma_panda_o.png" />
+    <Resource Include="Resources\Image\koma\koma_panda_p.png" />
+    <Resource Include="Resources\Image\koma\koma_panda_pi.png" />
+    <Resource Include="Resources\Image\koma\koma_panda_r.png" />
+    <Resource Include="Resources\Image\koma\koma_panda_w.png" />
+    <Resource Include="Resources\Image\koma\koma_panda_y.png" />
+    <Resource Include="Resources\Image\koma\koma_pig_b.png" />
+    <Resource Include="Resources\Image\koma\koma_pig_g.png" />
+    <Resource Include="Resources\Image\koma\koma_pig_k.png" />
+    <Resource Include="Resources\Image\koma\koma_pig_o.png" />
+    <Resource Include="Resources\Image\koma\koma_pig_p.png" />
+    <Resource Include="Resources\Image\koma\koma_pig_pi.png" />
+    <Resource Include="Resources\Image\koma\koma_pig_r.png" />
+    <Resource Include="Resources\Image\koma\koma_pig_w.png" />
+    <Resource Include="Resources\Image\koma\koma_pig_y.png" />
+    <Resource Include="Resources\Image\koma\koma_rabbit_b.png" />
+    <Resource Include="Resources\Image\koma\koma_rabbit_g.png" />
+    <Resource Include="Resources\Image\koma\koma_rabbit_k.png" />
+    <Resource Include="Resources\Image\koma\koma_rabbit_o.png" />
+    <Resource Include="Resources\Image\koma\koma_rabbit_p.png" />
+    <Resource Include="Resources\Image\koma\koma_rabbit_pi.png" />
+    <Resource Include="Resources\Image\koma\koma_rabbit_r.png" />
+    <Resource Include="Resources\Image\koma\koma_rabbit_w.png" />
+    <Resource Include="Resources\Image\koma\koma_rabbit_y.png" />
+    <Resource Include="Resources\Image\voteroom_me.png" />
+    <Resource Include="Resources\Image\voteroom_owner.png" />
+    <Resource Include="Resources\Image\vote_addtime.png" />
+    <Resource Include="Resources\Image\vote_create.png" />
+    <Resource Include="Resources\Image\vote_create_local.png" />
+    <Resource Include="Resources\Image\vote_create_network.png" />
+    <Resource Include="Resources\Image\vote_enter_network.png" />
+    <Resource Include="Resources\Image\vote_leave.png" />
+    <Resource Include="Resources\Image\vote_pause.png" />
+    <Resource Include="Resources\Image\vote_settime.png" />
+    <Resource Include="Resources\Image\vote_start.png" />
+    <Resource Include="Resources\Image\vote_start_nolimit.png" />
+    <Resource Include="Resources\Image\vote_state_end.png" />
+    <Resource Include="Resources\Image\vote_state_pause.png" />
+    <Resource Include="Resources\Image\vote_state_stop.png" />
+    <Resource Include="Resources\Image\vote_state_voting.png" />
+    <Resource Include="Resources\Image\vote_stop.png" />
+    <Content Include="Data\EndRoll\endroll_format.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Hassy\atama_kakaeru.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Hassy\default.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Hassy\kaisuiyoku.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Hassy\kiri.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Hassy\kocchi_minna.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Hassy\majime.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Hassy\peace.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Hassy\yankee1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Hassy\yankee2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\IbukiSuika\aseru.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\IbukiSuika\default.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\IbukiSuika\egao.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\IbukiSuika\ikari.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\IbukiSuika\kanasi.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\IbukiSuika\kirai.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\IbukiSuika\naku.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\IbukiSuika\odoroku.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\IbukiSuika\seme.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\IbukiSuika\suki.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\IbukiSuika\tereru.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\IbukiSuika\uke.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Ruka\default.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Ruka\ehehe.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Ruka\naku.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Ruka\nikkori.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Ruka\tako.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Ruka\uu.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Ruka\yabai.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Ruka\yatta.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Image\Ruka\zetubou.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\1.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\10.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\2.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\3.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\30byou.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\4.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\40byou.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\5.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\50byou.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\6.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\7.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\8.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\9.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\nokori_1min.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\nokori_2min.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\nokori_3min.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\vote_end.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\vote_pause.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\vote_start.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\ai\vote_stop.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\1.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\10.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\2.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\3.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\30byou.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\4.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\40byou.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\5.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\50byou.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\6.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\7.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\8.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\9.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\nokori_1min.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\nokori_2min.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\nokori_3min.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Sound\amiami\vote_end.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

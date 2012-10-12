@@ -1,0 +1,49 @@
+﻿<Window x:Class="VoteSystem.PluginShogi.View.ShogiSettingDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+        xmlns:sd="clr-namespace:VoteSystem.PluginShogi.View.Detail"
+        mc:Ignorable="d" 
+        Title="設定ダイアログ" ResizeMode="NoResize"
+        d:DesignHeight="441" d:DesignWidth="342" SizeToContent="WidthAndHeight">
+    
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Detail/BanSettingControl.xaml" />
+                <ResourceDictionary Source="Detail/EffectSettingControl.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid Width="300">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="0" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <TabControl>
+            <TabItem Header="画像設定">
+                <StaticResource ResourceKey="banSettingControl" />
+            </TabItem>
+
+            <TabItem Header="エフェクト設定">
+                <StaticResource ResourceKey="effectSettingControl" />
+            </TabItem>
+        </TabControl>
+        
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Margin="5,5,5,5" MinWidth="50"
+                    Content="ＯＫ"
+                    Command="{x:Static rp:DialogCommands.OK}" />
+            <Button Margin="5,5,5,5"
+                    Content="キャンセル"
+                    Command="{x:Static rp:DialogCommands.Cancel}" />
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,15 @@
+syntax: glob
+obj/
+bin/
+Client/VoteClient.xml
+Protocol/VoteProtocol.xml
+Server/VoteServer.xml
+*.user
+*.suo
+Client/Data/Image/AKB48_2011
+PluginShogi/Resources/Image/koma/
+_ReSharper.VoteSystem/
+ShogiApp/
+document/
+syntax: regexp
+dist/VoteClient_[0-9_]+

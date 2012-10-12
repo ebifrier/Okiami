@@ -1,0 +1,55 @@
+//
+//
+//
+
+import "Protocol.inc.proto";
+
+package VoteSystem.Protocol.Commenter;
+
+
+///////////////////////////////////////////////////////////
+//
+// コメンター関係のコマンドです。
+//
+
+// 新たな放送が開始したことを各クライアントに通知します。
+// サーバーからクライアントに送られます。
+message NotifyNewLiveCommand {
+	required LiveData Live = 1;
+}
+
+// 放送の接続が切れたことを各クライアントに通知します。
+// サーバーからクライアントに送られます。
+message NotifyClosedLiveCommand {
+	required LiveData Live = 1;
+}
+
+// この放送に接続し、コメント投稿可能な状態になったことを通知します。
+// クライアントからサーバーに送られます。
+message LiveConnectedCommand {
+	required LiveData Live = 1;
+	required int32 LiveRoom = 2;
+}
+
+// この放送から切断され、コメント投稿不可能な状態になったことを通知します。
+// クライアントからサーバーに送られます。
+message LiveDisconnectedCommand {
+	required LiveData Live = 1;
+}
+
+// コメンターの状態が変わったことを通知します。
+// クライアントからサーバーに送られます。
+message CommenterStateChangedCommand {
+	required LiveData Live = 1;
+
+	required bool CanPostComment = 2;
+	required bool IsWatching = 3;
+}
+
+// 放送への投稿用通知です。
+// サーバーからクライアントに送られます。
+message NotificationForPostCommand {
+	required Notification Notification = 1;
+	
+	required LiveData ToLive = 2;
+}

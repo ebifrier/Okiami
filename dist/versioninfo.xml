@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"
+     xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+  <channel>
+    <title>VoteSystem</title>
+    <link>
+      http://garnet-alice.net/programs/votesystem/update/versioninfo.xml
+    </link>
+    <description/>
+    <language>ja</language>
+    <pubDate>Sat Oct 06 02:00:33 +0900 2012</pubDate>
+    <item>
+      <title>Version 1.0.19</title>
+      <sparkle:releaseNotesLink>
+        http://garnet-alice.net/programs/votesystem/update/release_note.html?v=88784
+      </sparkle:releaseNotesLink>
+      <enclosure url="http://garnet-alice.net/programs/votesystem/download/VoteClient_1_0_19.zip"
+                 sparkle:version="1.0.19"
+                 sparkle:md5Signature="9ed22da71a83cf7579e3fdf7343d9979" />
+    </item>
+  </channel>
+</rss>

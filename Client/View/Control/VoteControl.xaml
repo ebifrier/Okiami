@@ -1,0 +1,212 @@
+﻿<UserControl x:Class="VoteSystem.Client.View.Control.VoteControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+             xmlns:vp="clr-namespace:VoteSystem.Protocol.Vote;assembly=VoteProtocol"
+             xmlns:l="clr-namespace:VoteSystem.Client"
+             xmlns:c="clr-namespace:VoteSystem.Client.Command"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="304">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../CommonDictionary.xaml" />
+                <ResourceDictionary Source="./VoteRoomInfoTemplate.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- 投票モードを表示するコンボボックスのスタイルです。-->
+            <Style x:Key="voteModeComboStyle" TargetType="ComboBox">
+                <Setter Property="Width" Value="60" />
+                <Setter Property="SelectedIndex" Value="0" />
+                <Setter Property="IsEditable" Value="False" />
+                <Setter Property="IsReadOnly" Value="True" />
+                <Setter Property="IsEnabled" Value="False" />
+
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsVoteRoomOwner}" Value="True" />
+                            <Condition Binding="{Binding VoteState}" Value="Stop" />
+                        </MultiDataTrigger.Conditions>
+                        <Setter Property="IsEnabled" Value="True" />
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <StackPanel Orientation="Vertical">
+        <!-- メニューバー -->
+        <DockPanel>
+            <!-- 投票ルーム用のツールバーです。-->
+            <ToolBar DockPanel.Dock="Top">
+                <Label Content="モード:" />
+                <ComboBox Style="{StaticResource voteModeComboStyle}"
+                          ItemsSource="{p:EnumList vp:VoteMode}"
+                          SelectedValue="{Binding CurrentVoteMode}"
+                          SelectedValuePath="Value"
+                          DisplayMemberPath="Label"
+                          ToolTip="投票モードを選択します"
+                          IsReadOnly="True" />
+
+                <Separator />
+
+                <!-- 投票状態をアイコンで表示します。-->
+                <Label Content="投票状態:" />
+                <Image Width="16" Height="16"
+                       Margin="2,0,2,0"
+                       VerticalAlignment="Center"
+                       Source="{Binding VoteStateImageUri}"
+                       ToolTip="{Binding VoteStateText}" />
+                <TextBlock VerticalAlignment="Center"
+                           Foreground="#FF2F2F2F">
+                    [<TextBlock Text="{Binding VoteStateText}" />]
+                </TextBlock>
+            </ToolBar>
+
+            <!-- 投票ルームのオーナー用ツールバーです。-->
+            <ToolBar DockPanel.Dock="Bottom"
+                     IsEnabled="{Binding IsVoteRoomOwner}">
+                <Button Style="{StaticResource voteButtonStyle}"
+                        Content="pack://application:,,,/Resources/Image/vote_start.png"
+                        ToolTip="時間制限つきで投票を開始します。"
+                        Command="{x:Static c:Commands.StartVoteWithLimit}" />
+                <Button Style="{StaticResource voteButtonStyle}"
+                        Content="pack://application:,,,/Resources/Image/vote_start_nolimit.png"
+                        ToolTip="時間制限無しで投票を開始します。"
+                        Command="{x:Static c:Commands.StartVoteWithNolimit}" />
+                <Button Style="{StaticResource voteButtonStyle}"
+                        Content="pack://application:,,,/Resources/Image/vote_stop.png"
+                        ToolTip="投票を終了し、残り時間を０にします。"
+                        Command="{x:Static c:Commands.StopVote}" />
+                <Button Style="{StaticResource voteButtonStyle}"
+                        Content="pack://application:,,,/Resources/Image/vote_pause.png"
+                        ToolTip="投票を一時停止します。"
+                        Command="{x:Static c:Commands.PauseVote}" />
+                <Button Style="{StaticResource voteButtonStyle}"
+                        Content="pack://application:,,,/Resources/Image/clear_vote.png"
+                        ToolTip="投票結果をクリアします。"
+                        Command="{x:Static c:Commands.ClearVote}" />
+
+                <Separator />
+
+                <Button Style="{StaticResource voteButtonStyle}"
+                        Content="pack://application:,,,/Resources/Image/vote_settime.png"
+                        ToolTip="残り時間を再設定します。"
+                        Command="{x:Static c:Commands.SetVoteSpan}" />
+                <Button Style="{StaticResource voteButtonStyle}"
+                        Content="pack://application:,,,/Resources/Image/vote_addtime.png"
+                        ToolTip="残り時間を追加します。"
+                        Command="{x:Static c:Commands.AddVoteSpan}" />
+                <Button Style="{StaticResource voteButtonStyle}"
+                        Content="pack://application:,,,/Resources/Image/vote_addtotaltime.png"
+                        ToolTip="持ち時間を追加します。"
+                        Command="{x:Static c:Commands.AddTotalVoteSpan}" />
+                <Button Style="{StaticResource voteButtonStyle}"
+                        Content="pack://application:,,,/Resources/Image/clear_time_extend.png"
+                        ToolTip="延長要求をクリアします。"
+                        Command="{x:Static c:Commands.ClearTimeExtendDemand}" />
+
+                <Separator />
+
+                <Button Style="{StaticResource voteButtonStyle}"
+                    Content="pack://application:,,,/Resources/Image/clear_evaluation.png"
+                    ToolTip="評価値をクリアします。"
+                    Command="{x:Static c:Commands.ClearEvaluationPoint}" />
+            </ToolBar>
+        </DockPanel>
+
+        <Separator Margin="0,0,0,0" />
+
+        <!-- 残り時間などを表示するパネル -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,0,10,0">
+                <Label Content="残り時間:" />
+                <Label Content="{Binding VoteLeaveTimeString}"
+                       VerticalContentAlignment="Center"
+                       Background="{Binding VoteLeaveTimeBackgroundColor,
+                                            Converter={StaticResource brushConverter}}" />
+            </StackPanel>
+            
+            <Button Style="{StaticResource voteButtonStyle}"
+                    HorizontalAlignment="Right"
+                    Background="White"
+                    Content="pack://application:,,,/Resources/Image/vote_leave.png"
+                    ToolTip="ルームから退出します。"
+                    Command="{x:Static c:Commands.LeaveVoteRoom}" />
+        </StackPanel>
+
+        <Separator Margin="0,0,0,0" />
+
+        <!-- 一言メッセージ -->
+        <Expander Header="一言メッセージを設定">
+            <GroupBox Padding="0,6,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Column="0"
+                             Text="{Binding MessageString}" />
+                    <Button Grid.Column="1"
+                            Content="設定" MinWidth="40"
+                            ToolTip="一言メッセージを設定します。"
+                            Command="{x:Static c:Commands.SetMessage}"
+                            CommandParameter="{Binding MessageString}" />
+                </Grid>
+            </GroupBox>
+        </Expander>
+
+        <!-- 投票ルームに通知を送るときのコントロールなど -->
+        <Expander Header="投票ルームに通知を送信"
+                  Visibility="{x:Static l:Global.IsNonPublishedVisibility}">
+            <GroupBox Padding="0,6,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+            
+                    <TextBox Grid.Column="0"
+                                Text="{Binding NotificationString}" />
+                    <Button Grid.Column="1"
+                            Content="送信" MinWidth="40"
+                            ToolTip="。"
+                            Command="{x:Static c:Commands.SendNotification}"
+                            CommandParameter="{Binding SendNotificationParameter}" />
+                </Grid>
+
+                <!--<Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0"
+                            HorizontalAlignment="Right"
+                            Content="テンプレ:" />
+                    <ComboBox Grid.Column="1"
+                                SelectedIndex="0" Width="120"
+                                HorizontalContentAlignment="Right"
+                                VerticalAlignment="Center">
+                        <ComboBox.Items>
+                            <ComboBoxItem Content="投票参加" />
+                            <ComboBoxItem Content="メッセージ拡散" />
+                        </ComboBox.Items>
+                    </ComboBox>
+                </Grid>-->
+            </GroupBox>
+        </Expander>
+
+        <!-- ルームにログインしているメンバー一覧 -->
+        <Border BorderBrush="Gray"
+                BorderThickness="1.2">
+            <ContentControl ContentTemplate="{StaticResource voteRoomInfoTemplate}"
+                            Content="{Binding VoteRoomInfo}" />
+        </Border>        
+    </StackPanel>
+</UserControl>

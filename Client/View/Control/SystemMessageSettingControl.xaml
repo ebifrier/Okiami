@@ -1,0 +1,101 @@
+﻿<UserControl x:Class="VoteSystem.Client.View.Control.SystemMessageSettingControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:l="clr-namespace:VoteSystem.Client"
+             xmlns:m="clr-namespace:VoteSystem.Client.Model"
+             xmlns:c="clr-namespace:VoteSystem.Client.Command"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../CommonDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <!-- 一つのシステムメッセージに対応する設定コントロール -->
+            <DataTemplate x:Key="messageTemplate" DataType="{x:Type m:SystemMessage}">
+                <StackPanel Orientation="Vertical">
+                    <CheckBox Content="コメントを投稿する"
+                              IsChecked="{Binding IsPostComment}"/>
+                    <GroupBox Header="コメント投稿"
+                              IsEnabled="{Binding IsPostComment}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            
+                            <!--<CheckBox Content="運営コメントとして投稿" />-->
+                            <Label Grid.Row="0" Grid.Column="0"
+                                   HorizontalAlignment="Right"
+                                   Content="名前:" />
+                            <TextBox Grid.Row="0" Grid.Column="1"
+                                     Text="{Binding CommentName}" />
+                            <Label Grid.Row="1" Grid.Column="0"
+                                   HorizontalAlignment="Right"
+                                   Content="コメント:" />
+                            <TextBox Grid.Row="1" Grid.Column="1"
+                                     Text="{Binding CommentText}" />
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </DataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Orientation="Vertical">
+            <Expander Header="投票開始メッセージ"
+                      IsExpanded="True">
+                <GroupBox Header="設定">
+                    <ContentControl
+                        Content="{Binding VoteStartSystemMessage, Source={x:Static l:Global.Settings}}"
+                        ContentTemplate="{StaticResource messageTemplate}" />
+                </GroupBox>
+            </Expander>
+
+            <Expander Header="投票停止メッセージ"
+                      IsExpanded="True">
+                <GroupBox Header="設定">
+                    <ContentControl
+                        Content="{Binding VoteStopSystemMessage, Source={x:Static l:Global.Settings}}"
+                        ContentTemplate="{StaticResource messageTemplate}" />
+                </GroupBox>
+            </Expander>
+
+            <Expander Header="投票一時停止メッセージ"
+                      IsExpanded="True">
+                <GroupBox Header="設定">
+                    <ContentControl
+                        Content="{Binding VotePauseSystemMessage, Source={x:Static l:Global.Settings}}"
+                        ContentTemplate="{StaticResource messageTemplate}" />
+                </GroupBox>
+            </Expander>
+
+            <Expander Header="投票終了メッセージ"
+                      IsExpanded="True">
+                <GroupBox Header="設定">
+                    <ContentControl
+                        Content="{Binding VoteEndSystemMessage, Source={x:Static l:Global.Settings}}"
+                        ContentTemplate="{StaticResource messageTemplate}" />
+                </GroupBox>
+            </Expander>
+
+            <Expander Header="投票時間変更メッセージ"
+                      IsExpanded="True">
+                <GroupBox Header="設定">
+                    <ContentControl
+                        Content="{Binding ChangeVoteSpanSystemMessage, Source={x:Static l:Global.Settings}}"
+                        ContentTemplate="{StaticResource messageTemplate}" />
+                </GroupBox>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

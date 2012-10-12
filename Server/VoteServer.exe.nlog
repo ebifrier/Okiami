@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <variable name="logDirectory" value="${basedir}/logs"/>
+
+  <targets>
+    <target name="console" xsi:type="Console"/>
+
+    <!-- Rename the log file if the size exceeds larger than 1GB. -->
+    <target name="file" xsi:type="File"
+            archiveAboveSize="1073741824"
+            concurrentWrites="false"
+            fileName="${logDirectory}/server.log"
+            layout="${date}|${level}|th=${threadid}| ${message}">
+    </target>
+
+    <target name="file_err" xsi:type="File"
+            archiveAboveSize="1073741824"
+            concurrentWrites="false"
+            fileName="${logDirectory}/server.err">
+      <layout xsi:type="SimpleLayout"
+              text="${newline}エラー!!!${newline}  内容: ${message}${newline}  日付: ${longdate}${newline}  スレッド: ${threadid}${newline}  場所: ${stacktrace:format=Raw}  例外: ${repeated-exception:format=Type,Message,StackTrace:separator=\: }">
+      </layout>
+    </target>
+  </targets>
+
+  <rules>
+    <logger minlevel="Debug" writeTo="console" />
+    <logger minlevel="Debug" writeTo="file" />
+    <logger minlevel="Error" writeTo="file_err" />
+  </rules>
+</nlog>

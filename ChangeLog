@@ -1,0 +1,959 @@
+2012-10-08  - Ver 1.0.19.1
+
+	* PluginShogi/View/Detail/BanSettingControl.xaml: 盤の不透明度の表
+	示を必ず下二桁表示するようにしました。今までは一桁だったり二桁だっ
+	たりと数字によって表示桁数が変わっていました。
+	* PluginShogi/View/MainWindow.xaml: 変化の自動再生時に画面を青くす
+	るようにしました。
+	* PluginShogi/ViewModel/ShogiWindowViewModel.cs: 変化の自動再生時に
+	手動で駒を動かせないようにしました。
+	* Server/VoteModel.cs: 「もう結構です」や「もっともっと」の判定を修
+	正し、より厳密な判定方法をとるようにしました。そうしないと意図しな
+	いコメントで延長要求がかかってしまうからです。
+	* Server/VoteStrategy/ShogiVoteStrategy.cs: 大合神クジラちゃんから
+	評価値を受け取るようにしました。
+
+2012-10-06  - Ver 1.0.19.0
+
+	* PluginShogi/ShogiPlugin.cs: 投票ルームログイン時に局面を変更しな
+	いようにしました。意図しない局面になるのを防ぐためです。
+	* Server/VoteModel.cs: 延長要求で変わる時間を２分にしました。
+	* バージョンを1.0.19.0に上げました。
+
+2012-10-05  - Ver 1.0.18.1
+
+	* Server/LiveRoom.cs: 投票コメントのみ'　'の区切りを生かすようにし
+	ました。
+
+2012-09-29  - Ver 1.0.18.0
+
+	* バージョンを1.0.18に上げました。
+
+2012-09-28  - Ver 1.0.17.2
+
+	* PluginShogi/ViewModel/Commands.cs: 記譜の貼り付けやドラッグ＆ドロ
+	ップで棋譜を読み込めるようにしました。
+	* PluginShogi/View/Detail/EffectSettingControl.xaml: 将棋設定ダイア
+	ログのエフェクト項目を少し修正しました。
+
+2012-09-24  - Ver 1.0.17.1
+
+	* Server/VoteParticipant.cs: ロックを追加しました。
+	* Server/LiveRoomManager.cs: 放送主の登録を行うようにしました。
+	* Server/VoteRoom.cs, Server/LiveRoomManager.cs: NotifyObjectを継承
+	するようにしました。
+
+2012-09-22  - Ver 1.0.17.0
+
+	* バージョンを1.0.17に上げました。
+
+2012-09-15  - Ver 1.0.16.0
+
+	* バージョンを1.0.16に上げました。
+
+2012-09-14  - Ver 1.0.15.1
+
+	* Server/VoteTimeKeeper.cs: 全投票時間機能のバグを修正しました。
+	* Server/VoteModel.cs: "もっともっと"で投票時間を延長、"もう結構で
+	す"で投票時間を短縮するようにしました。
+
+2012-09-08  - Ver 1.0.15.0
+
+	* バージョンを1.0.15に上げました。
+
+2012-09-08  - Ver 1.0.14.4
+
+	* Client/View/Control/VoteControl.xaml: 全投票時間の時間追加ボタン
+	を追加しました。
+	* Client/View/VoteResultWindow.xaml: 全投票時間を表示するようにしま
+	した。
+	* Server/VoteTimeKeeper.cs: 全投票時間の機能が正しく動くようにしま
+	した。
+
+2012-09-08  - Ver 1.0.14.3
+
+	* Protocol/ProtoBuf/VoteProtocol.proto: 全投票時間の操作コマンドを
+	追加しました。
+	* Server/VoteTimeKeeper.cs: 全投票時間の操作コマンドを実装しました。
+	* Server/Program.cs: Null例外が発生しないようにしました。
+
+2012-09-05  - Ver 1.0.14.2
+
+	* 少しソースを見直しました。
+
+2012-09-03  - Ver 1.0.14.1
+
+	* Client/Model/CommenterCommentClient.cs: ログを抑制するようにしま
+	した。
+
+2012-09-01  - Ver 1.0.14.0
+
+	* バージョンを1.0.14に上げました。 
+
+2012-08-31  - Ver 1.0.13.1
+
+	* PluginShogi/View/Detail/EffectSettingControl.xaml: エフェクトの設
+	定画面を追加しました。
+	* PluginShogi/View/MoveManageView.xaml: ツールウィンドウから通常の
+	ウィンドウに変えました。
+	* PluginShogi/ViewModel/Commands.cs: 盤面反転機能を追加しました。
+
+2012-08-18  - Ver 1.0.13.0
+
+	* バージョンを1.0.13に上げました。
+
+2012-08-17  - Ver 1.0.12.1
+
+	* Client/View/Control/VoteRoomInfoTemplate.xaml: 投票ルーム名の表示
+	位置を修正しました。
+	* PluginShogi/ShogiData/Background/WinterEffect/WinterEffect.xaml: 
+	エフェクトを吹雪のイメージにしてみました。
+	* PluginShogi/ViewModel/EffectManager.cs: 将棋ウィンドウを閉じたと
+	きに、条件によっては落ちるバグを修正しました。
+
+2012-08-11  - Ver 1.0.12.0
+
+	* バージョンを1.0.12にあげました。
+
+2012-08-10  - Ver 1.0.11.2
+
+	* PluginShogi/View/MainMenu.xaml: 開始・投了ボタンを追加しました。
+	* PluginShogi/ViewModel/EffectManager.cs: 投了エフェクトを追加しま
+	した。
+	* PluginShogi/ViewModel/EffectObject.cs: アニメーションをランダムで
+	行うようなモードを追加しました。
+	* FlintSharp/twoD/Behaviours/TweenTargetPosition.cs: 目的地まで指定
+	の速度で向かうようなアクションを追加しました。
+	* ShogiData/Effect/Other: ディレクトリ新たに作り、囲いエフェクトと、
+	投票エフェクトをここに移動しました。また、投了時のエフェクトを新規
+	に追加しました。
+
+2012-08-06  - Ver 1.0.11.1
+
+	* PluginShogi/Model/VariationManager.cs: 変化つきの棋譜を出力できる
+	ようにしました。
+	* PluginShogi/ViewModel/Commands.cs: 変化をNCVログから読み込むため
+	のコマンドを追加しました。
+	* Protocol/Vote/VoteParticipantInfo.cs: 名前やメッセージが表示領域
+	に収まるように、文字幅を考慮しつつ短縮するようにしました。
+
+2012-08-04  - Ver 1.0.11.0
+
+	* バージョンを1.0.11に上げました。
+
+2012-08-03  - Ver 1.0.10.6
+
+	* Client/Model/SoundManager.cs: 各ＳＥの情報をファイルから読み込む
+	ようにしました。
+	* Client/View/Control/InfoView.xaml: 作者情報などを表示するテンプレ
+	ートを別ファイルにしました。
+	* PluginShogi/View/MainWindow.xaml.cs: フレームレートを固定するため
+	のメソッド群を別クラスに移動しました。
+	* PluginShogi/View/Detail/ShogiBackgroundCore.xaml.cs: 背景オブジェ
+	クトのリソースリークを防ぐようにしました。
+
+2012-08-03  - Ver 1.0.10.5
+
+	* Client/Data/Image: 設定ファイルをJSON形式にしました。
+	* Client/Model/ImageSetInfo.cs: 形式をJSONにしました。
+	* Client/Model/SoundSetInfo.cs: SEの情報ファイルを追加しました。
+
+2012-07-31  - Ver 1.0.10.4
+
+	* Server/VoteStrategy/ShogiVoteStrategy.cs: 大合神クジラちゃんの参
+	加者一覧を各クライアントに送るようにしました。またその取得コマンド
+	も作成しました。
+	* PluginShogi/ShogiPlugin.cs: 大合神クジラちゃんへのクライアント参
+	加時に、メッセージを出すようにしました。
+
+2012-07-30  - Ver 1.0.10.3
+
+	* Server: 大合神クジラちゃんと協調するためのシグナル処理を追加しま
+	した。
+
+2012-07-30  - Ver 1.0.10.2
+
+	* dist/readme.txt: 謝辞を追加しました。
+	* PluginShogi/View/MainWindow.xaml: 情報表示用のステータスバーのよ
+	うなものを追加しました。
+
+2012-07-29  - Ver 1.0.10.1
+
+	* エフェクトの画像ファイルが出力ディレクトリにコピーされるようにし
+	ました。
+	* PluginShogi/ViewModel/ShogiWindowViewModel.cs: 変化がコントロール
+	に出るように修正しました。また、変化再生後にボタンの有効状態が正し
+	く切り替わるようにしました。
+
+2012-07-28  - Ver 1.0.10.0
+
+	* バージョンを1.0.10に上げました。
+
+2012-07-28  - Ver 1.0.9.4
+
+	* PluginShogi/ShogiData/Effect/CastleEffect/CastleEffect.xaml: 文字
+	のパーティクル密度を変更しました。
+	* Client/View/Control/MainStatusBar.xaml: Ragnarok.Presentationに移
+	動しました。
+
+2012-07-26  - Ver 1.0.9.3
+
+	* PluginShogi/Resources/Image/koma: 駒のサイズが2のN畳になるように
+	画像を拡大しました。
+	* PluginShogi/ViewModel/ShogiWindowViewModel.cs: 編集不可能モードで
+	は変化の再生などをできないようにしました。
+
+2012-07-25  - Ver 1.0.9.2
+
+	* PluginShogi/ShogiData/Effect/Piece: 効果音を追加しました。また、
+	いくつかのエフェクトに色のパラメータを追加しました。
+	* PluginShogi/ShogiData/Effect/CastleEffect: 背景絵を更新し、また効
+	果音を追加しました。
+	* PluginShogi/ShogiData/Effect/VoteEffect: 含まれる画像が2のN畳サイ
+	ズになるように拡大しました。また、効果音を追加しました。
+	* PluginShogi/ShogiData/Background/WinterEffect: 冬のエフェクトを追
+	加しました。
+
+2012-07-22  - Ver 1.0.9.1
+
+	* PluginShogi/View/MainWindow.xaml.cs: トランジション終了時にアニメ
+	ーション値を保持しないようにしました。
+	* PluginShogi/ViewModel/EffectObjects.cs: エフェクト定義を外部ファ
+	イルに移動し、ソースは削除しました。
+	* エフェクトファイルの位置を変更しました。
+	* 盤画像を修正しました。
+
+2012-07-21  - Ver 1.0.9.0
+
+	* バージョンを1.0.9に上げました。
+	* PluginShogi/ShogiData/Background: 背景画像を各エフェクトにつき１
+	枚含めるようにしました。
+	* PluginShogi/ShogiPlugin.cs: ルーム管理者以外は現局面更新時にその
+	通知を受けるようにしました。
+
+2012-07-20  - Ver 1.0.8.6
+
+	* PluginShogi/View/MainWindow.xaml.cs: フレーム時間を安定させるため
+	のメソッドを追加しました。
+	* PluginShogi/ShogiData/Effect/TebanEffect.xaml: 手番の表示を行うた
+	めのエフェクトを追加しました。
+	* PluginShogi/ViewModel/TebanMeshConverter.cs: 手番表示のためのメッ
+	シュ作成用オブジェクトを追加しました。
+
+2012-07-19  - Ver 1.0.8.5
+
+	* PluginShogi/View/ShogiSettingDialog.xaml: 画像一覧を出すときに拡
+	張構文を使うようにし、ソースを簡潔にしました。
+	* PluginShogi/ViewModel/ShogiSettingDialogViewModel.cs: 不要なオブ
+	ジェクトを削除しました。
+	* PluginShogi/ViewModel/ShogiWindowViewModel.cs: 盤画像などを選択で
+	きるようにしました。
+
+2012-07-18  - Ver 1.0.8.4
+
+	* FlintSharp/twoD/Utils/SharedImage.cs, ParticleImage.cs: 画像設定
+	時にモデルも設定するようにしました。(テクスチャ座標の関係)
+	* PluginShogi/ViewModel/EffectManager.cs: 現局面の進行時に、背景エ
+	フェクトを変化させるようにしました。
+	* PluginShogi/ViewModel/EffectObject.cs: テクスチャ座標の関係で、画
+	像設定時にメッシュを一緒に設定するようにしました。
+	* PluginShogi/View/MainWindow.xaml: 背景エフェクトの処理を一手に引
+	き受けるようにしました。これは背景トランジション時には背景だけでは
+	なく、盤や駒台なども一緒に変化させたいことがあるからです。
+	* PluginShogi/View/Detail/ShogiBackgroundCore.xaml: 背景表示用のオ
+	ブジェクトを追加しました。
+	* PluginShogi/ShogiData/Background/SummerEffect: 夏のエフェクトを追
+	加しました。
+	* PluginShogi/ShogiData/Background/AutumnEffect: 秋のエフェクトを追
+	加しました。
+
+2012-07-17  - Ver 1.0.8.3
+
+	* dist/make_dist.rb: 更新用ファイルの作成バッチとファイルをコピーす
+	るバッチを分けました。
+	* FlintSharp/twoD/Utils/SharedImage.cs, ParticleImage.cs: 画像設定
+	時にマテリアルのタイプを設定するようにしました。
+	* FlintSharp/twoD/Behaviours/DeathOffScreen.cs: Paddingプロパティを
+	追加しました。
+	* PluginShogi/View/ShogiBackground.xaml.cs: EffectKeyプロパティを追
+	加しました。これで外部ファイルからエフェクトを読み込みます。
+	* PluginShogi/ViewModel/Effect.cs: EffectObjectの読み込みようメソッ
+	ドをEffectFactoryから移動しました。
+	* PluginShogi/ViewModel/EffectObject.cs: サウンド再生用プロパティを
+	追加しました。
+	* PluginShogi/ViewModel/EffectManager.cs: コンテキストデータの作成
+	方法に一貫性を持たせるようにしました。
+	* PluginShogi/ShogiData: ファイルを移動し、またBackgroundディレクト
+	リを追加しました。このディレクトリには背景のエフェクト用データが入
+	っています。
+
+2012-07-15  - Ver 1.0.8.2
+
+	* PluginShogi/ViewModel/EffectManager.cs: XAMLに直接与える引数を減
+	らし、DataContext経由のパラメータを増やしました。また、囲い検索の方
+	法を少し変えました。
+
+2012-07-15  - Ver 1.0.8.1
+
+	* FlintSharp/twoD/Zones/Zone.cs: CollideParticleメソッドを追加し、
+	各ゾーンで移動情報を使った衝突処理が行えるようにしました。
+	* FlintSharp/twoD/Initializers/TextTargetInit.cs: テキストにあわせ
+	てパーティクルの位置を設定するような初期化子を作成しました。
+	* PluginShogi/ShogiData/Effect/CastleEffect/CastleEffect.xaml: 囲い
+	の名前をより整然とした状態で出せるようにしました。
+	* PluginShogi/View/MainWindow.xaml.cs: 各フレームの時間管理を行うよ
+	うにしました。
+
+2012-07-14  - Ver 1.0.8.0
+
+	* バージョンを1.0.8にあげました。
+
+2012-07-13  - Ver 1.0.7.5
+
+	* FlintSharp/twoD/Zones/DiscSectorZone.cs: MinAngleとMaxAngleの計算
+	式が間違っていたため、修正しました。
+	* FlintSharp/twoD/Behaviours/MissileTowardsTarget.cs: 
+	TurnTowardsPointから名前を変更しました。
+	* FlintSharp/twoD/Behaviours/TurnTowardsTarget.cs: 速度を変えずに目
+	的地を目指すようなアクションを追加しました。
+	* PluginShogi/ShogiData/Effect/CastleEffect/CastleEffect.xaml: 囲い
+	のエフェクトを追加しました。
+	* PluginShogi/ViewModel/EffectObjects.cs: エフェクト作成用オブジェ
+	クトから不要なメソッドなどを削除しました。
+	* FlintSharp/twoD/Initializers/MaterialInit.cs: マテリアルの初期化
+	用オブジェクトを追加しました。
+	* PluginShogi/View/ShogiBackground.xaml: 背景用のコントロールを追加
+	しました。
+
+2012-07-13  - Ver 1.0.7.4
+
+	* FlintSharp/twoD/Behaviours/FixPositionToTarget.cs: 目的地に到達し
+	たらポジションを固定するようなアクションを追加しました。
+	* FlintSharp/twoD/Zones/TextZone.cs: 文字列が書かれた領域を扱うゾー
+	ンクラスを追加しました。
+	* PluginShogi/ViewModel/EffectObject.cs: 初期化と開始を別フレームで
+	行うようにしました。(初期化には時間のかかることがあるため)
+	* PluginShogi/ViewModel/Effect.cs: 各エフェクトを列挙子ではなく、オ
+	ブジェクトとして管理するようにしました。また各エフェクトの引数パラ
+	メータも管理するようにしました。
+	* PluginShogi/ShogiData/Effect/CastleEffect/CastleEffect.xaml: 囲い
+	エフェクトを別ファイルで提供するようにしました。
+
+2012-07-11  - Ver 1.0.7.3
+
+	* FlintSharp/twoD/Particles/Particle.cs: 前フレームの位置を保持する
+	プロパティを追加しました。
+	* FlintSharp/twoD/Zones/DiscSectorZone.cs: 角度の単位をラジアンから
+	度に変え、処理内容を変更しました。
+	* PluginShogi/ShogiPlugin.cs: 簡易的な速度テスト用のメソッドを追加
+	し、パフォーマンスを測りながら描画部分を修正するようにしました。
+	* PluginShogi/ViewModel/EffectObjects.cs: エフェクト初回使用時の遅
+	延を避けるために、エフェクトの事前読み込みを行うようにしました。
+	また、XAMLファイルを事前に書き換えることで、パーティクルシステムに
+	パラメータを渡すことを可能にしました。
+
+2012-07-11  - Ver 1.0.7.2
+
+	* FlintSharp: WPFのModel3Dを使って表示するときに必要な修正やファイ
+	ル追加などを行いました。
+	* PluginShogi/ViewModel/EffectObject.cs: パーティクルシステムを統
+	合し、XAMLからパーティクルを飛ばせるようにしました。
+
+2012-07-08  - Ver 1.0.7.1
+
+	* PluginShogi/ViewModel/EffectObject.cs: 画像パスの指定をUri型から
+	string型で行うように修正しました。
+	(xamlでは型指定されたUri型のインスタンスが作れないためです)
+	
+2012-07-07  - Ver 1.0.7.0
+
+	* バージョンを1.0.7に上げました。
+
+2012-07-06  - Ver 1.0.6.5
+
+	* FlintSharp: 新たなライブラリを追加しました。
+	* dist/readme.txt: 謝辞を修正しました。
+	* PluginShogi/ViewModel/EffectManager.cs: 囲いエフェクトの画像を修
+	正しました。
+	* Client/Global.cs: コメントサーバーからの切断されたとき確認ダイア
+	ログを出すようにしました。
+
+2012-07-04  - Ver 1.0.6.4
+
+	* Client.App.xaml.cs: 開始メソッドをSplashWindowからAppに移動しまし
+	た。
+	* Client/Global.cs: InitLoggerをIInitLoggerに修正しました。
+	* PluginShogi/View/MainWindow.xaml.cs: FPSを表示するようにしました。
+	* PluginShogi/View/EffectManager.cs: パーティクルで文字を書くような
+	囲いエフェクトを作成中です。
+	* PluginShogi/ViewModel/FlatFont.cs: フォントの外形を点情報にして保
+	持するクラスを追加しました。
+
+2012-07-03  - Ver 1.0.6.3
+
+	* tabをスペースに置き換えました。
+	* PluginShogi/ViewModel/EffectObject.cs: IUriContentから派生するよ
+	うにし、XAMLファイルのパスを取得できるようにしました。
+	(イメージの読み込みなどに使います)
+
+2012-07-02  - Ver 1.0.6.2
+
+	* NetSparkle: バージョン更新時に元ファイルを削除するようにしました。
+
+2012-07-01  - Ver 1.0.6.1
+
+	* Client/Properties/AssemblyInfo.cs: xmlnsを変更しました。
+	* PluginShogi/Properties/AssemblyInfo.cs: xmlnsを変更しました。
+	* Client/App.xaml.cs: 開始時にRagnarokの初期化をするようにしました。
+	* Server/Program.cs: 開始時にRagnarokの初期化をするようにしました。
+
+2012-06-30  - Ver 1.0.6.0
+
+	* バージョンを1.0.6にあげました。
+
+2012-06-29  - Ver 1.0.5.3
+
+	* PluginShogi: エフェクト画像をShogiData/Effect以下に配置しました。
+	* PluginShogi/EffectManager.cs: セル関係のエフェクトをxamlで記述す
+	るようにしました。
+	* PluginShogi/ViewModel/EffectContext.cs: エフェクト用のデータコン
+	テキストクラスを追加しました。
+
+2012-06-27  - Ver 1.0.5.2
+
+	* EntityObjectの各プロパティをアニメーション可能なようにしました。
+
+2012-06-26  - Ver 1.0.5.1
+
+	* Client/View/VoteResultWindow.xaml: 文字を周囲にフィットするように
+	拡大するようにしました。
+	* PluginShogi/ShogiData/Effect.xaml: エフェクトを外部ファイルで定義
+	するようにしました。
+	* PluginShogi/ViewModel/EffectObject.cs: メソッドの名前を
+	InitializeImplからOnInitializeに、LoadModelImplからOnLoadModelに変
+	更しました。
+
+2012-06-25  - Ver 1.0.5.0
+
+	* バージョンを1.0.5に上げました。
+
+2012-06-24  - Ver 1.0.4.8
+
+	* PluginShogi/ViewModel/EffectManager.cs: 囲い完成時のエフェクトを
+	追加しました。
+
+2012-06-23  - Ver 1.0.4.7
+
+	* MONOでコンパイルしました。
+
+2012-06-23  - Ver 1.0.4.6
+
+	* PluginShogi/ViewModel/EffectManager.cs: 駒を取ったときのエフェク
+	トを調整しました。
+	* PluginSHogi/Resources/Image/masu: 升目を表示する画像を削除しまし
+	た。(盤画像に表示するようにしたため)
+
+2012-06-22  - Ver 1.0.4.5
+
+	* PluginShogi/ViewModel/EffectImageCache.cs: ImageCacheから改名し、
+	また各画像をアニメーションごとに分割して管理するようにしました。
+	(画面スクリーンより大きい画像は表示できないことがあるため)
+	* PluginShogi/ViewModel/EffectObject.cs: DependencyObjectから派生さ
+	せるようにし、WPFのアニメーション機能を使えるようにしました。
+	(作成中)
+	* PluginShogi/ViewModel/EffectManager.cs: マスの表示エフェクトなど
+	を追加し、また駒を取ったときのエフェクトも追加しました。
+
+2012-06-20  - Ver 1.0.4.4
+
+	* PluginShogi: 将棋盤関係のファイルを一部、Ragnarok.Shogiに移動しま
+	した。
+	* PluginShogi/ViewModel/EntityObject.cs: NotifyObjectからの継承を止
+	め、Animatableから派生させるようにしました。xamlでエフェクトを定義
+	するためにこのようにしました。
+
+2012-06-20  - Ver 1.0.4.3
+
+	* Client/View/SplashWindow.xaml: 環境によっては更新確認に数十秒かか 
+	ることが分かったので、起動時にスプラッシュウィンドウを出すようにし
+	ました。
+	* Client/Global.cs: InitLoggerインターフェースを追加し、初期化時の
+	メッセージをスプラッシュウィンドウに出すようにしました。
+	* PluginShogi/View/ShogiControl.xaml.cs: 駒台上の駒の位置を調整し直
+	しました。また、盤画像や駒画像をコントロールに設定できるようにしま
+	した。
+
+2012-06-18  - Ver 1.0.4.2
+
+	* Ragnarok.Extra, Ragnarok.Shogi: ２つのプロジェクトを追加し、ファ
+	イルを移動しました。
+
+2012-06-18  - Ver 1.0.4.1
+
+	* Protocol/ProtocolUtil.cs: ミラーコメント作成用のメソッドを追加し
+	ました。
+	* PluginShogi/ViewModel/ShogiWindowViewModel.cs: 投稿者コメントや運
+	営コメントではアリーナ席以外のコメントを処理しないようにしました。
+	* PluginShogi/View/ShogiControl.xaml.cs: 編集モードを示すプロパティ 
+	を追加しました。
+
+2012-06-17  - Ver 1.0.4.0
+
+	* バージョンを1.0.4に上げました。 
+
+2012-06-17  - Ver 1.0.3.3
+
+	* Client/Model/SoundBackend.cs: サウンド再生機能を
+	Ragnarok.Presentationに移動しました。
+	* PluginShogi/SoundManager.cs: サウンドの再生を行うようにしました。
+
+2012-06-13  - Ver 1.0.3.2
+
+	* 先手・後手の表示をするようにしました。
+
+2012-06-12  - Ver 1.0.3.1
+
+	* Ragnarok/Util.cs: プロパティ変更などを特別な環境で通知するための 
+	仕組みをProtocolから移動しました。
+	* PluginShogi/ViewModel/EffectObject.cs: 表示期間や表示開始時刻など
+	をEntityObjectに移動し、また各フレームの更新処理をデリゲートから処
+	理できるようにしました。
+	* PluginShogi/View/ShogiControl.xaml: 駒の移動中に移動可能なマスを
+	明るく表示するようにしました。
+	* PluginShogi/View/ShogiControl.xaml: 駒台の駒の数の表示が正しく無
+	いことがあったので、それを修正しました。
+
+2012-06-10  - Ver 1.0.3.0
+
+	* バージョンを1.0.3に上げました。
+
+2012-06-10  - Ver 1.0.2.4
+
+	* Client/IPlugin.cs: 音を鳴らすためのSoundManagerオブジェクトをプラ
+	グインに渡すようにしました。
+	* PluginShogi/ViewModel/EntityObject.cs: BaseScaleなど表示位置・
+	サイズなどを設定するメソッドを追加しました。
+	* PluginShogi/ViewModel/ShogiWindowViewModel.cs: コメントによる変化
+	の自動再生時に、段階的なエフェクトを表示するようにしました。通常は
+	ささやかなエフェクトしか現れません。
+	* PluginShogi/ViewModel/EffectManager.cs: 将棋盤にエフェクトを表示
+	するためのオブジェクトを追加しました。このクラスで表示するエフェク
+	トなどを管理します。
+	* PluginShogi/ViewModel/EffectObjects.cs: 各種エフェクトをこのファ
+	イルでまとめて管理するようにしました。
+	* PluginShogi/Resources/Image/effect/*: エフェクトファイルを追加。
+
+2012-06-09  - Ver 1.0.2.3
+
+	* Ragnarok/MathEx.cs: NextDoubleをRandDoubleに改名しました。
+	* Ragnarok.Wpf: Ragnarok.Presentaionに改名しました。
+	* Ragnarok.Wpf/WpfGlobal.cs: クラスを消し、メソッドなどをすべて
+	WpfUtilクラスに移動しました。
+	* PluginShogi/ViewModel/CapturedPieceObject.cs: 持ち駒の数を表示す
+	るようにしました。
+
+2012-06-06  - Ver 1.0.2.2
+
+	* PluginShogi/View/ShogiControl.xaml: リドゥ・アンドゥなどが正しく
+	動くようにしました。また、マスに色を付けれるようにしました。
+	* PluginShogi/View/BoardTitleResource.xaml: 盤に段列の数字を追加。
+	* PluginShogi/ViewModel/CellObject.cs: マスにエフェクトをつけるため
+	のオブジェクトを追加しました。
+
+2012-06-06  - Ver 1.0.2.1
+
+	* PluginShogi/View/ShogiControl: 局面の表示を３Ｄベースで行い、加算
+	合成を自由に使えるようにしました。また、いくつかのファイルを大幅に
+	変更しました。
+
+2012-06-03  - Ver 1.0.2.0
+
+	* バージョンを1.0.2に上げました。
+
+2012-05-30  - Ver 1.0.1.2
+
+	* PluginShogi/Resources/Image/effect/*: いくつかのエフェクト用画像
+	を追加しました。
+	* PluginShogi/View/CurrentBoardSetupDialog.xaml: サーバーへの将棋局
+	面設定時に、投票結果のクリアも一緒にできるようにしました。
+
+2012-05-29  - Ver 1.0.1.1
+
+	* Protocol\Shogi\MoveStatistics.cs: 投票結果の表示順が逆になってい
+	たのを修正しました。
+	* Server\VoteStrategy\ShogiVoteStrategy.cs: 指し手コメントの最初に
+	空白がある場合に、確認コメント(!コメント)の表示がおかしくなっていた
+	バグを修正しました。
+	* PluginShogi\ShogiPlugin.cs: 指し手コメントが"同○"だった場合の、
+	エフェクトの表示位置を修正しました。
+
+2012-05-27  - Ver 1.0.1.0
+
+	* PluginShogi/ViewModel/EffectObject.cs: エフェクト表示用の
+	オブジェクトを追加しました。
+	* バージョンを1.0.1に上げました。
+
+2012-05-26  - Ver 1.0.0.2
+
+	* Client: メニューオブジェクトなどを別ファイルにするのをやめました。 
+	* EnumExクラスを使うようにしました。
+	* NotifyObjectを使うようにしました。
+
+2012-05-24  - Ver 1.0.0.1
+
+	* PluginShogi/ViewModel/Commands.cs: 変化コメントの投稿ボタンの
+	仕様を変え、自動で生放送に接続するようにしました。
+
+2012-05-20  - Ver 1.0.0.0
+
+	* バージョンを1.0.0に上げました。
+
+2012-05-19  - Ver 0.7.2.3
+
+	* Client/View/Control/VoteRoomInfoTemplate.xaml: 一言メッセージを
+	表示するようにしました。
+	* NetSparkle: ファイルを更新しました。
+	* dist/versioninfo_templ.xml: 更新履歴ページがブラウザにキャッシュ
+	されるのを避けるため、URLにパラメータを付加しました。
+
+2012-05-12  - Ver 0.7.2.2
+
+	* Client/View/VoteResultWindow.xaml: 表示される数値が小さかったので、
+	全角数字で表示できるようにしました。半角とどちらで表示するか選択
+	できます。
+	* dist: 各バージョンの更新履歴などをyamlファイルで管理するようにし、
+	そこからhtmlの更新履歴などを作成するようにしました。
+
+2012-05-09  - Ver 0.7.2.1
+
+	* 自動更新プログラムを追加しました。
+
+2012-05-06  - Ver 0.7.2.0
+
+	* バージョンを0.7.2に上げました。 
+
+2012-05-06  - Ver 0.7.1.4
+
+	* Protocol/Shogi/Move.cs: NewPositionプロパティを追加しました。
+	* PluginShogi/View/MainWindow.xaml: 投票のあった位置にエフェクトを
+	かけるようにしました。
+
+2012-05-05  - Ver 0.7.1.3
+
+	* Protocol/Shogi/BoardExtension.cs: リファクタリングしました。
+	* PluginShogi/ViewModel/ShogiWindowViewModel.cs: 将棋のメインウィン
+	ドウから接続している放送コメントのみを拾い、変化を再生するようにし
+	ました。今までは入室している全放送のコメントを拾い、変化を再生して
+	いました。
+	* Server/VoteStrategy/ShogiVoteStrategy.cs: ロックするようにし、
+	マルチスレッドでも動作するようにしました。
+	* Client/Data/EndRoll/endroll_format.xml: 参加者の表示方法を
+	"棋力　名前"に戻しました。
+
+2012-05-04  - Ver 0.7.1.2
+
+	* Resharperを導入し、コードを修正しました。
+
+2012-05-02  - Ver 0.7.1.1
+
+	* ClientModel/EndRollList.cs: エンドロール用のファイルフォーマット
+	を変え、より柔軟な書式に対応できるようにしました。
+	* PluginShogi/ViewModel/Commands.cs: 将棋コントロールのオープンコマ
+	ンドをメインウィンドウからコマンドクラスに移動しました。
+	* Protocol: Ragnarok.Wpfが使うWindowsBase.dllへの参照を追加しました。 
+
+2012-04-15  - Ver 0.7.1.0
+
+	* バージョンを0.7.1に上げました。
+
+2012-04-13  - Ver 0.7.0.3
+
+	* Server/VoteRoom.cs: Notificationの全体通知時に、Notification自体
+	の投稿と、放送へのコメント通知の投稿の可否を設定できるようにしました。
+	* PluginShogi/Model/Variation.cs: 変化オブジェクトの作成方法と、
+	変化の登録方法を変更しました。
+
+2012-04-11  - Ver 0.7.0.2
+
+	* PluginShogi: 駒や盤の画像を各種追加し、設定ダイアログから選択
+	できるようにしました。
+	* PluginShogi/ShogiPlugin.cs: 変化コメントの投稿時に手番の記号を
+	付加するようにしました。
+	* PluginShogi/View/ShogiSettingDialog.xaml: 設定ダイアログを追加。
+
+2012-04-09  - Ver 0.7.0.1
+
+	* Protocol/Vote/VoteMode.cs, Server/VoteStrategy/MirroringStrategy.cs:
+	コメントミラー用のモードを追加しました。
+
+2012-04-08  - Ver 0.7.0.0
+
+	* バージョンを0.7.0にあげました。
+
+2012-04-07  - Ver 0.6.9.3
+
+	* Client/View/Control/MainMenu.xaml: メインメニューに「エラーログ送
+	信」と「バージョン情報」メニューを追加しました。
+
+2012-04-05  - Ver 0.6.9.2
+
+	* Client/MessageUtil.cs: メッセージダイアログの表示位置など、使いや
+	すさに関わる細かい部分を修正しました。
+	* PluginShogi/ShogiPlugin.cs: 受信した変化を重要メッセージとして
+	表示するようにしました。また、Windowプロパティを
+	ShogiGlobal.MainWindowに移動しました。
+	* PluginShogi/View/MainMenu.xaml: 変化のコメントをコンボボックス
+	から選べるようにしました。これはマウス操作のみで変化を投稿可能にする
+	ためです。
+	* PluginShogi/View/MainWindow.xaml: ウィンドウオープン時に現局面を
+	取得するようにしました。今まではプラグインの初期化時に行っていました。
+	* PluginShogi/View/MoveManageView.xaml: 変化の自動再生などを将棋
+	コントロールの右クリックメニューから行えるようにしました。
+	* PluginShogi/Model/VariationManager.cs: 追加された変化を過去の局面に
+	さかのぼって登録するのをやめ、その局面のみに追加するようにしました。
+
+2012-04-02  - Ver 0.6.9.1
+
+	* Server/VoteStrategy/ShogiVoteStrategy.cs: サーバーに送られた通知を
+	元に変化コマンドを作成し、各クライアントに送るようにしました。
+	* PluginShogi/ShogiPlugin.cs: 放送コメントや通知ではなく、変化コマンド
+	からのみ変化を受け入れるようにしました。
+	（今までは放送コメントから変化を受信していましたが、こうすると放送に
+	　接続していないクライアントは変化を受信できなってしまいます。
+	　全クライアントを一様に処理するため、このような仕様にしました）
+	* PluginShogi/View/MainWindow.xaml.cs: 駒移動時に駒の中心位置を
+	マウスポインタに合わせながら移動するようにしました。
+
+2012-04-01  - Ver 0.6.9.0
+
+	* バージョンを0.6.9にしました。
+
+2012-03-30  - Ver 0.6.8.3
+
+	* Client/Model/SoundManager.cs: MainViewModelのサウンド機能をすべて
+	このクラスに移しました。また、音が二重で鳴る問題なども解消しました。
+	* Client/Model/SoundManager.cs: staticクラスであったのをインスタンスを
+	Globalクラスで持たせるような構成に変えました。
+	* Client/Model/VoteClient.cs: 投票の時間設定時に、秒の端数を設定する
+	ようにし、本来の時間よりカンマ何秒か増やすようにしました。これで、
+	10秒ぴったりの投票時間指定でも、「あと１０秒です」と正しく読まれる
+	ようになります。端数を設定しないとサーバーから返答が来たときには
+	すでに残り時間が9.N秒になってしまうため、正しく読まれません。
+	* Protocol/ProtoBuf/VoteProtocol.proto: StartVoteCommandの秒数を整数
+	ではなく浮動小数点数で持たせるようにしました。これで半端な秒数が表現
+	可能になりました。
+
+	* Client/IPlugin.cs: プラグインの仕様を変え、メニューアイテムやコマンド
+	バインディングの代わりに、ボタンが押されたら実行されるメソッドを追加
+	しました。
+	* Client/Model/CommenterCommentClient.cs: 接続した放送のルーム番号を
+	使うようにし、ルームごとにコメント中継を行うようにしました。
+	* PluginShogi/ShogiPlugin.cs: IPluginのインターフェース変更に合わせ、
+	このクラスも修正しました。
+
+2012-03-29  - Ver 0.6.8.2
+
+	* Client/Model/CommenterManager.cs: ブラウザで放送を視聴中かどうか判断
+	するため、各コメントサーバーへのコネクションを監視するようにしました。
+	外部アプリによるコメントサーバーへの接続がある場合は、その放送を
+	視聴中であると判断するようにしています。
+	* PluginShogi/ShogiPlugin.cs: コンパイルが通るように修正しました。
+	* Client/ViewModel/VoteResultWindowViewModel.cs: 投票結果の表示数を
+	設定ファイルに保存するようにしました。
+	* Client/View/Control/LiveControlTemplate.xaml: 放送タイトルとログイン
+	名を斜体から通常のフォントに修正しました。
+
+2012-03-26  - Ver 0.6.8.1
+
+	* PluginShogi/ShogiPlugin.cs: 変化をNotificationとして通知するのを
+	やめ、通常コメントとして投稿するようにしました。
+	* PluginShogi/View/MainMenu.xaml: ニコ生への接続ボタンを追加し、
+	変化をニコ生のコメントとして投稿するようにしました。
+	* Protocol/Shogi/Stringizer.cs: 指し手の書き方のスタイルを設定できる
+	できるようにしました。
+	* Server/VoteStrategy/ShogiVoteStrategy.cs: 変化通知を各参加者に
+	送信するのをやめました。変化はコメントで処理されます。
+
+2012-03-18  - Ver 0.6.7.0
+
+	* バージョンを0.6.7にしました。
+
+2012-03-17  - Ver 0.6.6.1
+
+	* Client/App.xaml.cs: アプリ終了時にソケットを切断するようにしました。
+	* Client/Model/MainModel.cs: 投票ルームからの退出時に、ニコニコへの
+	ログイン情報を送信しないようにしました。
+	* Client/Model/VoteClient.cs: 投票ルームからの退出時に接続を切断する
+	ようにしました。
+	* Protocol/Shogi/Stringizer.cs: 棋譜ファイル出力時に指し手の先頭に
+	△or▲を書かないようにしました。
+	* PluginShogi/ShogiPlugin.cs: 現局面更新時の指し手出力時に、古い
+	現局面から何手でも戻って指し手を表示するようにしました。
+	* PluginShogi/Model/VariationManager.cs: 現局面更新時の局面オブジェ
+	クトをCloneするようにしました。そうしないと、元のオブジェクトが更新
+	されてしまい、挙動がおかしくなっていたためです。
+
+2012-03-11  - Ver 0.6.6.0
+
+	* PluginShogi/ShogiPlugin.cs: 変化のコメントが空白のみの場合は表示
+	しないようにしました。
+	* バージョンをあげました。
+
+2012-03-08  - Ver 0.6.5.4
+
+	* コメンター: コメンターが現在視聴している放送を判別できるようにし
+	（一部、正確ではないところあり）、それをサーバー側に反映するように
+	しました。これにより見ている放送に優先的にコメンターを機能させること
+	ができるようになります。
+
+2012-03-08  - Ver 0.6.5.3
+
+	* Protocol/Shogi/Board.cs: リドゥの方法を変更しました。
+	* Protocol/Shogi/KifFile.cs: 変化付きの棋譜ファイルを読み込めるように
+	しました。(現在は読み込めるだけで、変化は表示されません)
+	* Client/View/MainWindow.xaml: システム画像を一部変更しました。
+	* Client/Model/VoteClient.cs: 投票ルーム入出時の通信量を減らしました。
+	これはVoteRoomInfoプロパティ設定時の値変更を判断することによって
+	行いました。
+	* Client/Model/MainModel.cs: ニコニコへのログイン状態の変更を即座に
+	サーバー側に通知するようにしました。
+	* Server/LiveRoom.cs: ニコニコにログインしていないアカウントには
+	放送開始通知を送らないようにしました。
+	* Server/VoteParticipant.cs: 各放送の状態が変わったらそれをクライアン
+	ト側に通知するようにしました。
+
+2012-03-08  - Ver 0.6.5.2
+
+	* Protocol/Shogi/Board.cs: 可能な手の生成メソッドを高速化しました。
+
+2012-03-06  - Ver 0.6.5.1
+
+	* ShogiPlugin: 将棋ウィンドウのアイコンを一部変更しました。
+	* Server/Participant.cs: 同じ投票ルームへの多重ログインをエラーとする
+	ようにしました。
+	* Protocol: サーバーアドレスの指定をIPアドレスではなくホスト名から
+	指定するようにしました。
+
+2012-03-03  - Ver 0.6.5.0
+
+	* バージョンをあげました。
+
+2012-03-02  - Ver 0.6.4.4
+
+	* PluginShogi/ShogiPlugin.cs: 変化投稿時に名前を出すように、さらに
+	文字が長すぎるときは改行するようにしました。
+	* PluginShogi/View/MainWindow.xaml: 持ち駒の数字を示す色を変更しました。
+	* Server: Notification投稿時に名前を設定するようにしました。
+	* Server/VoteStrategy: ModifyNotificationメソッドを削除し、通知の色変更
+	などをVoteRoomで行うようにしました。
+
+2012-03-01  - Ver 0.6.4.3
+
+	* StuffList.cs: EndRollList.csにファイル名を変更しました。
+	* VoteResultSettingDialog.xaml: 投票結果表示ウィンドウの設定用
+	ダイアログを追加しました。フォントや色などの設定ができるように
+	なりました。
+	* VoteResultWindow.xaml: 投票結果の表示で、残り時間や投票状態によって
+	表示色を変えるようにしました。
+	* ShogiPlugin.cs: 指し手の数え方を変え、手数が０から始まっていたのを
+	１から始めるようにしました。
+	例: ０手目 76歩 => １手目76歩
+	* ShogiPlugin/View/MainWindow.xaml: ウィンドウ拡大時に拡大されない
+	文字があったのでそのサイズを変えるようにしました。
+
+2012-02-28  - Ver 0.6.4.2
+
+	* Protocol/Shogi: 出力する棋譜ファイルの「同○○」の「同」の後に
+	必ず空白を入れるようにしました。
+	これは"kif for windows"で棋譜を正しく読み込むために必要です。
+	* Protocol/Shogi: 駒台の駒の数を示す数字をより見やすくしました。
+
+2012-02-27  - Ver 0.6.4.1
+
+	* Protocol/Shogi: 参加コメントの確認コメントを「棋力＠名前さんが参加
+	しました」ではなく「名前（棋力）さんが参加しました」に変更しました。
+	これはコメント中継用のアカウントにコテハンがつくのを防ぐためです。
+
+2012-02-26  - Ver 0.6.4.0
+
+	* バージョンを上げました。
+
+2012-02-22  - Ver 0.6.3.7
+
+	* Protocol/Shogi: "同○○"の指し手表示で空白の入れ方を少し変更しました。
+	* Protocol/Shogi: Boardクラスのシリアライズサイズをさらに圧縮しました。
+	BoardPieceとBoardMoveの２クラスが特別仕様のシリアライザを使っています。
+	* ShogiPlugin: 局面が一致しない場合でも変化を表示していたのを修正。
+
+2012-02-21  - Ver 0.6.3.6
+
+	* KifFile: 読み込むファイルがtest.kif縛りだったのを修正。
+	* Protocol/Shogi/Board: NextMoveCount => MoveCount に修正し、
+	次ではなく現在の手数を取得するように変更しました。
+	* Server: 現局面が設定できなくなるバグを緩和しました。
+	原因 => Boardクラスが正しくデシリアライズできないことが原因。
+	protobuf-netで扱うデータが3kbを超えるくらいになると正しくデシリアライズ
+	できなくなることが判明したため、差し手を表すBoardMoveクラスの
+	シリアライズサイズを圧縮しました。
+	(16byte => 5byte, 200手の場合は3200byte => 1000byte)
+	しかし、これでも300手を超えるような場合は正しくデシリアライズできません。
+	Client: アプリケーションの設定ファイルの入出力方法を変更しました。
+	Client: ニコ生へのログイン失敗時/成功時にダイアログが出ないように
+	なっていたので、それを出るように修正。
+
+2012-02-19  - Ver 0.6.3.5
+
+	* ソリューションディレクトリの使用をやめました。
+	(ExpressEditionで使えるようにするため)
+	* Server: ルームからの退出時にVoteParticipantのconnectionがnullに
+	なることがあるようなのでその対策を追加しました。(原因は不明)
+
+2012-02-17  - Ver 0.6.3.4
+
+	* ShogiPlugin: .kif形式のファイル(分岐なし)の入出力に対応しました。
+	* ShogiPlugin: 現局面の取得コマンドを作成しました。
+	* Protocol/Shogi: 移動元の情報を持った差し手の表示形式に対応しました。
+
+2012-02-17  - Ver 0.6.3.3
+
+	* Server: コメンターの終了処理を修正しました。
+	* VoteRoom: BroadcastNotificationメソッドに個別の放送ルームにも
+	コメントを送るかどうかのフラグを追加しました。
+
+2012-02-16  - Ver 0.6.3.2
+
+	* Settings: ShogiPluginと設定ファイルのフォーマットを合わせるため、
+	設定ファイルの保存方法を変更しました。ApplicationSettingsBaseを使うと
+	保存ディレクトリが指定できないため、ShogiPluginと設定ファイルを同じ
+	ディレクトリにすることが難しいためです。
+
+2012-02-16  - Ver 0.6.3.1
+
+	* Notification: バイナリデータプロパティを削除しました。
+	* NotificationType: Special1を削除しました。
+	* PluginHost: 実行ファイルなどのパスをプラグインに渡すようにしました。
+	* MainWindow: ウィンドウが閉じたときに、アプリも一緒に閉じるのをやめました。
+
+2012-02-15  - Ver 0.6.3.0
+
+	* Server: LiveRoomの管理のためのクラスLiveRoomManagerを追加し、またコメ
+	ンターの管理などもそこで行うようにしました。
+	* Server: 放送開始通知を何度も送らないようにしました。
+	* Client: エンドロールのフォーマットで列を指定できるようにしました。
+	これで、右半分に名前を出すことなどが可能になりました。
+
+2010-12-24  - Ver   
+
+	* Client: CommandとViewを別ディレクトリにし、ウィンドウ上での処理をコマ
+	ンドクラスで行うようにしました。また、モデルオブジェクトを静的にし、グ
+	ローバルなオブジェクトが持つようにしました。
+
+2010-12-09  - Ver
+
+	* CommentServer.cs: LiveIdを接続が切断しても取れるようにしました。
+	* MirrorCommentModel.cs: コメントサーバーは一つでも部屋に接続している
+	場合に「接続」していることにしました。
+	各種コマンドの処理を追加しました。
+	* ProtocolVersion.cs: C/S間のバージョンチェックをするためのオブジェクトを
+	追加しました。
+

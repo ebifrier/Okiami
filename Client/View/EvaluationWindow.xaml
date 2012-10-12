@@ -1,0 +1,147 @@
+﻿<rp:MovableWindow x:Class="VoteSystem.Client.View.EvaluationWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+                  xmlns:v="clr-namespace:VoteSystem.Client.View"
+                  xmlns:vc="clr-namespace:VoteSystem.Client.View.Control"
+                  Title="評価値" Height="300" Width="300"
+                  Background="Transparent" EdgeLength="10" Topmost="True"
+                  ShowInTaskbar="False">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="./CommonDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <!-- コンテキストメニュー -->
+            <ContextMenu x:Key="contextMenu">
+                <!-- CommandTargetの指定はwpfのバグを避けるために必要。
+                     http://social.msdn.microsoft.com/forums/en-US/wpf/thread/7bd75a7c-eab4-4f3a-967b-94a9534a7455/ -->
+                <MenuItem Header="常に手前に表示する"
+                          IsCheckable="True"
+                          IsChecked="{Binding Topmost,
+                                              RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}" />
+                <Separator />
+                <MenuItem Header="ウィンドウを移動する"
+                          Command="{x:Static rp:MovableWindow.MakeMoveWindow}"
+                          CommandTarget="{Binding PlacementTarget,
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                <MenuItem Header="ウィンドウを固定する"
+                          Command="{x:Static rp:MovableWindow.MakeFixWindow}"
+                          CommandTarget="{Binding PlacementTarget,
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                <Separator />
+                <MenuItem Header="評価値を表示"
+                          IsCheckable="True"
+                          IsChecked="{Binding IsShowEvaluationPoint}"/>
+                <MenuItem Header="設定ウィンドウを開く"
+                          Command="{x:Static v:EvaluationWindow.OpenSettingDialog}"
+                          CommandTarget="{Binding PlacementTarget,
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                <Separator />
+                <MenuItem Header="閉じる"
+                          Command="Close"
+                          CommandTarget="{Binding PlacementTarget,
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+            </ContextMenu>
+            
+            <!-- 外枠の表示を切り替えます。-->
+            <Style x:Key="borderStyle" TargetType="FrameworkElement">
+                <Setter Property="Visibility" Value="Visible" />
+                <Setter Property="IsHitTestVisible" Value="True" />
+
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsMovable,
+                                                   RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}"
+                                 Value="False">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Setter Property="IsHitTestVisible" Value="False" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.Style>
+        <Style TargetType="v:EvaluationWindow">
+            <Setter Property="ContextMenu"
+                    Value="{StaticResource contextMenu}" />
+        </Style>
+    </Window.Style>
+
+    <Grid Name="layoutBase">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding EdgeLength,
+                                            RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="{Binding EdgeLength,
+                                            RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding EdgeLength,
+                                              RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{Binding EdgeLength,
+                                              RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}" />
+        </Grid.ColumnDefinitions>
+
+        <Image Grid.RowSpan="3" Grid.ColumnSpan="3"
+               Stretch="Fill"
+               Source="{Binding CurrentImagePath, Converter={StaticResource imageConverter}}" />
+
+        <Grid Grid.RowSpan="3" Grid.ColumnSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- 評価値 -->
+            <rp:DecoratedText Grid.Row="1" Grid.Column="1"
+                              Visibility="{Binding IsShowEvaluationPoint,
+                                                   Converter={StaticResource visibilityConverterCollapsed}}"
+                              Text="{Binding EvaluationPoint, StringFormat={}{0:0}}"
+                              FontSize="50"
+                              Foreground="White"
+                              Stroke="Black"
+                              StrokeThickness="1.5"
+                              HorizontalAlignment="Right"
+                              VerticalAlignment="Bottom" />
+        </Grid>
+
+        <Rectangle Grid.Row="0" Grid.RowSpan="1"
+                   Grid.Column="0" Grid.ColumnSpan="3"
+                   Style="{StaticResource borderStyle}"
+                   Stroke="Transparent"
+                   Fill="White" />
+        <Rectangle Grid.Row="2" Grid.RowSpan="1"
+                   Grid.Column="0" Grid.ColumnSpan="3"
+                   Style="{StaticResource borderStyle}"
+                   Stroke="Transparent"
+                   Fill="White" />
+        <Rectangle Grid.Row="0" Grid.RowSpan="3"
+                   Grid.Column="0" Grid.ColumnSpan="1"
+                   Style="{StaticResource borderStyle}"
+                   Stroke="Transparent"
+                   Fill="White" />
+        <Rectangle Grid.Row="0" Grid.RowSpan="3"
+                   Grid.Column="2" Grid.ColumnSpan="1"
+                   Style="{StaticResource borderStyle}"
+                   Stroke="Transparent"
+                   Fill="White" />
+        
+        <Rectangle Grid.Row="1" Grid.RowSpan="1"
+                   Grid.Column="1" Grid.ColumnSpan="1"
+                   Style="{StaticResource borderStyle}"
+                   Stroke="Black" StrokeThickness="1.5"
+                   Fill="Transparent" />
+        <Rectangle Grid.Row="0" Grid.RowSpan="3"
+                   Grid.Column="0" Grid.ColumnSpan="3"
+                   Style="{StaticResource borderStyle}"
+                   Stroke="Black" StrokeThickness="1.5"
+                   Fill="Transparent" />
+    </Grid>
+</rp:MovableWindow>

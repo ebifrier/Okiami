@@ -1,0 +1,111 @@
+﻿<UserControl x:Class="VoteSystem.Client.View.Control.CommenterSettingControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:l="clr-namespace:VoteSystem.Client"
+             xmlns:c="clr-namespace:VoteSystem.Client.Command"
+             xmlns:m="clr-namespace:VoteSystem.Client.Model"
+             xmlns:vc="clr-namespace:VoteSystem.Client.View.Control"
+             mc:Ignorable="d" 
+             d:DesignHeight="395" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../CommonDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <vc:BoolToSignConverter x:Key="boolToSignConverter" />
+            
+            <Style x:Key="dataGridColumnStyle" TargetType="FrameworkElement">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+            </Style>
+
+            <!-- 中継リストを表示します。-->
+            <ControlTemplate x:Key="userIdListTemplate">
+                <DataGrid ItemsSource="{Binding CommenterClientList}"
+                          Height="150"
+                          SelectionMode="Single"
+                          AutoGenerateColumns="False"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                          VerticalGridLinesBrush="#FFAAAAAA"
+                          HorizontalGridLinesBrush="#FFAAAAAA">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="Auto" Header="放送ID"
+                                            Binding="{Binding LiveId}" />
+                        <DataGridCheckBoxColumn Width="Auto" Header="中継許可"
+                                                IsReadOnly="False"
+                                                Binding="{Binding IsAllowToConnect, Mode=TwoWay,
+                                                                  UpdateSourceTrigger=PropertyChanged}"
+                                                ElementStyle="{StaticResource dataGridColumnStyle}" />
+                        <DataGridTextColumn Width="70" Header="状態"
+                                            Binding="{Binding State}"
+                                            ElementStyle="{StaticResource dataGridColumnStyle}" />
+                        <DataGridTextColumn Width="Auto" Header="投稿"
+                                            Binding="{Binding IsPostCommentEnabled,
+                                                              Converter={StaticResource boolToSignConverter}}"
+                                            ElementStyle="{StaticResource dataGridColumnStyle}" />
+                        <DataGridTextColumn Width="Auto" Header="視聴" IsReadOnly="True"
+                                            Binding="{Binding IsWatching,
+                                                              Mode=OneWay,
+                                                              Converter={StaticResource boolToSignConverter}}"
+                                            ElementStyle="{StaticResource dataGridColumnStyle}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ControlTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Vertical">
+            <CheckBox IsChecked="{Binding IsUseAsNicoCommenter}"
+                      Content="アカウントをコメント中継に使う"
+                      Margin="2,14,2,1" />
+        
+            <GroupBox Header="コメント中継設定"
+                      IsEnabled="{Binding IsUseAsNicoCommenter}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                
+                    <CheckBox Grid.Row="0"
+                              IsChecked="{Binding IsNicoCommenterAutoStart}"
+                              Content="コメント中継を自動的に始める"
+                              ToolTip="チェック中は中継が自動的に開始されます。"
+                              Margin="0,0,0,8" />
+
+                    <GroupBox Grid.Row="1"
+                              Header="中継放送リスト"
+                              ToolTip="中継中か中継待ちの放送リストです。">
+                        <ContentControl Template="{StaticResource userIdListTemplate}" />
+                    </GroupBox>
+
+                    <!--<StackPanel Grid.Row="2" Orientation="Horizontal"
+                                Visibility="{x:Static l:Global.IsNonPublishedVisibility}">
+                        <TextBox Name="commenterUrl" Width="200" />
+                        <Button Content="コメンター追加"
+                                Command="{x:Static c:Commands.AddCommenter}"
+                                CommandParameter="{Binding Text, ElementName=commenterUrl}" />
+                    </StackPanel>-->
+                </Grid>
+            </GroupBox>
+
+            <Expander Header="コメント中継とは？" IsExpanded="False">
+                <GroupBox Padding="0,6,0,0">
+                    <TextBlock TextWrapping="Wrap"
+                               Text="ある放送のコメントを他の放送に再投稿します。&#xa;
+&#xa;
+ニコ生では３秒に一度しかコメントできないため&#xa;
+コメント中継用のアカウントを複数使うことで&#xa;
+再投稿のラグを防いでいます。" />
+                </GroupBox>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

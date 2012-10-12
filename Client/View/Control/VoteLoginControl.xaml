@@ -1,0 +1,137 @@
+﻿<UserControl x:Class="VoteSystem.Client.View.Control.VoteLoginControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:t="clr-namespace:VoteSystem.Client"
+             xmlns:c="clr-namespace:VoteSystem.Client.Command"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="344">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="./VoteRoomInfoTemplate.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- ログイン用アイコンを表示するときに使います。-->
+            <Style x:Key="imageButtonStyle" TargetType="{x:Type Button}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Grid>
+                                <Rectangle StrokeThickness="0.8" Stroke="Black"
+                                           Fill="LightGray" RadiusX="4" RadiusY="4" />
+                                <Image Margin="1,1,1,1"
+                                       Source="{Binding ImageUrl,
+                                                        Converter={StaticResource imageConverter},
+                                                        ConverterParameter={StaticResource noImage}}" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- 投票ルーム名やパスワードなどの設定 -->
+        <GroupBox Grid.Row="0" Header="ログイン">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="0" />
+                    <RowDefinition />
+                    <RowDefinition Height="0" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="80" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Text="ニックネーム: " HorizontalAlignment="Right"
+                           VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="2" Grid.Column="0"
+                           Text="ルーム名: " HorizontalAlignment="Right"
+                           VerticalAlignment="Center" />
+                <TextBlock Grid.Row="4" Grid.Column="0"
+                           Text="パスワード: " HorizontalAlignment="Right"
+                           VerticalAlignment="Center" />
+
+                <TextBox Grid.Row="0" Grid.Column="1"
+                         Text="{Binding NickName}" />
+                <TextBox Grid.Row="2" Grid.Column="1"
+                         Text="{Binding VoteRoomName}" />
+                <PasswordBox Grid.Row="4" Grid.Column="1"
+                             Name="password"
+                             PasswordChanged="voteRoomPasswordBox_PasswordChanged" />
+
+                <!-- アイコンの設定 -->
+                <StackPanel Grid.RowSpan="5" Grid.Column="2"
+                            Orientation="Vertical">
+                    <TextBlock Text="アイコン" Padding="0,4,0,0"
+                               HorizontalAlignment="Center" />
+                    <Button Width="48" Height="48"
+                            Cursor="Hand"
+                            Style="{StaticResource imageButtonStyle}"
+                            Command="{x:Static c:Commands.SelectImageAsOwner}"
+                            ToolTip="アイコンを選択します。"
+                            Margin="4,4,4,4" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <!-- 入退室などのボタン -->
+        <GroupBox Grid.Row="1" Header="投票ルーム">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- 入室などのボタンコントロール -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                    <Button Style="{StaticResource voteButtonStyle}"
+                            Visibility="{x:Static t:Global.IsNonPublishedVisibility}"
+                            Content="pack://application:,,,/Resources/Image/vote_create_local.png"
+                            Command="{x:Static c:Commands.SelectLocalVote}"
+                            ToolTip="このパソコンに投票ルームを作ります。(ぼっち)&#xd;&#xa;
+(事前にVoteServer.exeを起動しないとログインできません(｡-_-)ﾉ )" />
+                    <Button Style="{StaticResource voteButtonStyle}"
+                            Content="pack://application:,,,/Resources/Image/vote_create_network.png"
+                            Command="{x:Static c:Commands.CreateVoteRoom}"
+                            ToolTip="サーバーに投票ルームを作ります。" />
+                    <Button Style="{StaticResource voteButtonStyle}"
+                            Content="pack://application:,,,/Resources/Image/vote_enter_network.png"
+                            Command="{x:Static c:Commands.EnterVoteRoom}"
+                            ToolTip="サーバーの投票ルームに入ります。" />
+                </StackPanel>
+
+                <Separator Grid.Row="1" />
+
+                <!-- 入室可能な投票ルーム一覧 -->
+                <ScrollViewer Grid.Row="2"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Auto">
+                    <ListBox SelectionMode="Single"
+                             DataContext="{x:Static t:Global.VoteRoomInfoModel}"
+                             ItemsSource="{Binding VoteRoomInfoList}"
+                             ItemTemplate="{StaticResource voteRoomInfoTemplate}"
+                             IsSynchronizedWithCurrentItem="True"
+                             SelectedValue="{Binding SelectedVoteRoomId}"
+                             SelectedValuePath="Id" />
+                </ScrollViewer>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

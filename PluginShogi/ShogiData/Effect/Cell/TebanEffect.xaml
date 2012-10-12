@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+                    xmlns:l="http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi">
+    <l:TebanMeshConverter x:Key="tebanMeshConv" />
+
+    <l:EffectObject x:Key="Effect"
+                    Duration="Forever"
+                    Color="Ivory"
+                    ImageUri="../Image/Gradient.png"
+                    Coord="{p:Binding BanCoord}"
+                    BaseScale="{p:Binding BanScale}"
+                    AutoUpdateMesh="False"
+                    Mesh="{p:Binding BWType, Converter={StaticResource tebanMeshConv}}">
+        <l:EffectObject.Scenario>
+            <p:Scenario>
+                <DoubleAnimationUsingKeyFrames
+                        p:Scenario.TargetProperty="Opacity"
+                        RepeatBehavior="Forever">
+                    <LinearDoubleKeyFrame KeyTime="0:0:0.0" Value="0.1" />
+                    <LinearDoubleKeyFrame KeyTime="0:0:3.0" Value="0.4" />
+                    <LinearDoubleKeyFrame KeyTime="0:0:6.0" Value="0.1" />
+                </DoubleAnimationUsingKeyFrames>
+            </p:Scenario>
+        </l:EffectObject.Scenario>
+    </l:EffectObject>
+</ResourceDictionary>

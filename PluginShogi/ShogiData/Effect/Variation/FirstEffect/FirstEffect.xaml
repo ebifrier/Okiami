@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+                    xmlns:l="http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi">
+
+    <l:EffectObject x:Key="Effect"
+                    Duration="0:0:0.4"
+                    AnimationImageCount="10"
+                    ImageUri="Arrow.png"
+                    Coord="{p:Binding Coord}"
+                    BaseScale="{p:Binding BaseScale}"
+                    StartSoundPath="First.wav">
+        <l:EffectObject.Scale>
+            <Vector3D X="{p:Calc 'leap(4, 7, ${Rate})'}"
+                      Y="{p:Calc 'leap(4, 7, ${Rate})'}"
+                      Z="1.0" />
+        </l:EffectObject.Scale>
+    </l:EffectObject>
+</ResourceDictionary>

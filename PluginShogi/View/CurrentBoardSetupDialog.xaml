@@ -1,0 +1,40 @@
+﻿<Window x:Class="VoteSystem.PluginShogi.View.CurrentBoardSetupDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation" 
+        mc:Ignorable="d" 
+        Title="確認" ResizeMode="NoResize"
+        SizeToContent="WidthAndHeight"
+        d:DesignHeight="207" d:DesignWidth="232">
+    <Grid MinWidth="150">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <TextBlock HorizontalAlignment="Center"
+                   Margin="40,30,40,10">
+            現局面を更新します。
+            <LineBreak />
+            よろしいですか？
+        </TextBlock>
+        
+        <CheckBox Grid.Row="1"
+                  Margin="0,20,0,10"
+                  HorizontalAlignment="Center"
+                  Content="ついでに投票結果もクリアする"
+                  IsChecked="{Binding IsClearVoteResult,
+                                      RelativeSource={RelativeSource AncestorType=Window}}" />
+        
+        <StackPanel Grid.Row="2" Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Margin="20,10,10,10" MinWidth="40" Content="ＯＫ"
+                    Command="{x:Static rp:DialogCommands.OK}" />
+            <Button Margin="0,10,10,10" Content="キャンセル"
+                    Command="{x:Static rp:DialogCommands.Cancel}" />
+        </StackPanel>
+    </Grid>
+</Window>

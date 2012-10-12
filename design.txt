@@ -1,0 +1,46 @@
+
+○投票システム
+
+・VoteRoom
+　投票開始時に○○が作ります。
+
+・コメンターアカウント
+　コメント中継用アカウント
+　（ニコニコ専用）
+
+・Participant
+　投票に参加する人。
+　投票ルームにログインする必要があります。
+　放送主の場合は放送からこのルームに通知を送ります。
+
+・LiveRoom
+　Participantが放送主である放送オブジェクトです。
+
+・NotificationReceiver
+　各種通知を受け取る人。
+　また、ニコ生の場合はコメント中継に使われることがあります。
+　投票ルームにログインする必要があります。
+
+・Voter
+　各種放送から投票する投票参加者。
+　放送主ではなく、各放送を通じて投票に参加します。
+
+・Notification
+　投票に関する各種通知メッセージ。
+　（誰が何に投票したかや、新規参加者が現れたときのメッセージなど）
+　
+　メッセージ、色、投稿元の放送、投稿元のルーム名(もしあれば)、投稿者、時刻
+
+・
+
+
+○コメント投稿時
+　Voter
+  => Client: ...
+  => Server: Participant
+  => Server: VoteRoom.VoteModel.ProcessNotification
+  => Server: VoteStrategy.ProcessNotification
+  => Server: VoteRoom.OnNotificationBroadcasted
+  => Server: Patricipant.SendNotification
+     ここで通知の送信と同時に必要ならコメンターによるコメントの送信も行います。
+  => Client: ...

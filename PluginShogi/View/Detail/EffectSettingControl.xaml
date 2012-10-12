@@ -1,0 +1,69 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation">
+    <!-- 音量設定を行います。-->
+    <Grid x:Key="seTemplate">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <CheckBox Grid.Row="0" Margin="5"
+                  Content="効果音を使用する"
+                  IsChecked="{Binding IsUseEffectSound}" />
+
+        <GroupBox Grid.Row="1" Header="ボリューム"
+                  IsEnabled="{Binding IsUseEffectSound}">
+            <StackPanel Orientation="Vertical"
+                        Margin="0,5,0,0">
+                <Grid>
+                    <TextBlock Text=" 0" HorizontalAlignment="Left" />
+                    <TextBlock Text="50" HorizontalAlignment="Center" />
+                    <TextBlock Text="100" HorizontalAlignment="Right" />
+                </Grid>
+                <Slider Margin="5,0,5,5"
+                        SmallChange="1" Maximum="100"
+                        AutoToolTipPlacement="TopLeft" Interval="4"
+                        IsMoveToPointEnabled="True" LargeChange="10"
+                        TickPlacement="TopLeft" TickFrequency="10"
+                        Value="{Binding EffectVolume}" />
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+    
+    <StackPanel Orientation="Vertical" x:Key="mainTemplate"
+                Margin="5">
+        <CheckBox Content="一手前に動かした駒を強調表示"
+                  IsChecked="{Binding IsUsePrevCellEffect}" />
+        <CheckBox Content="移動/駒打ち可能なマスを強調表示"
+                  IsChecked="{Binding IsUseMovableCellEffect}" />
+        <CheckBox Content="手番側を強調表示"
+                  IsChecked="{Binding IsUseTebanEffect}" />
+        <TextBlock />
+        <CheckBox Content="駒に関するエフェクトを使用"
+                  IsChecked="{Binding IsUsePieceEffect}" />
+        <CheckBox Content="囲いエフェクトを使用"
+                  IsChecked="{Binding IsUseCastleEffect}" />
+        <CheckBox Content="投票エフェクトを使用"
+                  IsChecked="{Binding IsUseVoteEffect}" />
+        <TextBlock />
+
+        <GroupBox Header="効果音設定(エフェクトと一緒に鳴ります)">
+            <StaticResource ResourceKey="seTemplate" />
+        </GroupBox>
+    </StackPanel>
+    
+    <StackPanel Orientation="Vertical"
+                x:Key="effectSettingControl">
+        <CheckBox Content="エフェクトを使用する"
+                  Margin="5"
+                  Name="isUseEffectCB"
+                  IsChecked="{Binding IsUseEffect}" />
+        
+        <GroupBox Header="エフェクト設定"
+                  IsEnabled="{Binding IsUseEffect}">
+            <StaticResource ResourceKey="mainTemplate" />
+        </GroupBox>
+    </StackPanel>
+</ResourceDictionary>

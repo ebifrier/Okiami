@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<FormatRoot>
+	<ColumnDefinitions>
+		<ColumnDefinition Width="1" />
+		<ColumnDefinition Width="1" />
+	</ColumnDefinitions>
+
+	<Line>
+		<Format ColumnSpan="2" Text="参加者一覧" />
+	</Line>
+
+	<Lines Data="$JoinedVoterList">
+		<Line>
+			<Format Column="0" Text="$Skill" Color="$Color" Alignment="Right" />
+			<Format Column="1" Text="$Name" Color="$Color" Alignment="Left" />
+		</Line>
+	</Lines>
+
+	<Line />
+	<Lines Data="$UnjoinedVoterCount">
+		<Line>
+			<Format Column="0" Text="その他" Color="#000000" Alignment="Right" />
+			<Format Column="1" Text="$()人" Alignment="Left" />
+		</Line>
+	</Lines>
+
+	<Line />
+	<Line>
+		<Format ColumnSpan="2" Text="放送主一覧" />
+	</Line>
+	
+	<Lines Data="$LiveOwnerList">
+		<Line>
+			<Format ColumnSpan="2"
+					Text="$Name" Color="$Color" Alignment="Center" />
+		</Line>
+	</Lines>
+	
+	<Line />
+	<Line>
+		<Format ColumnSpan="2" Text="最後までおつきあい頂き" />
+	</Line>
+	<Line>
+		<Format ColumnSpan="2" Text="どうもありがとうございました" />
+	 </Line>
+</FormatRoot>

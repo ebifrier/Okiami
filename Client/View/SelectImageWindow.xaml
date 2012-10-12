@@ -1,0 +1,56 @@
+﻿<Window x:Class="VoteSystem.Client.View.SelectImageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+        Title="アイコン一覧" Height="300" Width="300" ResizeMode="NoResize"
+        SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="CommonDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <rp:ImageConverter x:Key="imageConverter" />
+       
+            <!-- 画像を一列表示するためのテンプレート -->
+            <DataTemplate x:Key="imageListTemplate" DataType="List">
+                <ListBox SelectionMode="Single"
+                         ItemsSource="{Binding}"
+                         SelectionChanged="ListBox_SelectionChanged">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <!-- 画像表示 -->
+                            <Image Width="48" Height="48"
+                                   Source="{Binding Converter={StaticResource imageConverter},
+                                                    ConverterParameter={StaticResource noImage}}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <StackPanel Orientation="Vertical">
+        <ItemsControl ItemsSource="{Binding ImageUrlList}"
+                      ItemTemplate="{StaticResource imageListTemplate}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="ＯＫ"
+                    Margin="8,8,0,8" MinWidth="50"
+                    Click="OkButton_Click" />
+            <Button Margin="10,8,8,8" Content="キャンセル"
+                    Click="CancelButton_Click" />
+        </StackPanel>
+    </StackPanel>
+</Window>

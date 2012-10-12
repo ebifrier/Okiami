@@ -1,0 +1,186 @@
+﻿<rp:MovableWindow x:Class="VoteSystem.Client.View.EndRollWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+                  xmlns:v="clr-namespace:VoteSystem.Client.View"
+                  Title="エンドロール" Height="300" Width="400"
+                  Background="Transparent" EdgeLength="10" Topmost="True"
+                  ShowInTaskbar="False">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="./CommonDictionary.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Ragnarok.Presentation;component/Themes/Common.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- 操作を行うボタンの共通スタイルです。-->
+            <Style x:Key="imageButtonStyle" TargetType="Button">
+                <Setter Property="Margin" Value="2,0,2,0" />
+                <Setter Property="Width" Value="24" />
+                <Setter Property="Height" Value="24" />
+                <Setter Property="ContentTemplate"
+                        Value="{StaticResource DisableImageTemplate}" />
+
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="True">
+                        <Setter Property="ContentTemplate"
+                                Value="{StaticResource ImageTemplate}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- コンテキストメニュー -->
+            <ContextMenu x:Key="contextMenu">
+                <!-- CommandTargetの指定はwpfのバグを避けるために必要。
+                     http://social.msdn.microsoft.com/forums/en-US/wpf/thread/7bd75a7c-eab4-4f3a-967b-94a9534a7455/ -->
+                <MenuItem Header="常に手前に表示する"
+                          IsCheckable="True"
+                          IsChecked="{Binding Topmost,
+                                              RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}"
+                          CommandTarget="{Binding PlacementTarget,
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                <Separator />
+                <MenuItem Header="ウィンドウ枠を表示する"
+                          IsCheckable="True"
+                          IsChecked="{Binding IsShowBorder,
+                                              RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}"
+                          CommandTarget="{Binding PlacementTarget,
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                <Separator />
+                <MenuItem Header="閉じる"
+                          Command="Close"
+                          CommandTarget="{Binding PlacementTarget,
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+            </ContextMenu>
+            
+            <!-- 外枠の表示を切り替えます。-->
+            <Style x:Key="borderStyle" TargetType="FrameworkElement">
+                <Setter Property="Visibility" Value="Visible" />
+
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsShowBorder,
+                                                   RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}"
+                                 Value="False">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.Style>
+        <Style TargetType="v:EndRollWindow">
+            <Setter Property="ContextMenu"
+                    Value="{StaticResource contextMenu}" />
+        </Style>
+    </Window.Style>
+
+    <Grid Name="layoutBase">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding EdgeLength}" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="{Binding EdgeLength}" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding EdgeLength}" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{Binding EdgeLength}" />
+        </Grid.ColumnDefinitions>
+
+        <Rectangle Grid.Row="0" Grid.RowSpan="1"
+                   Grid.Column="0" Grid.ColumnSpan="3"
+                   Style="{StaticResource borderStyle}"
+                   Stroke="Transparent"
+                   Fill="White" />
+        <Rectangle Grid.Row="2" Grid.RowSpan="1"
+                   Grid.Column="0" Grid.ColumnSpan="3"
+                   Style="{StaticResource borderStyle}"
+                   Stroke="Transparent"
+                   Fill="White" />
+        <Rectangle Grid.Row="0" Grid.RowSpan="3"
+                   Grid.Column="0" Grid.ColumnSpan="1"
+                   Style="{StaticResource borderStyle}"
+                   Stroke="Transparent"
+                   Fill="White" />
+        <Rectangle Grid.Row="0" Grid.RowSpan="3"
+                   Grid.Column="2" Grid.ColumnSpan="1"
+                   Style="{StaticResource borderStyle}"
+                   Stroke="Transparent"
+                   Fill="White" />
+        <!--<Rectangle Grid.Row="1" Grid.RowSpan="1"
+                   Grid.Column="1" Grid.ColumnSpan="1"
+                   Style="{StaticResource borderStyle}"
+                   Stroke="White" StrokeThickness="2"
+                   Fill="Transparent" />-->
+
+        <Rectangle Grid.Row="0" Grid.RowSpan="3"
+                   Grid.Column="0" Grid.ColumnSpan="3"
+                   Style="{StaticResource borderStyle}"
+                   Stroke="Black" StrokeThickness="1.5"
+                   Fill="Transparent" />
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--<MediaElement Grid.Row="0"
+                          Source="E:\programs\develop\VoteSystem\VoteSystem\Client\Data\sample.mpg"
+                          Name="movie"
+                          LoadedBehavior="Manual">
+            </MediaElement>-->
+
+            <Canvas Grid.Row="0" Name="canvas">
+            </Canvas>
+
+            <Grid Grid.Row="1" Background="White" IsEnabled="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Style="{StaticResource imageButtonStyle}"
+                            Content="pack://application:,,,/Resources/Image/endroll_start.png"
+                            ToolTip="開始"
+                            Command="{x:Static v:EndRollWindow.PlayCommand}" />
+                    <Button Style="{StaticResource imageButtonStyle}"
+                            Content="pack://application:,,,/Resources/Image/endroll_pause.png"
+                            ToolTip="一時停止"
+                            Command="{x:Static v:EndRollWindow.PauseCommand}" />
+                    <Button Style="{StaticResource imageButtonStyle}"
+                            Content="pack://application:,,,/Resources/Image/endroll_stop.png"
+                            ToolTip="停止"
+                            Command="{x:Static v:EndRollWindow.StopCommand}" />
+                    
+                    <Separator />
+
+                    <Label Content="時間(秒)" />
+
+                    <Label Content="{Binding CurrentPos}"
+                           ContentStringFormat="{}{0:000.00} /"
+                           ToolTip="現在の再生時刻" />
+                    
+                    <rp:NumericUpDown x:Name="updown" Minimum="0" Maximum="6000"
+                                      MinWidth="55"
+                                      Value="{Binding RollTimeSeconds, Converter={StaticResource intConverter}}" />
+                </StackPanel>
+
+                <Slider Grid.Column="1"
+                        SmallChange="1" TickFrequency="5" IsSnapToTickEnabled="False"
+                        TickPlacement="TopLeft" IsMoveToPointEnabled="True"
+                        Maximum="{Binding RollTimeSeconds}"
+                        Value="{Binding CurrentPos}" />
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button Style="{StaticResource imageButtonStyle}"
+                            Content="pack://application:,,,/Resources/Image/endroll_close.png"
+                            ToolTip="閉じる"
+                            Command="Close" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</rp:MovableWindow>

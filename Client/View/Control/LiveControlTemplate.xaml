@@ -1,0 +1,240 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+                    xmlns:p="clr-namespace:VoteSystem.Protocol;assembly=VoteProtocol"
+                    xmlns:pv="clr-namespace:VoteSystem.Protocol.Vote;assembly=VoteProtocol"
+                    xmlns:l="clr-namespace:VoteSystem.Client"
+                    xmlns:c="clr-namespace:VoteSystem.Client.Command"
+                    xmlns:ml="clr-namespace:VoteSystem.Client.Model.Live">
+    
+    <!-- ニコニコ専用のログイン名表示テンプレート -->
+    <!-- かなり変則的 -->
+    <ControlTemplate x:Key="nicoLoginNameControl">
+        <StackPanel Orientation="Horizontal"
+                    DataContext="{x:Static l:Global.MainViewModel}"
+                    Margin="0,0,0,8">
+            <TextBlock>
+                <TextBlock Text="ログイン名:" />
+                <Hyperlink NavigateUri="{Binding NicoLoginName}"
+                           Command="{x:Static c:Commands.NavigateUrl}"
+                           CommandParameter="{Binding NicoLoginUserUrl}">
+                    <TextBlock Text="{Binding NicoLoginName}" />
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
+    </ControlTemplate>
+
+    <Style x:Key="nicoLoginNameStyle" TargetType="Control">
+        <Setter Property="Visibility" Value="Collapsed" />
+        <Setter Property="Template" Value="{StaticResource nicoLoginNameControl}" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding LiveSite}" Value="NicoNama">
+                <Setter Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- 接続/切断ボタンの切換を行うスタイルです。-->
+    <Style x:Key="toggleConnectButtonStyle" TargetType="Button">
+        <Setter Property="Content" Value="切断" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Command" Value="{x:Static c:Commands.DisconnectToLive}" />
+        <Setter Property="CommandParameter" Value="{Binding}" />
+        
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding LiveData}" Value="{x:Null}">
+                <Setter Property="Content" Value="接続" />
+                <Setter Property="Command" Value="{x:Static c:Commands.ConnectToLive}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- 放送属性を設定するコントロールです。-->
+    <DataTemplate x:Key="attributeTemplate" DataType="{x:Type p:LiveAttribute}">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Disabled">
+            <TreeView>
+                <TreeViewItem IsExpanded="True"
+                              Header="システムメッセージの投稿設定">
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <CheckBox Content="重要メッセージ"
+                                      IsChecked="{Binding IsPostImportantComment}" />
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <CheckBox Content="システムメッセージ"
+                                      IsChecked="{Binding IsPostSystemComment}" />
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                </TreeViewItem>
+
+                <TreeViewItem IsExpanded="True">
+                    <TreeViewItem.Header>
+                        <CheckBox Content="自放送からの確認コメントを投稿する"
+                                  IsChecked="{Binding IsPostConfirmComment}"
+                                  Name="isPostConfirmCommentControl" />
+                    </TreeViewItem.Header>
+                    
+                    <TreeViewItem Header="投稿するコメントの種類"
+                                  IsEnabled="{Binding IsChecked, ElementName=isPostConfirmCommentControl}"
+                                  IsExpanded="{Binding IsChecked, ElementName=isPostConfirmCommentControl}">
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="通常メッセージ"
+                                          IsChecked="{Binding IsPostConfirmMessageComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="投票コメント"
+                                          IsChecked="{Binding IsPostConfirmVoteComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="参加コメント"
+                                          IsChecked="{Binding IsPostConfirmJoinComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="延長コメント"
+                                          IsChecked="{Binding IsPostConfirmTimeExtendComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="評価値コメント"
+                                          IsChecked="{Binding IsPostConfirmEvaluationComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                </TreeViewItem>
+
+                <TreeViewItem IsExpanded="True">
+                    <TreeViewItem.Header>
+                        <CheckBox Content="他放送からのミラーコメントを投稿する"
+                                  IsChecked="{Binding IsPostMirrorComment}"
+                                  Name="isPostMirrorCommentControl" />
+                    </TreeViewItem.Header>
+                    
+                    <TreeViewItem Header="投稿するコメントの種類"
+                                  IsEnabled="{Binding IsChecked, ElementName=isPostMirrorCommentControl}"
+                                  IsExpanded="{Binding IsChecked, ElementName=isPostMirrorCommentControl}">
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="通常メッセージ"
+                                          IsChecked="{Binding IsPostMirrorMessageComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="投票コメント"
+                                          IsChecked="{Binding IsPostMirrorVoteComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="参加コメント"
+                                          IsChecked="{Binding IsPostMirrorJoinComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="延長コメント"
+                                          IsChecked="{Binding IsPostMirrorTimeExtendComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="評価値コメント"
+                                          IsChecked="{Binding IsPostMirrorEvaluationComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                </TreeViewItem>
+            </TreeView>
+        </ScrollViewer>
+    </DataTemplate>
+    
+    <!-- -->
+    <DataTemplate x:Key="liveControlTemplate" DataType="{x:Type ml:LiveClient}">
+        <Expander Header="{Binding LiveSiteTitle}"
+                  IsExpanded="True">
+            <!-- Expander.HeaderStringFormatにはバグがあるらしく上手く動かない -->
+            <Expander.HeaderTemplate>
+                <DataTemplate DataType="String">
+                    <TextBlock Text="{Binding StringFormat={}{0}設定}" />
+                </DataTemplate>
+            </Expander.HeaderTemplate>
+            
+            <GroupBox>
+                <Grid Margin="0,8,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition Height="*"  />
+                    </Grid.RowDefinitions>
+
+                    <!-- ログイン名 -->
+                    <ContentControl Grid.Row="0"
+                                    Style="{StaticResource nicoLoginNameStyle}" />
+
+                    <!-- 放送URL -->
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="40" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Row="2" Grid.Column="0"
+                               Content="URL:" />
+                        <rp:BindOnEnterTextBox
+                            Grid.Row="2" Grid.Column="1" AcceptsReturn="False"
+                            Text="{Binding LiveUrlText}" />
+                        <Button Grid.Row="2" Grid.Column="2"
+                                Style="{StaticResource toggleConnectButtonStyle}" />
+                    </Grid>
+
+                    <!-- 放送タイトルなど -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal">
+                        <TextBlock>
+                            <TextBlock Text="放送:" />
+                            <Hyperlink NavigateUri="{Binding LiveData.Url}"
+                                       Command="{x:Static c:Commands.NavigateUrl}"
+                                       CommandParameter="{Binding LiveData.Url}">
+                                <TextBlock Text="{Binding LiveTitle}"
+                                           ToolTip="{Binding LiveData.Url}"/>
+                            </Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+
+                    <Separator Grid.Row="3" />
+
+                    <GroupBox Grid.Row="4" Header="各種設定">
+                        <ContentControl ContentTemplate="{StaticResource attributeTemplate}"
+                                        Content="{Binding Attribute}" />
+                    </GroupBox>
+                </Grid>
+            </GroupBox>
+        </Expander>
+    </DataTemplate>
+</ResourceDictionary>

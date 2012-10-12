@@ -1,0 +1,40 @@
+#
+#
+#
+
+OUTDIR = bin
+#TARGET = $(OUTDIR)/Ragnarok.dll
+
+CSFLAGS = -debug+ -warn:4 -o+ $(OPT_CSFLAGS)
+
+LDFLAGS = $(OPT_LDFLAGS) -lib:$(OUTDIR)
+LIBS    = -r:System.Runtime.Serialization.dll -r:protobuf-net.dll \
+          -r:Ragnarok.dll -r:Ragnarok.Shogi.dll $(OPT_LIBS)
+
+all: make-pre make-main make-post
+
+make-main:
+
+make-pre:
+	@if test ! -d $(OUTDIR); then \
+		mkdir $(OUTDIR); \
+	fi
+	@rm -rf $(OUTDIR)/*
+	
+	@for d in $(DEPEND_LIBPATH); do \
+		(cd $$d; make); \
+		if test ! -d $$d/$(OUTDIR); then \
+			echo "Not found '$$d/$(OUTDIR)'"; \
+			exit 1; \
+		fi; \
+		cp $$d/$(OUTDIR)/* $(OUTDIR); \
+	done
+
+make-post:
+	
+
+clean:
+	@for d in $(DEPEND_LIBPATH); do \
+		(cd $$d; make clean) \
+	done
+	rm -rf *~ $(OUTDIR)

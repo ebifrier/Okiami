@@ -1,0 +1,246 @@
+//
+//
+//
+
+import "Protocol.inc.proto";
+import "Vote.inc.proto";
+import "Shogi.inc.proto";
+
+package VoteSystem.Protocol.Vote;
+
+// ニココメンターのログインタイプです。
+enum NicoLoginType {
+	NotLogined = 0;
+	Normal = 1;
+	Premium = 2;
+}
+
+// 放送ルームへの操作IDです。
+enum LiveOperation {
+	None = 0;
+	Add = 1;
+	Remove = 2;
+	SetAttribute = 3;
+	GetAttribute = 4;
+}
+
+
+///////////////////////////////////////////////////////////
+//
+// サーバーへのリクエストです。
+// リクエストとは応答を要するサーバーへの指示のことです。
+//
+
+// 既存の投票部屋がいくつあるかを取得します。
+message GetVoteRoomCountRequest {
+}
+
+message GetVoteRoomCountResponse {
+	required int32 Count = 1;
+}
+
+
+// 既存の投票部屋の情報を取得します。
+message GetVoteRoomListRequest {
+	required int32 FromIndex = 1;
+	required int32 ToIndex = 2;
+}
+
+message GetVoteRoomListResponse {
+	repeated VoteRoomInfo RoomInfoList = 1;
+}
+
+
+// 投票参加者の属性を設定します。
+message SetParticipantAttributeRequest {
+	optional BoolObject IsUseAsNicoCommenter = 1;
+	optional bool IsSetLoginType = 2;
+	optional NicoLoginType LoginType = 3;
+	optional string Message = 4;
+}
+
+message SetParticipantAttributeResponse {
+	required VoteParticipantInfo Info = 1;
+}
+
+
+// 放送主やその放送の情報を取得します。
+message LiveOperationRequest {
+	required LiveOperation Operation = 1;
+	required LiveData LiveData = 2;
+	optional LiveAttribute Attribute = 3;
+}
+
+message LiveOperationResponse {
+	required LiveOperation Operation = 1;
+	required LiveData LiveData = 2;
+	required LiveAttribute Attribute = 3;
+}
+
+
+// 接続の切断要求を出します。
+message DisconnectRequest {
+}
+
+message DisconnectResponse {
+}
+
+
+// 投票部屋作成要求を出します。
+message CreateVoteRoomRequest {
+	required string RoomName = 1;
+	optional string Password = 2;
+	
+	required string OwnerName = 10;
+	required string ImageUrl = 11;
+	required string OwnerId = 12;
+}
+
+message CreateVoteRoomResponse {
+	required VoteRoomInfo RoomInfo = 1;
+	required int32 ParticipantNo = 2;
+}
+
+
+// 既存の投票部屋に入室します。
+// ロビーサーバーのみが処理可能です。
+message EnterVoteRoomRequest {
+	required int32 RoomId = 1;
+	optional string Password = 2;
+	
+	required string ParticipantName = 10;
+	required string ImageUrl = 11;
+	required string ParticipantId = 12;
+}
+
+message EnterVoteRoomResponse {
+	required VoteRoomInfo RoomInfo = 1;
+	required int32 ParticipantNo = 2;
+}
+
+
+// 投票者一覧を取得します。
+message GetVoterListRequest {
+}
+
+message GetVoterListResponse {
+	required VoterList VoterList = 1;
+}
+
+
+// 投票部屋から退出します。
+message LeaveVoteRoomRequest {
+}
+
+message LeaveVoteRoomResponse {
+}
+
+
+///////////////////////////////////////////////////////////
+//
+// コマンドは応答のない指示です。
+//
+
+// 投票結果を送信します。
+// サーバーからクライアントに送られます。
+message SendVoteResultCommand {
+	required VoteResult Result = 1;
+}
+
+// 投票モードの変更を行います。
+// クライアントからサーバーに送られます。
+message ChangeVoteModeCommand {
+	required VoteMode VoteMode = 1;
+}
+
+// 投票を開始します。
+// クライアントからサーバーに送られます。
+message StartVoteCommand {
+	optional double Seconds = 1;
+}
+
+// 投票を一時停止します。
+// クライアントからサーバーに送られます。
+message PauseVoteCommand {
+}
+
+// 投票を停止します。
+// クライアントからサーバーに送られます。
+message StopVoteCommand {
+}
+
+// 投票時間を設定します。
+// クライアントからサーバーに送られます。
+message SetVoteSpanCommand {
+	required double Seconds = 1;
+}
+
+// 投票時間を延長します。
+// （負数ならその分だけ時間を減らします）
+// クライアントからサーバーに送られます。
+message AddVoteSpanCommand {
+	required double DiffSeconds = 1;
+}
+
+// 全投票時間を設定します。
+// クライアントからサーバーに送られます。
+message SetTotalVoteSpanCommand {
+	required double Seconds = 1;
+}
+
+// 全投票時間を延長します。
+// （負数ならその分だけ時間を減らします）
+// クライアントからサーバーに送られます。
+message AddTotalVoteSpanCommand {
+	required double DiffSeconds = 1;
+}
+
+// 投票結果のクリアを行います。
+// クライアントからサーバーに送られます。
+message ClearVoteCommand {
+}
+
+// 投票やプレイヤーの登録などを行う各種メッセージを送信します。
+// サーバー、クライアント双方に送られます。
+message NotificationCommand {
+	required Notification Notification = 1;
+
+	// クライアントから送られるときにのみ使われ、
+	// 放送主からの投稿であるかどうかを示します。
+	required bool IsFromLiveOwner = 2;
+}
+
+
+///////////////////////////////////////////////////////////
+//
+// 将棋専用
+//
+
+// 現局面を取得します。
+// クライアントからサーバーに送られます。
+message ShogiGetCurrentBoardRequest {
+}
+
+message ShogiGetCurrentBoardResponse {
+	required Ragnarok.Shogi.Board Board = 1;
+}
+
+
+// 現局面を設定します。
+// クライアント、サーバー双方から送られます。
+message ShogiSetCurrentBoardCommand {
+	required Ragnarok.Shogi.Board Board = 1;
+}
+
+
+// 大合神クジラちゃんの参加者を取得します。
+// クライアントからサーバーに送られます。
+message ShogiGetWhaleClientListCommand {
+}
+
+// 大合神クジラちゃんの参加者が変わったことを通知します。
+// サーバーからクライアントに送られます。
+message ShogiSetWhaleClientListCommand {
+	repeated string NameList = 1;
+	required double Value = 2;
+}

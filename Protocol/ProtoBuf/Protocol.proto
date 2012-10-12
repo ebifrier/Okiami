@@ -1,0 +1,8 @@
+
+package VoteSystem.Protocol;
+
+// 真偽値オブジェクトです。protobuf.netではbool?を
+// 直接扱えないためこのようにしました。
+message BoolObject {
+	required bool Value = 1;
+}

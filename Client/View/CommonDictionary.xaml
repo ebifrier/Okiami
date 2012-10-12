@@ -1,0 +1,68 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+                    xmlns:vc="clr-namespace:VoteSystem.Client.View.Control;assembly=VoteClient">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Ragnarok.Presentation;component/Themes/Common.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <rp:MultiValueConverter x:Key="multiValueConverter" />
+    <rp:ImageConverter x:Key="imageConverter" />
+    <rp:ColorToSolidColorBrushConverter x:Key="brushConverter" />
+    <rp:ColorAlphaConverter x:Key="colorAlphaConverter" />
+    <rp:ValueToIntConverter x:Key="intConverter" />
+    <rp:EnumToBooleanConverter x:Key="enumToBooleanConverter" />
+
+    <rp:BooleanToVisibilityConverter x:Key="visibilityConverterHidden"
+                                     DefaultHiddenValue="Hidden" />
+    <rp:BooleanToVisibilityConverter x:Key="visibilityConverterCollapsed"
+                                     DefaultHiddenValue="Collapsed" />
+    
+    <BitmapImage x:Key="noImage"
+                 UriSource="pack://application:,,,/Resources/Image/koma/koma_noimage.png" />
+    
+    <!--
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock Style="{StaticResource enableIfLoginToNicoTextBlockStyle}"
+                       Text="現在の状態: " />
+            <TextBlock Style="{StaticResource enableIfLoginToNicoTextBlockStyle}"
+                       Text="('･ω･')" />
+        </StackPanel>
+    -->
+
+    <!-- 投票関連操作を行うボタンの共通スタイルです。-->
+    <Style x:Key="voteButtonStyle" TargetType="Button">
+        <Setter Property="Margin" Value="2,0,2,0" />
+        <Setter Property="Width" Value="24" />
+        <Setter Property="Height" Value="24" />
+        <Setter Property="ContentTemplate"
+                Value="{StaticResource DisableImageTemplate}" />
+
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="True">
+                <Setter Property="ContentTemplate"
+                        Value="{StaticResource ImageTemplate}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- IsLoginedが真の時のみコントロールを有効にします -->
+    <Style x:Key="enableIfLoginedStyle" TargetType="FrameworkElement">
+        <Setter Property="IsEnabled" Value="False" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsLogined}" Value="True">
+                <Setter Property="IsEnabled" Value="True" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- IsLoginedが偽の時のみコントロールを有効にします -->
+    <Style x:Key="enableIfNotLoginedStyle" TargetType="FrameworkElement">
+        <Setter Property="IsEnabled" Value="False" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Logined}" Value="False">
+                <Setter Property="IsEnabled" Value="True" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

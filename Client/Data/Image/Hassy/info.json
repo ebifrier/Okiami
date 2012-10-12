@@ -1,0 +1,20 @@
+﻿{
+  "title": "橋本崇載",
+  "blog": "http://blog.livedoor.jp/hassy_blog/",
+  "homepage": "http://shogi-bar.ciao.jp/",
+  "nicommunity": "co1505413",
+  "twitter": "shogibar84",
+
+  "imageList":
+  [
+    {"image":"atama_kakaeru.jpg", "min":-100000, "max": -2000},
+    {"image":"yankee2.jpg",       "min":  -2000, "max": -1000},
+    {"image":"majime.jpg",        "min":  -1000, "max":  -500},
+    {"image":"yankee1.jpg",       "min":   -500, "max":  -300},
+    {"image":"default.jpg",       "min":   -300, "max":   300},
+    {"image":"kiri.jpg",          "min":    300, "max":   500},
+    {"image":"kaisuiyoku.jpg",    "min":    500, "max":  1000},
+    {"image":"kocchi_minna.jpg",  "min":   1000, "max":  2000},
+    {"image":"peace.jpg",         "min":   2000, "max":100000}
+  ]
+}
