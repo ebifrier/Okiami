@@ -126,7 +126,7 @@
         <Border Grid.Row="3" Grid.RowSpan="2"
                 x:Name="variationBorder"
                 Style="{StaticResource variationStyle}"
-                Background="#500037D5"
+                Background="#600023F0"
                 IsHitTestVisible="False" />
 
         <!-- ステータスバーです。-->
