@@ -282,12 +282,19 @@ namespace VoteSystem.Server.VoteStrategy
                     return null;
                 }
 
+                // 参加者を参加者一覧に加えます。
+                var joiners = lines.Skip(1).ToList();
+                foreach (var name in joiners)
+                {
+                    this.voteRoom.VoterListManager.AddModeCustomJoiner(name);
+                }
+
                 // 二行目以降は名前一覧
                 var command = new ShogiSetWhaleClientListCommand()
                 {
                     Value = value,
                 };
-                command.NameList.AddRange(lines);
+                command.NameList.AddRange(joiners);
 
                 return command;
             }

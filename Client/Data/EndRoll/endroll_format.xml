@@ -27,6 +27,18 @@
 
 	<Line />
 	<Line>
+		<Format ColumnSpan="2" Text="クジラちゃん参加ＰＣ一覧" />
+	</Line>
+	
+	<Lines Data="$ModeCustomJoinerList">
+		<Line>
+			<Format ColumnSpan="2"
+					Text="$" Color="Black" Alignment="Center" />
+		</Line>
+	</Lines>
+
+	<Line />
+	<Line>
 		<Format ColumnSpan="2" Text="放送主一覧" />
 	</Line>
 	

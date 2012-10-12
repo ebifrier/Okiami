@@ -18,6 +18,8 @@ namespace VoteSystem.Server
             new Dictionary<string, VoterInfo>();
         private readonly Dictionary<string, VoterInfo> liveOwnerDic =
             new Dictionary<string, VoterInfo>();
+        private readonly HashSet<string> modeCustomjoinerSet =
+            new HashSet<string>();
 
         /// <summary>
         /// 投票者リストを取得します。
@@ -29,12 +31,14 @@ namespace VoteSystem.Server
                 lock (this.joinedVoterDic)
                 lock (this.unjoinedVoterDic)
                 lock (this.liveOwnerDic)
+                lock (this.modeCustomjoinerSet)
                 {
                     return new VoterList()
                     {
                         JoinedVoterList = this.joinedVoterDic.Values.ToList(),
                         UnjoinedVoterCount = this.unjoinedVoterDic.Count,
                         LiveOwnerList = this.liveOwnerDic.Values.ToList(),
+                        ModeCustomJoinerList = this.modeCustomjoinerSet.ToList(),
                     };
                 }
             }
@@ -105,7 +109,7 @@ namespace VoteSystem.Server
         }
 
         /// <summary>
-        /// IDから登録された投票者を取得します。
+        /// 登録された投票者をIDから検索します。
         /// </summary>
         public VoterInfo GetJoinedVoter(string voterId)
         {
@@ -146,6 +150,22 @@ namespace VoteSystem.Server
             lock (this.liveOwnerDic)
             {
                 this.liveOwnerDic[voter.Id] = voter;
+            }
+        }
+
+        /// <summary>
+        /// 各モード固有の参加者をリストに追加します。
+        /// </summary>
+        public void AddModeCustomJoiner(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return;
+            }
+
+            lock (this.modeCustomjoinerSet)
+            {
+                this.modeCustomjoinerSet.Add(name);
             }
         }
     }

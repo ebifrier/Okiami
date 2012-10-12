@@ -406,7 +406,9 @@ namespace VoteSystem.Client.Model
                 case "JoinedVoterList":
                     return voterList.JoinedVoterList.ToList<object>();
                 case "LiveOwnerList":
-                    return voterList.LiveOwnerList.ToList<object>();                
+                    return voterList.LiveOwnerList.ToList<object>();
+                case "ModeCustomJoinerList":
+                    return voterList.ModeCustomJoinerList.ToList<object>();
             }
 
             return null;

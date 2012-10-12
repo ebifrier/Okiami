@@ -1,3 +1,10 @@
+2012-10-12  - Ver 1.0.19.2
+
+	* Protocol/Vote/VoterList.cs: 各モードごとの参加者リストを保持でき
+	るようにしました。大合神クジラちゃん用に追加したプロパティです。
+	* Server/VoteStrategy/ShogiVoteStrategy.cs: クジラちゃんに参加者が
+	増えたときに、それを内部の参加者情報に記録するようにしました。
+
 2012-10-08  - Ver 1.0.19.1
 
 	* PluginShogi/View/Detail/BanSettingControl.xaml: 盤の不透明度の表

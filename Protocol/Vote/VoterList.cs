@@ -11,7 +11,7 @@ namespace VoteSystem.Protocol.Vote
     /// </summary>
     [DataContract()]
     [Serializable()]
-    public class VoterList
+    public sealed class VoterList
     {
         /// <summary>
         /// "参加"した投票者一覧を取得または設定します。
@@ -44,6 +44,16 @@ namespace VoteSystem.Protocol.Vote
         }
 
         /// <summary>
+        /// モード固有の参加者一覧を取得または設定します。
+        /// </summary>
+        [DataMember(Order = 4, IsRequired = true)]
+        public List<string> ModeCustomJoinerList
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// デシリアライズ後に呼ばれます。
         /// </summary>
         [OnDeserialized()]
@@ -58,6 +68,11 @@ namespace VoteSystem.Protocol.Vote
             {
                 LiveOwnerList = new List<VoterInfo>();
             }
+
+            if (ModeCustomJoinerList == null)
+            {
+                ModeCustomJoinerList = new List<string>();
+            }
         }
 
         /// <summary>
@@ -65,8 +80,9 @@ namespace VoteSystem.Protocol.Vote
         /// </summary>
         public VoterList()
         {
-            this.JoinedVoterList = new List<VoterInfo>();
-            this.LiveOwnerList = new List<VoterInfo>();
+            JoinedVoterList = new List<VoterInfo>();
+            LiveOwnerList = new List<VoterInfo>();
+            ModeCustomJoinerList = new List<string>();
         }
     }
 }
