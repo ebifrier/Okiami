@@ -653,13 +653,15 @@ namespace VoteSystem.PluginShogi.ViewModel
                 }
 
                 // ファイルに保存します。
-                var file = new KifFile();
-                file.Headers["先手"] = "あなた";
-                file.Headers["後手"] = "あなた２";
-
                 var manager = ShogiGlobal.ShogiModel.MoveManager;
                 var root = manager.CreateVariationNode();
-                file.SaveFile(dialog.FileName, root);
+
+                var headers = new Dictionary<string, string>();
+                headers["先手"] = "あなた";
+                headers["後手"] = "あなた２";
+
+                var kifu = new KifuObject(headers, root);
+                KifuWriter.SaveFile(dialog.FileName, kifu);
             }
             catch (Exception ex)
             {

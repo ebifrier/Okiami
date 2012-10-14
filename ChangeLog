@@ -1,3 +1,10 @@
+2012-10-15  - Ver 1.0.20.1
+
+	* Client/Model/SoundManager.cs: 投票開始や投票終了などのＳＥ再生時
+	にファイルがなくてもエラーを出力しないようにしました。
+	* PluginShogi/Model/VariationManager.cs: 変化付きの棋譜を正しく出力
+	できるようにしました。今までは変化の扱い方が間違っていました。
+
 2012-10-12  - Ver 1.0.19.2
 
 	* Protocol/Vote/VoterList.cs: 各モードごとの参加者リストを保持でき

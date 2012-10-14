@@ -12,11 +12,28 @@ namespace VoteSystem.Client.Model
     /// <summary>
     /// 音声ファイルを再生します。
     /// </summary>
-    public class SoundManager : Ragnarok.Extra.Sound.SoundManager
+    public sealed class SoundManager
     {
+        private readonly Ragnarok.Extra.Sound.SoundManager manager;
         private List<SoundSetInfo> soundInfoList =
             new List<SoundSetInfo>();
         private SoundSetInfo selectedSoundSet;
+
+        /// <summary>
+        /// SE再生が可能かどうかを取得します。
+        /// </summary>
+        public bool CanUseSound
+        {
+            get
+            {
+                if (this.manager == null)
+                {
+                    return false;
+                }
+                
+                return this.manager.CanUseSound;
+            }
+        }
 
         /// <summary>
         /// 音声ディレクトリの一覧を取得します。
@@ -61,6 +78,20 @@ namespace VoteSystem.Client.Model
 
             // 選択された画像セットを保存します。
             Global.Settings.SoundSetDir = SelectedSoundSet.DirectoryName;
+        }
+
+        /// <summary>
+        /// SE再生を行います。
+        /// </summary>
+        public void PlaySE(string filename)
+        {
+            if (this.manager == null)
+            {
+                return;
+            }
+
+            // 例外は投げません。
+            this.manager.PlaySE(filename, 1.0, true, true);
         }
 
         /// <summary>
@@ -186,21 +217,25 @@ namespace VoteSystem.Client.Model
         {
             try
             {
-                DefaultPath = Path.Combine(
-                    AssemblyLocation, "Data", "Sound",
+                this.manager = new Ragnarok.Extra.Sound.SoundManager();
+
+                this.manager.DefaultPath = Path.Combine(
+                    Ragnarok.Extra.Sound.SoundManager.AssemblyLocation,
+                    "Data", "Sound",
                     Global.Settings.SoundSetDir ?? "");
-                Volume = Global.Settings.SEVolume;
+                this.manager.Volume = Global.Settings.SEVolume;
 
                 Global.Settings.PropertyChanged += (sender, e) =>
                 {
                     if (e.PropertyName == "SEVolume")
                     {
-                        Volume = Global.Settings.SEVolume;
+                        this.manager.Volume = Global.Settings.SEVolume;
                     }
                     else if (e.PropertyName == "SoundSetDir")
                     {
-                        DefaultPath = Path.Combine(
-                            AssemblyLocation, "Data", "Sound",
+                        this.manager.DefaultPath = Path.Combine(
+                            Ragnarok.Extra.Sound.SoundManager.AssemblyLocation,
+                            "Data", "Sound",
                             Global.Settings.SoundSetDir ?? "");
                     }
                 };

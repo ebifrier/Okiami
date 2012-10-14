@@ -158,7 +158,10 @@ namespace VoteSystem.PluginShogi.Model
             manager.TryAddVariation(variation);
         }
 
-        private VariationNode CreateVariationList()
+        /// <summary>
+        /// 本譜のみの差し手をツリー形式(内容は一本道)に直します。
+        /// </summary>
+        private VariationNode CreateHonpuNode()
         {
             var root = new VariationNode()
             {
@@ -190,6 +193,9 @@ namespace VoteSystem.PluginShogi.Model
             return root;
         }
 
+        /// <summary>
+        /// 変化ツリーに変化を登録します。
+        /// </summary>
         private void AddVariationNode(VariationNode root,
                                       IEnumerable<Move> variationMoveList)
         {
@@ -207,44 +213,65 @@ namespace VoteSystem.PluginShogi.Model
             var leaveMoveList = variationMoveList.Skip(1);
 
             // 変化の初手が次の手と一致したら、次の手に移動します。
-            var next = root.NextChild;
-            if (next != null && next.Move == firstMove)
+            var child = root.NextChild;
+            if (child != null && child.Move == firstMove)
             {
-                AddVariationNode(next, leaveMoveList);
+                AddVariationNode(child, leaveMoveList);
                 return;
             }
 
-            // 変化の初手がすでに登録された変化と一致すれば、その手に移動します。
-            var prevNode = root;
-            for (next = root.NextVariation; next != null; next = next.NextVariation)
-            {
-                if (next.Move == firstMove)
-                {
-                    AddVariationNode(next, leaveMoveList);
-                    return;
-                }
-
-                prevNode = next;
-            }
-
-            // 次の手です。
-            var node = new VariationNode()
-            {
-                Move = firstMove,
-                MoveCount = root.MoveCount + 1,
-            };
-
-            // 次の手が空いていれば次の手に、もしくは新たな変化に登録します。
             if (root.NextChild == null)
             {
-                root.NextChild = node;
+                // 次の手が空いていれば次から変化をまとめて登録します。
+                root.NextChild = KifuObject.Convert2Node(
+                    variationMoveList,
+                    root.MoveCount + 1);
             }
             else
             {
-                prevNode.NextVariation = node;
+                // 次の手の変化に所望の変化があるか調べます。
+                var prevNode = child;
+                for (var next = child.NextVariation; next != null; next = next.NextVariation)
+                {
+                    if (next.Move == firstMove)
+                    {
+                        AddVariationNode(next, leaveMoveList);
+                        return;
+                    }
+
+                    prevNode = next;
+                }
+
+                // 次の手を設定します。
+                prevNode.NextVariation = KifuObject.Convert2Node(
+                    variationMoveList,
+                    root.MoveCount + 1);
+            }
+        }
+
+        /// <summary>
+        /// 指し手の移動前位置などを修正します。
+        /// </summary>
+        private List<Move> ModifyMove(Variation variation)
+        {
+            var moveList = new List<Move>(variation.MoveList);
+
+            // ファイル保存用に駒移動前の位置などをちゃんと設定します。
+            for (var i = 0; i < moveList.Count(); ++i)
+            {
+                var oldPosition = variation.BoardMoveList[i].OldPosition;
+
+                if (oldPosition == null)
+                {
+                    moveList[i].ActionType = ActionType.Drop;
+                }
+                else
+                {
+                    moveList[i].OldPosition = oldPosition;
+                }
             }
 
-            AddVariationNode(node, leaveMoveList);
+            return moveList;
         }
 
         /// <summary>
@@ -252,7 +279,7 @@ namespace VoteSystem.PluginShogi.Model
         /// </summary>
         public VariationNode CreateVariationNode()
         {
-            var root = CreateVariationList();
+            var root = CreateHonpuNode();
             var currentRoot = root;
 
             foreach (var manager in CurrentStateList)
@@ -260,24 +287,9 @@ namespace VoteSystem.PluginShogi.Model
                 // 各変化を登録します。
                 foreach (var variation in manager.VariationList)
                 {
-                    var moveList = new List<Move>(variation.MoveList);
+                    var modifiedMoveList = ModifyMove(variation);
 
-                    // ファイル保存用に駒移動前の位置などをちゃんと設定します。
-                    for (var i = 0; i < moveList.Count(); ++i)
-                    {
-                        var oldPosition = variation.BoardMoveList[i].OldPosition;
-
-                        if (oldPosition == null)
-                        {
-                            moveList[i].ActionType = ActionType.Drop;
-                        }
-                        else
-                        {
-                            moveList[i].OldPosition = oldPosition;
-                        }
-                    }
-
-                    AddVariationNode(currentRoot, moveList);
+                    AddVariationNode(currentRoot, modifiedMoveList);
                 }
 
                 currentRoot = currentRoot.NextChild;
