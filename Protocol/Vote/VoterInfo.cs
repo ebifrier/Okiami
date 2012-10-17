@@ -19,6 +19,7 @@ namespace VoteSystem.Protocol.Vote
     public class VoterInfo : IEquatable<VoterInfo>
     {
         private string name;
+        private string skill;
 
         /// <summary>
         /// 参加した放送サイトを取得または設定します。
@@ -49,15 +50,8 @@ namespace VoteSystem.Protocol.Vote
             get { return this.name; }
             set
             {
-                // 名前は16文字までとします。
-                if (value != null && value.Length > 16)
-                {
-                    this.name = value.Substring(0, 16);
-                }
-                else
-                {
-                    this.name = value;
-                }
+                // 名前は全角で12文字までとします。
+                this.name = value.HankakuSubstring(12 * 2);
             }
         }
 
@@ -67,8 +61,12 @@ namespace VoteSystem.Protocol.Vote
         [DataMember(Order = 4, IsRequired = true)]
         public string Skill
         {
-            get;
-            set;
+            get { return this.skill; }
+            set
+            {
+                // 強さは全角で12文字までとします。
+                this.skill = value.HankakuSubstring(12 * 2);
+            }
         }
 
         /// <summary>

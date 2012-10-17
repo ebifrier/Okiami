@@ -250,28 +250,17 @@ namespace VoteSystem.PluginShogi.Model
         }
 
         /// <summary>
-        /// 指し手の移動前位置などを修正します。
+        /// 指し手の移動前位置を設定します。
         /// </summary>
         private List<Move> ModifyMove(Variation variation)
         {
-            var moveList = new List<Move>(variation.MoveList);
+            var bmList = variation.BoardMoveList;
 
-            // ファイル保存用に駒移動前の位置などをちゃんと設定します。
-            for (var i = 0; i < moveList.Count(); ++i)
-            {
-                var oldPosition = variation.BoardMoveList[i].OldPosition;
-
-                if (oldPosition == null)
-                {
-                    moveList[i].ActionType = ActionType.Drop;
-                }
-                else
-                {
-                    moveList[i].OldPosition = oldPosition;
-                }
-            }
-
-            return moveList;
+            return variation.MoveList
+                .Select(_ => _.Clone())
+                .SelectWithIndex((_, i) =>
+                    _.Apply(__ => __.OldPosition = bmList[i].OldPosition))
+                .ToList();
         }
 
         /// <summary>
