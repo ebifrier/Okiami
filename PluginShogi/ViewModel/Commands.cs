@@ -132,6 +132,14 @@ namespace VoteSystem.PluginShogi.ViewModel
                 "MoveUndoContinue",
                 typeof(Window));
         /// <summary>
+        /// 連続して手を進めます。
+        /// </summary>
+        public static readonly ICommand MoveRedoContinue =
+            new RoutedUICommand(
+                "連続して手を進めます。",
+                "MoveRedoContinue",
+                typeof(Window));
+        /// <summary>
         /// 再生中の手を停止します。
         /// </summary>
         public static readonly ICommand MoveStop =
@@ -289,6 +297,10 @@ namespace VoteSystem.PluginShogi.ViewModel
                     ExecuteMoveUndoContinue, CanExecute));
             bindings.Add(
                 new CommandBinding(
+                    MoveRedoContinue,
+                    ExecuteMoveRedoContinue, CanExecute));
+            bindings.Add(
+                new CommandBinding(
                     MoveStop,
                     ExecuteMoveStop, CanExecute));
 
@@ -389,7 +401,11 @@ namespace VoteSystem.PluginShogi.ViewModel
             }
             else if (e.Command == MoveUndoContinue)
             {
-                e.CanExecute = false;
+                e.CanExecute = model.CanUndo;
+            }
+            else if (e.Command == MoveRedoContinue)
+            {
+                e.CanExecute = model.CanRedo;
             }
             else if (e.Command == MoveStop)
             {
@@ -578,7 +594,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                         var variation = Variation.Parse(text);
                         if (variation != null)
                         {
-                            model.AddVariation(variation, false);
+                            model.AddVariation(variation, true, false);
                         }
                     }
                 }
@@ -785,6 +801,13 @@ namespace VoteSystem.PluginShogi.ViewModel
         private static void ExecuteMoveUndoContinue(object sender, ExecutedRoutedEventArgs e)
         {
             var model = ShogiGlobal.ShogiModel;
+            var autoPlay = new AutoPlay(model.Board, AutoPlayType.Undo)
+            {
+                IsChangeBackground = false,
+                IsConfirmPlay = false,
+            };
+
+            model.StartAutoPlay(autoPlay);
         }
 
         /// <summary>
@@ -793,6 +816,13 @@ namespace VoteSystem.PluginShogi.ViewModel
         private static void ExecuteMoveRedoContinue(object sender, ExecutedRoutedEventArgs e)
         {
             var model = ShogiGlobal.ShogiModel;
+            var autoPlay = new AutoPlay(model.Board, AutoPlayType.Redo)
+            {
+                IsChangeBackground = false,
+                IsConfirmPlay = false,
+            };
+
+            model.StartAutoPlay(autoPlay);
         }
 
         /// <summary>
@@ -802,7 +832,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         {
             var model = ShogiGlobal.ShogiModel;
 
-            model.StopVariation();
+            model.StopAutoPlay();
         }
 
         /// <summary>
@@ -1125,7 +1155,13 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             if (variation != null)
             {
-                model.ShowVariation(variation);
+                var autoPlay = new AutoPlay(variation)
+                {
+                    IsChangeBackground = true,
+                    IsConfirmPlay = false,
+                };
+
+                model.StartAutoPlay(autoPlay);
             }
         }
 

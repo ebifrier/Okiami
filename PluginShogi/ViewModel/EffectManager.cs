@@ -31,35 +31,40 @@ namespace VoteSystem.PluginShogi.ViewModel
         None = 0,
 
         /// <summary>
-        /// 駒に関するエフェクトを使用します。
-        /// </summary>
-        Piece = (1 << 0),
-        /// <summary>
-        /// 囲いエフェクトを使用します。
-        /// </summary>
-        Castle = (1 << 1),
-        /// <summary>
-        /// 投票エフェクトを使用します。
-        /// </summary>
-        Vote = (1 << 2),
-
-        /// <summary>
         /// 一手前に動かした駒を強調表示します。
         /// </summary>
-        PrevCell = (1 << 3),
+        PrevCell = (1 << 0),
         /// <summary>
         /// 動かせるマスを強調表示します。
         /// </summary>
-        MovableCell = (1 << 4),
+        MovableCell = (1 << 1),
         /// <summary>
         /// 手番側を強調表示します。
         /// </summary>
-        Teban = (1 << 5),
+        Teban = (1 << 2),
+
+        /// <summary>
+        /// 駒に関するエフェクトを使用します。
+        /// </summary>
+        Piece = (1 << 8),
+        /// <summary>
+        /// 囲いエフェクトを使用します。
+        /// </summary>
+        Castle = (1 << 9),
+        /// <summary>
+        /// 投票エフェクトを使用します。
+        /// </summary>
+        Vote = (1 << 10),
+        /// <summary>
+        /// 変化エフェクトを使用します。
+        /// </summary>
+        Variation = (1 << 11),
 
         /// <summary>
         /// 全フラグ
         /// </summary>
-        All = (Piece | Castle | Vote | PrevCell | MovableCell | Teban),
+        All = (PrevCell | MovableCell | Teban |
+               Piece | Castle | Vote | Variation),
     }
 
     /// <summary>
@@ -489,11 +494,28 @@ namespace VoteSystem.PluginShogi.ViewModel
             };
 
             var effect = effectInfo.LoadEffect(dic);
-            if (effect != null)
+            if (effect == null)
+            {
+                return;
+            }
+
+            // 効果音を調整します。
+            if (!Settings.SD_IsUseEffectSound)
+            {
+                effect.StartSoundPath = null;
+            }
+            else
+            {
+                var volume = Settings.SD_EffectVolume / 100.0;
+
+                effect.StartSoundVolume *= MathEx.Between(0.0, 1.0, volume);
+            }
+
+            WpfUtil.UIProcess(() =>
             {
                 effect.DataContext = CreateContext(position);
                 Container.AddEffect(effect);
-            }
+            });
         }
 
         /// <summary>
@@ -502,6 +524,11 @@ namespace VoteSystem.PluginShogi.ViewModel
         private void VariationEffect(BoardMove move)
         {
             if (IsSimpleEffect)
+            {
+                return;
+            }
+
+            if (!HasEffectFlag(EffectFlag.Variation))
             {
                 return;
             }

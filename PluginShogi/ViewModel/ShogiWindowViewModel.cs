@@ -46,10 +46,11 @@ namespace VoteSystem.PluginShogi.ViewModel
         private Board currentBoard;
         private Board board;
 
-        private readonly DispatcherTimer variationTimer;
-        private bool isCheckingShowVariation = false;
-        private readonly Queue<Variation> variationQueue = new Queue<Variation>();
-        private Queue<BoardMove> currentVariation;
+        private readonly DispatcherTimer autoPlayTimer;
+        private bool isCheckingAutoPlay = false;
+        private readonly Queue<AutoPlay> autoPlayList =
+            new Queue<AutoPlay>();
+        private AutoPlay currentAutoPlay;
         private readonly VariationManager moveManager = new VariationManager();
         private readonly NotifyCollection<string> commentCandidates;
         private readonly CommentClient commentClient;
@@ -245,6 +246,15 @@ namespace VoteSystem.PluginShogi.ViewModel
             }
         }
 
+        /// <summary>
+        /// 変化再生時の色を取得または設定します。
+        /// </summary>
+        public double VariationBorderOpacity
+        {
+            get { return GetValue<double>("VariationBorderOpacity"); }
+            set { SetValue("VariationBorderOpacity", value); }
+        }
+
         #region 見た目系
         /// <summary>
         /// 盤などの画像読み込みを行います。
@@ -417,7 +427,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// 変化を追加し、可能なら再生します。
         /// </summary>
         public bool AddVariation(IEnumerable<Move> moveList,
-                                 string comment, bool autoPlay)
+                                 string comment, bool isAutoPlay)
         {
             if (moveList == null)
             {
@@ -433,13 +443,14 @@ namespace VoteSystem.PluginShogi.ViewModel
                 return false;
             }
 
-            return AddVariation(variation, autoPlay);
+            return AddVariation(variation, true, isAutoPlay);
         }
 
         /// <summary>
         /// 変化を追加し、可能なら再生します。
         /// </summary>
-        public bool AddVariation(Variation variation, bool autoPlay)
+        public bool AddVariation(Variation variation, bool addVariation,
+                                 bool isAutoPlay)
         {
             if (variation == null)
             {
@@ -447,23 +458,31 @@ namespace VoteSystem.PluginShogi.ViewModel
             }
 
             // 将棋コントロールに変化を追加します。
-            this.moveManager.AddVariation(variation);
+            if (addVariation)
+            {
+                this.moveManager.AddVariation(variation);
+            }
 
             // 自動再生用に変化を追加します。
-            if (autoPlay)
+            if (isAutoPlay)
             {
-                ShowVariation(variation);
+                var autoPlay = new AutoPlay(variation)
+                {
+                    IsChangeBackground = true,
+                };
+
+                StartAutoPlay(autoPlay);
             }
 
             return true;
         }
 
         /// <summary>
-        /// 変化の表示を行います。
+        /// 変化の自動再生を開始します。
         /// </summary>
-        public void ShowVariation(Variation variation)
+        public void StartAutoPlay(AutoPlay autoPlay)
         {
-            if (variation == null || !variation.CanShow)
+            if (autoPlay == null || !autoPlay.Validate())
             {
                 return;
             }
@@ -474,18 +493,18 @@ namespace VoteSystem.PluginShogi.ViewModel
                 return;
             }
 
-            this.variationQueue.Enqueue(variation);
-            BeginToShowVariation();
+            this.autoPlayList.Enqueue(autoPlay);
+            BeginAutoPlay();
         }
 
         /// <summary>
         /// 変化を再生するか確かめ、再生する場合はそれを返します。
         /// </summary>
-        private Variation CheckShowVariation()
+        private AutoPlay GetNextAutoPlay()
         {
             // 再生中なら再生しません。
             if (VariationState == VariationState.Playing ||
-                this.isCheckingShowVariation)
+                this.isCheckingAutoPlay)
             {
                 return null;
             }
@@ -494,21 +513,15 @@ namespace VoteSystem.PluginShogi.ViewModel
             {
                 // ここで変化の再生フラグを立てます。
                 // 確認中に再度確認するのを防ぐためです。
-                this.isCheckingShowVariation = true;
+                this.isCheckingAutoPlay = true;
 
-                if (!this.variationQueue.Any())
+                if (!this.autoPlayList.Any())
                 {
                     return null;
                 }
 
-                // 次の変化を取り出します。
-                var variation = this.variationQueue.Dequeue();
-                if (variation == null ||
-                    !variation.Board.CanMoveList(variation.BoardMoveList))
-                {
-                    // もう一回。
-                    return CheckShowVariation();
-                }
+                // 次の再生用オブジェクトを取り出します。
+                var autoPlay = this.autoPlayList.Dequeue();
 
                 // ウィンドウが非表示なら変化を表示しません。
                 if (ShogiGlobal.MainWindow == null)
@@ -516,58 +529,60 @@ namespace VoteSystem.PluginShogi.ViewModel
                     return null;
                 }
 
-                var dialog = DialogUtil.CreateDialog(
-                    ShogiGlobal.MainWindow,
-                    string.Format("{1}{0}{0}コメント: {2}{0}{0}を再生しますか？",
-                        Environment.NewLine,
-                        variation.Label,
-                        variation.Comment),
-                    "再生確認",
-                    MessageBoxButton.YesNo,
-                    MessageBoxResult.No);
-                dialog.ShowDialog();
-                if (dialog.ResultButton != MessageBoxResult.Yes)
+                // 必要なら再生の許可を取ります。
+                if (autoPlay.IsConfirmPlay)
                 {
-                    return null;
+                    var dialog = DialogUtil.CreateDialog(
+                        ShogiGlobal.MainWindow,
+                        autoPlay.ConfirmMessage,
+                        "再生確認",
+                        MessageBoxButton.YesNo,
+                        MessageBoxResult.No);
+                    dialog.ShowDialog();
+                    if (dialog.ResultButton != MessageBoxResult.Yes)
+                    {
+                        return null;
+                    }
                 }
 
-                return variation;
+                return autoPlay;
             }
             finally
             {
-                this.isCheckingShowVariation = false;
+                this.isCheckingAutoPlay = false;
             }
         }
 
         /// <summary>
         /// 変化を再生します。
         /// </summary>
-        private void BeginToShowVariation()
+        private void BeginAutoPlay()
         {
-            var variation = CheckShowVariation();
-            if (variation == null)
+            var autoPlay = GetNextAutoPlay();
+            if (autoPlay == null)
             {
                 return;
             }
 
             // ここで変化の再生フラグを立てます。
             VariationState = VariationState.Playing;
+            VariationBorderOpacity = 0.0;
             EditMode = EditMode.NoEdit;
 
             //EndMovePiece();
-            Board = variation.Board.Clone();
+            Board = autoPlay.Board.Clone();
 
             ShogiGlobal.EffectManager.IsSimpleEffect = false;
             ShogiGlobal.EffectManager.EffectMoveCount = 0;
 
-            this.currentVariation = new Queue<BoardMove>(variation.BoardMoveList);
-            this.variationTimer.Start();
+            this.currentAutoPlay = autoPlay;
+            this.autoPlayTimer.Start();
         }
 
         /// <summary>
-        /// 変化の表示が終わったら呼ばれます。
+        /// 自動再生が終わる時/終わらせる時に呼びます。
         /// </summary>
-        public void StopVariation()
+        public void StopAutoPlay()
         {
             if (VariationState != VariationState.Playing)
             {
@@ -575,10 +590,11 @@ namespace VoteSystem.PluginShogi.ViewModel
             }
 
             VariationState = VariationState.None;
+            VariationBorderOpacity = 0.0;
             EditMode = EditMode.Normal;
 
-            this.currentVariation.Clear(); // 停止時に備える
-            this.variationTimer.Stop();
+            this.currentAutoPlay = null;
+            this.autoPlayTimer.Stop();
 
             // 変化停止時の処理
             WpfUtil.InvalidateCommand();
@@ -589,27 +605,60 @@ namespace VoteSystem.PluginShogi.ViewModel
             //Board = this.currentBoard;
 
             // もし次の変化があればそれも表示します。
-            BeginToShowVariation();
+            BeginAutoPlay();
         }
 
-        void variationTimer_Tick(object sender, EventArgs e)
+        /// <summary>
+        /// 自動再生リストを空にし、自動再生をすべて停止します。
+        /// </summary>
+        public void ClearAutoPlay()
         {
-            if (!this.currentVariation.Any())
+            this.autoPlayList.Clear();
+
+            StopAutoPlay();
+        }
+
+        /// <summary>
+        /// 指し手の自動更新を行います。
+        /// </summary>
+        void autoPlayTimer_Tick(object sender, EventArgs e)
+        {
+            if (this.currentAutoPlay == null)
             {
-                StopVariation();
+                StopAutoPlay();
                 return;
             }
 
-            var move = this.currentVariation.Dequeue();
-            if (move != null)
+            var nextPlay = this.currentAutoPlay.Update();
+            if (nextPlay == null)
             {
-                if (!this.currentVariation.Any())
-                {
-                    ShogiGlobal.EffectManager.SetLastEffect();
-                }
-
-                this.board.DoMove(move);
+                StopAutoPlay();
+                return;
             }
+
+            // 最終手には特別なエフェクトを表示します。
+            if (nextPlay.IsLastMove)
+            {
+                ShogiGlobal.EffectManager.SetLastEffect();
+            }
+
+            switch (nextPlay.AutoPlayType)
+            {
+                case AutoPlayType.Normal:
+                    if (nextPlay.Move != null)
+                    {
+                        this.board.DoMove(nextPlay.Move);
+                    }
+                    break;
+                case AutoPlayType.Undo:
+                    this.board.Undo();
+                    break;
+                case AutoPlayType.Redo:
+                    this.board.Redo();
+                    break;
+            }
+
+            VariationBorderOpacity = nextPlay.Opacity;
         }
 
         void ShogiWindowViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -633,15 +682,9 @@ namespace VoteSystem.PluginShogi.ViewModel
             
             if (moveList != null)
             {
-                var variation = Variation.Create(
-                    this.currentBoard,
-                    moveList, null, true);
-                if (variation == null)
-                {
-                    return;
-                }
+                // 動かした駒を変化として登録します。
+                AddVariation(moveList, string.Empty, false);
 
-                this.moveManager.AddVariation(variation);
                 UpdateMoveTextFromCurrentBoard();
             }
 
@@ -684,7 +727,8 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             WpfUtil.UIProcess(() =>
             {
-                var ret = ShogiGlobal.ShogiModel.AddVariation(variation, true);
+                var model = ShogiGlobal.ShogiModel;
+                var ret = model.AddVariation(variation, true, true);
                 if (!ret)
                 {
                     return;
@@ -771,10 +815,11 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// </summary>
         public ShogiWindowViewModel(Board board)
         {
-            this.variationTimer = new DispatcherTimer()
+            this.autoPlayTimer = new DispatcherTimer()
             {
-                Interval = TimeSpan.FromMilliseconds(1000),
+                Interval = TimeSpan.FromMilliseconds(20),
             };
+            this.autoPlayTimer.Tick += autoPlayTimer_Tick;
 
             this.commentCandidates = new NotifyCollection<string>(
                 new []
@@ -794,8 +839,6 @@ namespace VoteSystem.PluginShogi.ViewModel
             this.commentClient.IsSupressLog = true;
             this.commentClient.PropertyChanged += commentClient_PropertyChanged;
             this.commentClient.CommentReceived += commentClient_HandleComment;
-
-            this.variationTimer.Tick += variationTimer_Tick;
 
             this.moveManager.SetCurrentBoard(this.currentBoard);
 

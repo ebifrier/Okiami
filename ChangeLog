@@ -1,3 +1,17 @@
+2012-10-19  - Ver 1.0.20.3
+
+	* PluginShogi/Model/AutoPlay.cs: 指し手の自動再生用オブジェクトを追
+	加しました。
+	* PluginShogi/ViewModel/Commands.cs: 指し手を連続で戻す／指し手を連
+	続で進める機能を追加しました。
+	* PluginShogi/ViewModel/EffectManager.cs: 変化エフェクトを使用する
+	かどうかのフラグを追加しました。また、変化エフェクトの音量調整機能
+	を付加しました。
+	* ViewModel/ShogiWindowViewModel.cs: 変化の自動再生時に全体を指定の
+	色で染めるようにしました。変化の再生前後で色がフェードイン／アウト
+	します。また、再生前の事前確認をしないようにすることもできるように
+	なりました。
+
 2012-10-17  - Ver 1.0.20.2
 
 	* Protocol/Vote/VoterInfo.cs: 名前と強さの文字数を全角で12文字まで

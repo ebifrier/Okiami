@@ -41,12 +41,14 @@
         <CheckBox Content="手番側を強調表示"
                   IsChecked="{Binding IsUseTebanEffect}" />
         <TextBlock />
-        <CheckBox Content="駒に関するエフェクトを使用"
+        <CheckBox Content="通常の駒に関するエフェクトを使用"
                   IsChecked="{Binding IsUsePieceEffect}" />
         <CheckBox Content="囲いエフェクトを使用"
                   IsChecked="{Binding IsUseCastleEffect}" />
         <CheckBox Content="投票エフェクトを使用"
                   IsChecked="{Binding IsUseVoteEffect}" />
+        <CheckBox Content="変化エフェクトを使用"
+                  IsChecked="{Binding IsUseVariationEffect}" />
         <TextBlock />
 
         <GroupBox Header="効果音設定(エフェクトと一緒に鳴ります)">

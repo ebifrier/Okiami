@@ -99,7 +99,7 @@
         <Button Style="{StaticResource ToolBarButtonStyle}"
                 Content="pack://application:,,,/PluginShogi;component/Resources/Image/move_redo_continue.png"
                 ToolTip="連続して進める"
-                Command="{x:Static svm:Commands.MoveUndoContinue}" />
+                Command="{x:Static svm:Commands.MoveRedoContinue}" />
         <Button Style="{StaticResource ToolBarButtonStyle}"
                 Content="pack://application:,,,/PluginShogi;component/Resources/Image/move_goto_last.png"
                 ToolTip="最終局面へ"

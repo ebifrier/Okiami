@@ -12,7 +12,7 @@ namespace VoteSystem.PluginShogi.Model
     /// <summary>
     /// 各局面における変化を管理します。
     /// </summary>
-    public class EachStateManager
+    public sealed class EachStateManager
     {
         private readonly Board board;
         private readonly NotifyCollection<Variation> variationList =

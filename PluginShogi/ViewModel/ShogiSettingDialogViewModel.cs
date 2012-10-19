@@ -117,6 +117,36 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// 一手前に動かした駒を強調表示するかどうかを取得または設定します。
+        /// </summary>
+        [DependOnProperty(typeof(Settings), "SD_EffectFlag")]
+        public bool IsUsePrevCellEffect
+        {
+            get { return HasEffectFlag(EffectFlag.PrevCell); }
+            set { SetEffectFlag(EffectFlag.PrevCell, value); }
+        }
+
+        /// <summary>
+        /// 動かせるマスを強調表示するかどうかを取得または設定します。
+        /// </summary>
+        [DependOnProperty(typeof(Settings), "SD_EffectFlag")]
+        public bool IsUseMovableCellEffect
+        {
+            get { return HasEffectFlag(EffectFlag.MovableCell); }
+            set { SetEffectFlag(EffectFlag.MovableCell, value); }
+        }
+
+        /// <summary>
+        /// 手番側を強調表示するかどうかを取得または設定します。
+        /// </summary>
+        [DependOnProperty(typeof(Settings), "SD_EffectFlag")]
+        public bool IsUseTebanEffect
+        {
+            get { return HasEffectFlag(EffectFlag.Teban); }
+            set { SetEffectFlag(EffectFlag.Teban, value); }
+        }
+
+        /// <summary>
         /// 駒に関するエフェクトの使用フラグを取得または設定します。
         /// </summary>
         [DependOnProperty(typeof(Settings), "SD_EffectFlag")]
@@ -147,33 +177,13 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
-        /// 一手前に動かした駒を強調表示するかどうかを取得または設定します。
+        /// 変化エフェクトの使用フラグを取得または設定します。
         /// </summary>
         [DependOnProperty(typeof(Settings), "SD_EffectFlag")]
-        public bool IsUsePrevCellEffect
+        public bool IsUseVariationEffect
         {
-            get { return HasEffectFlag(EffectFlag.PrevCell); }
-            set { SetEffectFlag(EffectFlag.PrevCell, value); }
-        }
-
-        /// <summary>
-        /// 動かせるマスを強調表示するかどうかを取得または設定します。
-        /// </summary>
-        [DependOnProperty(typeof(Settings), "SD_EffectFlag")]
-        public bool IsUseMovableCellEffect
-        {
-            get { return HasEffectFlag(EffectFlag.MovableCell); }
-            set { SetEffectFlag(EffectFlag.MovableCell, value); }
-        }
-
-        /// <summary>
-        /// 手番側を強調表示するかどうかを取得または設定します。
-        /// </summary>
-        [DependOnProperty(typeof(Settings), "SD_EffectFlag")]
-        public bool IsUseTebanEffect
-        {
-            get { return HasEffectFlag(EffectFlag.Teban); }
-            set { SetEffectFlag(EffectFlag.Teban, value); }
+            get { return HasEffectFlag(EffectFlag.Variation); }
+            set { SetEffectFlag(EffectFlag.Variation, value); }
         }
 
         /// <summary>
