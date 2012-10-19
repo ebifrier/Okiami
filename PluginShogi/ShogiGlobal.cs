@@ -24,6 +24,8 @@ namespace VoteSystem.PluginShogi
         /// </summary>
         public static void Initialize(ShogiPlugin plugin)
         {
+            Ragnarok.Initializer.Initialize();
+
             Ragnarok.Util.SetPropertyChangedCaller(
                 WpfUtil.CallPropertyChanged);
             Ragnarok.Util.SetColletionChangedCaller(

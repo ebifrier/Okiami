@@ -150,7 +150,7 @@ namespace VoteSystem.Client
         /// <summary>
         /// プラグインを読み込み、オブジェクトを作成します。
         /// </summary>
-        internal static IPlugin LoadPlugin(IInitLogger logger, string dllPath)
+        internal static IPlugin LoadPlugin(string dllPath)
         {
             try
             {
@@ -158,10 +158,7 @@ namespace VoteSystem.Client
                 var asm = Assembly.LoadFrom(dllPath);
                 var types = asm.GetExportedTypes();
 
-                if (logger != null)
-                {
-                    logger.Log(name.Name + " を読み込み中");
-                }
+                Log.Trace(name.Name + " を読み込み中");
 
                 // IPluginを継承した型を検索します。
                 foreach (var type in types)
@@ -185,7 +182,7 @@ namespace VoteSystem.Client
         /// <summary>
         /// プラグインを読み込みます。
         /// </summary>
-        internal static List<IPlugin> LoadPlugins(IInitLogger logger)
+        internal static List<IPlugin> LoadPlugins()
         {
             try
             {
@@ -201,7 +198,7 @@ namespace VoteSystem.Client
                 // Plugin/xxx.dllからプラグインを読み込みます。
                 return Directory
                     .EnumerateFiles(pluginPath, "*.dll")
-                    .Select(_ => LoadPlugin(logger, _))
+                    .Select(_ => LoadPlugin(_))
                     .Where(plugin => plugin != null)
                     .ToList();
             }

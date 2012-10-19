@@ -23,12 +23,7 @@ namespace VoteSystem.Client
 
             try
             {
-                Initializer.Initialize();
-
-                var window = new View.SplashWindow();
-                window.Show();
-                MainWindow = window;
-                //Start(null);
+                Start();
             }
             catch (Exception ex)
             {
@@ -42,21 +37,21 @@ namespace VoteSystem.Client
         /// <summary>
         /// アプリ本体を開始します。
         /// </summary>
-        internal void Start(IInitLogger logger)
+        internal void Start()
         {
             // 静的オブジェクトの初期化を行います。
             Global.Initialize();
 
+            // 更新作業の開始
+            UpdateChecker.CheckUpdate();
+
             // ウィンドウを作成します。
-            // ここでGlobal.MainWindowが設定されます。
             var controlWindow = new View.MainWindow();
-
-            // ウィンドウ作成後にプラグインを初期化します。
-            Global.InitPlugin(logger);
-
-            // すべての初期化終了後にウィンドウを表示します。
             controlWindow.Show();
             MainWindow = controlWindow;
+
+            // ウィンドウ作成後にプラグインを初期化します。
+            Global.InitPlugin();
         }
 
         void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

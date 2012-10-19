@@ -1,3 +1,10 @@
+2012-10-20  - Ver 1.0.20.4
+
+	* 全プロジェクト: ランタイムを.NET Framework 4.0ではなく、4.0の
+	Client Profileを使うように修正しました。
+	* Client/UpdateChecker.cs: 自動更新の仕方を変え、起動後に更新チェッ
+	クを行うようにしました。これによってユーザーの待ち時間を減らします。
+
 2012-10-19  - Ver 1.0.20.3
 
 	* PluginShogi/Model/AutoPlay.cs: 指し手の自動再生用オブジェクトを追

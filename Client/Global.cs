@@ -17,17 +17,6 @@ namespace VoteSystem.Client
     using VoteSystem.Protocol;
 
     /// <summary>
-    /// 初期化時のログを出力します。
-    /// </summary>
-    internal interface IInitLogger
-    {
-        /// <summary>
-        /// ログを出力します。
-        /// </summary>
-        void Log(string message);
-    }
-
-    /// <summary>
     /// グローバルなオブジェクトを保持します。
     /// </summary>
     public static class Global
@@ -338,9 +327,9 @@ namespace VoteSystem.Client
         /// <summary>
         /// ウィンドウの作成が終わった後にプラグインの読み込みを行います。
         /// </summary>
-        internal static void InitPlugin(IInitLogger logger)
+        internal static void InitPlugin()
         {
-            PluginList = PluginUtil.LoadPlugins(logger);
+            PluginList = PluginUtil.LoadPlugins();
 
             var handler = PluginLoaded;
             if (handler != null)
@@ -357,8 +346,12 @@ namespace VoteSystem.Client
         /// </summary>
         public static void Initialize()
         {
+            Ragnarok.Initializer.Initialize();
+
             Ragnarok.Util.SetPropertyChangedCaller(
                 Ragnarok.Presentation.WpfUtil.CallPropertyChanged);
+            Ragnarok.Util.SetColletionChangedCaller(
+                Ragnarok.Presentation.WpfUtil.CallCollectionChanged);
             Ragnarok.Util.SetEventCaller(
                 Ragnarok.Presentation.WpfUtil.UIProcess);
 
