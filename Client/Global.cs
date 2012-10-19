@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Reflection;
@@ -60,6 +61,23 @@ namespace VoteSystem.Client
             get
             {
                 return (IsPublished ? Visibility.Collapsed : Visibility.Visible);
+            }
+        }
+
+        /// <summary>
+        /// バージョン情報を取得します。
+        /// </summary>
+        public static string Version
+        {
+            get
+            {
+                var asm = Assembly.GetExecutingAssembly();
+                var version = FileVersionInfo.GetVersionInfo(asm.Location);
+
+                return string.Format("{0}.{1}.{2}",
+                    version.ProductMajorPart,
+                    version.ProductMinorPart,
+                    version.ProductBuildPart);
             }
         }
 

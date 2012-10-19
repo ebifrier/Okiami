@@ -9,15 +9,15 @@
     </link>
     <description/>
     <language>ja</language>
-    <pubDate>Sat Oct 13 00:42:24 +0900 2012</pubDate>
+    <pubDate>Sat Oct 20 02:36:41 +0900 2012</pubDate>
     <item>
-      <title>Version 1.0.20</title>
+      <title>Version 1.1.0</title>
       <sparkle:releaseNotesLink>
-        http://garnet-alice.net/programs/votesystem/update/release_note.html?v=86931
+        http://garnet-alice.net/programs/votesystem/update/release_note.html?v=39997
       </sparkle:releaseNotesLink>
-      <enclosure url="http://garnet-alice.net/programs/votesystem/download/VoteClient_1_0_20.zip"
-                 sparkle:version="1.0.20"
-                 sparkle:md5Signature="bbc66f755b160254101ece3bdef0b2a3" />
+      <enclosure url="http://garnet-alice.net/programs/votesystem/download/VoteClient_1_1_0.zip"
+                 sparkle:version="1.1.0"
+                 sparkle:md5Signature="73c4106b1542a719cb7c33f021a1d95e" />
     </item>
   </channel>
 </rss>
