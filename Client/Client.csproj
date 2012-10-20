@@ -190,6 +190,9 @@
     <Compile Include="View\TimeSpanWindow.xaml.cs">
       <DependentUpon>TimeSpanWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\VersionWindow.xaml.cs">
+      <DependentUpon>VersionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\VoteResultSettingDialog.xaml.cs">
       <DependentUpon>VoteResultSettingDialog.xaml</DependentUpon>
     </Compile>
@@ -230,6 +233,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\TimeSpanWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\VersionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

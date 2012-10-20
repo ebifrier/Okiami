@@ -306,8 +306,8 @@ namespace VoteSystem.Client.View
                 FontSize = 20,
                 Foreground = new SolidColorBrush(elem.Color),
                 //FontWeight = FontWeights.Bold,
-                Stroke = Brushes.Black,
-                StrokeThickness = 0.3,
+                Stroke = Brushes.Gray,
+                StrokeThickness = 0.4,
                 Effect = new DropShadowEffect() {Opacity = 0.4},
             };
 
@@ -326,6 +326,7 @@ namespace VoteSystem.Client.View
             try
             {
                 var voterList = EndRollList.GetVoterList();
+                    //EndRollList.GetTestVoterList();
                 if (voterList == null)
                 {
                     return new List<LineInfo>();
@@ -425,7 +426,7 @@ namespace VoteSystem.Client.View
             // 更新時間を調整します。
             var now = DateTime.Now;
             var diff = now - this.prevUpdateTime;
-            if (diff < TimeSpan.FromMilliseconds(50))
+            if (diff < TimeSpan.FromMilliseconds(30))
             {
                 return;
             }

@@ -340,10 +340,19 @@ namespace VoteSystem.Client.Command
         private static void ExecuteShowVersion(object sender,
                                                ExecutedRoutedEventArgs e)
         {
-            DialogUtil.Show(
-                "まだ作ってませんお （ ＾ω＾）",
-                "バージョン情報",
-                MessageBoxButton.OK);
+            try
+            {
+                var dialog = new View.VersionWindow()
+                {
+                    Owner = Global.MainWindow,
+                };
+                dialog.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Log.ErrorException(ex,
+                    "バージョン情報の表示に失敗しました。");
+            }
         }
 
         /// <summary>
@@ -495,7 +504,8 @@ namespace VoteSystem.Client.Command
             var window = new View.EndRollWindow()
             {
                 Background = new System.Windows.Media.SolidColorBrush(
-                    System.Windows.Media.Color.FromArgb(164, 255, 255, 255)),
+                    //System.Windows.Media.Color.FromArgb(164, 255, 255, 255)),
+                    System.Windows.Media.Color.FromArgb(164, 0, 0, 0)),
                 RollTimeSeconds = 30,
                 LineHeight = 30.0,
                 Owner = Global.MainWindow,

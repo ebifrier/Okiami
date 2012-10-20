@@ -86,6 +86,7 @@
 
                 <MenuItem Header="エラー報告・要望など(_R)"
                           Command="{x:Static c:Commands.SendErrorLog}" />
+                <Separator />
                 <MenuItem Header="バージョン情報(_V)"
                           Command="{x:Static c:Commands.ShowVersion}" />
             </MenuItem>

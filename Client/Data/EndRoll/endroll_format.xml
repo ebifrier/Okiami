@@ -20,7 +20,7 @@
 	<Line />
 	<Lines Data="$UnjoinedVoterCount">
 		<Line>
-			<Format Column="0" Text="その他" Color="#000000" Alignment="Right" />
+			<Format Column="0" Text="その他" Alignment="Right" />
 			<Format Column="1" Text="$()人" Alignment="Left" />
 		</Line>
 	</Lines>
@@ -33,7 +33,7 @@
 	<Lines Data="$ModeCustomJoinerList">
 		<Line>
 			<Format ColumnSpan="2"
-					Text="$" Color="Black" Alignment="Center" />
+					Text="$" Alignment="Center" />
 		</Line>
 	</Lines>
 

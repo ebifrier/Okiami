@@ -316,7 +316,7 @@ namespace VoteSystem.Client
             switch (color)
             {
                 case NotificationColor.Default:
-                    return Colors.Black;
+                    return Colors.White;
                 case NotificationColor.Black:
                     return Colors.Black;
                 case NotificationColor.White:

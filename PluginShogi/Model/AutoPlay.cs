@@ -112,6 +112,15 @@ namespace VoteSystem.PluginShogi.Model
             get;
             set;
         }
+
+        /// <summary>
+        /// 背景がフェードイン／アウトする時間を取得または設定します。
+        /// </summary>
+        public TimeSpan FadeInterval
+        {
+            get;
+            set;
+        }
         
         /// <summary>
         /// 自動再生の種類を取得または設定します。
@@ -183,13 +192,13 @@ namespace VoteSystem.PluginShogi.Model
         private NextPlayInfo GetFadingNextPlay(DateTime baseTime, bool isReverse)
         {
             var progress = DateTime.Now - baseTime;
-            if (progress >= Interval)
+            if (progress >= FadeInterval)
             {
                 return null;
             }
 
             // 背景の不透明度を更新します。
-            var progressRate = (progress.TotalSeconds / Interval.TotalSeconds);
+            var progressRate = (progress.TotalSeconds / FadeInterval.TotalSeconds);
             return new NextPlayInfo
             {
                 Opacity = (isReverse ? 1.0 - progressRate : progressRate),
@@ -211,7 +220,7 @@ namespace VoteSystem.PluginShogi.Model
                     var nextPlay = GetFadingNextPlay(baseTime, false);
                     if (nextPlay == null)
                     {
-                        baseTime += Interval;
+                        baseTime += FadeInterval;
                         break;
                     }
 
@@ -255,7 +264,7 @@ namespace VoteSystem.PluginShogi.Model
                     var nextPlay = GetFadingNextPlay(baseTime, true);
                     if (nextPlay == null)
                     {
-                        baseTime += Interval;
+                        baseTime += FadeInterval;
                         break;
                     }
 
@@ -321,9 +330,23 @@ namespace VoteSystem.PluginShogi.Model
         }
 
         /// <summary>
+        /// 共通コンストラクタ
+        /// </summary>
+        private AutoPlay(Board board)
+        {
+            Board = board;
+            Interval = TimeSpan.FromSeconds(1.0);
+            FadeInterval = TimeSpan.FromSeconds(Interval.TotalSeconds / 2);
+            IsConfirmPlay = true;
+
+            this.enumerator = GetUpdateEnumerator().GetEnumerator();
+        }
+
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         public AutoPlay(Board board, IEnumerable<BoardMove> moveList)
+            : this(board)
         {
             if (moveList == null)
             {
@@ -331,12 +354,8 @@ namespace VoteSystem.PluginShogi.Model
             }
 
             AutoPlayType = AutoPlayType.Normal;
-            Board = board;
-            Interval = TimeSpan.FromMilliseconds(1000);
-            IsConfirmPlay = true;
 
             this.moveList = new List<BoardMove>(moveList);
-            this.enumerator = GetUpdateEnumerator().GetEnumerator();
             this.maxMoveCount = moveList.Count();
         }
 
@@ -344,6 +363,7 @@ namespace VoteSystem.PluginShogi.Model
         /// コンストラクタ
         /// </summary>
         public AutoPlay(Board board, AutoPlayType autoPlayType)
+            : this(board)
         {
             if (autoPlayType != AutoPlayType.Undo &&
                 autoPlayType != AutoPlayType.Redo)
@@ -354,11 +374,7 @@ namespace VoteSystem.PluginShogi.Model
             }
 
             AutoPlayType = autoPlayType;
-            Board = board;
-            Interval = TimeSpan.FromMilliseconds(1000);
-            IsConfirmPlay = true;
 
-            this.enumerator = GetUpdateEnumerator().GetEnumerator();
             this.maxMoveCount =
                 (autoPlayType == Model.AutoPlayType.Undo ?
                  board.CanUndoCount :

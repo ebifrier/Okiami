@@ -127,7 +127,7 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public Element()
         {
-            Color = Colors.Black;
+            Color = Colors.White;
             Column = 0;
             ColumnSpan = 1;
             HorizontalAlignment = HorizontalAlignment.Center;

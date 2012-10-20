@@ -447,7 +447,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 var view = ShogiGlobal.MoveManageView;
                 if (view != null)
                 {
-                    view.Show();
+                    view.Activate();
                     return;
                 }
 
