@@ -320,7 +320,19 @@ namespace VoteSystem.PluginShogi.ViewModel
 
         #region 変化表示用のエフェクトです。
         /// <summary>
-        /// 変化表時事の最初のエフェクトです。
+        /// 自動再生開始時のカットインエフェクトです。(その１)
+        /// </summary>
+        public readonly static EffectInfo VariationCutIn1 = new EffectInfo(
+            "CutInEffect1", "Variation");
+
+        /// <summary>
+        /// 自動再生開始時のカットインエフェクトです。(その２)
+        /// </summary>
+        public readonly static EffectInfo VariationCutIn2 = new EffectInfo(
+            "CutInEffect2", "Variation");
+
+        /// <summary>
+        /// 変化の最初のエフェクトです。
         /// </summary>
         public readonly static EffectInfo VariationFirst = new EffectInfo(
             "FirstEffect", "Variation",
@@ -330,7 +342,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             });
 
         /// <summary>
-        /// 変化表時事の２番目のエフェクトです。
+        /// 変化の２番目のエフェクトです。
         /// </summary>
         public readonly static EffectInfo VariationSecond = new EffectInfo(
             "SecondEffect", "Variation",
@@ -340,7 +352,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             });
 
         /// <summary>
-        /// 変化最終手のエフェクトです。
+        /// 変化のエフェクトです。
         /// </summary>
         public readonly static EffectInfo VariationLast = new EffectInfo(
             "LastEffect", "Variation");

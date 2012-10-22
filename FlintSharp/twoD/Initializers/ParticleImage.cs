@@ -63,6 +63,7 @@ namespace FlintSharp.Initializers
     public class ParticleImage : Initializer
     {
         private static BitmapImage defaultImage;
+        private MaterialType m_materialType = MaterialType.Emissive;
 
         public ParticleImage()
         {
@@ -76,6 +77,15 @@ namespace FlintSharp.Initializers
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// The composition type of the image.
+        /// </summary>
+        public MaterialType MaterialType
+        {
+            get { return m_materialType; }
+            set { m_materialType = value; }
         }
 
         /// <summary>
@@ -117,11 +127,13 @@ namespace FlintSharp.Initializers
 
             if (IsSingle)
             {
-                EmissiveMaterial material = new EmissiveMaterial()
+                MaterialWrap materialWrap = new MaterialWrap()
                 {
+                    MaterialType = MaterialType,
                     Brush = brush,
                     Color = Colors.White,
                 };
+                Material material = materialWrap.Create();
 
                 GeometryModel3D model = new GeometryModel3D()
                 {
@@ -136,18 +148,23 @@ namespace FlintSharp.Initializers
             else
             {
                 // front
-                EmissiveMaterial material1 = new EmissiveMaterial()
+                MaterialWrap materialWrap1 = new MaterialWrap()
                 {
+                    MaterialType = MaterialType,
                     Brush = brush,
                     Color = Colors.White,
                 };
 
                 // back
-                EmissiveMaterial material2 = new EmissiveMaterial()
+                MaterialWrap materialWrap2 = new MaterialWrap()
                 {
+                    MaterialType = MaterialType,
                     Brush = brush,
                     Color = Color.FromArgb(0xC0, 0xFF, 0xFF, 0xFF),
                 };
+
+                Material material1 = materialWrap1.Create();
+                Material material2 = materialWrap2.Create();
 
                 MaterialGroup matGroup = new MaterialGroup();
                 matGroup.Children.Add(material2);

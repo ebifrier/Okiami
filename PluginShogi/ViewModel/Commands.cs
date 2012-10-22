@@ -586,7 +586,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                         }
 
                         // 現局面を設定します。
-                        model.CurrentBoard = board.Clone();
+                        model.SetCurrentBoard(board.Clone());
                     }
                     else
                     {
@@ -634,13 +634,12 @@ namespace VoteSystem.PluginShogi.ViewModel
                 var board = file.CreateBoard();
 
                 // 現局面は更新しません。
-                ShogiGlobal.ShogiModel.Board = board;
+                ShogiGlobal.ShogiModel.SetBoard(board);
             }
             catch (Exception ex)
             {
                 ShogiGlobal.ErrorMessage(ex,
                     "棋譜ファイルの読み込みに失敗しました(￣ω￣;)");
-                return;
             }
         }
 
@@ -713,7 +712,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 var board = file.CreateBoard();
 
                 // 現局面は更新しません。
-                ShogiGlobal.ShogiModel.Board = board;
+                ShogiGlobal.ShogiModel.SetBoard(board);
             }
             catch (Exception ex)
             {
@@ -756,7 +755,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             {
             }
 
-            model.Board = cloned;
+            model.SetBoard(cloned);
         }
 
         /// <summary>
@@ -772,7 +771,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             {
             }
 
-            model.Board = cloned;
+            model.SetBoard(cloned);
         }
 
         /// <summary>
@@ -897,7 +896,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         {
             var model = ShogiGlobal.ShogiModel;
 
-            model.Board = model.CurrentBoard;
+            model.SetBoard(model.CurrentBoard);
         }
 
         /// <summary>
@@ -1131,7 +1130,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                     cloned.DoMove(boardMove);
                 }
 
-                model.Board = cloned;
+                model.SetBoard(cloned);
             }
         }
 

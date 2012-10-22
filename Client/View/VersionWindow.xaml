@@ -50,7 +50,7 @@
                          HorizontalAlignment="Center"
                          Foreground="{x:Static Brushes.Black}"
                          StrokeThickness="0"
-                         FontSize="13"
+                         FontSize="11"
                          Text="Copyright (C) 2010-2012 えびふらい" />
         
         <Border Grid.Row="6"

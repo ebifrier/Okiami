@@ -6,8 +6,10 @@ using System.Text;
 using Ragnarok;
 using Ragnarok.Shogi;
 
-namespace VoteSystem.PluginShogi.Model
+namespace VoteSystem.PluginShogi.ViewModel
 {
+    using Model;
+
     /// <summary>
     /// 自動再生の種別です。
     /// </summary>
@@ -228,6 +230,24 @@ namespace VoteSystem.PluginShogi.Model
                 }
             }
 
+            if (ShogiGlobal.EffectManager.VariationCutIn())
+            {
+                var cutInInterval = TimeSpan.FromSeconds(1.0);
+
+                while (DateTime.Now - baseTime < cutInInterval)
+                {
+                    yield return new NextPlayInfo
+                    {
+                        Opacity = (IsChangeBackground ? 1.0 : 0.0),
+                    };
+                }
+
+                baseTime += cutInInterval;
+            }
+
+            // 最初の一手はすぐに表示します。
+            baseTime -= Interval;
+
             // 最後の指し手を動かした後に一手分だけ待ちます。
             // エフェクトを表示するためです。
             var didLastInterval = false;
@@ -303,7 +323,7 @@ namespace VoteSystem.PluginShogi.Model
                 return false;
             }
 
-            if (AutoPlayType == Model.AutoPlayType.Normal)
+            if (AutoPlayType == AutoPlayType.Normal)
             {
                 if (this.moveList == null)
                 {
@@ -336,7 +356,7 @@ namespace VoteSystem.PluginShogi.Model
         {
             Board = board;
             Interval = TimeSpan.FromSeconds(1.0);
-            FadeInterval = TimeSpan.FromSeconds(Interval.TotalSeconds / 2);
+            FadeInterval = TimeSpan.FromSeconds(0.2); //Interval.TotalSeconds / 2);
             IsConfirmPlay = true;
 
             this.enumerator = GetUpdateEnumerator().GetEnumerator();
@@ -376,7 +396,7 @@ namespace VoteSystem.PluginShogi.Model
             AutoPlayType = autoPlayType;
 
             this.maxMoveCount =
-                (autoPlayType == Model.AutoPlayType.Undo ?
+                (autoPlayType == AutoPlayType.Undo ?
                  board.CanUndoCount :
                  board.CanRedoCount);
         }

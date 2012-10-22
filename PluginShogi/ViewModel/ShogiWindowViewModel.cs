@@ -64,7 +64,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             {
                 return this.board;
             }
-            set
+            private set
             {
                 using (LazyLock())
                 {
@@ -102,7 +102,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             {
                 return this.currentBoard;
             }
-            set
+            private set
             {
                 using (LazyLock())
                 {
@@ -396,6 +396,44 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// 局面の更新を行います。
+        /// </summary>
+        /// <remarks>
+        /// クラス外から局面を設定するときは、このメソッドを使ってください。
+        /// </remarks>
+        public void SetBoard(Board board)
+        {
+            using (LazyLock())
+            {
+                // クラス外から局面が設定されたときは、
+                // 自動再生用の変化をすべて消去します。
+                ClearAutoPlay();
+
+                if (board != null)
+                {
+                    Board = board;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 現局面の更新を行います。
+        /// </summary>
+        /// <remarks>
+        /// クラス外から局面を設定するときは、このメソッドを使ってください。
+        /// </remarks>
+        public void SetCurrentBoard(Board currentBoard)
+        {
+            using (LazyLock())
+            {
+                if (currentBoard != null)
+                {
+                    CurrentBoard = currentBoard;
+                }
+            }
+        }
+
+        /// <summary>
         /// １手戻します。
         /// </summary>
         public void Undo()
@@ -572,7 +610,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             //EndMovePiece();
             Board = autoPlay.Board.Clone();
 
-            ShogiGlobal.EffectManager.IsSimpleEffect = false;
+            ShogiGlobal.EffectManager.IsAutoPlayEffect = true;
             ShogiGlobal.EffectManager.EffectMoveCount = 0;
 
             this.currentAutoPlay = autoPlay;
@@ -599,7 +637,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             // 変化停止時の処理
             WpfUtil.InvalidateCommand();
 
-            ShogiGlobal.EffectManager.IsSimpleEffect = true;
+            ShogiGlobal.EffectManager.IsAutoPlayEffect = false;
             ShogiGlobal.EffectManager.EffectMoveCount = 0;
 
             //Board = this.currentBoard;

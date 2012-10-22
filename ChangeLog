@@ -1,3 +1,17 @@
+2012-10-23  - Ver 1.1.0.1
+
+	* FlintSharp/twoD/Initializers/ParticleImage.cs: パーティクルにも
+	Diffuseの指定が可能になりました。
+	* FlintSharp/twoD/Zones/RectangleZone.cs: - と = を取り違えていたた
+	め、それを修正しました。
+	* PluginShogi/ViewModel/EffectManager.cs: カットイン再生用のメソッ
+	ドを追加しました。
+	* PluginShogi/ViewModel/ShogiWindowViewModel.cs: 指し手の自動再生時
+	にクラス外から局面の変更が指示された場合は、自動再生をすべて停止す
+	るようにしました。
+	* PluginShogi/ShogiData/Effect/Variation/CutInEffect1: 指し手自動再
+	生時のカットイン用ファイルを追加しました。
+
 2012-10-20  - Ver 1.1.0.0
 
 	* Client/View/EndRollWindow.xaml: 背景を黒にしました。また文字色を

@@ -41,7 +41,7 @@ namespace VoteSystem.PluginShogi
             EffectManager = new ViewModel.EffectManager()
             {
                 EffectEnabled = true,
-                IsSimpleEffect = true,
+                IsAutoPlayEffect = false,
             };
 
             InitializeEffect();

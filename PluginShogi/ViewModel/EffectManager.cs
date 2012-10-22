@@ -113,12 +113,12 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
-        /// 単純なエフェクトを有効にするかどうかを取得または設定します。
+        /// 自動再生エフェクトを有効にするかどうかを取得または設定します。
         /// </summary>
-        public bool IsSimpleEffect
+        public bool IsAutoPlayEffect
         {
-            get { return GetValue<bool>("IsSimpleEffect"); }
-            set { SetValue("IsSimpleEffect", value); }
+            get { return GetValue<bool>("IsAutoPlayEffect"); }
+            set { SetValue("IsAutoPlayEffect", value); }
         }
 
         /// <summary>
@@ -523,7 +523,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// </summary>
         private void VariationEffect(BoardMove move)
         {
-            if (IsSimpleEffect)
+            if (!IsAutoPlayEffect)
             {
                 return;
             }
@@ -771,6 +771,28 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// 変化エフェクトのカットインを表示します。
+        /// </summary>
+        public bool VariationCutIn()
+        {
+            if (Container == null)
+            {
+                return false;
+            }
+
+            if (MathEx.RandInt(0, 2) == 0)
+            {
+                AddEffect(Effects.VariationCutIn1, null);
+            }
+            else
+            {
+                AddEffect(Effects.VariationCutIn2, null);
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// エフェクトを追加します。
         /// </summary>
         void IEffectManager.Moved(BoardMove move, bool isUndo)
@@ -804,7 +826,11 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             UpdateTeban(move.BWType.Toggle());
 
-            if (IsSimpleEffect)
+            if (IsAutoPlayEffect)
+            {
+                VariationEffect(move);
+            }
+            else
             {
                 var castleAdded = AddCastleEffect(move);
 
@@ -826,10 +852,6 @@ namespace VoteSystem.PluginShogi.ViewModel
 
                     AddMoveEffect(move.NewPosition, move);
                 }
-            }
-            else
-            {
-                VariationEffect(move);
             }
         }
         #endregion

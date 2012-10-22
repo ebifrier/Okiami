@@ -127,7 +127,7 @@ namespace VoteSystem.PluginShogi
             var voteClient = ShogiGlobal.VoteClient;
             if (voteClient == null || !voteClient.IsLogined)
             {
-                ShogiGlobal.ShogiModel.CurrentBoard = new Board();
+                ShogiGlobal.ShogiModel.SetCurrentBoard(new Board());
                 return;
             }
 
@@ -151,10 +151,10 @@ namespace VoteSystem.PluginShogi
                         return;
                     }
 
-                    ShogiGlobal.ShogiModel.CurrentBoard = board;
+                    ShogiGlobal.ShogiModel.SetCurrentBoard(board);
                     if (modifyBoard)
                     {
-                        ShogiGlobal.ShogiModel.Board = board;
+                        ShogiGlobal.ShogiModel.SetBoard(board);
                     }
                 });
         }
@@ -264,9 +264,9 @@ namespace VoteSystem.PluginShogi
         }
 
         /// <summary>
-        /// 必要なら表示局面を更新します。
+        /// 現局面が更新されたことを通知します。
         /// </summary>
-        private void UpdateBoard(Board board)
+        private void PointOutNewBoard(Board board)
         {
             var statusBar = ShogiGlobal.MainStatusBar;
             var model = ShogiGlobal.ShogiModel;
@@ -295,18 +295,17 @@ namespace VoteSystem.PluginShogi
 
             // もし同じ内容なら、局面の更新は行いません。
             var model = ShogiGlobal.ShogiModel;
-            if (model.CurrentBoard != null &&
-                model.CurrentBoard.BoardEquals(board))
+            var oldBoard = model.CurrentBoard;
+            if (oldBoard != null && oldBoard.BoardEquals(board))
             {
                 return;
             }
 
-            // 局面を更新します。
-            var oldBoard = model.CurrentBoard;
-            model.CurrentBoard = board;
+            // 現局面を更新します。
+            model.SetCurrentBoard(board);
 
             // 表示局面と違う場合は更新するか確認します。
-            WpfUtil.UIProcess(() => UpdateBoard(board));
+            WpfUtil.UIProcess(() => PointOutNewBoard(board));
 
             // 重要メッセージとして差し手を表示します。
             var moveList = GetMoveListFrom(oldBoard, board);

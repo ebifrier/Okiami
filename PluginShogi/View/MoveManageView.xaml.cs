@@ -31,7 +31,7 @@ namespace VoteSystem.PluginShogi.View
 
             if (stateManager != null)
             {
-                model.Board = stateManager.Board.Clone();
+                model.SetBoard(stateManager.Board.Clone());
             }
         }
 

@@ -93,7 +93,7 @@ namespace FlintSharp.Zones
         public double Right
         {
             get { return m_right; }
-            set { m_right = value; m_width = m_right = m_left; }
+            set { m_right = value; m_width = m_right - m_left; }
         }
 
         /// <summary>

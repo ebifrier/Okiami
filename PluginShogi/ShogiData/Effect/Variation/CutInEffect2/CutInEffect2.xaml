@@ -1,0 +1,94 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:f="http://schemas.flint-sharp/xaml"
+                    xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+                    xmlns:l="http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi">
+
+    <p:CellMeshConverter x:Key="cellMeshConv" />
+
+    <Vector3D x:Key="backgroundCoord"
+              X="400" Y="240" Z="{x:Static p:ShogiControl.PreEffectZ}" />
+    <Vector3D x:Key="foregroundCoord"
+              X="400" Y="240" Z="{x:Static p:ShogiControl.PostEffectZ}" />
+
+    <f:LineZone x:Key="particlePositionZone"
+                Point1="380,-40" Point2="580,-40" />
+    <f:LineZone x:Key="particleVelocityZone"
+                Point1="0,600" Point2="0,600" />
+    <f:RectangleZone x:Key="particleSafeZone"
+                     Left="320" Right="640"
+                     Top="-40" Bottom="480" />
+
+    <l:EffectObject x:Key="Effect">
+        <!-- カットイン背景 -->
+        <l:EffectObject Coord="{StaticResource backgroundCoord}"
+                        MaterialType="Diffuse"
+                        Color="White"
+                        Duration="0:0:2.0"
+                        BaseScale="240,480,1"
+                        Mesh="{p:MakeMesh}">
+            <l:EffectObject.Scenario>
+                <p:Scenario>
+                    <DoubleAnimationUsingKeyFrames
+                        p:Scenario.TargetProperty="Opacity">
+                        <LinearDoubleKeyFrame KeyTime="0:0:0.0" Value="0.0" />
+                        <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="0.8" />
+                        <LinearDoubleKeyFrame KeyTime="0:0:0.8" Value="0.8" />
+                        <LinearDoubleKeyFrame KeyTime="0:0:1.2" Value="0.0" />
+                    </DoubleAnimationUsingKeyFrames>
+                </p:Scenario>
+            </l:EffectObject.Scenario>
+        </l:EffectObject>
+
+        <!-- 背景パーティクル -->
+        <!--<l:EffectObject Duration="0:0:2.0">
+            <l:EffectObject.Emitters>
+                <f:Emitter>
+                    <f:Emitter.Counter>
+                        <f:TimePeriod Duration="0.9" NumParticles="50" />
+                    </f:Emitter.Counter>
+                    <f:Emitter.Initializers>
+                        <f:ParticleImage IsSingle="True" MaterialType="Diffuse" />
+                        <f:Position Zone="{StaticResource particlePositionZone}" />
+                        <f:Velocity Zone="{StaticResource particleVelocityZone}" />
+                        <f:ColorInit Color="#00fbec35" />
+                        <f:ScaleInit MinScale="10" MaxScale="20" />
+                        <f:AlphaInit MinAlpha="0.6" MaxAlpha="0.8" />
+                        <f:Lifetime Value="0.9" />
+                    </f:Emitter.Initializers>
+                    <f:Emitter.Behaviours>
+                        <f:DeathZone ZoneIsSafe="True"
+                                     Zone="{StaticResource particleSafeZone}" />
+                        <f:Fade />
+                        <f:Move />
+                    </f:Emitter.Behaviours>
+                </f:Emitter>
+            </l:EffectObject.Emitters>
+        </l:EffectObject>-->
+
+        <!-- カットイン画像 -->
+        <l:EffectObject Coord="{StaticResource foregroundCoord}">
+            <l:EffectObject ImageUri="Back.png"
+                            MaterialType="Diffuse"
+                            Duration="0:0:2.0"
+                            BaseScale="240,480,1"
+                            Color="White">
+                <l:EffectObject.Scenario>
+                    <p:Scenario>
+                        <Vector3DAnimationUsingKeyFrames
+                            p:Scenario.TargetProperty="Coord">
+                            <LinearVector3DKeyFrame KeyTime="0:0:0.0" Value="0,200,0" />
+                            <LinearVector3DKeyFrame KeyTime="0:0:1.2" Value="0,-30,0" />
+                        </Vector3DAnimationUsingKeyFrames>
+                        <DoubleAnimationUsingKeyFrames
+                            p:Scenario.TargetProperty="Opacity">
+                            <LinearDoubleKeyFrame KeyTime="0:0:0.0" Value="0.0" />
+                            <LinearDoubleKeyFrame KeyTime="0:0:0.6" Value="0.8" />
+                            <LinearDoubleKeyFrame KeyTime="0:0:1.2" Value="0.0" />
+                        </DoubleAnimationUsingKeyFrames>
+                    </p:Scenario>
+                </l:EffectObject.Scenario>
+            </l:EffectObject>
+        </l:EffectObject>
+    </l:EffectObject>
+</ResourceDictionary>

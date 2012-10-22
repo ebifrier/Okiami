@@ -190,6 +190,7 @@
     <Compile Include="Utils\IObjectBase.cs" />
     <Compile Include="Emitters\SortedCollection.cs" />
     <Compile Include="Utils\InterpolateColors.cs" />
+    <Compile Include="Utils\MaterialWrap.cs" />
     <Compile Include="Utils\Misc.cs" />
     <Compile Include="Utils\PointDistance.cs" />
     <Compile Include="Utils\PointPolar.cs" />
