@@ -336,7 +336,8 @@ namespace VoteSystem.Client
                 case NotificationColor.Blue:
                     return Colors.Blue;
                 case NotificationColor.Purple:
-                    return Colors.Purple;
+                    //return Colors.Purple;
+                    return Colors.Magenta;
             }
 
             return Colors.Black;

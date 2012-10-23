@@ -626,7 +626,7 @@ namespace VoteSystem.Client.Model
 
             voterList.LiveOwnerList.Add(new VoterInfo()
             {
-                Color = NotificationColor.Green,
+                Color = NotificationColor.Yellow,
                 Id = "7",
                 LiveSite = LiveSite.NicoNama,
                 Name = "x５",

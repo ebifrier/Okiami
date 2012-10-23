@@ -306,9 +306,9 @@ namespace VoteSystem.Client.View
                 FontSize = 20,
                 Foreground = new SolidColorBrush(elem.Color),
                 //FontWeight = FontWeights.Bold,
-                Stroke = Brushes.Gray,
-                StrokeThickness = 0.4,
-                Effect = new DropShadowEffect() {Opacity = 0.4},
+                Stroke = Brushes.Black,
+                StrokeThickness = 0.3,
+                Effect = new DropShadowEffect() {Opacity = 0.6},
             };
 
             return new TextInfo()
@@ -325,8 +325,8 @@ namespace VoteSystem.Client.View
         {
             try
             {
-                var voterList = EndRollList.GetVoterList();
-                    //EndRollList.GetTestVoterList();
+                var voterList = //EndRollList.GetVoterList();
+                    EndRollList.GetTestVoterList();
                 if (voterList == null)
                 {
                     return new List<LineInfo>();
