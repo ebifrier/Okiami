@@ -85,7 +85,7 @@ namespace VoteSystem.PluginShogi.Model
         /// </summary>
         public Variation TryAddVariation(Variation variation)
         {
-            if (variation == null)
+            if (variation == null || !variation.BoardMoveList.Any())
             {
                 return null;
             }

@@ -13,7 +13,7 @@
             archiveAboveSize="1073741824"
             concurrentWrites="false"
             fileName="${logDirectory}/server.log"
-            layout="${date}|${level}|th=${threadid}| ${message}">
+            layout="${longdate}|${level}|th=${threadid}| ${message}">
     </target>
 
     <target name="file_err" xsi:type="File"
