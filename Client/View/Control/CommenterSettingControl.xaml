@@ -25,7 +25,7 @@
             <!-- 中継リストを表示します。-->
             <ControlTemplate x:Key="userIdListTemplate">
                 <DataGrid ItemsSource="{Binding CommenterClientList}"
-                          Height="150"
+                          Height="100"
                           SelectionMode="Single"
                           AutoGenerateColumns="False"
                           HorizontalScrollBarVisibility="Auto"
@@ -85,25 +85,19 @@
                               ToolTip="中継中か中継待ちの放送リストです。">
                         <ContentControl Template="{StaticResource userIdListTemplate}" />
                     </GroupBox>
-
-                    <!--<StackPanel Grid.Row="2" Orientation="Horizontal"
-                                Visibility="{x:Static l:Global.IsNonPublishedVisibility}">
-                        <TextBox Name="commenterUrl" Width="200" />
-                        <Button Content="コメンター追加"
-                                Command="{x:Static c:Commands.AddCommenter}"
-                                CommandParameter="{Binding Text, ElementName=commenterUrl}" />
-                    </StackPanel>-->
                 </Grid>
             </GroupBox>
 
             <Expander Header="コメント中継とは？" IsExpanded="False">
                 <GroupBox Padding="0,6,0,0">
-                    <TextBlock TextWrapping="Wrap"
-                               Text="ある放送のコメントを他の放送に再投稿します。&#xa;
-&#xa;
-ニコ生では３秒に一度しかコメントできないため&#xa;
-コメント中継用のアカウントを複数使うことで&#xa;
-再投稿のラグを防いでいます。" />
+                    <TextBlock TextWrapping="Wrap">
+ある放送のコメントを他の放送に再投稿します。<LineBreak />
+中継用アカウントは184でコメントを投稿します。<LineBreak />
+<LineBreak />
+ニコ生では３秒に一度しかコメントできないため<LineBreak />
+コメント中継用のアカウントを複数使うことで<LineBreak />
+再投稿のラグを防いでいます。
+                    </TextBlock>
                 </GroupBox>
             </Expander>
         </StackPanel>

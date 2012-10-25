@@ -3,38 +3,133 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation" 
+        xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation" 
         mc:Ignorable="d" 
         Title="確認" ResizeMode="NoResize"
-        SizeToContent="WidthAndHeight"
-        d:DesignHeight="207" d:DesignWidth="232">
+        SizeToContent="WidthAndHeight" MinWidth="250"
+        d:DesignHeight="416" d:DesignWidth="250">
+    <Window.Resources>
+        <ResourceDictionary>
+            <p:EnumToBooleanConverter x:Key="enumToBooleanConverter" />
+            
+            <Style x:Key="timeSpanStyle" TargetType="p:NumericUpDown">
+                <Setter Property="IsTabStop" Value="True" />
+                
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="true">
+                        <Setter Property="ToolTip" Value="Error "/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            
+            <StackPanel x:Key="myTurnStackPanel"
+                        Orientation="Vertical">
+                <CheckBox Content="投票を停止する"
+                          IsChecked="{Binding CBS_IsStopVote}" />
+
+                <CheckBox x:Name="addTimeCheckBox"
+                          Content="持ち時間を追加"
+                          IsChecked="{Binding CBS_IsAddLimitTime}" />
+                <Grid IsEnabled="{Binding IsChecked, ElementName=addTimeCheckBox}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="1"
+                           Content="分:" />
+                    <p:NumericUpDown Grid.Column="2"
+                                     Width="60" Minimum="0" Maximum="600"
+                                     Value="{Binding CBS_AddLimitTimeMinutes, Mode=TwoWay}"
+                                     Style="{StaticResource timeSpanStyle}" />
+                    <Label Grid.Column="4"
+                           Content="秒:" />
+                    <p:NumericUpDown Grid.Column="5"
+                                     Width="50" Minimum="0" Maximum="59"
+                                     Value="{Binding CBS_AddLimitTimeSeconds, Mode=TwoWay}"
+                                     Style="{StaticResource timeSpanStyle}" />
+                </Grid>
+            </StackPanel>
+
+            <StackPanel x:Key="yourTurnStackPanel"
+                        Orientation="Vertical">
+                <CheckBox Content="投票を開始する"
+                          IsChecked="{Binding CBS_IsStartVote}" />
+            </StackPanel>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <Grid MinWidth="150">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
         <TextBlock HorizontalAlignment="Center"
-                   Margin="40,30,40,10">
+                   Margin="30,20,30,20">
             現局面を更新します。
             <LineBreak />
             よろしいですか？
         </TextBlock>
-        
+
         <CheckBox Grid.Row="1"
-                  Margin="0,20,0,10"
+                  Margin="0,0,0,10"
                   HorizontalAlignment="Center"
                   Content="ついでに投票結果もクリアする"
-                  IsChecked="{Binding IsClearVoteResult,
-                                      RelativeSource={RelativeSource AncestorType=Window}}" />
+                  IsChecked="{Binding CBS_IsClearVoteResult}" />
+
+        <GroupBox Grid.Row="2"
+                  Header="手番ごとの操作">
+            <StackPanel Orientation="Vertical">
+                <RadioButton Margin="0,3,0,0"
+                             Content="操作不要"
+                             IsChecked="{Binding SelectedRadioButton,
+                                                 RelativeSource={RelativeSource AncestorType=Window},
+                                                 Converter={StaticResource enumToBooleanConverter},
+                                                 ConverterParameter=Default}" />
+
+                <RadioButton x:Name="myTurnButton"
+                             Margin="0,3,0,0"
+                             Content="こちらの手番" 
+                             IsChecked="{Binding SelectedRadioButton,
+                                                 RelativeSource={RelativeSource AncestorType=Window},
+                                                 Converter={StaticResource enumToBooleanConverter},
+                                                 ConverterParameter=MyTurn}" />
+                <GroupBox Header="操作" Margin="10,0,0,0"
+                          IsEnabled="{Binding IsChecked, ElementName=myTurnButton}">
+                    <StaticResource ResourceKey="myTurnStackPanel" />
+                </GroupBox>
+
+                <RadioButton x:Name="yourTurnButton"
+                             Margin="0,3,0,0"
+                             Content="相手の手番"
+                             IsChecked="{Binding SelectedRadioButton,
+                                                 RelativeSource={RelativeSource AncestorType=Window},
+                                                 Converter={StaticResource enumToBooleanConverter},
+                                                 ConverterParameter=YourTurn}" />
+                <GroupBox Header="操作" Margin="10,0,0,0"
+                          IsEnabled="{Binding IsChecked, ElementName=yourTurnButton}">
+                    <StaticResource ResourceKey="yourTurnStackPanel" />
+                </GroupBox>
+            </StackPanel>
+        </GroupBox>
         
-        <StackPanel Grid.Row="2" Orientation="Horizontal"
+        <Border Grid.Row="4"
+                Background="LightGray" />
+        <StackPanel Grid.Row="4"
+                    Orientation="Horizontal"
                     HorizontalAlignment="Right">
-            <Button Margin="20,10,10,10" MinWidth="40" Content="ＯＫ"
-                    Command="{x:Static rp:DialogCommands.OK}" />
-            <Button Margin="0,10,10,10" Content="キャンセル"
-                    Command="{x:Static rp:DialogCommands.Cancel}" />
+            <Button Margin="10" MinWidth="40" Content="ＯＫ"
+                    Command="{x:Static p:DialogCommands.OK}" />
+            <Button Margin="10" Content="キャンセル"
+                    Command="{x:Static p:DialogCommands.Cancel}" />
         </StackPanel>
     </Grid>
 </Window>

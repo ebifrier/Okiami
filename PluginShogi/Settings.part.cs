@@ -29,11 +29,43 @@ namespace VoteSystem.PluginShogi
         }
         #endregion
 
-        public bool IsClearVoteResult
+        #region 現局面設定ダイアログ
+        public bool CBS_IsClearVoteResult
         {
-            get { return GetValue<bool>("IsClearVoteResult"); }
-            set { SetValue("IsClearVoteResult", value); }
+            get { return GetValue<bool>("CBS_IsClearVoteResult"); }
+            set { SetValue("CBS_IsClearVoteResult", value); }
         }
+
+        public bool CBS_IsStartVote
+        {
+            get { return GetValue<bool>("CBS_IsStartVote"); }
+            set { SetValue("CBS_IsStartVote", value); }
+        }
+
+        public bool CBS_IsStopVote
+        {
+            get { return GetValue<bool>("CBS_IsStopVote"); }
+            set { SetValue("CBS_IsStopVote", value); }
+        }
+
+        public bool CBS_IsAddLimitTime
+        {
+            get { return GetValue<bool>("CBS_IsAddLimitTime"); }
+            set { SetValue("CBS_IsAddLimitTime", value); }
+        }
+
+        public int CBS_AddLimitTimeMinutes
+        {
+            get { return GetValue<int>("CBS_AddLimitTimeMinutes"); }
+            set { SetValue("CBS_AddLimitTimeMinutes", value); }
+        }
+
+        public int CBS_AddLimitTimeSeconds
+        {
+            get { return GetValue<int>("CBS_AddLimitTimeSeconds"); }
+            set { SetValue("CBS_AddLimitTimeSeconds", value); }
+        }
+        #endregion
 
         #region 設定ダイアログ
         public KomaImageType SD_KomaImage

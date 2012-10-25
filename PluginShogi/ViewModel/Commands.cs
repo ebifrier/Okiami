@@ -866,19 +866,40 @@ namespace VoteSystem.PluginShogi.ViewModel
             try
             {
                 // サーバー側に現局面の変更を通知します。
-                var dialog = new CurrentBoardSetupDialog()
+                var dialog = new CurrentBoardSetupDialog(ShogiGlobal.Settings)
                 {
                     Topmost = true,
                 };
-                var result = dialog.ShowDialogCenterMouse();
 
+                var result = dialog.ShowDialogCenterMouse();
                 if (result == true)
                 {
-                    SendSetCurrentBoard(model.Board);
-
                     if (dialog.IsClearVoteResult)
                     {
                         voteClient.ClearVote();
+                    }
+
+                    if (dialog.IsAddLimitTime)
+                    {
+                        var addTime = dialog.AddLimitTime;
+
+                        voteClient.AddTotalVoteSpan(addTime);
+                    }
+
+                    // 現局面更新前に投票を停止します。
+                    if (dialog.IsStopVote)
+                    {
+                        voteClient.StopVote();
+                    }
+
+                    // 現局面更新
+                    SendSetCurrentBoard(model.Board);
+
+                    // 現局面更新後に投票を開始します。
+                    if (dialog.IsStartVote)
+                    {
+                        // TODO
+                        voteClient.StartVote(TimeSpan.FromSeconds(-1));
                     }
                 }
             }
