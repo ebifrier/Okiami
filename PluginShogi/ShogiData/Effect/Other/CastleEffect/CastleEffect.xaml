@@ -45,7 +45,7 @@
         <!-- マスを光らせる -->
         <l:EffectObject Coord="{p:Binding BanCoord}"
                         BaseScale="{p:Binding BaseScale}"
-			StartSoundPath="Cell.wav">
+                        StartSoundPath="Cell.wav">
             <l:EffectObject Color="Gold"
                             Duration="0:0:5"
                             ImageUri="../../Image/Cell.png"
@@ -187,10 +187,10 @@
             </l:EffectObject>
 
             <!-- 囲いの名前のＳＥ -->
-            <!--<l:EffectObject WaitTime="0:0:1.2"
+            <l:EffectObject WaitTime="0:0:2.0"
                             StartSoundVolume="1.0"
-                            StartSoundPath="test.wav">
-            </l:EffectObject>-->
+                            StartSoundPath="Voice/${CastleId}.wav">
+            </l:EffectObject>
 
             <!-- 終了時のＳＥ -->
             <l:EffectObject WaitTime="0:0:3.5"

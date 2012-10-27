@@ -371,6 +371,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             {
                 {"CastleName", castle.Name},
                 {"CastleNameLen", castle.Name.Length},
+                {"CastleId", castle.Id},
                 {"StartAngle", angle},
                 {"StartXY", new Vector(p.X, p.Y)},
             };

@@ -1,3 +1,10 @@
+2012-10-28  - Ver 1.1.0.6
+
+	* PluginShogi/ShogiData/Effect/Other/CastleEffect/CastleEffect.xaml: 
+	各囲いのボイスを設定しました。
+	* PluginShogi/ShogiData/Effect/Other/CastleEffect/Voice: 囲いのボイ
+	スを追加しました。
+
 2012-10-27  - Ver 1.1.0.5
 
 	* Client/Command/VoteCommands.cs: 持ち時間の再設定コマンドを追加し
