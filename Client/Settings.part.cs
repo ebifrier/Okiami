@@ -19,31 +19,38 @@ namespace VoteSystem.Client
     {
         #region TimeSpan
         [DefaultSettingValueAttribute("00:05:00")]
-        public TimeSpan SetVoteTimeSpan
+        public TimeSpan SetVoteSpan
         {
-            get { return (TimeSpan)this["SetVoteTimeSpan"]; }
-            set { this["SetVoteTimeSpan"] = value; }
+            get { return (TimeSpan)this["SetVoteSpan"]; }
+            set { this["SetVoteSpan"] = value; }
         }
 
         [DefaultSettingValueAttribute("00:01:00")]
-        public TimeSpan AddVoteTimeSpan
+        public TimeSpan AddVoteSpan
         {
-            get { return (TimeSpan)this["AddVoteTimeSpan"]; }
-            set { this["AddVoteTimeSpan"] = value; }
+            get { return (TimeSpan)this["AddVoteSpan"]; }
+            set { this["AddVoteSpan"] = value; }
         }
 
         [DefaultSettingValueAttribute("00:05:00")]
-        public TimeSpan DefaultVoteTimeSpan
+        public TimeSpan DefaultVoteSpan
         {
-            get { return (TimeSpan)this["DefaultVoteTimeSpan"]; }
-            set { this["DefaultVoteTimeSpan"] = value; }
+            get { return (TimeSpan)this["DefaultVoteSpan"]; }
+            set { this["DefaultVoteSpan"] = value; }
+        }
+
+        [DefaultSettingValueAttribute("00:60:00")]
+        public TimeSpan SetTotalVoteSpan
+        {
+            get { return (TimeSpan)this["SetTotalVoteSpan"]; }
+            set { this["SetTotalVoteSpan"] = value; }
         }
 
         [DefaultSettingValueAttribute("00:03:00")]
-        public TimeSpan AddTotalVoteTimeSpan
+        public TimeSpan AddTotalVoteSpan
         {
-            get { return (TimeSpan)this["AddTotalVoteTimeSpan"]; }
-            set { this["AddTotalVoteTimeSpan"] = value; }
+            get { return (TimeSpan)this["AddTotalVoteSpan"]; }
+            set { this["AddTotalVoteSpan"] = value; }
         }
 
         [DefaultSettingValueAttribute("100")]

@@ -71,7 +71,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                 
                     <CheckBox Grid.Row="0"
@@ -83,7 +83,25 @@
                     <GroupBox Grid.Row="1"
                               Header="中継放送リスト"
                               ToolTip="中継中か中継待ちの放送リストです。">
+                        <!-- 中継リスト -->
                         <ContentControl Template="{StaticResource userIdListTemplate}" />
+                    </GroupBox>
+
+                    <GroupBox Grid.Row="2"
+                              Header="中継したコメント一覧">
+                        <ListView ItemsSource="{Binding PostCommentList}"
+                                  Height="80">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="放送ID"
+                                                    DisplayMemberBinding="{Binding LiveId}" />
+                                    <GridViewColumn Header="時刻"
+                                                    DisplayMemberBinding="{Binding Timestamp, StringFormat={}{0:HH:mm:ss}}" />
+                                    <GridViewColumn Header="コメント"
+                                                    DisplayMemberBinding="{Binding Text}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                     </GroupBox>
                 </Grid>
             </GroupBox>
@@ -92,10 +110,11 @@
                 <GroupBox Padding="0,6,0,0">
                     <TextBlock TextWrapping="Wrap">
 ある放送のコメントを他の放送に再投稿します。<LineBreak />
-中継用アカウントは184でコメントを投稿します。<LineBreak />
+中継用アカウントに設定されると、そのアカウントは<LineBreak />
+184でコメントを投稿するようになります。<LineBreak />
 <LineBreak />
-ニコ生では３秒に一度しかコメントできないため<LineBreak />
-コメント中継用のアカウントを複数使うことで<LineBreak />
+ニコ生では３秒に一度しかコメントできません。<LineBreak />
+中継用のアカウントを複数使うことで<LineBreak />
 再投稿のラグを防いでいます。
                     </TextBlock>
                 </GroupBox>

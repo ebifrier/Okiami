@@ -269,9 +269,19 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// 接続待ちの放送一覧を取得します。
         /// </summary>
+        [DependOnProperty(typeof(VoteClient), "CommenterClientList")]
         public NotifyCollection<CommenterCommentClient> CommenterClientList
         {
             get { return this.voteClient.CommenterClientList; }
+        }
+
+        /// <summary>
+        /// 中継したコメント一覧を取得します。
+        /// </summary>
+        [DependOnProperty(typeof(VoteClient), "PostCommentList")]
+        public NotifyCollection<PostCommentData> PostCommentList
+        {
+            get { return this.voteClient.PostCommentList; }
         }
 
         /// <summary>

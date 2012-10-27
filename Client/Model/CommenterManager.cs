@@ -65,6 +65,48 @@ namespace VoteSystem.Client.Model
     }
 
     /// <summary>
+    /// 中継したコメントの情報を保持します。
+    /// </summary>
+    public sealed class PostCommentData
+    {
+        /// <summary>
+        /// コメントを投稿した放送IDを取得または設定します。
+        /// </summary>
+        public string LiveId
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// コメント内容を取得または設定します。
+        /// </summary>
+        public string Text
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// コメントを投稿した時刻を取得または設定します。
+        /// </summary>
+        public DateTime Timestamp
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// コメントの色を取得または設定します。
+        /// </summary>
+        public System.Windows.Media.Color Color
+        {
+            get;
+            set;
+        }
+    }
+
+    /// <summary>
     /// コメンターの管理を行います。
     /// </summary>
     /// <remarks>
@@ -80,6 +122,8 @@ namespace VoteSystem.Client.Model
     {
         private readonly NotifyCollection<CommenterCommentClient> commenterClientList =
             new NotifyCollection<CommenterCommentClient>();
+        private readonly NotifyCollection<PostCommentData> postCommentList =
+            new NotifyCollection<PostCommentData>();
         private readonly ConcurrentQueue<CommenterInstruction> instructionQueue =
             new ConcurrentQueue<CommenterInstruction>();
         private readonly Thread thread;
@@ -89,10 +133,15 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public NotifyCollection<CommenterCommentClient> CommenterClientList
         {
-            get
-            {
-                return this.commenterClientList;
-            }
+            get { return this.commenterClientList; }
+        }
+
+        /// <summary>
+        /// 中継されたコメント一覧を取得します。
+        /// </summary>
+        public NotifyCollection<PostCommentData> PostCommentList
+        {
+            get { return this.postCommentList; }
         }
 
         #region サーバーからの要求処理
@@ -214,6 +263,7 @@ namespace VoteSystem.Client.Model
             }
 
             // 放送の切断処理を行います。
+            commentClient.CommentPost -= CommenterClient_CommentPost;
             commentClient.Delete();
         }
 
@@ -248,6 +298,39 @@ namespace VoteSystem.Client.Model
                     RemoveCommentClient(commentClient);
                 }
             }
+        }
+        #endregion
+
+        #region 投稿したコメント一覧
+        /// <summary>
+        /// 中継したコメントをリストに追加します。
+        /// </summary>
+        internal void AddPostComment(PostCommentData postComment)
+        {
+            if (postComment == null)
+            {
+                return;
+            }
+
+            Global.UIProcess(() =>
+                this.postCommentList.Add(postComment));
+        }
+
+        /// <summary>
+        /// 中継したコメントリストをクリアします。
+        /// </summary>
+        internal void ClearPostCommentList()
+        {
+            Global.UIProcess(() =>
+                this.postCommentList.Clear());
+        }
+
+        /// <summary>
+        /// コメント中継時に呼ばれます。
+        /// </summary>
+        private void CommenterClient_CommentPost(object sender, CommentPostEvent e)
+        {
+            AddPostComment(e.PostComment);
         }
         #endregion
 
@@ -287,6 +370,7 @@ namespace VoteSystem.Client.Model
                         IsAllowToConnect =
                             Global.MainModel.IsNicoCommenterAutoStart,
                     };
+                    commentClient.CommentPost += CommenterClient_CommentPost;
 
                     // 放送接続待ちリストに追加します。
                     AddCommentClient(commentClient);
@@ -320,6 +404,7 @@ namespace VoteSystem.Client.Model
         {
             while (true)
             {
+                // ConcurrentQueueを使用
                 CommenterInstruction inst;
                 if (!this.instructionQueue.TryDequeue(out inst))
                 {

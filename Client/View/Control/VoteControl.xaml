@@ -101,6 +101,10 @@
                         ToolTip="残り時間を追加します。"
                         Command="{x:Static c:Commands.AddVoteSpan}" />
                 <Button Style="{StaticResource voteButtonStyle}"
+                        Content="pack://application:,,,/Resources/Image/vote_settotaltime.png"
+                        ToolTip="持ち時間を再設定します。"
+                        Command="{x:Static c:Commands.SetTotalVoteSpan}" />
+                <Button Style="{StaticResource voteButtonStyle}"
                         Content="pack://application:,,,/Resources/Image/vote_addtotaltime.png"
                         ToolTip="持ち時間を追加します。"
                         Command="{x:Static c:Commands.AddTotalVoteSpan}" />
@@ -112,9 +116,9 @@
                 <Separator />
 
                 <Button Style="{StaticResource voteButtonStyle}"
-                    Content="pack://application:,,,/Resources/Image/clear_evaluation.png"
-                    ToolTip="評価値をクリアします。"
-                    Command="{x:Static c:Commands.ClearEvaluationPoint}" />
+                        Content="pack://application:,,,/Resources/Image/clear_evaluation.png"
+                        ToolTip="評価値をクリアします。"
+                        Command="{x:Static c:Commands.ClearEvaluationPoint}" />
             </ToolBar>
         </DockPanel>
 

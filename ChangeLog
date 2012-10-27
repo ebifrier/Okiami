@@ -1,3 +1,14 @@
+2012-10-27  - Ver 1.1.0.5
+
+	* Client/Command/VoteCommands.cs: 持ち時間の再設定コマンドを追加し
+	ました。
+	* Client/View/Control/VoteControl.xaml: 持ち時間の再設定用ボタンを
+	追加しました。
+	* Client/Model/CommenterManager.cs: 中継したコメント一覧を保持する
+	ようにしました。
+	* Client/View/Control/CommenterSettingControl.xaml: 中継したコメン
+	ト一覧を表示するようにしました。
+
 2012-10-27  - Ver 1.1.0.4
 
 	* PluginShogi/ShogiData/Effect/Piece: 駒成り、駒取りのＳＥを更新し

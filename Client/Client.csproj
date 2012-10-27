@@ -288,6 +288,7 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Resource Include="Resources\Image\vote_settotaltime.png" />
     <Resource Include="Resources\Image\vote_addtotaltime.png" />
     <None Include="app.config">
       <SubType>Designer</SubType>

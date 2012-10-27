@@ -39,6 +39,29 @@ namespace VoteSystem.Client.Model
     }
 
     /// <summary>
+    /// 中継コメント投稿時に呼ばれるイベントです。
+    /// </summary>
+    public sealed class CommentPostEvent : EventArgs
+    {
+        /// <summary>
+        /// 中継されたコメントを取得または設定します。
+        /// </summary>
+        public PostCommentData PostComment
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public CommentPostEvent(PostCommentData postComment)
+        {
+            PostComment = postComment;
+        }
+    }
+
+    /// <summary>
     /// 各放送への接続情報などを保持します。
     /// </summary>
     public class CommenterCommentClient : NotifyObject
@@ -52,6 +75,11 @@ namespace VoteSystem.Client.Model
         private bool isPostCommentEnabled = false;
         private DateTime lastErrorDateTime = DateTime.Now;
         private DateTime lastCheckTimeToWatch = DateTime.Now;
+
+        /// <summary>
+        /// コメント中継時に呼ばれるイベントです。
+        /// </summary>
+        public event EventHandler<CommentPostEvent> CommentPost;
 
         /// <summary>
         /// 放送ＩＤを取得します。
@@ -373,6 +401,18 @@ namespace VoteSystem.Client.Model
                 // とりあえず偽に設定しておきます。
                 IsPostCommentEnabled = false;
             }
+
+            // 中継したコメントの情報です。
+            var data = new PostCommentData
+            {
+                LiveId = LiveId,
+                Text = notification.Text,
+
+                // Notificationの時刻はサーバー時刻なので
+                // ＰＣのローカル時間とずれる可能性がある。
+                Timestamp = DateTime.Now,
+            };
+            CommentPost.SafeRaiseEvent(this, new CommentPostEvent(data));
         }
 
         /// <summary>

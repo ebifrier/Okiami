@@ -114,6 +114,14 @@ namespace VoteSystem.Client.Command
                 "AddVoteSpan",
                 typeof(Window));
         /// <summary>
+        /// 全投票時間の再設定コマンドです。
+        /// </summary>
+        public readonly static ICommand SetTotalVoteSpan =
+            new RoutedUICommand(
+                "全投票時間を再設定します。",
+                "SetTotalVoteSpan",
+                typeof(Window));
+        /// <summary>
         /// 全投票時間の追加コマンドです。
         /// </summary>
         public readonly static ICommand AddTotalVoteSpan =
@@ -255,6 +263,11 @@ namespace VoteSystem.Client.Command
                 new CommandBinding(
                     Commands.AddVoteSpan,
                     ExecuteAddVoteTime,
+                    CanExecuteCommand));
+            bindings.Add(
+                new CommandBinding(
+                    Commands.SetTotalVoteSpan,
+                    ExecuteSetTotalVoteTime,
                     CanExecuteCommand));
             bindings.Add(
                 new CommandBinding(
@@ -711,7 +724,7 @@ namespace VoteSystem.Client.Command
                 }
 
                 // 時間をウィンドウから取得します。
-                var timeSpan = GetTimeSpan(Global.Settings.DefaultVoteTimeSpan);
+                var timeSpan = GetTimeSpan(Global.Settings.DefaultVoteSpan);
                 if (timeSpan == null)
                 {
                     return;
@@ -723,7 +736,7 @@ namespace VoteSystem.Client.Command
                 Global.VoteClient.StartVote(timeSpan.Value + FractionTime);
 
                 // 設定した時間を次回のために保存します。
-                Global.Settings.DefaultVoteTimeSpan = timeSpan.Value;
+                Global.Settings.DefaultVoteSpan = timeSpan.Value;
                 Global.Settings.Save();
             }
             catch (Exception ex)
@@ -804,7 +817,7 @@ namespace VoteSystem.Client.Command
             try
             {
                 // 時間間隔をウィンドウから取得します。
-                var timeSpan = GetTimeSpan(Global.Settings.SetVoteTimeSpan);
+                var timeSpan = GetTimeSpan(Global.Settings.SetVoteSpan);
                 if (timeSpan == null)
                 {
                     return;
@@ -815,7 +828,7 @@ namespace VoteSystem.Client.Command
                 Global.VoteClient.SetVoteSpan(timeSpan.Value + FractionTime);
 
                 // 設定した時間を次回のために保存します。
-                Global.Settings.SetVoteTimeSpan = timeSpan.Value;
+                Global.Settings.SetVoteSpan = timeSpan.Value;
                 Global.Settings.Save();
             }
             catch (Exception ex)
@@ -834,7 +847,7 @@ namespace VoteSystem.Client.Command
             try
             {
                 // 追加時間をウィンドウから取得します。
-                var timeSpan = GetTimeSpan(Global.Settings.AddVoteTimeSpan);
+                var timeSpan = GetTimeSpan(Global.Settings.AddVoteSpan);
                 if (timeSpan == null)
                 {
                     return;
@@ -845,13 +858,43 @@ namespace VoteSystem.Client.Command
                 Global.VoteClient.AddVoteSpan(timeSpan.Value);
 
                 // 設定した時間を次回のために保存します。
-                Global.Settings.AddVoteTimeSpan = timeSpan.Value;
+                Global.Settings.AddVoteSpan = timeSpan.Value;
                 Global.Settings.Save();
             }
             catch (Exception ex)
             {
                 MessageUtil.ErrorMessage(ex,
                     "投票時間の追加に失敗しました o(＞ω＜)o");
+            }
+        }
+
+        /// <summary>
+        /// 全投票時間を再設定します。
+        /// </summary>
+        public static void ExecuteSetTotalVoteTime(object sender,
+                                                   ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                // 追加時間をウィンドウから取得します。
+                var timeSpan = GetTimeSpan(Global.Settings.SetTotalVoteSpan);
+                if (timeSpan == null)
+                {
+                    return;
+                }
+
+                // 制限時間を秒が繰り上がらない程度に増やします。
+                // (遅延時間分などを余分に追加)
+                Global.VoteClient.SetTotalVoteSpan(timeSpan.Value + FractionTime);
+
+                // 設定した時間を次回のために保存します。
+                Global.Settings.SetTotalVoteSpan = timeSpan.Value;
+                Global.Settings.Save();
+            }
+            catch (Exception ex)
+            {
+                MessageUtil.ErrorMessage(ex,
+                    "持ち時間の再設定に失敗しました o(＞ω＜)o");
             }
         }
 
@@ -864,7 +907,7 @@ namespace VoteSystem.Client.Command
             try
             {
                 // 追加時間をウィンドウから取得します。
-                var timeSpan = GetTimeSpan(Global.Settings.AddTotalVoteTimeSpan);
+                var timeSpan = GetTimeSpan(Global.Settings.AddTotalVoteSpan);
                 if (timeSpan == null)
                 {
                     return;
@@ -875,7 +918,7 @@ namespace VoteSystem.Client.Command
                 Global.VoteClient.AddTotalVoteSpan(timeSpan.Value);
 
                 // 設定した時間を次回のために保存します。
-                Global.Settings.AddTotalVoteTimeSpan = timeSpan.Value;
+                Global.Settings.AddTotalVoteSpan = timeSpan.Value;
                 Global.Settings.Save();
             }
             catch (Exception ex)

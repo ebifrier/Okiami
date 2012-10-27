@@ -389,6 +389,22 @@ namespace VoteSystem.Client.Model
             }
         }
 
+        /// <summary>
+        /// 中継したコメント一覧を取得します。
+        /// </summary>
+        public NotifyCollection<PostCommentData> PostCommentList
+        {
+            get
+            {
+                if (this.commenterManager == null)
+                {
+                    return null;
+                }
+
+                return this.commenterManager.PostCommentList;
+            }
+        }
+
         #region リクエスト送信
         /// <summary>
         /// 投票ルームに入室中かどうかを調べます。

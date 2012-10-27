@@ -8,7 +8,7 @@
         xmlns:c="clr-namespace:VoteSystem.Client.Command"
         xmlns:vc="clr-namespace:VoteSystem.Client.View.Control"
         mc:Ignorable="d"
-        Title="2525投票将棋" Height="450" Width="340">
+        Title="2525投票将棋" Height="470" Width="380">
 
     <Window.Resources>
         <ResourceDictionary>
