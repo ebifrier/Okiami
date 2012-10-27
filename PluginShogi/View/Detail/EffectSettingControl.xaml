@@ -47,8 +47,10 @@
                   IsChecked="{Binding IsUseCastleEffect}" />
         <CheckBox Content="投票エフェクトを使用"
                   IsChecked="{Binding IsUseVoteEffect}" />
-        <CheckBox Content="変化エフェクトを使用"
-                  IsChecked="{Binding IsUseVariationEffect}" />
+        <CheckBox Content="自動再生エフェクトを使用"
+                  IsChecked="{Binding IsUseAutoPlayEffect}" />
+        <CheckBox Content="自動再生のカットインエフェクトを使用"
+                  IsChecked="{Binding IsUseAutoPlayCutIn}" />
         <TextBlock />
 
         <GroupBox Header="効果音設定(エフェクトと一緒に鳴ります)">

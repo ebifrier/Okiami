@@ -92,6 +92,11 @@ namespace VoteSystem.PluginShogi.ViewModel
     /// </summary>
     public sealed class AutoPlay
     {
+        /// <summary>
+        /// カットイン画像の表示時間です。
+        /// </summary>
+        public static readonly TimeSpan CutInInterval = TimeSpan.FromSeconds(1.0);
+
         private List<BoardMove> moveList;
         private IEnumerator<NextPlayInfo> enumerator;
         private int moveIndex;
@@ -137,6 +142,15 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// 背景を変化させるかどうかを取得または設定します。
         /// </summary>
         public bool IsChangeBackground
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// カットインを使用するかどうかを取得または設定します。
+        /// </summary>
+        public bool IsUseCutIn
         {
             get;
             set;
@@ -230,19 +244,21 @@ namespace VoteSystem.PluginShogi.ViewModel
                 }
             }
 
-            if (ShogiGlobal.EffectManager.VariationCutIn())
+            if (IsUseCutIn)
             {
-                var cutInInterval = TimeSpan.FromSeconds(1.0);
-
-                while (DateTime.Now - baseTime < cutInInterval)
+                // カットインが表示できたら、指定の時間だけ待ちます。
+                if (ShogiGlobal.EffectManager.VariationCutIn())
                 {
-                    yield return new NextPlayInfo
+                    while (DateTime.Now - baseTime < CutInInterval)
                     {
-                        Opacity = (IsChangeBackground ? 1.0 : 0.0),
-                    };
-                }
+                        yield return new NextPlayInfo
+                        {
+                            Opacity = (IsChangeBackground ? 1.0 : 0.0),
+                        };
+                    }
 
-                baseTime += cutInInterval;
+                    baseTime += CutInInterval;
+                }
             }
 
             // 最初の一手はすぐに表示します。
@@ -358,6 +374,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             Interval = TimeSpan.FromSeconds(1.0);
             FadeInterval = TimeSpan.FromSeconds(0.2); //Interval.TotalSeconds / 2);
             IsConfirmPlay = true;
+            IsUseCutIn = true;
 
             this.enumerator = GetUpdateEnumerator().GetEnumerator();
         }

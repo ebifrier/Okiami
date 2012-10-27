@@ -48,22 +48,16 @@ namespace VoteSystem.PluginShogi
             set { SetValue("CBS_IsStopVote", value); }
         }
 
-        public bool CBS_IsAddLimitTime
+        public ShogiTimeSpan CBS_AddLimitTime
         {
-            get { return GetValue<bool>("CBS_IsAddLimitTime"); }
-            set { SetValue("CBS_IsAddLimitTime", value); }
+            get { return GetValue<ShogiTimeSpan>("CBS_AddLimitTime"); }
+            set { SetValue("CBS_AddLimitTime", value); }
         }
 
-        public int CBS_AddLimitTimeMinutes
+        public ShogiTimeSpan CBS_VoteSpan
         {
-            get { return GetValue<int>("CBS_AddLimitTimeMinutes"); }
-            set { SetValue("CBS_AddLimitTimeMinutes", value); }
-        }
-
-        public int CBS_AddLimitTimeSeconds
-        {
-            get { return GetValue<int>("CBS_AddLimitTimeSeconds"); }
-            set { SetValue("CBS_AddLimitTimeSeconds", value); }
+            get { return GetValue<ShogiTimeSpan>("CBS_VoteSpan"); }
+            set { SetValue("CBS_VoteSpan", value); }
         }
         #endregion
 
@@ -127,5 +121,26 @@ namespace VoteSystem.PluginShogi
             set { SetValue("SD_EffectVolume", value); }
         }
         #endregion
+
+        protected override void OnSettingsLoaded(object sender, SettingsLoadedEventArgs e)
+        {
+            base.OnSettingsLoaded(sender, e);
+
+            if (CBS_AddLimitTime == null)
+            {
+                CBS_AddLimitTime = new ShogiTimeSpan
+                {
+                    Minutes = 3,
+                };
+            }
+
+            if (CBS_VoteSpan == null)
+            {
+                CBS_VoteSpan = new ShogiTimeSpan()
+                {
+                    Minutes = 3,
+                };
+            }
+        }
     }
 }

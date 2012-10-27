@@ -507,6 +507,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 var autoPlay = new AutoPlay(variation)
                 {
                     IsChangeBackground = true,
+                    IsUseCutIn = true,
                 };
 
                 StartAutoPlay(autoPlay);

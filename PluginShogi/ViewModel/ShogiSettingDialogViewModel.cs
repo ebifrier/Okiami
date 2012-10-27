@@ -177,13 +177,23 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
-        /// 変化エフェクトの使用フラグを取得または設定します。
+        /// 自動再生のエフェクトの使用フラグを取得または設定します。
         /// </summary>
         [DependOnProperty(typeof(Settings), "SD_EffectFlag")]
-        public bool IsUseVariationEffect
+        public bool IsUseAutoPlayEffect
         {
-            get { return HasEffectFlag(EffectFlag.Variation); }
-            set { SetEffectFlag(EffectFlag.Variation, value); }
+            get { return HasEffectFlag(EffectFlag.AutoPlay); }
+            set { SetEffectFlag(EffectFlag.AutoPlay, value); }
+        }
+
+        /// <summary>
+        /// 自動再生時のカットイン画像の使用フラグを取得または設定します。
+        /// </summary>
+        [DependOnProperty(typeof(Settings), "SD_EffectFlag")]
+        public bool IsUseAutoPlayCutIn
+        {
+            get { return HasEffectFlag(EffectFlag.AutoPlayCutIn); }
+            set { SetEffectFlag(EffectFlag.AutoPlayCutIn, value); }
         }
 
         /// <summary>

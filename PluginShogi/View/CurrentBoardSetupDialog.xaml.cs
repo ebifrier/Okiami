@@ -85,6 +85,22 @@ namespace VoteSystem.PluginShogi.View
         }
 
         /// <summary>
+        /// 投票開始時の投票時間を取得します。
+        /// </summary>
+        public ShogiTimeSpan VoteSpan
+        {
+            get
+            {
+                if (SelectedRadioButton != CBS_SelectedRadioButton.YourTurn)
+                {
+                    return null;
+                }
+
+                return this.settings.CBS_VoteSpan;
+            }
+        }
+
+        /// <summary>
         /// 投票を停止するかどうかを取得します。
         /// </summary>
         public bool IsStopVote
@@ -101,36 +117,18 @@ namespace VoteSystem.PluginShogi.View
         }
 
         /// <summary>
-        /// 持ち時間を追加するかどうかを取得します。
-        /// </summary>
-        public bool IsAddLimitTime
-        {
-            get
-            {
-                if (SelectedRadioButton != CBS_SelectedRadioButton.MyTurn)
-                {
-                    return false;
-                }
-
-                return this.settings.CBS_IsAddLimitTime;
-            }
-        }
-
-        /// <summary>
         /// 追加する持ち時間を取得します。
         /// </summary>
-        public TimeSpan AddLimitTime
+        public ShogiTimeSpan AddLimitTime
         {
             get
             {
                 if (SelectedRadioButton != CBS_SelectedRadioButton.MyTurn)
                 {
-                    return TimeSpan.Zero;
+                    return null;
                 }
 
-                return TimeSpan.FromSeconds(
-                    this.settings.CBS_AddLimitTimeMinutes * 60 +
-                    this.settings.CBS_AddLimitTimeSeconds);
+                return this.settings.CBS_AddLimitTime;
             }
         }
 

@@ -1,3 +1,16 @@
+2012-10-27  - Ver 1.1.0.4
+
+	* PluginShogi/ShogiData/Effect/Piece: 駒成り、駒取りのＳＥを更新し
+	ました。
+	* PluginShogi/View/CurrentBoardSetupDialog.xaml: 現局面更新時の操作
+	を修正し、時間制限有の投票も行えるようにしました。
+	* PluginShogi/View/Detail/EffectSettingControl.xaml: 自動再生のカッ
+	トインを使うかどうか選択するチェックボックスを追加しました。
+	* PluginShogi/ViewModel/AutoPlay.cs: カットインを使用するかどうかの
+	フラグを追加しました。
+	* PluginShogi/ShogiTimeSpan.cs: 投票時間を分と秒で管理するための、
+	管理用オブジェクトを追加しました。
+
 2012-10-26  - Ver 1.1.0.3
 
 	* PluginShogi/View/CurrentBoardSetupDialog.xaml.cs: 現局面更新時に、

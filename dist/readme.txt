@@ -92,6 +92,10 @@ http://affexceed.art.coocan.jp/
 ザ・マッチメイカァズ様
 http://osabisi.sakura.ne.jp/m2/
 
+・効果音素材
+369様
+http://www.369musiq.com/index.html
+
 ・ライブラリ（NLog, ログ出力）
 Jaroslaw Kowalski 様
 http://nlog-project.org/

@@ -803,6 +803,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             var autoPlay = new AutoPlay(model.Board, AutoPlayType.Undo)
             {
                 IsChangeBackground = false,
+                IsUseCutIn = false,
                 IsConfirmPlay = false,
             };
 
@@ -818,6 +819,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             var autoPlay = new AutoPlay(model.Board, AutoPlayType.Redo)
             {
                 IsChangeBackground = false,
+                IsUseCutIn = false,
                 IsConfirmPlay = false,
             };
 
@@ -879,11 +881,10 @@ namespace VoteSystem.PluginShogi.ViewModel
                         voteClient.ClearVote();
                     }
 
-                    if (dialog.IsAddLimitTime)
+                    var addTime = dialog.AddLimitTime;
+                    if (addTime != null && addTime.IsUse)
                     {
-                        var addTime = dialog.AddLimitTime;
-
-                        voteClient.AddTotalVoteSpan(addTime);
+                        voteClient.AddTotalVoteSpan(addTime.TimeSpan);
                     }
 
                     // 現局面更新前に投票を停止します。
@@ -898,8 +899,12 @@ namespace VoteSystem.PluginShogi.ViewModel
                     // 現局面更新後に投票を開始します。
                     if (dialog.IsStartVote)
                     {
-                        // TODO
-                        voteClient.StartVote(TimeSpan.FromSeconds(-1));
+                        var span = dialog.VoteSpan;
+                        var voteSpan = (span != null && span.IsUse ?
+                            span.TimeSpan :
+                            TimeSpan.FromSeconds(-1));
+
+                        voteClient.StartVote(voteSpan);
                     }
                 }
             }
@@ -1178,6 +1183,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 var autoPlay = new AutoPlay(variation)
                 {
                     IsChangeBackground = true,
+                    IsUseCutIn = true,
                     IsConfirmPlay = false,
                 };
 

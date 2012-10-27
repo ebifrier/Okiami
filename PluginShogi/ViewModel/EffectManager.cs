@@ -56,15 +56,19 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// </summary>
         Vote = (1 << 10),
         /// <summary>
-        /// 変化エフェクトを使用します。
+        /// 自動再生エフェクトを使用します。
         /// </summary>
-        Variation = (1 << 11),
+        AutoPlay = (1 << 11),
+        /// <summary>
+        /// 自動再生のカットインエフェクトを使用します。
+        /// </summary>
+        AutoPlayCutIn = (1 << 12),
 
         /// <summary>
         /// 全フラグ
         /// </summary>
         All = (PrevCell | MovableCell | Teban |
-               Piece | Castle | Vote | Variation),
+               Piece | Castle | Vote | AutoPlay | AutoPlayCutIn),
     }
 
     /// <summary>
@@ -528,7 +532,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 return;
             }
 
-            if (!HasEffectFlag(EffectFlag.Variation))
+            if (!HasEffectFlag(EffectFlag.AutoPlay))
             {
                 return;
             }
@@ -776,6 +780,11 @@ namespace VoteSystem.PluginShogi.ViewModel
         public bool VariationCutIn()
         {
             if (Container == null)
+            {
+                return false;
+            }
+
+            if (!HasEffectFlag(EffectFlag.AutoPlayCutIn))
             {
                 return false;
             }

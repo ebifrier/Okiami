@@ -57,6 +57,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ShogiTimeSpan.cs" />
     <Compile Include="ViewModel\AutoPlay.cs" />
     <Compile Include="Model\EachStateManager.cs" />
     <Compile Include="ImageType.cs" />
