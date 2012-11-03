@@ -329,7 +329,7 @@ namespace VoteSystem.Client.View
 #if PUBLISHED
                     EndRollList.GetVoterList();
 #else
-                    EndRollList.GetTestVoterList();
+                    EndRollList.GetVoterList();
 #endif
                 if (voterList == null)
                 {

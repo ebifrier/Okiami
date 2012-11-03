@@ -18,10 +18,10 @@
 
 ○ 必要なプラットフォーム・ランタイム
 .NET Framework 4 Client Profile
-http://mf1.jp/RpqARu
+http://goo.gl/zOJif
 
 Visual C++ 2010 再頒布可能パッケージ (x86)
-http://mf1.jp/iPnuGH
+http://goo.gl/0bAF3
 
 
 ○ どうやって投票に参加するのですか？
@@ -63,6 +63,14 @@ http://mucho.girly.jp/bona/
 ・評価値の表情画像（伊吹萃香・巡音ルカ）
 希祥様
 http://www.pixiv.net/member.php?id=1533222
+
+・指し手自動再生時のカットイン画像（中静そよ）
+ザビ山様
+http://www.pixiv.net/member.php?id=755264
+
+・指し手自動再生時のカットイン画像（菅田健太郎）
+MAXみちこFEVER様
+http://www.pixiv.net/member_illust.php?mode=medium&illust_id=29782988
 
 ・エフェクト素材
 ぴぽや様
