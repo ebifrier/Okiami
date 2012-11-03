@@ -700,21 +700,6 @@ namespace VoteSystem.PluginShogi.ViewModel
             VariationBorderOpacity = nextPlay.Opacity;
         }
 
-        void ShogiWindowViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "CurrentBoard")
-            {
-                // 現局面を更新します。
-                this.moveManager.SetCurrentBoard(CurrentBoard);
-
-                UpdateMoveTextFromCurrentBoard();
-            }
-            else if (e.PropertyName == "Board")
-            {
-                UpdateMoveTextFromCurrentBoard();
-            }
-        }
-
         void board_BoardChanged(object sender, BoardChangedEventArgs e)
         {
             var moveList = BuildMoveListFromCurrentBoard();
@@ -881,7 +866,17 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             this.moveManager.SetCurrentBoard(this.currentBoard);
 
-            this.PropertyChanged += ShogiWindowViewModel_PropertyChanged;
+            AddPropertyChangedHandler(
+                "CurrentBoard",
+                (_, __) =>
+                {
+                    // 現局面を更新します。
+                    this.moveManager.SetCurrentBoard(CurrentBoard);
+                    UpdateMoveTextFromCurrentBoard();
+                });
+            AddPropertyChangedHandler(
+                "Board",
+                (_, __) => UpdateMoveTextFromCurrentBoard());
 
             this.AddDependModel(ShogiGlobal.Settings);
         }

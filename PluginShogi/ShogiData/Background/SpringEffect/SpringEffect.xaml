@@ -12,7 +12,7 @@
     
     <l:EffectObject x:Key="Effect">
         <l:EffectObject ImageUri="Back.jpg"
-                        Opacity="0.9"
+                        Opacity="1.0"
                         MaterialType="Diffuse"
                         Duration="Forever"
                         Coord="320,240,0"

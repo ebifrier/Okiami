@@ -95,7 +95,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// カットイン画像の表示時間です。
         /// </summary>
-        public static readonly TimeSpan CutInInterval = TimeSpan.FromSeconds(1.0);
+        public static readonly TimeSpan CutInInterval = TimeSpan.FromSeconds(2.0);
 
         private List<BoardMove> moveList;
         private IEnumerator<NextPlayInfo> enumerator;

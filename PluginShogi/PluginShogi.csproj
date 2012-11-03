@@ -321,7 +321,7 @@
     <Content Include="ShogiData\Effect\Variation\CutInEffect1\Back.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ShogiData\Effect\Variation\CutInEffect2\Back.png">
+    <Content Include="ShogiData\Effect\Variation\CutInEffect2\Back.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ShogiData\Effect\Variation\FirstEffect\Arrow.png">

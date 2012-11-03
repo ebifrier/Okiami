@@ -1,3 +1,12 @@
+2012-11-03  - Ver 1.1.1.2
+
+	* PluginShogi/ShogiData/Background/SpringEffect/Back.jpg: 背景画像
+	を変更しました。
+	* PluginShogi/ShogiData/Effect/Piece: 駒成り、駒取りのＳＥをもとに
+	戻しました。
+	* PluginShogi/ShogiData/Effect/Variation: カットインエフェクトの表
+	示時間を延ばしました。
+
 2012-11-03  - Ver 1.1.1.1
 
 	* TODOをいくつかつぶしました。
