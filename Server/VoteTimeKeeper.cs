@@ -185,7 +185,8 @@ namespace VoteSystem.Server
                 // 投票停止時間を検出するタイマを開始します。
                 AdjustTimer();
 
-                // TODO
+                // TODO: 今のところTotalVoteSpanを最初に同期することができないので、
+                // ここで同期しています。
                 this.RaisePropertyChanged("TotalVoteSpan");
             }
 

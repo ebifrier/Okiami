@@ -369,7 +369,8 @@ namespace VoteSystem.Server
 
             if (roomCount == 0)
             {
-                // TODO いいのかこれで？
+                // ルームがない場合は、どんな引数でも何も返しません。
+                // TODO: いいのかこれで？
                 fromIndex = 0;
                 toIndex = 0;
             }

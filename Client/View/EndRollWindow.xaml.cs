@@ -325,8 +325,12 @@ namespace VoteSystem.Client.View
         {
             try
             {
-                var voterList = //EndRollList.GetVoterList();
+                var voterList =
+#if PUBLISHED
+                    EndRollList.GetVoterList();
+#else
                     EndRollList.GetTestVoterList();
+#endif
                 if (voterList == null)
                 {
                     return new List<LineInfo>();

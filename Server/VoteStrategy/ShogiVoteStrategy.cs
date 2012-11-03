@@ -391,7 +391,7 @@ namespace VoteSystem.Server.VoteStrategy
         /// 参加コマンドの正規表現です。
         /// </summary>
         private static readonly Regex JoinRegex =
-            new Regex(@"^(join|参加|さんか)\s*", RegexOptions.IgnoreCase);
+            new Regex(@"^(join|sanka|参加|さんか)\s+", RegexOptions.IgnoreCase);
 
         /// <summary>
         /// 投票ルームにたいする各種操作を処理します。

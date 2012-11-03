@@ -25,7 +25,7 @@ namespace VoteSystem.Protocol
     /// </remarks>
     [DataContract()]
     [Serializable()]
-    public class LiveAttribute : IModel
+    public class LiveAttribute : NotifyObject
     {
         private NotificationTypeMask systemCommentTypeMask =
             NotificationTypeMask.SystemAll;
@@ -37,25 +37,6 @@ namespace VoteSystem.Protocol
         private bool isPostMirrorComment = true;
         private NotificationTypeMask mirrorCommentTypeMask =
             NotificationTypeMask.CommentCore;
-
-        /// <summary>
-        /// プロパティの変更通知を扱います。
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// プロパティ変更通知を送ります。
-        /// </summary>
-        void IModel.NotifyPropertyChanged(PropertyChangedEventArgs e)
-        {
-            var handler = this.PropertyChanged;
-
-            if (handler != null)
-            {
-                Util.SafeCall(() =>
-                    handler(this, e));
-            }
-        }
 
         #region Systemコメント
         /// <summary>
@@ -519,13 +500,6 @@ namespace VoteSystem.Protocol
         {
             // TODO
             return true;
-        }
-
-        /// <summary>
-        /// コンストラクタ
-        /// </summary>
-        public LiveAttribute()
-        {
         }
     }
 }

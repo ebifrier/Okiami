@@ -164,7 +164,7 @@ namespace VoteSystem.Server
         /// </summary>
         public void ClearVote()
         {
-            // TODO: 投票結果を消す前にそれをログに残しておきます。
+            // 投票結果を消す前にそれをログに残しておきます。
             var result = VoteResult;
             var strs = result.CandidateList.Select(pair =>
                 string.Format("{0}: {1}", pair.Candidate, pair.Point));
@@ -517,7 +517,7 @@ namespace VoteSystem.Server
         /// 時間短縮要求コマンドの正規表現です。
         /// </summary>
         private static Regex StableRegex = new Regex(
-            "^(あ|あっ)?(、)?(もう)?(、)?(けっこう|結構|いりません)(です)?(。)?",
+            "^(あ|あっ)?(、)?(もう)?(、)?(けっこうです|結構です|いりません)(。)?",
             RegexOptions.IgnoreCase);
 
         /// <summary>
