@@ -390,8 +390,9 @@ namespace VoteSystem.Server.VoteStrategy
         /// <summary>
         /// 参加コマンドの正規表現です。
         /// </summary>
-        private static readonly Regex JoinRegex =
-            new Regex(@"^(join|sanka|参加|さんか)\s+", RegexOptions.IgnoreCase);
+        private static readonly Regex JoinRegex = new Regex(
+            @"^(join|sanka|参加|さんか)(\s+|@|＠)",
+            RegexOptions.IgnoreCase);
 
         /// <summary>
         /// 投票ルームにたいする各種操作を処理します。
@@ -403,7 +404,9 @@ namespace VoteSystem.Server.VoteStrategy
             var m = JoinRegex.Match(notification.Text);
             if (m.Success)
             {
-                var text = notification.Text.Substring(m.Length);
+                // ＠マークは残します。スペースもついでに残ってしまいますが、
+                // ParsePlayerメソッドで削除されるので問題ありません。
+                var text = notification.Text.Substring(m.Groups[1].Length);
 
                 var player = ShogiParser.ParsePlayer(text);
                 if (player != null)

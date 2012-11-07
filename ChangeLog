@@ -1,3 +1,14 @@
+2012-11-08  - Ver 1.1.2.1
+
+	* Client/Model/EndRollList.cs: 青を少し明るくしました。
+	* Client/Settings.part.cs: TimeSpanの値の指定に６０分が使われていた
+	ため、文字列から正しく変換できていませんでした。
+	* PluginShogi/ViewModel/EffectManager.cs: 投票が投了だった場合は自
+	玉を光らせるようにしました。また投票エフェクトの表示間隔を最短100ms
+	としました。
+	* Server/VoteStrategy/ShogiVoteStrategy.cs: 参加コマンドで\"参加＠
+	名前\"という文字列を受け入れるようにしました。
+
 2012-11-04  - Ver 1.1.2.0
 
 	* バージョンを1.1.2に上げました。

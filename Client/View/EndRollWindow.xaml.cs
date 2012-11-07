@@ -348,11 +348,12 @@ namespace VoteSystem.Client.View
                     lines.Add(new LineInfo());
                 }
 
-                lines.AddRange(stuffList.LineList.Select(line =>
-                    new LineInfo()
+                lines.AddRange(
+                    from line in stuffList.LineList
+                    select new LineInfo()
                     {
                         Texts = line.ElementList.Select(CreateTextInfo).ToList(),
-                    }));
+                    });
 
                 // 前後には空行を何行か入れます。
                 for (var i = 0; i < OpacityLineCount; ++i)

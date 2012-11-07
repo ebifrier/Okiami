@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Configuration;
@@ -39,7 +40,7 @@ namespace VoteSystem.Client
             set { this["DefaultVoteSpan"] = value; }
         }
 
-        [DefaultSettingValueAttribute("00:60:00")]
+        [DefaultSettingValueAttribute("01:00:00")]
         public TimeSpan SetTotalVoteSpan
         {
             get { return (TimeSpan)this["SetTotalVoteSpan"]; }

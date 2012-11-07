@@ -76,11 +76,14 @@ namespace VoteSystem.PluginShogi.ViewModel
     /// </summary>
     public class EffectManager : NotifyObject, IEffectManager
     {
+        private readonly TimeSpan VoteInterval = TimeSpan.FromMilliseconds(100);
+
+        private HashSet<string> castleEffectedBag = new HashSet<string>();
+        private string prevBackgroundKey = "SpringEffect";
         private EffectObject prevMovedCell;
         private EffectObject movableCell;
         private EffectObject tebanCell;
-        private HashSet<string> castleEffectedBag = new HashSet<string>();
-        private string prevBackgroundKey = "SpringEffect";
+        private DateTime prevVotedTime = DateTime.Now;
 
         /// <summary>
         /// エフェクトを表示するオブジェクトを取得または設定します。
@@ -721,6 +724,27 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// 玉の位置を取得します。
+        /// </summary>
+        private Position FindGyoku(Board board, BWType bwType)
+        {
+            var positions =
+                from file in Enumerable.Range(1, Board.BoardSize)
+                from rank in Enumerable.Range(1, Board.BoardSize)
+                let piece = board[file, rank]
+                where piece != null &&
+                      piece.PieceType == PieceType.Gyoku &&
+                      piece.BWType == bwType
+                select new Position(file, rank);
+            if (positions.Count() != 1)
+            {
+                return null;
+            }
+
+            return positions.FirstOrDefault();
+        }
+
+        /// <summary>
         /// 投票時のエフェクトを表示します。
         /// </summary>
         public void Voted(Move move)
@@ -730,7 +754,30 @@ namespace VoteSystem.PluginShogi.ViewModel
                 return;
             }
 
+            var board = Container.Board;
+            if (board == null)
+            {
+                return;
+            }
+
             if (!HasEffectFlag(EffectFlag.Vote))
+            {
+                return;
+            }
+
+            // 放送ログをまとめて読み込むと、
+            // 投票エフェクトが大量に発生することがあります。
+            if (DateTime.Now < this.prevVotedTime + VoteInterval)
+            {
+                return;
+            }
+
+            // 投了時は玉の位置にエフェクトをかけます。
+            var position =
+                ( move.IsResigned
+                ? FindGyoku(board, board.MovePriority)
+                : move.NewPosition);
+            if (position == null)
             {
                 return;
             }
@@ -738,7 +785,9 @@ namespace VoteSystem.PluginShogi.ViewModel
             var effect = Effects.Vote.LoadEffect();
             if (effect != null)
             {
-                AddEffect(effect, move.NewPosition);
+                AddEffect(effect, position);
+
+                this.prevVotedTime = DateTime.Now;
             }
         }
 
@@ -758,21 +807,14 @@ namespace VoteSystem.PluginShogi.ViewModel
                 return;
             }
 
-            // 投了する玉のある位置を取得します。
-            var positions =
-                from file in Enumerable.Range(1, Board.BoardSize)
-                from rank in Enumerable.Range(1, Board.BoardSize)
-                let piece = board[file, rank]
-                where piece != null &&
-                      piece.PieceType == PieceType.Gyoku &&
-                      piece.BWType == board.MovePriority
-                select new Position(file, rank);
-            if (positions.Count() != 1)
+            // 投了時は玉の位置にエフェクトをかけます。
+            var position = FindGyoku(board, board.MovePriority);
+            if (position == null)
             {
                 return;
             }
 
-            AddEffect(Effects.Win, positions.FirstOrDefault());
+            AddEffect(Effects.Win, position);
         }
 
         /// <summary>

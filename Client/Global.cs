@@ -309,41 +309,6 @@ namespace VoteSystem.Client
         }
 
         /// <summary>
-        /// xaml用の色を返します。
-        /// </summary>
-        public static Color GetXamlColor(Protocol.NotificationColor color)
-        {
-            switch (color)
-            {
-                case NotificationColor.Default:
-                    return Colors.White;
-                case NotificationColor.Black:
-                    return Colors.Black;
-                case NotificationColor.White:
-                    return Colors.White;
-                case NotificationColor.Red:
-                    return Colors.Red;
-                case NotificationColor.Pink:
-                    return Colors.Pink;
-                case NotificationColor.Orange:
-                    return Colors.Orange;
-                case NotificationColor.Yellow:
-                    return Colors.Goldenrod;
-                case NotificationColor.Green:
-                    return Colors.Green;
-                case NotificationColor.Cyan:
-                    return Colors.Cyan;
-                case NotificationColor.Blue:
-                    return Colors.Blue;
-                case NotificationColor.Purple:
-                    //return Colors.Purple;
-                    return Colors.Magenta;
-            }
-
-            return Colors.Black;
-        }
-
-        /// <summary>
         /// ウィンドウの作成が終わった後にプラグインの読み込みを行います。
         /// </summary>
         internal static void InitPlugin()
