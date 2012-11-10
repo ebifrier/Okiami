@@ -427,7 +427,7 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             else if (e.Command == Resign)
             {
-                e.CanExecute = ShogiGlobal.VoteClient.IsVoteRoomOwner;
+                e.CanExecute = true; // ShogiGlobal.VoteClient.IsVoteRoomOwner;
             }
             else
             {
@@ -1203,13 +1203,24 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// </summary>
         private static void ExecuteResign(object sender, ExecutedRoutedEventArgs e)
         {
-            var manager = ShogiGlobal.EffectManager;
-            if (manager == null)
+            try
             {
-                return;
-            }
+                /*var model = ShogiGlobal.ShogiModel;
+                SendSetCurrentBoard(model.Board);*/
 
-            manager.Resign();
+                var manager = ShogiGlobal.EffectManager;
+                if (manager == null)
+                {
+                    return;
+                }
+
+                manager.Resign();
+            }
+            catch (Exception ex)
+            {
+                ShogiGlobal.ErrorMessage(ex,
+                    "投了に失敗しました (T∇T)");
+            }
         }
     }
 }
