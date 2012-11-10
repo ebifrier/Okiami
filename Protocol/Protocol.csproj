@@ -40,6 +40,8 @@
     <AssemblyOriginatorKeyFile>VoteProtocol.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="protobuf-net, Version=1.0.0.280, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Ragnarok\externals\net\protobuf-net.dll</HintPath>
@@ -48,6 +50,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -55,12 +60,14 @@
     <Compile Include="Commenter\CommenterProtocol.cs" />
     <Compile Include="LiveAttribute.cs" />
     <Compile Include="LiveInfoData.cs" />
+    <Compile Include="Model\EndRollList.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="NotificationColor.cs" />
     <Compile Include="NotificationEventArgs.cs" />
     <Compile Include="NotificationType.cs" />
     <Compile Include="ProtocolUtil.cs" />
     <Compile Include="SystemNotificationType.cs" />
+    <Compile Include="View\EndRollControl.cs" />
     <Compile Include="Vote\TimeExtendKind.cs" />
     <Compile Include="Vote\VoteMode.cs" />
     <Compile Include="Vote\VoteParticipantInfo.cs" />
@@ -80,6 +87,10 @@
     <Compile Include="Vote\VoteResult.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Ragnarok\Ragnarok.Presentation\Ragnarok.Presentation.csproj">
+      <Project>{2E5515A8-7B34-44A2-9C50-F423C5F87798}</Project>
+      <Name>Ragnarok.Presentation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Shogi\Ragnarok.Shogi.csproj">
       <Project>{38ABBDA5-B22F-41B7-A415-2A909D0A6A35}</Project>
       <Name>Ragnarok.Shogi</Name>
@@ -91,6 +102,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="VoteProtocol.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\EndRollControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\EndRollMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

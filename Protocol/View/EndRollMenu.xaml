@@ -1,0 +1,77 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+                    xmlns:v="clr-namespace:VoteSystem.Protocol.View">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Ragnarok.Presentation;component/Themes/Common.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <p:ValueToIntConverter x:Key="intConverter" />
+
+    <!-- 操作を行うボタンの共通スタイルです。-->
+    <Style x:Key="imageButtonStyle" TargetType="Button">
+        <Setter Property="Margin" Value="2,0,2,0" />
+        <Setter Property="Width" Value="24" />
+        <Setter Property="Height" Value="24" />
+        <Setter Property="ContentTemplate"
+                Value="{StaticResource DisableImageTemplate}" />
+
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="True">
+                <Setter Property="ContentTemplate"
+                        Value="{StaticResource ImageTemplate}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- 各種メニュー -->
+    <ControlTemplate x:Key="EndRollMenu">
+        <Grid Background="White" IsEnabled="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+        
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Button Style="{StaticResource imageButtonStyle}"
+                        Content="pack://application:,,,/Resources/Image/endroll_start.png"
+                        ToolTip="開始"
+                        Command="{x:Static v:EndRollControl.PlayCommand}" />
+                <Button Style="{StaticResource imageButtonStyle}"
+                        Content="pack://application:,,,/Resources/Image/endroll_pause.png"
+                        ToolTip="一時停止"
+                        Command="{x:Static v:EndRollControl.PauseCommand}" />
+                <Button Style="{StaticResource imageButtonStyle}"
+                        Content="pack://application:,,,/Resources/Image/endroll_stop.png"
+                        ToolTip="停止"
+                        Command="{x:Static v:EndRollControl.StopCommand}" />
+                    
+                <Separator />
+
+                <Label Content="時間(秒)" />
+
+                <Label Content="{Binding CurrentPos, Mode=OneWay}"
+                       ContentStringFormat="{}{0:000.00} /"
+                       ToolTip="現在の再生時刻" />
+                    
+                <p:NumericUpDown x:Name="updown" Minimum="0" Maximum="6000"
+                                 MinWidth="55"
+                                 Value="{Binding RollTimeSeconds, Converter={StaticResource intConverter}}" />
+            </StackPanel>
+
+            <Slider Grid.Column="1"
+                    SmallChange="1" TickFrequency="5" IsSnapToTickEnabled="False"
+                    TickPlacement="TopLeft" IsMoveToPointEnabled="True"
+                    Maximum="{Binding RollTimeSeconds}"
+                    Value="{Binding CurrentPos}" />
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button Style="{StaticResource imageButtonStyle}"
+                        Content="pack://application:,,,/Resources/Image/endroll_close.png"
+                        ToolTip="閉じる"
+                        Command="Close" />
+            </StackPanel>
+        </Grid>
+    </ControlTemplate>
+</ResourceDictionary>

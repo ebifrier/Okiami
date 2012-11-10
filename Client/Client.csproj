@@ -107,7 +107,6 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Core" />
     <Reference Include="System.XML" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -126,7 +125,6 @@
     <Compile Include="Model\CommenterCommentClient.cs" />
     <Compile Include="Model\CommenterManager.cs" />
     <Compile Include="Model\ConnectionCounter.cs" />
-    <Compile Include="Model\EndRollList.cs" />
     <Compile Include="Model\ImageSetInfo.cs" />
     <Compile Include="Model\InfoBase.cs" />
     <Compile Include="Model\Live\LiveClient.cs" />
@@ -140,6 +138,7 @@
     <Compile Include="Global.cs" />
     <Compile Include="Settings.part.cs" />
     <Compile Include="UpdateChecker.cs" />
+    <Compile Include="ViewModel\EndRollWindowViewModel.cs" />
     <Compile Include="ViewModel\EvaluateWindowViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\VoteResultWindowViewModel.cs" />

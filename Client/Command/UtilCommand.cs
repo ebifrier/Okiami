@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 using Ragnarok;
 using Ragnarok.Extra.Sound;
@@ -11,7 +12,7 @@ using Ragnarok.Presentation;
 
 namespace VoteSystem.Client.Command
 {
-    using VoteSystem.Client.Model;
+    using Protocol.Vote;
 
     public static partial class Commands
     {
@@ -501,13 +502,20 @@ namespace VoteSystem.Client.Command
         private static void ExecuteOpenEndRollWindow(object sender,
                                                      ExecutedRoutedEventArgs e)
         {
-            var window = new View.EndRollWindow()
+            var model = new ViewModel.EndRollWindowViewModel
             {
-                Background = new System.Windows.Media.SolidColorBrush(
-                    //System.Windows.Media.Color.FromArgb(164, 255, 255, 255)),
-                    System.Windows.Media.Color.FromArgb(164, 0, 0, 0)),
+                Background = new SolidColorBrush(Color.FromArgb(170, 0, 0, 0)),
                 RollTimeSeconds = 30,
                 LineHeight = 30.0,
+                OpacityLineCount = 3,
+                Topmost = true,
+                IsShowBorder = true,
+                EdgeLength = 10,
+            };
+
+            var window = new View.EndRollWindow
+            {
+                DataContext = model,
                 Owner = Global.MainWindow,
             };
 

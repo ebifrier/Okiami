@@ -9,20 +9,17 @@ using System.Windows.Media;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
-using System.Threading;
 
 using Ragnarok.Utility;
-using Ragnarok.Net.ProtoBuf;
 
-namespace VoteSystem.Client.Model
+namespace VoteSystem.Protocol.Model
 {
-    using VoteSystem.Protocol;
-    using VoteSystem.Protocol.Vote;
+    using Vote;
 
     /// <summary>
     /// <see cref="EndRollList"/>の例外クラスです。
     /// </summary>
-    public class StuffListException : Exception
+    public class EndRollListException : Exception
     {
         /// <summary>
         /// <see cref="XElement"/>からエラーメッセージを作成します。
@@ -41,7 +38,7 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public StuffListException(string message)
+        public EndRollListException(string message)
             : base(message)
         {
         }
@@ -49,7 +46,7 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public StuffListException(string message, Exception innerException)
+        public EndRollListException(string message, Exception innerException)
             : base(message, innerException)
         {
         }
@@ -57,7 +54,7 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public StuffListException(string message, XElement elem)
+        public EndRollListException(string message, XElement elem)
             : base(MakeMessage(message, elem))
         {
         }
@@ -65,7 +62,7 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public StuffListException(string message, XElement elem,
+        public EndRollListException(string message, XElement elem,
                                   Exception innerException)
             : base(MakeMessage(message, elem), innerException)
         {
@@ -255,7 +252,7 @@ namespace VoteSystem.Client.Model
                 var attr = elem.Attribute("Width");
                 if (attr == null)
                 {
-                    throw new StuffListException(
+                    throw new EndRollListException(
                         "ColumnDefinitionタグ: Width属性がありません。", elem);
                 }
 
@@ -264,7 +261,7 @@ namespace VoteSystem.Client.Model
             }
             catch (Exception ex)
             {
-                throw new StuffListException(
+                throw new EndRollListException(
                     "ColumnDefinitionタグの解析に失敗しました。", elem, ex);
             }
         }
@@ -282,7 +279,7 @@ namespace VoteSystem.Client.Model
                 }
                 else
                 {
-                    throw new StuffListException(
+                    throw new EndRollListException(
                         string.Format("{0}タグには対応していません。",
                             elemChild.Name.LocalName),
                         elemChild);
@@ -390,7 +387,7 @@ namespace VoteSystem.Client.Model
             }
             catch (Exception ex)
             {
-                throw new StuffListException(
+                throw new EndRollListException(
                     "Formatタグの解析に失敗しました。", elem, ex);
             }
         }
@@ -410,7 +407,7 @@ namespace VoteSystem.Client.Model
                     }
                     else
                     {
-                        throw new StuffListException(
+                        throw new EndRollListException(
                             string.Format("{0}タグには対応していません。",
                                 elemChild.Name.LocalName),
                             elemChild);
@@ -436,8 +433,8 @@ namespace VoteSystem.Client.Model
                 case "UnjoinedVoterCount":
                     return new List<object>() { voterList.UnjoinedVoterCount };
                 case "LiveOwner":
-                    return new List<object>() { Global.MainModel.NickName };
-
+                    return new List<object>() { /*Global.MainModel.NickName*/ };
+                    
                 case "JoinedVoterList":
                     return voterList.JoinedVoterList.ToList<object>();
                 case "LiveOwnerList":
@@ -461,14 +458,14 @@ namespace VoteSystem.Client.Model
             var dataAttr = elem.Attribute("Data");
             if (dataAttr == null)
             {
-                throw new StuffListException(
+                throw new EndRollListException(
                     "LineFormatタグにData属性がありません。", elem);
             }
 
             var dataList = GetDataObject(voterList, dataAttr.Value);
             if (dataList == null)
             {
-                throw new StuffListException(
+                throw new EndRollListException(
                     "Data属性の値が正しくありません。", elem);
             }
 
@@ -480,7 +477,7 @@ namespace VoteSystem.Client.Model
                     {
                         if (line.Name.LocalName != "Line")
                         {
-                            throw new StuffListException(
+                            throw new EndRollListException(
                                 string.Format(
                                     "{0}タグには対応していません。",
                                     line.Name.LocalName),
@@ -518,7 +515,7 @@ namespace VoteSystem.Client.Model
                 }
                 else
                 {
-                    throw new StuffListException(
+                    throw new EndRollListException(
                         string.Format("{0}タグには対応していません。",
                             elem.Name.LocalName),
                         elem);
@@ -528,194 +525,6 @@ namespace VoteSystem.Client.Model
             // 解析に成功したら、値を設定します。
             this.ColumnList = columnList;
             this.LineList = result;
-        }
-
-        /// <summary>
-        /// 投票者リストを更新します。
-        /// </summary>
-        public static VoterList GetVoterList()
-        {
-            if (!Global.VoteClient.IsLogined)
-            {
-                MessageUtil.ErrorMessage(
-                    "投票ルームに入出してください。(~∇~;)");
-            }
-
-            using (var ev = new ManualResetEvent(false))
-            {
-                VoterList voterList = null;
-
-                try
-                {
-                    Global.VoteClient.GetVoterList(
-                        (sender, response) =>
-                        {
-                            voterList = GetVoterListDone(response);
-                            ev.Set();
-                        });
-                    if (!ev.WaitOne(TimeSpan.FromSeconds(5.0)))
-                    {
-                        MessageUtil.ErrorMessage(
-                            "参加者リストの取得がタイムアウトしました。(~∇~;)");
-                        return null;
-                    }
-
-                    // 理由不明だが･･････
-                    if (voterList == null)
-                    {
-                        MessageUtil.ErrorMessage(
-                            "参加者リストがありませんでした。(~∇~;)");
-                        return null;
-                    }
-
-                    return voterList;
-                }
-                catch (Exception ex)
-                {
-                    MessageUtil.ErrorMessage(ex,
-                        "参加者リストの取得に失敗しました。(~∇~;)");
-                    return null;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 投票者リストの設定を行います。
-        /// </summary>
-        private static VoterList GetVoterListDone(
-            PbResponseEventArgs<GetVoterListResponse> response)
-        {
-            if (response.ErrorCode != 0)
-            {
-                return null;
-            }
-
-            if (response.Response == null)
-            {
-                return null;
-            }
-
-            return response.Response.VoterList;
-        }
-        
-        /// <summary>
-        /// テスト用
-        /// </summary>
-        public static VoterList GetTestVoterList()
-        {
-            var voterList = new VoterList();
-
-            voterList.JoinedVoterList.Add(new VoterInfo()
-            {
-                Color = NotificationColor.Default,
-                Id = "1",
-                LiveSite = LiveSite.NicoNama,
-                Name = "テスト1",
-            });
-
-            voterList.JoinedVoterList.Add(new VoterInfo()
-            {
-                Color = NotificationColor.Red,
-                Id = "2",
-                LiveSite = LiveSite.NicoNama,
-                Name = "テスト２",
-                Skill = "5段",
-            });
-
-            voterList.JoinedVoterList.Add(new VoterInfo()
-            {
-                Color = NotificationColor.Blue,
-                Id = "3",
-                LiveSite = LiveSite.NicoNama,
-                Name = "テスト3",
-                Skill = "初段",
-            });
-
-            voterList.JoinedVoterList.Add(new VoterInfo()
-            {
-                Color = NotificationColor.Default,
-                Id = "4",
-                LiveSite = LiveSite.NicoNama,
-                Name = "テスト４さんだおお",
-                Skill = "15級",
-            });
-
-            voterList.JoinedVoterList.Add(new VoterInfo()
-            {
-                Color = NotificationColor.Cyan,
-                Id = "6",
-                LiveSite = LiveSite.NicoNama,
-                Name = "5",
-                Skill = "3級",
-            });
-
-            voterList.JoinedVoterList.Add(new VoterInfo()
-            {
-                Color = NotificationColor.Green,
-                Id = "6",
-                LiveSite = LiveSite.NicoNama,
-                Name = "５",
-                Skill = "9級",
-            });
-
-
-            voterList.LiveOwnerList.Add(new VoterInfo()
-            {
-                Color = NotificationColor.Yellow,
-                Id = "7",
-                LiveSite = LiveSite.NicoNama,
-                Name = "x５",
-                Skill = "9級",
-            });
-
-            voterList.LiveOwnerList.Add(new VoterInfo()
-            {
-                Color = NotificationColor.Green,
-                Id = "8",
-                LiveSite = LiveSite.NicoNama,
-                Name = "５x",
-                Skill = "9級",
-            });
-
-            voterList.LiveOwnerList.Add(new VoterInfo()
-            {
-                Color = NotificationColor.Default,
-                Id = "9",
-                LiveSite = LiveSite.NicoNama,
-                Name = "ーー",
-                Skill = "｜｜",
-            });
-
-            voterList.LiveOwnerList.Add(new VoterInfo()
-            {
-                Color = NotificationColor.Yellow,
-                Id = "10",
-                LiveSite = LiveSite.NicoNama,
-                Name = "￣￣￣",
-                Skill = "＿＿＿",
-            });
-
-            voterList.JoinedVoterList.Add(new VoterInfo()
-            {
-                Color = NotificationColor.Purple,
-                Id = "11",
-                LiveSite = LiveSite.NicoNama,
-                Name = "~~~",
-                Skill = "___",
-            });
-
-            voterList.JoinedVoterList.Add(new VoterInfo()
-            {
-                Color = NotificationColor.Pink,
-                Id = "12",
-                LiveSite = LiveSite.NicoNama,
-                Name = "----",
-                Skill = "",
-            });
-
-            voterList.UnjoinedVoterCount = 13;
-
-            return voterList;
         }
 
         /// <summary>

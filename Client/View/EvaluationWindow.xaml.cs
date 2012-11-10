@@ -30,7 +30,7 @@ namespace VoteSystem.Client.View
             new RoutedUICommand(
                 "設定ダイアログを開きます。",
                 "OpenSettingDialog",
-                typeof(EndRollWindow));
+                typeof(EvaluationWindow));
 
         /// <summary>
         /// 静的コンストラクタ

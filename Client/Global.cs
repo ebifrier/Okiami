@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Reflection;
-using System.ComponentModel;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Windows.Media;
 
 using Ragnarok.Net;
+using Ragnarok.Net.ProtoBuf;
 using Ragnarok.NicoNico.Live;
 
 namespace VoteSystem.Client
 {
-    using VoteSystem.Protocol;
+    using Protocol;
+    using Protocol.Vote;
 
     /// <summary>
     /// グローバルなオブジェクトを保持します。
@@ -26,6 +29,11 @@ namespace VoteSystem.Client
         /// プラグインが読み込まれたときに呼ばれます。
         /// </summary>
         public static event EventHandler PluginLoaded;
+
+        /// <summary>
+        /// xamlではメソッドを直接指定することができないため。
+        /// </summary>
+        public static Func<VoterList> VoterListGetter = GetVoterList;
 
         /// <summary>
         /// 公開用プログラムかどうかを取得します。
@@ -359,6 +367,195 @@ namespace VoteSystem.Client
             {
                 voteClient.Disconnect();
             }
+        }
+
+        /// <summary>
+        /// 投票者リストを更新します。
+        /// </summary>
+        public static VoterList GetVoterList()
+        {
+            if (!Global.VoteClient.IsLogined)
+            {
+                MessageUtil.ErrorMessage(
+                    "投票ルームに入出してください。(~∇~;)");
+                return null;
+            }
+
+            using (var ev = new ManualResetEvent(false))
+            {
+                VoterList voterList = null;
+
+                try
+                {
+                    Global.VoteClient.GetVoterList(
+                        (sender, response) =>
+                        {
+                            voterList = GetVoterListDone(response);
+                            ev.Set();
+                        });
+                    if (!ev.WaitOne(TimeSpan.FromSeconds(5.0)))
+                    {
+                        MessageUtil.ErrorMessage(
+                            "参加者リストの取得がタイムアウトしました。(~∇~;)");
+                        return null;
+                    }
+
+                    // 理由不明だが･･････
+                    if (voterList == null)
+                    {
+                        MessageUtil.ErrorMessage(
+                            "参加者リストがありませんでした。(~∇~;)");
+                        return null;
+                    }
+
+                    return voterList;
+                }
+                catch (Exception ex)
+                {
+                    MessageUtil.ErrorMessage(ex,
+                        "参加者リストの取得に失敗しました。(~∇~;)");
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 投票者リストの設定を行います。
+        /// </summary>
+        private static VoterList GetVoterListDone(
+            PbResponseEventArgs<GetVoterListResponse> response)
+        {
+            if (response.ErrorCode != 0)
+            {
+                return null;
+            }
+
+            if (response.Response == null)
+            {
+                return null;
+            }
+
+            return response.Response.VoterList;
+        }
+
+        /// <summary>
+        /// テスト用
+        /// </summary>
+        public static VoterList GetTestVoterList()
+        {
+            var voterList = new VoterList();
+
+            voterList.JoinedVoterList.Add(new VoterInfo()
+            {
+                Color = NotificationColor.Default,
+                Id = "1",
+                LiveSite = LiveSite.NicoNama,
+                Name = "テスト1",
+            });
+
+            voterList.JoinedVoterList.Add(new VoterInfo()
+            {
+                Color = NotificationColor.Red,
+                Id = "2",
+                LiveSite = LiveSite.NicoNama,
+                Name = "テスト２",
+                Skill = "5段",
+            });
+
+            voterList.JoinedVoterList.Add(new VoterInfo()
+            {
+                Color = NotificationColor.Blue,
+                Id = "3",
+                LiveSite = LiveSite.NicoNama,
+                Name = "テスト3",
+                Skill = "初段",
+            });
+
+            voterList.JoinedVoterList.Add(new VoterInfo()
+            {
+                Color = NotificationColor.Default,
+                Id = "4",
+                LiveSite = LiveSite.NicoNama,
+                Name = "テスト４さんだおお",
+                Skill = "15級",
+            });
+
+            voterList.JoinedVoterList.Add(new VoterInfo()
+            {
+                Color = NotificationColor.Cyan,
+                Id = "6",
+                LiveSite = LiveSite.NicoNama,
+                Name = "5",
+                Skill = "3級",
+            });
+
+            voterList.JoinedVoterList.Add(new VoterInfo()
+            {
+                Color = NotificationColor.Green,
+                Id = "6",
+                LiveSite = LiveSite.NicoNama,
+                Name = "５",
+                Skill = "9級",
+            });
+
+
+            voterList.LiveOwnerList.Add(new VoterInfo()
+            {
+                Color = NotificationColor.Yellow,
+                Id = "7",
+                LiveSite = LiveSite.NicoNama,
+                Name = "x５",
+                Skill = "9級",
+            });
+
+            voterList.LiveOwnerList.Add(new VoterInfo()
+            {
+                Color = NotificationColor.Green,
+                Id = "8",
+                LiveSite = LiveSite.NicoNama,
+                Name = "５x",
+                Skill = "9級",
+            });
+
+            voterList.LiveOwnerList.Add(new VoterInfo()
+            {
+                Color = NotificationColor.Default,
+                Id = "9",
+                LiveSite = LiveSite.NicoNama,
+                Name = "ーー",
+                Skill = "｜｜",
+            });
+
+            voterList.LiveOwnerList.Add(new VoterInfo()
+            {
+                Color = NotificationColor.Yellow,
+                Id = "10",
+                LiveSite = LiveSite.NicoNama,
+                Name = "￣￣￣",
+                Skill = "＿＿＿",
+            });
+
+            voterList.JoinedVoterList.Add(new VoterInfo()
+            {
+                Color = NotificationColor.Purple,
+                Id = "11",
+                LiveSite = LiveSite.NicoNama,
+                Name = "~~~",
+                Skill = "___",
+            });
+
+            voterList.JoinedVoterList.Add(new VoterInfo()
+            {
+                Color = NotificationColor.Pink,
+                Id = "12",
+                LiveSite = LiveSite.NicoNama,
+                Name = "----",
+                Skill = "",
+            });
+
+            voterList.UnjoinedVoterCount = 13;
+
+            return voterList;
         }
     }
 }

@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows;
+
+#if !MONO
+using System.Windows.Markup;
+#endif
 
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
 [assembly: AssemblyTitle("VoteProtocol")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("投票ツールのサーバー/クライアントの共用ライブラリです。")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Co516151")]
+[assembly: AssemblyCompany("co516151")]
 [assembly: AssemblyProduct("VoteProtocol")]
 [assembly: AssemblyCopyright("Copyright © えびふらい 2010")]
 [assembly: AssemblyTrademark("")]
@@ -22,6 +27,26 @@ using System.Runtime.InteropServices;
 
 // 次の GUID は、このプロジェクトが COM に公開される場合の、typelib の ID です
 [assembly: Guid("3ddba66d-3c78-4610-b48f-fe8e25d0e367")]
+
+[assembly: ThemeInfo(
+    //where theme specific resource dictionaries are located
+    //(used if a resource is not found in the page, 
+    // or application resource dictionaries)
+    ResourceDictionaryLocation.None,
+
+    //where the generic resource dictionary is located
+    //(used if a resource is not found in the page, 
+    // app, or any theme specific resource dictionaries)
+    ResourceDictionaryLocation.SourceAssembly
+)]
+
+#if !MONO
+[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Protocol")]
+[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Protocol.Commenter")]
+[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Protocol.Model")]
+[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Protocol.View")]
+[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Protocol.Vote")]
+#endif
 
 // アセンブリのバージョン情報は、以下の 4 つの値で構成されています:
 //
