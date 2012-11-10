@@ -17,12 +17,13 @@
 	* VoteSystem/Client/Global.cs: サーバーからのVoterList取得メソッド
 	を追加しました。
 	* Protocol/View/EndRollControl.xaml: Clientのエンドロールウィンドウ
-	の機能の一部をプロトコルに移動しました。
+	の機能の一部をVoteProtocolに移動しました。
 	* Protocol/View/EndRollMenu.xaml: エンドロールの操作用ボタンメニュ
-	ーを別ファイルに移動しました。
+	ーコントロールを別ファイルに移動しました。
 	* Client/ViewModel/EndRollWindowViewModel.cs: エンドロール用のビュ
 	ーモデルを作成しました。以前はウィンドウ内ですべてを完結していまし
-	たが、複数コントロールに機能を移譲する関係でそれが不可になりました。 
+	たが、複数のコントロールに機能を移譲した関係でそれができなくなりま
+	した。
 
 2012-11-08  - Ver 1.1.2.1
 
