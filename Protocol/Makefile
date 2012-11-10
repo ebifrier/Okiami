@@ -13,5 +13,6 @@ OPT_LIBS    = -r:WindowsBase.dll
 DEPEND_LIBPATH = ../../Ragnarok/Ragnarok.Shogi
 
 make-main: $(SRCS)
-	@gmcs -recurse:*.cs $(CSFLAGS) -out:$(TARGET) $(LDFLAGS) $(LIBS) $^
+	@gmcs *.cs Properties/*.cs Commenter/*.cs Vote/*.cs $(CSFLAGS) \
+	-out:$(TARGET) $(LDFLAGS) $(LIBS) $^
 	chmod a-x $(TARGET)

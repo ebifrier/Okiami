@@ -28,6 +28,7 @@ using System.Windows.Markup;
 // 次の GUID は、このプロジェクトが COM に公開される場合の、typelib の ID です
 [assembly: Guid("3ddba66d-3c78-4610-b48f-fe8e25d0e367")]
 
+#if !MONO
 [assembly: ThemeInfo(
     //where theme specific resource dictionaries are located
     //(used if a resource is not found in the page, 
@@ -40,7 +41,6 @@ using System.Windows.Markup;
     ResourceDictionaryLocation.SourceAssembly
 )]
 
-#if !MONO
 [assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Protocol")]
 [assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Protocol.Commenter")]
 [assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Protocol.Model")]

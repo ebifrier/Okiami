@@ -5,7 +5,7 @@
 OUTDIR = bin
 #TARGET = $(OUTDIR)/Ragnarok.dll
 
-CSFLAGS = -debug+ -warn:4 -o+ $(OPT_CSFLAGS)
+CSFLAGS = -debug+ -warn:4 -o+ -define:MONO $(OPT_CSFLAGS)
 
 LDFLAGS = $(OPT_LDFLAGS) -lib:$(OUTDIR)
 LIBS    = -r:System.Runtime.Serialization.dll -r:protobuf-net.dll \
