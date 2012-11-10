@@ -580,12 +580,12 @@ namespace VoteSystem.Server
             lock (this.timeExtendDic)
             {
                 // 同じ値なら何も処理しません。
-                TimeExtendKind value;
+                /*TimeExtendKind value;
                 if (this.timeExtendDic.TryGetValue(voterId, out value) &&
                     value == kind)
                 {
                     return false;
-                }
+                }*/
 
                 this.timeExtendDic[voterId] = kind;
             }

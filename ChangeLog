@@ -1,3 +1,7 @@
+2012-11-11  - Ver 1.1.2.4
+
+	* Server/VoteModel.cs: 時間延長・短縮を一人で何度でも可能にしました。
+
 2012-11-10  - Ver 1.1.2.3
 
 	* PluginShogi/Resources/Image/koma/koma_1moji.png: と金の右上にごみ
