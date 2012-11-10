@@ -76,6 +76,7 @@ namespace VoteSystem.PluginShogi.View
         private void ExecuteOK(object sender, ExecutedRoutedEventArgs e)
         {
             ShogiGlobal.Settings.Save();
+            ShogiGlobal.EffectManager.UpdateBackground();
 
             DialogResult = true;
         }

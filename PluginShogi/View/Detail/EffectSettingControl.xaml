@@ -41,6 +41,8 @@
         <CheckBox Content="手番側を強調表示"
                   IsChecked="{Binding IsUseTebanEffect}" />
         <TextBlock />
+        <CheckBox Content="背景エフェクトを使用"
+                  IsChecked="{Binding IsUseBackgroundEffect}" />
         <CheckBox Content="通常の駒に関するエフェクトを使用"
                   IsChecked="{Binding IsUsePieceEffect}" />
         <CheckBox Content="囲いエフェクトを使用"

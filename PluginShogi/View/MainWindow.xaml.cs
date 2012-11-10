@@ -30,6 +30,7 @@ namespace VoteSystem.PluginShogi.View
     {
         private readonly ShogiWindowViewModel model;
         private ShogiBackgroundCore currentBg;
+        private ShogiBackgroundCore nextBg;
         private FrameTimer timer;
 
         /// <summary>
@@ -86,14 +87,15 @@ namespace VoteSystem.PluginShogi.View
             animBack.KeyFrames.Add(new LinearDoubleKeyFrame(1.0, fadeTime0));
             animBack.KeyFrames.Add(new LinearDoubleKeyFrame(0.0, fadeTime3));
 
-            animFore.Completed += (sender, e) =>
+            animFore.Completed += (_, __) =>
             {
-                this.currentBg =
-                    (this.currentBg == this.background1
+                this.currentBg = this.nextBg;
+                this.nextBg =
+                    (this.nextBg == this.background1
                     ? this.background2
-                    : this.background1);
+                    : this.background1);                
 
-                this.currentBg.EffectKey = null;
+                this.nextBg.EffectKey = null;
             };
 
             bgFore.BeginAnimation(UIElement.OpacityProperty, animFore);
@@ -101,6 +103,7 @@ namespace VoteSystem.PluginShogi.View
 
             if (fadeBan)
             {
+                // 盤のフェードイン/アウトの設定
                 var banBrush = ShogiControl.BanBrush;
                 if (banBrush != null)
                 {
@@ -116,7 +119,8 @@ namespace VoteSystem.PluginShogi.View
 
                     banBrush.BeginAnimation(Brush.OpacityProperty, anim);
                 }
-
+                
+                // 駒台のフェードイン/アウトの設定
                 var komadaiBrush = ShogiControl.PieceBoxBrush;
                 if (komadaiBrush != null)
                 {
@@ -136,32 +140,38 @@ namespace VoteSystem.PluginShogi.View
         }
 
         /// <summary>
+        /// 次のエフェクトを設定します。
+        /// </summary>
+        public void AddEffectKey(string effectKey)
+        {
+            // 同じエフェクトは表示しません。
+            if (this.currentBg.EffectKey == effectKey)
+            {
+                return;
+            }
+
+            this.nextBg.EffectKey = effectKey;
+
+            // 今か次の背景が無なら、盤のフェードは行いません。
+            // → 今も次の背景もあるなら、盤のフェードを行います。
+            StartTransition(
+                this.nextBg, this.currentBg,
+                (!string.IsNullOrEmpty(this.currentBg.EffectKey) &&
+                 !string.IsNullOrEmpty(this.nextBg.EffectKey)));
+        }
+
+        /// <summary>
         /// 背景の初期化を行います。
         /// </summary>
         private void InitBackground()
         {
             this.currentBg = this.background1;
+            this.nextBg = this.background2;
 
-            AddEffectKey("SpringEffect", false);
-        }
-
-        /// <summary>
-        /// 次のエフェクトを設定します。
-        /// </summary>
-        public void AddEffectKey(string effectKey, bool fadeBan = true)
-        {
-            if (string.IsNullOrEmpty(effectKey))
+            if (ShogiGlobal.Settings.HasEffectFlag(EffectFlag.Background))
             {
-                return;
+                AddEffectKey("SpringEffect");
             }
-
-            var back =
-                (this.currentBg == this.background1
-                ? this.background2
-                : this.background1);
-
-            this.currentBg.EffectKey = effectKey;
-            StartTransition(this.currentBg, back, fadeBan);
         }
 
         /// <summary>
@@ -187,10 +197,11 @@ namespace VoteSystem.PluginShogi.View
 
             Closed += MainWindow_Closed;
 
+            // FPSを表示
             if (Client.Global.IsNonPublished)
             {
                 var fpsCounter = new FpsCounter();
-                fpsCounter.FpsChanged += (sender, e) =>
+                fpsCounter.FpsChanged += (_, __) =>
                     Title = string.Format("FPS: {0:0.00}", fpsCounter.Fps, 30);
                 ShogiControl.AddEffect(fpsCounter);
             }
@@ -202,7 +213,7 @@ namespace VoteSystem.PluginShogi.View
             InitBackground();
 
             this.timer = new FrameTimer();
-            this.timer.EnterFrame += (sender, e) => Render(e.ElapsedTime);
+            this.timer.EnterFrame += (_, e) => Render(e.ElapsedTime);
         }
 
         void MainWindow_Closed(object sender, EventArgs e)

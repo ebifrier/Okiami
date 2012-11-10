@@ -44,31 +44,35 @@ namespace VoteSystem.PluginShogi.ViewModel
         Teban = (1 << 2),
 
         /// <summary>
+        /// 背景エフェクトを使用します。
+        /// </summary>
+        Background = (1 << 8),
+        /// <summary>
         /// 駒に関するエフェクトを使用します。
         /// </summary>
-        Piece = (1 << 8),
+        Piece = (1 << 9),
         /// <summary>
         /// 囲いエフェクトを使用します。
         /// </summary>
-        Castle = (1 << 9),
+        Castle = (1 << 10),
         /// <summary>
         /// 投票エフェクトを使用します。
         /// </summary>
-        Vote = (1 << 10),
+        Vote = (1 << 11),
         /// <summary>
         /// 自動再生エフェクトを使用します。
         /// </summary>
-        AutoPlay = (1 << 11),
+        AutoPlay = (1 << 12),
         /// <summary>
         /// 自動再生のカットインエフェクトを使用します。
         /// </summary>
-        AutoPlayCutIn = (1 << 12),
+        AutoPlayCutIn = (1 << 13),
 
         /// <summary>
         /// 全フラグ
         /// </summary>
         All = (PrevCell | MovableCell | Teban |
-               Piece | Castle | Vote | AutoPlay | AutoPlayCutIn),
+               Background | Piece | Castle | Vote | AutoPlay | AutoPlayCutIn),
     }
 
     /// <summary>
@@ -76,10 +80,13 @@ namespace VoteSystem.PluginShogi.ViewModel
     /// </summary>
     public class EffectManager : NotifyObject, IEffectManager
     {
+        /// <summary>
+        /// 投票エフェクトの最短表示インターバルです。
+        /// </summary>
         private readonly TimeSpan VoteInterval = TimeSpan.FromMilliseconds(100);
 
         private HashSet<string> castleEffectedBag = new HashSet<string>();
-        private string prevBackgroundKey = "SpringEffect";
+        private int moveCount;
         private EffectObject prevMovedCell;
         private EffectObject movableCell;
         private EffectObject tebanCell;
@@ -142,12 +149,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// </summary>
         private bool HasEffectFlag(EffectFlag flag)
         {
-            if (!Settings.SD_IsUseEffect)
-            {
-                return false;
-            }
-
-            return ((Settings.SD_EffectFlag & flag) != 0);
+            return Settings.HasEffectFlag(flag);
         }
 
         /// <summary>
@@ -159,7 +161,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             {
                 if (EffectMoveCount > 4)
                 {
-                    EffectMoveCount = 100;
+                    EffectMoveCount = 1000;
                 }
             }
         }
@@ -433,41 +435,45 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// </summary>
         private void TrySetBackgroundKey(MainWindow window, string key)
         {
-            if (this.prevBackgroundKey != key)
-            {
-                window.AddEffectKey(key);
-                this.prevBackgroundKey = key;
-            }
+            window.AddEffectKey(key);
         }
 
         /// <summary>
-        /// 現局面の差し手が進んだときに呼ばれます。
+        /// 背景エフェクトを更新します。
         /// </summary>
-        public void ChangeMoveCount(int moveCount)
+        public void UpdateBackground()
         {
             if (Container == null)
             {
                 return;
             }
 
-            Ragnarok.Presentation.WpfUtil.UIProcess(() =>
+            // ウィンドウの取得を行います。
+            var window = ShogiGlobal.MainWindow;
+            if (window == null)
             {
-                var window = ShogiGlobal.MainWindow;
-                if (window == null)
+                return;
+            }
+
+            WpfUtil.UIProcess(() =>
+            {
+                // 必要なら背景エフェクトを無効にします。
+                if (!HasEffectFlag(EffectFlag.Background))
                 {
+                    TrySetBackgroundKey(window, null);
                     return;
                 }
 
                 var Unit = 30;
-                if (moveCount >= Unit * 3)
+                if (this.moveCount >= Unit * 3)
                 {
                     TrySetBackgroundKey(window, "WinterEffect");
                 }
-                else if (moveCount >= Unit * 2)
+                else if (this.moveCount >= Unit * 2)
                 {
                     TrySetBackgroundKey(window, "AutumnEffect");
                 }
-                else if (moveCount >= Unit)
+                else if (this.moveCount >= Unit)
                 {
                     TrySetBackgroundKey(window, "SummerEffect");
                 }
@@ -476,6 +482,16 @@ namespace VoteSystem.PluginShogi.ViewModel
                     TrySetBackgroundKey(window, "SpringEffect");
                 }
             });
+        }
+
+        /// <summary>
+        /// 現局面の差し手が進んだときに呼ばれます。
+        /// </summary>
+        public void ChangeMoveCount(int moveCount)
+        {
+            this.moveCount = moveCount;
+
+            UpdateBackground();
         }
         #endregion
 
@@ -541,7 +557,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 return;
             }
 
-            if (EffectMoveCount >= 100)
+            if (EffectMoveCount >= 1000)
             {
                 AddEffect(
                     Effects.VariationLast,
@@ -673,9 +689,9 @@ namespace VoteSystem.PluginShogi.ViewModel
             UpdateTeban(BWType.None);
             UpdateMovableCell(null, null);
             UpdatePrevMovedCell();
+            UpdateBackground();
 
             this.castleEffectedBag.Clear();
-            this.prevBackgroundKey = "SpringEffect";
         }
 
         /// <summary>
