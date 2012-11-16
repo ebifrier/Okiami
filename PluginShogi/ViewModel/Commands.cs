@@ -639,7 +639,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             catch (Exception ex)
             {
                 ShogiGlobal.ErrorMessage(ex,
-                    "棋譜ファイルの読み込みに失敗しました(￣ω￣;)");
+                    "棋譜ファイルの読み込みに失敗しました。(￣ω￣;)");
             }
         }
 
@@ -668,8 +668,9 @@ namespace VoteSystem.PluginShogi.ViewModel
                 }
 
                 // ファイルに保存します。
-                var manager = ShogiGlobal.ShogiModel.MoveManager;
-                var root = manager.CreateVariationNode();
+                var model = ShogiGlobal.ShogiModel;
+                var manager = model.MoveManager;
+                var root = manager.CreateVariationNode(model.Board);
 
                 var headers = new Dictionary<string, string>();
                 headers["先手"] = "あなた";
@@ -751,10 +752,7 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             // 局面をUndoします。
             var cloned = model.Board.Clone();
-            while (cloned.Undo() != null)
-            {
-            }
-
+            cloned.UndoAll();
             model.SetBoard(cloned);
         }
 
@@ -767,10 +765,7 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             // 局面をRedoします。
             var cloned = model.Board.Clone();
-            while (cloned.Redo() != null)
-            {
-            }
-
+            cloned.RedoAll();
             model.SetBoard(cloned);
         }
 

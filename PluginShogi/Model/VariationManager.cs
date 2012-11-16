@@ -159,44 +159,9 @@ namespace VoteSystem.PluginShogi.Model
         }
 
         /// <summary>
-        /// 本譜のみの差し手をツリー形式(内容は一本道)に直します。
-        /// </summary>
-        private VariationNode CreateHonpuNode()
-        {
-            var root = new VariationNode()
-            {
-                MoveCount = 0,
-            };
-
-            var prevNode = root;
-            foreach (var manager in CurrentStateList)
-            {
-                var move = manager.Board.LastMove;
-                if (move == null)
-                {
-                    continue;
-                }
-
-                var board = manager.Board.Clone();
-                board.Undo();
-
-                var node = new VariationNode()
-                {
-                    Move = board.ConvertMove(move, true),
-                    MoveCount = manager.Board.MoveCount,
-                };
-
-                prevNode.NextChild = node;
-                prevNode = node;
-            }
-
-            return root;
-        }
-
-        /// <summary>
         /// 変化ツリーに変化を登録します。
         /// </summary>
-        private void AddVariationNode(VariationNode root,
+        private void AddVariationNode(MoveNode root,
                                       IEnumerable<Move> variationMoveList)
         {
             if (root == null)
@@ -220,14 +185,7 @@ namespace VoteSystem.PluginShogi.Model
                 return;
             }
 
-            if (root.NextChild == null)
-            {
-                // 次の手が空いていれば次から変化をまとめて登録します。
-                root.NextChild = KifuObject.Convert2Node(
-                    variationMoveList,
-                    root.MoveCount + 1);
-            }
-            else
+            if (root.NextChild != null)
             {
                 // 次の手の変化に所望の変化があるか調べます。
                 var prevNode = child;
@@ -264,27 +222,79 @@ namespace VoteSystem.PluginShogi.Model
         }
 
         /// <summary>
-        /// 差し手と変化を木構造で表現します。（主にファイル保存用）
+        /// 本譜のみの差し手をツリー形式(内容は一本道)に直します。
         /// </summary>
-        public VariationNode CreateVariationNode()
+        private MoveNode CreateHonpuNode(Board board)
         {
-            var root = CreateHonpuNode();
-            var currentRoot = root;
-
-            foreach (var manager in CurrentStateList)
+            using (LazyLock())
             {
-                // 各変化を登録します。
-                foreach (var variation in manager.VariationList)
-                {
-                    var modifiedMoveList = ModifyMove(variation);
+                var curBoard = board.Clone();
+                var prevBoard = curBoard.Clone();
+                MoveNode root = null;
+                BoardMove move;
 
-                    AddVariationNode(currentRoot, modifiedMoveList);
+                while ((move = prevBoard.Undo()) != null)
+                {
+                    var node = new MoveNode()
+                    {
+                        Move = prevBoard.ConvertMove(move, true),
+                        MoveCount = curBoard.MoveCount,
+                    };
+
+                    node.NextChild = root;
+                    root = node;
+                    curBoard.Undo();
                 }
 
-                currentRoot = currentRoot.NextChild;
+                return new MoveNode()
+                {
+                    NextChild = root,
+                    MoveCount = 0,
+                };
+            }
+        }
+
+        /// <summary>
+        /// 差し手と変化を木構造で表現します。（主にファイル保存用）
+        /// </summary>
+        public MoveNode CreateVariationNode(Board board)
+        {
+            if (board == null || !board.Validate())
+            {
+                return null;
             }
 
-            return root.NextChild;
+            using (LazyLock())
+            {
+                var root = CreateHonpuNode(board);
+                var tmpBoard = board.Clone();
+                var currentRoot = root;
+
+                // できる限りUndoします。
+                tmpBoard.ClearRedoList();
+                tmpBoard.UndoAll();
+
+                do
+                {
+                    var manager = GetOrCreateStateManager(tmpBoard);
+                    if (manager == null)
+                    {
+                        break;
+                    }
+
+                    // 各変化を登録します。
+                    foreach (var variation in manager.VariationList)
+                    {
+                        var modifiedMoveList = ModifyMove(variation);
+
+                        AddVariationNode(currentRoot, modifiedMoveList);
+                    }
+
+                    currentRoot = currentRoot.NextChild;
+                } while (tmpBoard.Redo() != null);
+
+                return root.NextChild;
+            }
         }
 
         /// <summary>
