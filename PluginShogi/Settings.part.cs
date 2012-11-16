@@ -62,6 +62,13 @@ namespace VoteSystem.PluginShogi
         #endregion
 
         #region 設定ダイアログ
+        [DefaultSettingValueAttribute("false")]
+        public bool SD_IsAutoUpdateCurrentBoard
+        {
+            get { return GetValue<bool>("SD_IsAutoUpdateCurrentBoard"); }
+            set { SetValue("SD_IsAutoUpdateCurrentBoard", value); }
+        }
+        
         public KomaImageType SD_KomaImage
         {
             get { return GetValue<KomaImageType>("SD_KomaImage"); }

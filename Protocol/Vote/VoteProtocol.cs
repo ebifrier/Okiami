@@ -123,6 +123,15 @@ namespace VoteSystem.Protocol.Vote
       get { return _Message; }
       set { _Message = value; }
     }
+
+    private bool _HasMessage = default(bool);
+    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"HasMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(default(bool))]
+    public bool HasMessage
+    {
+      get { return _HasMessage; }
+      set { _HasMessage = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }

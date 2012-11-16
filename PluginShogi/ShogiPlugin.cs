@@ -252,7 +252,7 @@ namespace VoteSystem.PluginShogi
         {
             if (moveList == null || !moveList.Any())
             {
-                return new string[] { "現局面が更新されますた" };
+                return new string[] { "現局面が更新されました" };
             }
 
             // 一手戻した局面と古い局面を比較します。
@@ -264,19 +264,28 @@ namespace VoteSystem.PluginShogi
         }
 
         /// <summary>
-        /// 現局面が更新されたことを通知します。
+        /// 現局面を必要なら更新します。
         /// </summary>
-        private void PointOutNewBoard(Board board)
+        private void UpdateBoard(Board board)
         {
-            var statusBar = ShogiGlobal.MainStatusBar;
             var model = ShogiGlobal.ShogiModel;
 
             // 表示局面と違う場合は更新するか確認します。
-            if (statusBar != null &&
-                (model.Board == null || !model.Board.BoardEquals(board)))
+            if (model.Board == null || !model.Board.BoardEquals(board))
             {
-                statusBar.SetMessage(
-                    "現局面が更新されました。左上のボタンから局面が更新できます");
+                var autoUpdate = ShogiGlobal.Settings.SD_IsAutoUpdateCurrentBoard;
+                if (autoUpdate)
+                {
+                    model.SetBoard(board);
+                }
+
+                var statusBar = ShogiGlobal.MainStatusBar;
+                if (statusBar != null)
+                {
+                    statusBar.SetMessage(
+                        "現局面が更新されました。" +
+                        (autoUpdate ? "" : "左上のボタンから局面が更新できます"));
+                }
             }
         }
 
@@ -305,7 +314,7 @@ namespace VoteSystem.PluginShogi
             model.SetCurrentBoard(board);
 
             // 表示局面と違う場合は更新するか確認します。
-            WpfUtil.UIProcess(() => PointOutNewBoard(board));
+            WpfUtil.UIProcess(() => UpdateBoard(board));
 
             // 重要メッセージとして差し手を表示します。
             var moveList = GetMoveListFrom(oldBoard, board);

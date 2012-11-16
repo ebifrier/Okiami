@@ -566,6 +566,7 @@ namespace VoteSystem.Client.Model
                         ProtocolUtil.ToBoolObject(isUseAsNicoCommenter),
                     IsSetLoginType = (nicoLoginType != null),
                     LoginType = nicoLoginType ?? NicoLoginType.NotLogined,
+                    HasMessage = (message != null),
                     Message = message,
                 };
 
@@ -1096,7 +1097,7 @@ namespace VoteSystem.Client.Model
                 conn.Connect(address, port);
 
                 var result = conn.CheckProtocolVersion(
-                    TimeSpan.FromSeconds(10));
+                    TimeSpan.FromSeconds(30));
                 if (result != PbVersionCheckResult.Ok)
                 {
                     conn.Disconnect();

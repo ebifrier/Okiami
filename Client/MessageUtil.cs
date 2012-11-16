@@ -92,8 +92,16 @@ namespace VoteSystem.Client
         /// </summary>
         public static bool Confirm(string message, string title)
         {
+            return Confirm(message, title, Global.MainWindow);
+        }
+
+        /// <summary>
+        /// Yes/Noの確認メッセージを出します。
+        /// </summary>
+        public static bool Confirm(string message, string title, Window window)
+        {
             var dialog = DialogUtil.CreateDialog(
-                Global.MainWindow,
+                window,
                 message,
                 title,
                 MessageBoxButton.YesNo,

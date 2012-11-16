@@ -12,6 +12,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Detail/GeneralSettingControl.xaml" />
                 <ResourceDictionary Source="Detail/BanSettingControl.xaml" />
                 <ResourceDictionary Source="Detail/EffectSettingControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -26,6 +27,10 @@
         </Grid.RowDefinitions>
         
         <TabControl>
+            <TabItem Header="一般設定">
+                <StaticResource ResourceKey="generalSettingControl" />
+            </TabItem>
+            
             <TabItem Header="画像設定">
                 <StaticResource ResourceKey="banSettingControl" />
             </TabItem>

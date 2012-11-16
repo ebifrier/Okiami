@@ -28,6 +28,20 @@ namespace VoteSystem.Client.View
             Command.LiveCommands.Bind(CommandBindings);
             Command.VoteCommands.Bind(CommandBindings);
 
+            Closing += (sender, e) =>
+            {
+                var voteClient = Global.VoteClient;
+                if (voteClient != null && voteClient.IsLogined)
+                {
+                    MessageUtil.ErrorMessage(string.Format(
+                        "投票ルームに入室中です。{0}{0}" +
+                        "一度退室してから、アプリを終了してください。(T▽T)",
+                        Environment.NewLine));
+
+                    e.Cancel = true;
+                }
+            };
+
             Closed += (sender, e) =>
             {
                 Global.StatusBar = null;

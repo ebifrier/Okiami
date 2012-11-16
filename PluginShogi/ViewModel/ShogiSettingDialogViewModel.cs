@@ -18,6 +18,16 @@ namespace VoteSystem.PluginShogi.ViewModel
     public class ShogiSettingDialogViewModel : NotifyObject
     {
         /// <summary>
+        /// 現局面を自動的に更新するかを取得または設定します。
+        /// </summary>
+        [DependOnProperty(typeof(Settings), "SD_IsAutoUpdateCurrentBoard")]
+        public bool IsAutoUpdateCurrentBoard
+        {
+            get { return ShogiGlobal.Settings.SD_IsAutoUpdateCurrentBoard; }
+            set { ShogiGlobal.Settings.SD_IsAutoUpdateCurrentBoard = value; }
+        }
+
+        /// <summary>
         /// 選択されている駒画像を取得または設定します。
         /// </summary>
         [DependOnProperty(typeof(Settings), "SD_KomaImage")]

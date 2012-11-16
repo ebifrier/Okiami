@@ -405,14 +405,18 @@ namespace VoteSystem.PluginShogi.ViewModel
         {
             using (LazyLock())
             {
+                if (board == null)
+                {
+                    return;
+                }
+
                 // クラス外から局面が設定されたときは、
                 // 自動再生用の変化をすべて消去します。
                 ClearAutoPlay();
 
-                if (board != null)
-                {
-                    Board = board;
-                }
+                Board = board;
+
+                WpfUtil.InvalidateCommand();
             }
         }
 
@@ -429,6 +433,8 @@ namespace VoteSystem.PluginShogi.ViewModel
                 if (currentBoard != null)
                 {
                     CurrentBoard = currentBoard;
+
+                    WpfUtil.InvalidateCommand();
                 }
             }
         }

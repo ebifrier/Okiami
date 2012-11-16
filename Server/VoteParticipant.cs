@@ -438,7 +438,8 @@ namespace VoteSystem.Server
                     this.NicoLoginType = req.LoginType;
                 }
 
-                if (!string.IsNullOrEmpty(req.Message))
+                // nullや""でメッセージを消去します。
+                if (req.HasMessage)
                 {
                     this.Message = req.Message;
                 }

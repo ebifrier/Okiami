@@ -57,6 +57,7 @@ message SetParticipantAttributeRequest {
 	optional bool IsSetLoginType = 2;
 	optional NicoLoginType LoginType = 3;
 	optional string Message = 4;
+	optional bool HasMessage = 5;
 }
 
 message SetParticipantAttributeResponse {
