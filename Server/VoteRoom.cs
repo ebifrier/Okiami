@@ -315,6 +315,11 @@ namespace VoteSystem.Server
         {
             this.voteModel.ConnectHandlers(connection);
             this.voteTimeKeeper.ConnectHandlers(connection);
+
+            connection.AddCommandHandler<StartEndRollCommand>(
+                HandleStartEndRollCommand);
+            connection.AddCommandHandler<StopEndRollCommand>(
+                HandleStopEndRollCommand);
         }
 
         /// <summary>
@@ -324,6 +329,47 @@ namespace VoteSystem.Server
         {
             this.voteModel.DisconnectHandlers(connection);
             this.voteTimeKeeper.DisconnectHandlers(connection);
+
+            connection.RemoveHandler<StartEndRollCommand>();
+            connection.RemoveHandler<StopEndRollCommand>();
+        }
+
+        /// <summary>
+        /// エンドロールを開始します。
+        /// </summary>
+        private void HandleStartEndRollCommand(
+            object sender,
+            PbCommandEventArgs<StartEndRollCommand> e)
+        {
+            var isRoomOwner = IsRoomOwnerConnection(sender as PbConnection);
+            if (!isRoomOwner)
+            {
+                throw new InvalidOperationException(
+                    "投票ルームオーナーではありません。");
+            }
+
+            var seconds = e.Command.RollTimeSeconds;
+            BroadcastCommand(new StartEndRollCommand
+            {
+                RollTimeSeconds = seconds,
+            });
+        }
+
+        /// <summary>
+        /// エンドロールを停止します。
+        /// </summary>
+        private void HandleStopEndRollCommand(
+            object sender,
+            PbCommandEventArgs<StopEndRollCommand> e)
+        {
+            var isRoomOwner = IsRoomOwnerConnection(sender as PbConnection);
+            if (!isRoomOwner)
+            {
+                throw new InvalidOperationException(
+                    "投票ルームオーナーではありません。");
+            }
+
+            BroadcastCommand(new StopEndRollCommand());
         }
 
         /// <summary>

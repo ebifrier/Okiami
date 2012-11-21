@@ -158,6 +158,14 @@ namespace VoteSystem.PluginShogi.View
                 this.nextBg, this.currentBg,
                 (!string.IsNullOrEmpty(this.currentBg.EffectKey) &&
                  !string.IsNullOrEmpty(this.nextBg.EffectKey)));
+
+            Ragnarok.Util.SafeCall(() =>
+            {
+                if (ShogiGlobal.VoteClient != null)
+                {
+                    ShogiGlobal.VoteClient.SendStartEndRoll(30);
+                }
+            });
         }
 
         /// <summary>
@@ -183,6 +191,23 @@ namespace VoteSystem.PluginShogi.View
 
             this.background1.Render(elapsedTime);
             this.background2.Render(elapsedTime);
+        }
+
+        /// <summary>
+        /// エンドロールを開始します。
+        /// </summary>
+        public void PlayEndRoll(TimeSpan rollTimeSpan)
+        {
+            this.endRoll.RollTimeSeconds = (int)rollTimeSpan.TotalSeconds;
+            this.endRoll.Play();
+        }
+
+        /// <summary>
+        /// エンドロールを停止します。
+        /// </summary>
+        public void StopEndRoll()
+        {
+            this.endRoll.Stop();
         }
 
         /// <summary>

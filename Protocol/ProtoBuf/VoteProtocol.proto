@@ -211,6 +211,17 @@ message NotificationCommand {
 	required bool IsFromLiveOwner = 2;
 }
 
+// エンドロールの開始メッセージを送信します。
+// サーバー、クライアント双方に送られます。
+message StartEndRollCommand {
+	required double RollTimeSeconds = 1;
+}
+
+// エンドロールの停止メッセージを送信します。
+// サーバー、クライアント双方に送られます。
+message StopEndRollCommand {
+}
+
 
 ///////////////////////////////////////////////////////////
 //

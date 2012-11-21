@@ -41,12 +41,12 @@ using System.Windows.Markup;
     //アプリケーション、またはいずれのテーマ固有のリソース ディクショナリにも見つからない場合に使用されます)
 )]
 
-[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/client", "VoteSystem.Client")]
-[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/client", "VoteSystem.Client.Command")]
-[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/client", "VoteSystem.Client.Model")]
-[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/client", "VoteSystem.Client.View")]
-[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/client", "VoteSystem.Client.View.Control")]
-[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/client", "VoteSystem.Client.ViewModel")]
+[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Client")]
+[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Client.Command")]
+[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Client.Model")]
+[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Client.View")]
+[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Client.View.Control")]
+[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Client.ViewModel")]
 
 
 // アセンブリのバージョン情報は、以下の 4 つの値で構成されています:

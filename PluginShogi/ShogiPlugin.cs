@@ -203,10 +203,50 @@ namespace VoteSystem.PluginShogi
         /// </summary>
         public void ConnectHandlers(PbConnection connection)
         {
+            connection.AddCommandHandler<StartEndRollCommand>(
+                HandleStartEndRollCommand);
+            connection.AddCommandHandler<StopEndRollCommand>(
+                HandleStopEndRollCommand);
             connection.AddCommandHandler<ShogiSetCurrentBoardCommand>(
                 HandleSetCurrentBoardCommand);
             connection.AddCommandHandler<ShogiSetWhaleClientListCommand>(
                 HandleSetWhaleClientListCommand);
+        }
+
+        /// <summary>
+        /// エンドロールを開始します。
+        /// </summary>
+        private void HandleStartEndRollCommand(
+            object sender,
+            PbCommandEventArgs<StartEndRollCommand> e)
+        {
+            var window = ShogiGlobal.MainWindow;
+            if (window == null)
+            {
+                return;
+            }
+
+            var seconds = e.Command.RollTimeSeconds;
+
+            WpfUtil.UIProcess(() =>
+                window.PlayEndRoll(TimeSpan.FromSeconds(seconds)));
+        }
+
+        /// <summary>
+        /// エンドロールを停止します。
+        /// </summary>
+        private void HandleStopEndRollCommand(
+            object sender,
+            PbCommandEventArgs<StopEndRollCommand> e)
+        {
+            var window = ShogiGlobal.MainWindow;
+            if (window == null)
+            {
+                return;
+            }
+
+            WpfUtil.UIProcess(() =>
+                window.StopEndRoll());
         }
 
         /// <summary>

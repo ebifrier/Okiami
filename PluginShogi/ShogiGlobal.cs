@@ -12,6 +12,7 @@ using Ragnarok.Presentation;
 namespace VoteSystem.PluginShogi
 {
     using Protocol;
+    using Protocol.Vote;
     using ViewModel;
 
     /// <summary>
@@ -19,6 +20,11 @@ namespace VoteSystem.PluginShogi
     /// </summary>
     public static class ShogiGlobal
     {
+        /// <summary>
+        /// xamlではメソッドを直接指定することができないため。
+        /// </summary>
+        public static Func<VoterList> VoterListGetter = GetVoterList;
+
         /// <summary>
         /// 静的コンストラクタ
         /// </summary>
@@ -177,6 +183,29 @@ namespace VoteSystem.PluginShogi
         {
             get;
             private set;
+        }
+
+        /// <summary>
+        /// 投票者リストを更新します。
+        /// </summary>
+        public static VoterList GetVoterList()
+        {
+            try
+            {
+                if (VoteClient == null)
+                {
+                    return null;
+                }
+
+                return VoteClient.GetTestVoterList();//.GetVoterList();
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage(ex,
+                    "参加者リストの取得に失敗しました。(-A-;)");
+
+                return null;
+            }
         }
 
         /// <summary>

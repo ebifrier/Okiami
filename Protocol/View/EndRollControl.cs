@@ -742,6 +742,12 @@ namespace VoteSystem.Protocol.View
 
             this.background = GetTemplateChild(ElementBackgroundName) as Border;
             this.textPanel = GetTemplateChild(ElementTextPanelName) as Canvas;
+
+            // このコントロールの背景を実際の背景色に設定します。
+            if (this.background != null)
+            {
+                this.background.Background = Background;
+            }
         }
 
         /// <summary>

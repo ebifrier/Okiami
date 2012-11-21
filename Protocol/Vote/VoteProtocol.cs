@@ -602,6 +602,33 @@ namespace VoteSystem.Protocol.Vote
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"StartEndRollCommand")]
+  public partial class StartEndRollCommand : global::ProtoBuf.IExtensible
+  {
+    public StartEndRollCommand() {}
+    
+    private double _RollTimeSeconds;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"RollTimeSeconds", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public double RollTimeSeconds
+    {
+      get { return _RollTimeSeconds; }
+      set { _RollTimeSeconds = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"StopEndRollCommand")]
+  public partial class StopEndRollCommand : global::ProtoBuf.IExtensible
+  {
+    public StopEndRollCommand() {}
+    
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ShogiGetCurrentBoardRequest")]
   public partial class ShogiGetCurrentBoardRequest : global::ProtoBuf.IExtensible
   {

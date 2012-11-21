@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
-        xmlns:s="http://schemas.garnet-alice.net/votesystem/xaml/client"
+        xmlns:s="http://schemas.garnet-alice.net/votesystem/xaml/presentation"
         xmlns:l="clr-namespace:VoteSystem.PluginShogi"
         xmlns:v="clr-namespace:VoteSystem.PluginShogi.View"
         xmlns:vd="clr-namespace:VoteSystem.PluginShogi.View.Detail"
@@ -129,6 +129,19 @@
                 Opacity="{Binding VariationBorderOpacity}"
                 Background="#60001856"
                 IsHitTestVisible="False" />
+        
+        <!-- エンドロールです。
+        Background = new SolidColorBrush(Color.FromArgb(170, 0, 0, 0)),
+                RollTimeSeconds = 30,
+                LineHeight = 30.0,
+                OpacityLineCount = 3,-->
+        <s:EndRollControl Grid.Row="3" Grid.RowSpan="2"
+                          x:Name="endRoll"
+                          VoterListGetter="{x:Static l:ShogiGlobal.VoterListGetter}"
+                          Background="#C0000000"
+                          RollTimeSeconds="30"
+                          LineHeight="30.0"
+                          OpacityLineCount="3" />
 
         <!-- ステータスバーです。-->
         <p:MessageStatusBar Grid.Row="4"
