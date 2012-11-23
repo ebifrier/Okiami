@@ -149,6 +149,23 @@ namespace VoteSystem.PluginShogi.ViewModel
                 typeof(Window));
 
         /// <summary>
+        /// エンドロールを開始します。
+        /// </summary>
+        public static readonly ICommand PlayEndRoll =
+            new RoutedUICommand(
+                "エンドロールを開始します。",
+                "PlayEndRoll",
+                typeof(Window));
+        /// <summary>
+        /// エンドロールを停止します。
+        /// </summary>
+        public static readonly ICommand StopEndRoll =
+            new RoutedUICommand(
+                "エンドロールを停止します。",
+                "StopEndRoll",
+                typeof(Window));
+
+        /// <summary>
         /// 現局面を設定します。
         /// </summary>
         public static readonly ICommand SetCurrentBoard =
@@ -303,6 +320,15 @@ namespace VoteSystem.PluginShogi.ViewModel
                 new CommandBinding(
                     MoveStop,
                     ExecuteMoveStop, CanExecute));
+
+            bindings.Add(
+                new CommandBinding(
+                    PlayEndRoll,
+                    ExecutePlayEndRoll, CanExecute));
+            bindings.Add(
+                new CommandBinding(
+                    StopEndRoll,
+                    ExecuteStopEndRoll, CanExecute));
 
             bindings.Add(
                 new CommandBinding(
@@ -829,6 +855,34 @@ namespace VoteSystem.PluginShogi.ViewModel
             var model = ShogiGlobal.ShogiModel;
 
             model.StopAutoPlay();
+        }
+
+        /// <summary>
+        /// エンドロールを開始します。
+        /// </summary>
+        private static void ExecutePlayEndRoll(object sender, ExecutedRoutedEventArgs e)
+        {
+            var window = ShogiGlobal.MainWindow;
+            if (window == null)
+            {
+                return;
+            }
+
+            window.PlayEndRoll(TimeSpan.FromSeconds(30));
+        }
+
+        /// <summary>
+        /// エンドロールを停止します。
+        /// </summary>
+        private static void ExecuteStopEndRoll(object sender, ExecutedRoutedEventArgs e)
+        {
+            var window = ShogiGlobal.MainWindow;
+            if (window == null)
+            {
+                return;
+            }
+
+            window.StopEndRoll();
         }
 
         /// <summary>

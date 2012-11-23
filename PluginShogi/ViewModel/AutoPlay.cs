@@ -130,7 +130,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
         
         /// <summary>
-        /// 自動再生の種類を取得または設定します。
+        /// 自動再生の種類を取得します。
         /// </summary>
         public AutoPlayType AutoPlayType
         {

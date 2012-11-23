@@ -108,6 +108,8 @@
     <Resource Include="Resources\Image\koma\koma_1moji.png" />
     <Resource Include="Resources\Image\koma\koma_kinki.png" />
     <Resource Include="Resources\Image\koma\koma_ryoko.png" />
+    <Resource Include="Resources\Image\endroll_play.png" />
+    <Resource Include="Resources\Image\endroll_stop.png" />
     <Content Include="ShogiData\Background\AutumnEffect\Back.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

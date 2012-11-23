@@ -63,6 +63,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -101,50 +102,46 @@
         <ToolBarTray Grid.Row="1">
             <StaticResource ResourceKey="toolBar" />
             <StaticResource ResourceKey="numberToolBar" />
-            <StaticResource ResourceKey="nicoToolBar" />
         </ToolBarTray>
-        
+
         <ToolBar Grid.Row="2"
+                 Template="{StaticResource nicoToolBar}" />
+
+        <ToolBar Grid.Row="3"
                  Template="{StaticResource variationToolBar}" />
 
-        <!-- 背景 -->
-        <vd:ShogiBackgroundCore Grid.Row="3" Grid.RowSpan="2"
-                                x:Name="background1" />
-        <vd:ShogiBackgroundCore Grid.Row="3" Grid.RowSpan="2"
-                                x:Name="background2" />
+        <Grid Grid.Row="4" Grid.RowSpan="2">
+            <!-- 背景 -->
+            <vd:ShogiBackgroundCore x:Name="background1" />
+            <vd:ShogiBackgroundCore x:Name="background2" />
 
-        <p:ShogiControl Grid.Row="3" Grid.RowSpan="2"
-                        x:Name="ShogiControl"
-                        Board="{Binding Board}"
-                        EditMode="{Binding EditMode}"
-                        EffectManager="{x:Static l:ShogiGlobal.EffectManager}"
-                        PieceImage="{Binding KomaImage}"
-                        BanBrush="{StaticResource banBrush}"
-                        PieceBoxBrush="{StaticResource komadaiBrush}">
-        </p:ShogiControl>
+            <p:ShogiControl x:Name="ShogiControl"
+                            Board="{Binding Board}"
+                            EditMode="{Binding EditMode}"
+                            EffectManager="{x:Static l:ShogiGlobal.EffectManager}"
+                            PieceImage="{Binding KomaImage}"
+                            BanBrush="{StaticResource banBrush}"
+                            PieceBoxBrush="{StaticResource komadaiBrush}">
+            </p:ShogiControl>
 
-        <!-- 変化自動再生時の色です。-->
-        <Border Grid.Row="3" Grid.RowSpan="2"
-                Style="{StaticResource variationStyle}"
-                Opacity="{Binding VariationBorderOpacity}"
-                Background="#60001856"
-                IsHitTestVisible="False" />
+            <!-- 変化自動再生時の色です。-->
+            <Border Style="{StaticResource variationStyle}"
+                    Opacity="{Binding VariationBorderOpacity}"
+                    Background="#60001856"
+                    IsHitTestVisible="False" />
+
+            <!-- エンドロールです。-->
+            <s:EndRollControl x:Name="endRoll"
+                              VoterListGetter="{x:Static l:ShogiGlobal.VoterListGetter}"
+                              Background="#C0000000"
+                              RollTimeSeconds="30"
+                              LineHeight="30.0"
+                              OpacityLineCount="3"
+                              IsHitTestVisible="False" />
+        </Grid>
         
-        <!-- エンドロールです。
-        Background = new SolidColorBrush(Color.FromArgb(170, 0, 0, 0)),
-                RollTimeSeconds = 30,
-                LineHeight = 30.0,
-                OpacityLineCount = 3,-->
-        <s:EndRollControl Grid.Row="3" Grid.RowSpan="2"
-                          x:Name="endRoll"
-                          VoterListGetter="{x:Static l:ShogiGlobal.VoterListGetter}"
-                          Background="#C0000000"
-                          RollTimeSeconds="30"
-                          LineHeight="30.0"
-                          OpacityLineCount="3" />
-
         <!-- ステータスバーです。-->
-        <p:MessageStatusBar Grid.Row="4"
+        <p:MessageStatusBar Grid.Row="5"
                             x:Name="MainStatusBar" x:FieldModifier="public"
                             Background="#60000000"
                             MessageBrush="{x:Static Brushes.Beige}"

@@ -158,14 +158,6 @@ namespace VoteSystem.PluginShogi.View
                 this.nextBg, this.currentBg,
                 (!string.IsNullOrEmpty(this.currentBg.EffectKey) &&
                  !string.IsNullOrEmpty(this.nextBg.EffectKey)));
-
-            Ragnarok.Util.SafeCall(() =>
-            {
-                if (ShogiGlobal.VoteClient != null)
-                {
-                    ShogiGlobal.VoteClient.SendStartEndRoll(30);
-                }
-            });
         }
 
         /// <summary>
@@ -198,7 +190,33 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public void PlayEndRoll(TimeSpan rollTimeSpan)
         {
-            this.endRoll.RollTimeSeconds = (int)rollTimeSpan.TotalSeconds;
+            var model = ShogiGlobal.ShogiModel;
+            var total = TimeSpan.FromSeconds(2*60 + 30);
+
+            var count = model.CurrentBoard.MoveCount;
+            if (count == 0)
+            {
+                return;
+            }
+            
+            // エンディングの前に現局面を設定します。
+            var board = model.CurrentBoard.Clone();
+            board.UndoAll();
+            model.SetBoard(board);
+
+            // 音は消します。
+            ShogiGlobal.Settings.SD_IsUseEffectSound = false;
+
+            var autoPlay = new AutoPlay(model.Board, AutoPlayType.Redo)
+            {
+                IsChangeBackground = false,
+                IsUseCutIn = false,
+                IsConfirmPlay = false,
+                Interval = TimeSpan.FromSeconds(total.TotalSeconds / count),
+            };
+            model.StartAutoPlay(autoPlay);
+
+            this.endRoll.RollTimeSeconds = (int)total.TotalSeconds;            
             this.endRoll.Play();
         }
 
@@ -243,6 +261,14 @@ namespace VoteSystem.PluginShogi.View
 
         void MainWindow_Closed(object sender, EventArgs e)
         {
+            ShogiGlobal.ShogiModel.StopAutoPlay();
+
+            if (this.timer != null)
+            {
+                this.timer.Dispose();
+                this.timer = null;
+            }
+
             if (Client.Global.IsNonPublished)
             {
                 GC.Collect();
@@ -261,12 +287,6 @@ namespace VoteSystem.PluginShogi.View
                             "エフェクトがリークしている可能性があります。{0}個",
                             list.Count() - count));
                 }
-            }
-
-            if (this.timer != null)
-            {
-                this.timer.Dispose();
-                this.timer = null;
             }
         }
     }

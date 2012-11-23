@@ -1,3 +1,12 @@
+2012-11-23  - Ver 1.1.4.2
+
+	* PluginShogi/View/MainMenu.xaml: エンドロールの開始停止ボタンを追
+	加しました。
+	* PluginShogi/View/MainWindow.xaml: ボタンを新規に増やした関係で、
+	メニューの段数を２から３にしました。
+	* PluginShogi/View/MainWindow.xaml.cs: エンドロールの複数放送同時再
+	生機能を実装しました。
+
 2012-11-22  - Ver 1.1.4.1
 
 	* PluginShogi/ShogiPlugin.cs: エンドロールの同時再生機能に対応しま

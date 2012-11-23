@@ -104,6 +104,17 @@
                 Content="pack://application:,,,/PluginShogi;component/Resources/Image/move_goto_last.png"
                 ToolTip="最終局面へ"
                 Command="{x:Static svm:Commands.GotoLastState}" />
+
+        <Separator />
+
+        <Button Style="{StaticResource ToolBarButtonStyle}"
+                Content="pack://application:,,,/PluginShogi;component/Resources/Image/endroll_play.png"
+                ToolTip="エンドロールを開始"
+                Command="{x:Static svm:Commands.PlayEndRoll}" />
+        <Button Style="{StaticResource ToolBarButtonStyle}"
+                Content="pack://application:,,,/PluginShogi;component/Resources/Image/endroll_stop.png"
+                ToolTip="エンドロールを停止"
+                Command="{x:Static svm:Commands.StopEndRoll}" />
     </ToolBar>
 
     <!-- 手数を表示するツールバーです。-->
@@ -133,59 +144,64 @@
     </Style>
 
     <!-- ニコ生へのログインを行います。-->
-    <ToolBar x:Key="nicoToolBar" Band="1">
-        <Label Grid.Row="0" Grid.Column="0"
-               Padding="3,3,3,3"
-               VerticalAlignment="Center"
-               Content="URL:" />
-        <TextBox Grid.Row="0" Grid.Column="1"
-                 BorderBrush="{x:Static Brushes.LightGray}"
-                 VerticalAlignment="Center"
-                 HorizontalAlignment="Stretch"
-                 Width="100"
-                 Text="{Binding LiveUrl}" />
-        <Button Grid.Row="0" Grid.Column="2"
-                Style="{StaticResource toggleConnectButtonStyle}"
-                ToolTip="放送に接続。ログインはメインウィンドウからして下さい。" />
-    </ToolBar>
+    <ControlTemplate x:Key="nicoToolBar">
+        <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="2" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0"
+                   Padding="3,3,3,3"
+                   VerticalAlignment="Center"
+                   Content="URL:" />
+            <TextBox Grid.Column="1"
+                     BorderBrush="{x:Static Brushes.LightGray}"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Stretch"
+                     Text="{Binding LiveUrl}" />
+            <Button Grid.Column="2"
+                    Style="{StaticResource toggleConnectButtonStyle}"
+                    ToolTip="放送に接続。ログインはメインウィンドウからして下さい。" />
+        </Grid>
+    </ControlTemplate>
 
     <!-- コンテキストメニュー -->
     <ContextMenu x:Key="contextMenu">
         <MenuItem Header="将棋コントロールを表示"
-                      Command="{x:Static svm:Commands.ShowMoveManageView}"
-                      CommandTarget="{Binding Path=PlacementTarget,
-                                              RelativeSource={RelativeSource
-                                              AncestorType={x:Type ContextMenu}}}" />
+                  Command="{x:Static svm:Commands.ShowMoveManageView}"
+                  CommandTarget="{Binding PlacementTarget,
+                                          RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
         <Separator />
 
         <MenuItem Header="現局面に戻す"
-                      Command="{x:Static svm:Commands.SetBackToCurrentBoard}"
-                      CommandTarget="{Binding Path=PlacementTarget,
-                                              RelativeSource={RelativeSource
-                                              AncestorType={x:Type ContextMenu}}}" />
+                  Command="{x:Static svm:Commands.SetBackToCurrentBoard}"
+                  CommandTarget="{Binding PlacementTarget,
+                                          RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
         <MenuItem Header="現局面に設定する"
-                      Command="{x:Static svm:Commands.SetCurrentBoard}"
-                      CommandTarget="{Binding Path=PlacementTarget,
-                                              RelativeSource={RelativeSource
-                                              AncestorType={x:Type ContextMenu}}}" />
+                  Command="{x:Static svm:Commands.SetCurrentBoard}"
+                  CommandTarget="{Binding PlacementTarget,
+                                          RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
         <Separator />
 
         <MenuItem Header="１手戻る"
-                      Command="{x:Static svm:Commands.MoveUndo}"
-                      CommandTarget="{Binding Path=PlacementTarget,
-                                              RelativeSource={RelativeSource
-                                              AncestorType={x:Type ContextMenu}}}" />
+                  Command="{x:Static svm:Commands.MoveUndo}"
+                  CommandTarget="{Binding PlacementTarget,
+                                          RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
         <MenuItem Header="１手進む"
-                      Command="{x:Static svm:Commands.MoveRedo}"
-                      CommandTarget="{Binding Path=PlacementTarget,
-                                              RelativeSource={RelativeSource
-                                              AncestorType={x:Type ContextMenu}}}" />
+                  Command="{x:Static svm:Commands.MoveRedo}"
+                  CommandTarget="{Binding PlacementTarget,
+                                          RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
         <Separator />
         
         <MenuItem Header="閉じる"
-                      Command="Close"
-                      CommandTarget="{Binding Path=PlacementTarget,
-                                              RelativeSource={RelativeSource
-                                              AncestorType={x:Type ContextMenu}}}" />
+                  Command="Close"
+                  CommandTarget="{Binding PlacementTarget,
+                                          RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
     </ContextMenu>
 </ResourceDictionary>
