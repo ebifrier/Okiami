@@ -197,7 +197,7 @@ namespace VoteSystem.PluginShogi
                     return null;
                 }
 
-                return VoteClient.GetTestVoterList();//.GetVoterList();
+                return VoteClient.GetVoterList();
             }
             catch (Exception ex)
             {

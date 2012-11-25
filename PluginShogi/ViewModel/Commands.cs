@@ -438,6 +438,11 @@ namespace VoteSystem.PluginShogi.ViewModel
                 e.CanExecute = (model.VariationState == VariationState.Playing);
             }
 
+            else if (e.Command == PlayEndRoll || e.Command == StopEndRoll)
+            {
+                e.CanExecute = ShogiGlobal.VoteClient.IsVoteRoomOwner;
+            }
+
             else if (e.Command == SetCurrentBoard)
             {
                 e.CanExecute = ShogiGlobal.VoteClient.IsVoteRoomOwner;
