@@ -56,7 +56,7 @@ namespace VoteSystem.Client
         /// <summary>
         /// データ読み込み後、UserIdが初期値なら値を設定します。
         /// </summary>
-        private void Settings_SettingsLoaded(object sender, SettingsLoadedEventArgs e)
+        private void Settings_SettingsLoaded(object sender, EventArgs e)
         {
             if (AS_UserId == Guid.Empty)
             {

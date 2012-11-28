@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Configuration;
 using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Media;
@@ -19,49 +18,49 @@ namespace VoteSystem.Client
     public sealed partial class Settings : Ragnarok.Presentation.WpfSettingsBase
     {
         #region TimeSpan
-        [DefaultSettingValueAttribute("00:05:00")]
+        [DefaultValue("00:05:00")]
         public TimeSpan SetVoteSpan
         {
             get { return (TimeSpan)this["SetVoteSpan"]; }
             set { this["SetVoteSpan"] = value; }
         }
 
-        [DefaultSettingValueAttribute("00:01:00")]
+        [DefaultValue("00:01:00")]
         public TimeSpan AddVoteSpan
         {
             get { return (TimeSpan)this["AddVoteSpan"]; }
             set { this["AddVoteSpan"] = value; }
         }
 
-        [DefaultSettingValueAttribute("00:05:00")]
+        [DefaultValue("00:05:00")]
         public TimeSpan DefaultVoteSpan
         {
             get { return (TimeSpan)this["DefaultVoteSpan"]; }
             set { this["DefaultVoteSpan"] = value; }
         }
 
-        [DefaultSettingValueAttribute("01:00:00")]
+        [DefaultValue("01:00:00")]
         public TimeSpan SetTotalVoteSpan
         {
             get { return (TimeSpan)this["SetTotalVoteSpan"]; }
             set { this["SetTotalVoteSpan"] = value; }
         }
 
-        [DefaultSettingValueAttribute("00:03:00")]
+        [DefaultValue("00:03:00")]
         public TimeSpan AddTotalVoteSpan
         {
             get { return (TimeSpan)this["AddTotalVoteSpan"]; }
             set { this["AddTotalVoteSpan"] = value; }
         }
 
-        [DefaultSettingValueAttribute("100")]
+        [DefaultValue(100.0)]
         public double TimeSpanWindow_Left
         {
             get { return (double)this["TimeSpanWindow_Left"]; }
             set { this["TimeSpanWindow_Left"] = value; }
         }
 
-        [DefaultSettingValueAttribute("100")]
+        [DefaultValue(100.0)]
         public double TimeSpanWindow_Top
         {
             get { return (double)this["TimeSpanWindow_Top"]; }
@@ -70,21 +69,21 @@ namespace VoteSystem.Client
         #endregion
 
         #region Setting Dialog
-        [DefaultSettingValueAttribute("True")]
+        [DefaultValue(true)]
         public bool IsUseSE
         {
             get { return (bool)this["IsUseSE"]; }
             set { this["IsUseSE"] = value; }
         }
 
-        [DefaultSettingValueAttribute("50")]
+        [DefaultValue(50)]
         public int SEVolume
         {
             get { return ((int)(this["SEVolume"])); }
             set { this["SEVolume"] = value; }
         }
 
-        [DefaultSettingValueAttribute("")]
+        [DefaultValue("")]
         public string SoundSetDir
         {
             get { return (string)this["SoundSetDir"]; }
@@ -123,49 +122,49 @@ namespace VoteSystem.Client
         #endregion
 
         #region Auto Save
-        [DefaultSettingValueAttribute("00000000-0000-0000-0000-000000000000")]
+        [DefaultValue("00000000-0000-0000-0000-000000000000")]
         public Guid AS_UserId
         {
             get { return (Guid)this["AS_UserId"]; }
             set { this["AS_UserId"] = value; }
         }
 
-        [DefaultSettingValueAttribute("将棋投票所")]
+        [DefaultValue("将棋投票所")]
         public string AS_VoteRoomName
         {
             get { return (string)this["AS_VoteRoomName"]; }
             set { this["AS_VoteRoomName"] = value; }
         }
 
-        [DefaultSettingValueAttribute("")]
+        [DefaultValue("")]
         public string AS_VoteRoomPassword
         {
             get { return (string)this["AS_VoteRoomPassword"]; }
             set { this["AS_VoteRoomPassword"] = value; }
         }
 
-        [DefaultSettingValueAttribute("名無し名人")]
+        [DefaultValue("名無し名人")]
         public string AS_LoginName
         {
             get { return (string)this["AS_LoginName"]; }
             set { this["AS_LoginName"] = value; }
         }
 
-        [DefaultSettingValueAttribute("pack://application:,,,/Resources/Image/koma/koma_noimage.png")]
+        [DefaultValue("pack://application:,,,/Resources/Image/koma/koma_noimage.png")]
         public string AS_LoginImageUrl
         {
             get { return (string)this["AS_LoginImageUrl"]; }
             set { this["AS_LoginImageUrl"] = value; }
         }
 
-        [DefaultSettingValueAttribute("True")]
+        [DefaultValue(true)]
         public bool AS_IsUseAsNicoCommenter
         {
             get { return (bool)this["AS_IsUseAsNicoCommenter"]; }
             set { this["AS_IsUseAsNicoCommenter"] = value; }
         }
 
-        [DefaultSettingValueAttribute("False")]
+        [DefaultValue(false)]
         public bool AS_IsNicoCommenterAutoStart
         {
             get { return (bool)this["AS_IsNicoCommenterAutoStart"]; }
@@ -178,7 +177,7 @@ namespace VoteSystem.Client
             set { this["AS_OwnerNicoLoginData"] = value; }
         }
 
-        [DefaultSettingValueAttribute("")]
+        [DefaultValue("")]
         public string AS_ImageSetDirName
         {
             get { return (string)this["AS_ImageSetDirName"]; }
@@ -190,7 +189,7 @@ namespace VoteSystem.Client
         /// <summary>
         /// 固定時のウィンドウ色を取得または設定します。
         /// </summary>
-        [DefaultSettingValueAttribute("#B4FFFFFF")]
+        [DefaultValue("#B4FFFFFF")]
         public Color VR_FixingBackgroundColor
         {
             get { return (Color)this["VR_FixingBackgroundColor"]; }
@@ -200,7 +199,7 @@ namespace VoteSystem.Client
         /// <summary>
         /// 表示する投票結果の数を取得または設定します。
         /// </summary>
-        [DefaultSettingValueAttribute("10")]
+        [DefaultValue(10)]
         public int VR_DisplayResultCount
         {
             get { return (int)this["VR_DisplayResultCount"]; }
@@ -210,7 +209,7 @@ namespace VoteSystem.Client
         /// <summary>
         /// 表示する数字が半角か全角かを取得または設定します。
         /// </summary>
-        [DefaultSettingValueAttribute("true")]
+        [DefaultValue(true)]
         public bool VR_IsDisplayPointFullWidth
         {
             get { return (bool)this["VR_IsDisplayPointFullWidth"]; }
@@ -220,7 +219,7 @@ namespace VoteSystem.Client
         /// <summary>
         /// フォントファミリ名を取得または設定します。
         /// </summary>
-        [DefaultSettingValueAttribute("ＭＳ ゴシック")]
+        [DefaultValue("ＭＳ ゴシック")]
         public string VR_FontFamilyName
         {
             get { return (string)this["VR_FontFamilyName"]; }
@@ -257,7 +256,7 @@ namespace VoteSystem.Client
         /// <summary>
         /// フォントの色を取得または設定します。
         /// </summary>
-        [DefaultSettingValueAttribute("#FF000000")]
+        [DefaultValue("#FF000000")]
         public Color VR_FontColor
         {
             get { return (Color)this["VR_FontColor"]; }
@@ -267,7 +266,7 @@ namespace VoteSystem.Client
         /// <summary>
         /// 縁取りを行うかどうかを取得または設定します。
         /// </summary>
-        [DefaultSettingValueAttribute("True")]
+        [DefaultValue(true)]
         public bool VR_IsEdged
         {
             get { return (bool)this["VR_IsEdged"]; }
@@ -277,7 +276,7 @@ namespace VoteSystem.Client
         /// <summary>
         /// フォントの縁の太さを取得または設定します。
         /// </summary>
-        [DefaultSettingValueAttribute("0.5")]
+        [DefaultValue("0.5")]
         public decimal VR_FontEdgeLengthInternal
         {
             get { return (decimal)this["VR_FontEdgeLengthInternal"]; }
@@ -287,7 +286,7 @@ namespace VoteSystem.Client
         /// <summary>
         /// フォントの縁色を取得または設定します。
         /// </summary>
-        [DefaultSettingValueAttribute("#FF00FFFF")]
+        [DefaultValue("#FF00FFFF")]
         public Color VR_FontEdgeColor
         {
             get { return (Color)this["VR_FontEdgeColor"]; }

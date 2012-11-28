@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Configuration;
 using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Media;
 
 using Ragnarok;
 using Ragnarok.ObjectModel;
+using Ragnarok.Utility;
 
 // コメント不足への警告を無くします。
 #pragma warning disable 1591
@@ -21,7 +22,7 @@ namespace VoteSystem.PluginShogi
     public sealed partial class Settings : Ragnarok.Presentation.WpfSettingsBase
     {
         #region Auto Save
-        [DefaultSettingValueAttribute("")]
+        [DefaultValue("")]
         public string AS_Comment
         {
             get { return GetValue<string>("AS_Comment"); }
@@ -62,7 +63,7 @@ namespace VoteSystem.PluginShogi
         #endregion
 
         #region 設定ダイアログ
-        [DefaultSettingValueAttribute("false")]
+        [DefaultValue(false)]
         public bool SD_IsAutoUpdateCurrentBoard
         {
             get { return GetValue<bool>("SD_IsAutoUpdateCurrentBoard"); }
@@ -93,35 +94,35 @@ namespace VoteSystem.PluginShogi
             set { SetValue("SD_BackgroundPath", value); }
         }
 
-        [DefaultSettingValueAttribute("0.6")]
+        [DefaultValue(0.6)]
         public double SD_BanOpacity
         {
             get { return GetValue<double>("SD_BanOpacity"); }
             set { SetValue("SD_BanOpacity", value); }
         }
 
-        [DefaultSettingValueAttribute("true")]
+        [DefaultValue(true)]
         public bool SD_IsUseEffect
         {
             get { return GetValue<bool>("SD_IsUseEffect"); }
             set { SetValue("SD_IsUseEffect", value); }
         }
 
-        [DefaultSettingValueAttribute("All")]
+        [DefaultValue(EffectFlag.All)]
         public EffectFlag SD_EffectFlag
         {
             get { return GetValue<EffectFlag>("SD_EffectFlag"); }
             set { SetValue("SD_EffectFlag", value); }
         }
 
-        [DefaultSettingValueAttribute("true")]
+        [DefaultValue(true)]
         public bool SD_IsUseEffectSound
         {
             get { return GetValue<bool>("SD_IsUseEffectSound"); }
             set { SetValue("SD_IsUseEffectSound", value); }
         }
 
-        [DefaultSettingValueAttribute("100")]
+        [DefaultValue(100)]
         public int SD_EffectVolume
         {
             get { return GetValue<int>("SD_EffectVolume"); }
