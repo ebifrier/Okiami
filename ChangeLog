@@ -2,6 +2,8 @@
 
 	* VoteServer/VoteRoom.cs: 全参加者に通知を出すとき、個別の通知の送
 	信にログを出力しないようにしました。
+	* VoteServer/VoteParticipant.cs: コマンド送信時に、ログ出力をするか
+	どうか切り替えられるようにしました。
 
 2012-11-30  - Ver 1.1.5.2
 
