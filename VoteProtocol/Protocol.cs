@@ -707,6 +707,30 @@ namespace VoteSystem.Protocol
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ShogiSendVariationCommand")]
+  public partial class ShogiSendVariationCommand : global::ProtoBuf.IExtensible
+  {
+    public ShogiSendVariationCommand() {}
+    
+    private readonly global::System.Collections.Generic.List<Ragnarok.Shogi.Move> _MoveList = new global::System.Collections.Generic.List<Ragnarok.Shogi.Move>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"MoveList", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<Ragnarok.Shogi.Move> MoveList
+    {
+      get { return _MoveList; }
+    }
+  
+    private string _Note;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"Note", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string Note
+    {
+      get { return _Note; }
+      set { _Note = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ShogiGetWhaleClientListCommand")]
   public partial class ShogiGetWhaleClientListCommand : global::ProtoBuf.IExtensible
   {

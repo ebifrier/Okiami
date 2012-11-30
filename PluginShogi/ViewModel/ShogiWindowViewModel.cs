@@ -729,117 +729,6 @@ namespace VoteSystem.PluginShogi.ViewModel
             }
         }
 
-        #region コメントクライアント
-        /// <summary>
-        /// 変化通知を処理します。
-        /// </summary>
-        private void commentClient_HandleComment(
-            object sender,
-            CommentRoomReceivedEventArgs e)
-        {
-            var comment = e.Comment;
-            if (comment == null || string.IsNullOrEmpty(comment.Text))
-            {
-                return;
-            }
-
-            // 投稿者コメントや運営コメントではアリーナ席以外を無視します。
-            if (!comment.IsUserComment && e.RoomIndex != 0)
-            {
-                return;
-            }
-
-            var variation = Variation.Parse(e.Comment.Text);
-            if (variation == null)
-            {
-                return;
-            }
-
-            WpfUtil.UIProcess(() =>
-            {
-                var model = ShogiGlobal.ShogiModel;
-                var ret = model.AddVariation(variation, true, true);
-                if (!ret)
-                {
-                    return;
-                }
-
-                // 分かりやすくするため、再生する変化は一度、
-                // 重要メッセージとして表示します。
-                var postMessage = MakePostVariationComment(
-                    variation.MoveList,
-                    null,
-                    variation.Comment);
-                ShogiGlobal.VoteClient.OnNotificationReceived(
-                    new Notification()
-                    {
-                        Type = NotificationType.Important,
-                        Text = postMessage,
-                        VoterId = "$system$",
-                        Timestamp = Ragnarok.Net.NtpClient.GetTime(),
-                    });
-            });
-        }
-
-        /// <summary>
-        /// 変化の投稿用コメントを作成します。
-        /// このコメントは変化が投稿されたことを周知するために使われます。
-        /// </summary>
-        private string MakePostVariationComment(IEnumerable<Move> moveList,
-                                                string name,
-                                                string moveComment)
-        {
-            var result = new StringBuilder(128);
-            var model = ShogiGlobal.ShogiModel;
-
-            // 以下のようなコメントが作成されます。
-            //   - "/変化:　コメント　by Name"
-            //   - "/変化:　by Name"
-            //   - "/変化:　コメント　"
-            //   - "/変化:　"
-            result.Append("/変化:　");
-            if (!Util.IsWhiteSpaceOnly(moveComment))
-            {
-                result.Append(moveComment + "　");
-            }
-            if (!string.IsNullOrEmpty(name))
-            {
-                result.Append("by " + name);
-            }
-            
-            // とりあえず改行します。
-            result.AppendLine();
-
-            var line = 1;
-            var count = 0;
-            var bwType = model.CurrentBoard.MovePriority;
-            foreach (var move in moveList)
-            {
-                move.BWType = bwType;
-                bwType = bwType.Toggle();
-
-                var moveText = move.ToString();
-                result.Append(moveText);
-
-                // 指定文字数を超えたら改行します。
-                if ((count += moveText.Length) >= 32)
-                {
-                    // 最大３行までしか表示しません。
-                    if (++line >= 3)
-                    {
-                        result.Append("（ｒｙ");
-                        break;
-                    }
-
-                    result.AppendLine();
-                    count = 0;
-                }
-            }
-
-            return result.ToString();
-        }
-        #endregion
-
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -868,7 +757,6 @@ namespace VoteSystem.PluginShogi.ViewModel
             this.commentClient = VoteSystem.Client.Global.CreateCommentClient();
             this.commentClient.IsSupressLog = true;
             this.commentClient.PropertyChanged += commentClient_PropertyChanged;
-            this.commentClient.CommentReceived += commentClient_HandleComment;
 
             this.moveManager.SetCurrentBoard(this.currentBoard);
 

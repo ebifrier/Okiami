@@ -255,11 +255,18 @@ message ShogiGetCurrentBoardResponse {
 	required Ragnarok.Shogi.Board Board = 1;
 }
 
-
 // 現局面を設定します。
 // クライアント、サーバー双方から送られます。
 message ShogiSetCurrentBoardCommand {
 	required Ragnarok.Shogi.Board Board = 1;
+}
+
+
+// 変化を送信します。
+// サーバーからクライアントに送られます。
+message ShogiSendVariationCommand {
+	repeated Ragnarok.Shogi.Move MoveList = 1;
+	required string Note = 2;
 }
 
 

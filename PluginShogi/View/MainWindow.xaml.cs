@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -61,9 +62,10 @@ namespace VoteSystem.PluginShogi.View
             var files = e.Data.GetData(DataFormats.FileDrop) as string[];
             if (files != null && files.Any())
             {
-                var text = Ragnarok.Util.ReadFile(files[0], Encoding.GetEncoding("SJIS"));
-
-                Commands.LoadKifText(text);
+                using (var reader = new StreamReader(files[0]))
+                {
+                    Commands.LoadKif(reader);
+                }
             }
         }
 

@@ -1,3 +1,16 @@
+2012-11-30  - Ver 1.1.5.5
+
+	* PluginShogi/View/MainWindow.xaml: メニューを更新し、棋譜の貼り付
+	け/コピー機能を付加しました。
+	* PluginShogi/ViewModel/ShogiWindowViewModel.cs: コメントから変化を
+	処理することをやめ、サーバーからの通知で処理するようにしました。
+	* PluginShogi/ShogiPlugin.cs: サーバーからの変化通知を処理するよう
+	にしました。
+	* VoteProtocol/ProtoBuf/Protocol.proto: ShogiSendVariationCommandを
+	追加しました。
+	* VoteServer/VoteStrategy/ShogiVoteStrategy.cs: 変化を全参加者に通
+	知するようにしました。
+
 2012-11-30  - Ver 1.1.5.4
 
 	* VoteClient/Model/VoteClient.cs: 投票ルームの状態変化をプロパティ

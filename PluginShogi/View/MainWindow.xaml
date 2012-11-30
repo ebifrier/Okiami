@@ -77,12 +77,25 @@
                 <MenuItem Header="棋譜の読み込み(_O)"
                           Command="{x:Static svm:Commands.LoadKifFile}"
                           InputGestureText="Ctrl+O" />
-                <MenuItem Header="棋譜を保存(_S)"
+                <MenuItem Header="棋譜に名前を付けて保存(_A)"
                           Command="{x:Static svm:Commands.SaveKifFile}"
                           InputGestureText="Ctrl+S" />
+                <MenuItem Header="クリップボード(_C)">
+                    <MenuItem Header="棋譜の読み込み(_C)"
+                              Command="{x:Static svm:Commands.PasteKifFile}" />
+                    <Separator />
+                    <MenuItem Header="棋譜の書き出し(_P)"
+                              Command="{x:Static svm:Commands.CopyKifFile}" />
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="各種設定(_S)"
+                          Command="{x:Static svm:Commands.ShowSettingDialog}" />
+                <Separator />
                 <MenuItem Header="NCVログを読み込み"
                           Command="{x:Static svm:Commands.ReadNcvLog}"
                           Visibility="{x:Static s:Global.IsNonPublishedVisibility}" />
+                <MenuItem Header="終了(_X)"
+                          Command="Close" />
             </MenuItem>
 
             <MenuItem Header="表示(_V)">
@@ -90,8 +103,6 @@
                           IsCheckable="True" x:Name="boardReverse"
                           Command="{x:Static svm:Commands.SetReverseBoard}"
                           CommandParameter="{Binding IsChecked, ElementName=boardReverse}" />
-                <MenuItem Header="設定(_S)"
-                          Command="{x:Static svm:Commands.ShowSettingDialog}" />
                 <Separator />
                 <MenuItem Header="変化ウィンドウ"
                           Command="{x:Static svm:Commands.ShowMoveManageView}" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -81,6 +82,14 @@ namespace VoteSystem.PluginShogi.ViewModel
             new RoutedUICommand(
                 "棋譜ファイルの貼り付けを行います。",
                 "PasteKifFile",
+                typeof(Window));
+        /// <summary>
+        /// 棋譜ファイルのコピーを行います。
+        /// </summary>
+        public static readonly ICommand CopyKifFile =
+            new RoutedUICommand(
+                "棋譜ファイルのコピーを行います。",
+                "CopyKifFile",
                 typeof(Window));
         /// <summary>
         /// 盤面を反転します。
@@ -289,6 +298,10 @@ namespace VoteSystem.PluginShogi.ViewModel
                     ExecutePasteKifFile, CanExecute));
             bindings.Add(
                 new CommandBinding(
+                    CopyKifFile,
+                    ExecuteCopyKifFile, CanExecute));
+            bindings.Add(
+                new CommandBinding(
                     SetReverseBoard,
                     ExecuteSetReverseBoard, CanExecute));
 
@@ -394,11 +407,14 @@ namespace VoteSystem.PluginShogi.ViewModel
                     new KeyGesture(Key.O, ModifierKeys.Control)));
             inputs.Add(
                 new KeyBinding(SaveKifFile,
-                    new KeyGesture(Key.S, ModifierKeys.Control)));
+                    new KeyGesture(Key.A, ModifierKeys.Control)));
 
             inputs.Add(
                 new KeyBinding(PasteKifFile,
                     new KeyGesture(Key.V, ModifierKeys.Control)));
+            inputs.Add(
+                new KeyBinding(CopyKifFile,
+                    new KeyGesture(Key.C, ModifierKeys.Control)));
         }
 
         /// <summary>
@@ -660,8 +676,45 @@ namespace VoteSystem.PluginShogi.ViewModel
                     return;
                 }
 
+                using (var reader = new StreamReader(dialog.FileName))
+                {
+                    LoadKif(reader);
+                }
+            }
+            catch (Exception ex)
+            {
+                ShogiGlobal.ErrorMessage(ex,
+                    "棋譜ファイルの読み込みに失敗しました。(￣ω￣;)");
+            }
+        }
+
+        /// <summary>
+        /// 棋譜ファイルの貼り付けを行います。
+        /// </summary>
+        private static void ExecutePasteKifFile(object sender, ExecutedRoutedEventArgs e)
+        {
+            var text = Clipboard.GetText(TextDataFormat.Text);
+
+            using (var reader = new StringReader(text))
+            {
+                LoadKif(reader);
+            }
+        }
+
+        /// <summary>
+        /// 棋譜ファイルの読み込みを行います。
+        /// </summary>
+        public static void LoadKif(TextReader reader)
+        {
+            try
+            {
+                if (reader == null)
+                {
+                    return;
+                }
+
                 // ファイルを読み込み局面を作成します。
-                var file = KifuReader.LoadFile(dialog.FileName);
+                var file = KifuReader.Load(reader);
                 var board = file.CreateBoard();
 
                 // 現局面は更新しません。
@@ -670,7 +723,8 @@ namespace VoteSystem.PluginShogi.ViewModel
             catch (Exception ex)
             {
                 ShogiGlobal.ErrorMessage(ex,
-                    "棋譜ファイルの読み込みに失敗しました。(￣ω￣;)");
+                    "棋譜ファイルの読み込みに失敗しました(￣ω￣;)");
+                return;
             }
         }
 
@@ -698,17 +752,10 @@ namespace VoteSystem.PluginShogi.ViewModel
                     return;
                 }
 
-                // ファイルに保存します。
-                var model = ShogiGlobal.ShogiModel;
-                var manager = model.MoveManager;
-                var root = manager.CreateVariationNode(model.Board);
-
-                var headers = new Dictionary<string, string>();
-                headers["先手"] = "あなた";
-                headers["後手"] = "あなた２";
-
-                var kifu = new KifuObject(headers, root);
-                KifuWriter.SaveFile(dialog.FileName, kifu);
+                using (var writer = new StreamWriter(dialog.FileName))
+                {
+                    SaveKif(writer);
+                }
             }
             catch (Exception ex)
             {
@@ -718,41 +765,47 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
-        /// 棋譜ファイルの貼り付けを行います。
+        /// 棋譜ファイルのコピーを行います。
         /// </summary>
-        private static void ExecutePasteKifFile(object sender, ExecutedRoutedEventArgs e)
+        private static void ExecuteCopyKifFile(object sender, ExecutedRoutedEventArgs e)
         {
-            var text = Clipboard.GetText(TextDataFormat.Text);
+            using (var writer = new StringWriter())
+            {
+                SaveKif(writer);
 
-            LoadKifText(text);
+                Clipboard.SetText(writer.ToString());
+            }
         }
 
         /// <summary>
-        /// 棋譜ファイルの読み込みを行います。
+        /// 棋譜ファイルの書き込みを行います。
         /// </summary>
-        public static void LoadKifText(string text)
+        public static void SaveKif(TextWriter writer)
         {
             try
             {
-                if (string.IsNullOrEmpty(text))
+                if (writer == null)
                 {
                     return;
                 }
 
-                // ファイルを読み込み局面を作成します。
-                var file = KifuReader.LoadFrom(text);
-                var board = file.CreateBoard();
+                var model = ShogiGlobal.ShogiModel;
+                var manager = model.MoveManager;
+                var root = manager.CreateVariationNode(model.Board);
 
-                // 現局面は更新しません。
-                ShogiGlobal.ShogiModel.SetBoard(board);
+                var headers = new Dictionary<string, string>();
+                headers["先手"] = "あなた";
+                headers["後手"] = "あなた２";
+
+                var kifu = new KifuObject(headers, root);
+                KifuWriter.Save(writer, kifu);
             }
             catch (Exception ex)
             {
                 ShogiGlobal.ErrorMessage(ex,
-                    "棋譜ファイルの読み込みに失敗しました(￣ω￣;)");
-                return;
+                    "棋譜ファイルの出力に失敗しました(￣ω￣;)");
             }
-        } 
+        }
 
         /// <summary>
         /// 盤面を反転します。

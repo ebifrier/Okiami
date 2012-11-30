@@ -416,8 +416,40 @@ namespace VoteSystem.Server.VoteStrategy
 
                     AddPlayer(player, notification);
                 }
+
                 return;
             }
+
+            // 変化コマンドを処理します。
+            var note = string.Empty;
+            var moveList = ParseVariation(notification.Text, out note);
+            if (moveList != null)
+            {
+                var command = new ShogiSendVariationCommand
+                {
+                    Note = note,
+                };
+                command.MoveList.AddRange(moveList);
+
+                this.voteRoom.BroadcastCommand(command);
+            }
+        }
+
+        /// <summary>
+        /// 変化をパースします。
+        /// </summary>
+        private List<Move> ParseVariation(string text, out string note)
+        {
+            // まず、文字列から指し手リストを作成します。
+            var moveList = BoardExtension.MakeMoveList(text, out note);
+
+            // 最短手数以上の変化なら、よしとします。
+            if (moveList != null && moveList.Count() >= 3)
+            {
+                return moveList;
+            }
+
+            return null;
         }
 
         /// <summary>

@@ -44,6 +44,7 @@ namespace VoteSystem.PluginShogi
             }
         }
 
+#if false
         private void SpeedTest()
         {
             return;
@@ -80,6 +81,7 @@ namespace VoteSystem.PluginShogi
 
             return sw.Elapsed.TotalMilliseconds;
         }
+#endif
 
         /// <summary>
         /// プラグインの初期化を行います。
@@ -97,7 +99,7 @@ namespace VoteSystem.PluginShogi
                 // ログイン時に現局面を取得するようにします。
                 host.VoteClient.PropertyChanged += VoteClient_PropertyChanged;
 
-                SpeedTest();
+                //SpeedTest();
             }
             catch (Exception ex)
             {
@@ -207,6 +209,8 @@ namespace VoteSystem.PluginShogi
                 HandleStartEndRollCommand);
             connection.AddCommandHandler<StopEndRollCommand>(
                 HandleStopEndRollCommand);
+            connection.AddCommandHandler<ShogiSendVariationCommand>(
+                HandleSendVariationCommand);
             connection.AddCommandHandler<ShogiSetCurrentBoardCommand>(
                 HandleSetCurrentBoardCommand);
             connection.AddCommandHandler<ShogiSetWhaleClientListCommand>(
@@ -248,6 +252,115 @@ namespace VoteSystem.PluginShogi
             WpfUtil.UIProcess(() =>
                 window.StopEndRoll());
         }
+
+        #region 変化を処理
+        /// <summary>
+        /// 変化の投稿用コメントを作成します。
+        /// このコメントは変化が投稿されたことを周知するために使われます。
+        /// </summary>
+        private string MakePostVariationComment(IEnumerable<Move> moveList,
+                                                string name,
+                                                string moveComment)
+        {
+            var result = new StringBuilder(128);
+            var model = ShogiGlobal.ShogiModel;
+
+            // 以下のようなコメントが作成されます。
+            //   - "変化:　コメント　by Name"
+            //   - "変化:　by Name"
+            //   - "変化:　コメント　"
+            //   - "変化:　"
+            result.Append("変化:　");
+            if (!Util.IsWhiteSpaceOnly(moveComment))
+            {
+                result.Append(moveComment + "　");
+            }
+            if (!string.IsNullOrEmpty(name))
+            {
+                result.Append("by " + name);
+            }
+
+            // とりあえず改行します。
+            result.AppendLine();
+
+            var line = 1;
+            var count = 0;
+            var bwType = model.CurrentBoard.MovePriority;
+            foreach (var move in moveList)
+            {
+                move.BWType = bwType;
+                bwType = bwType.Toggle();
+
+                var moveText = move.ToString();
+                result.Append(moveText);
+
+                // 指定文字数を超えたら改行します。
+                if ((count += moveText.Length) >= 32)
+                {
+                    // 最大３行までしか表示しません。
+                    if (++line >= 3)
+                    {
+                        result.Append("（ｒｙ");
+                        break;
+                    }
+
+                    result.AppendLine();
+                    count = 0;
+                }
+            }
+
+            return result.ToString();
+        }
+
+        /// <summary>
+        /// 受信した変化を処理します。
+        /// </summary>
+        public void HandleSendVariationCommand(
+            object sender,
+            PbCommandEventArgs<ShogiSendVariationCommand> e)
+        {
+            var model = ShogiGlobal.ShogiModel;
+
+            var moveList = e.Command.MoveList;
+            if (moveList == null || !moveList.All(_ => _.Validate()))
+            {
+                return;
+            }
+
+            var variation = Variation.Create(
+                model.CurrentBoard, moveList,
+                e.Command.Note, true);
+            if (variation == null ||
+                variation.MoveList.Count() <= Variation.ShortestMove)
+            {
+                return;
+            }
+
+            WpfUtil.UIProcess(() =>
+            {
+                var ret = model.AddVariation(variation, true, true);
+                if (!ret)
+                {
+                    return;
+                }
+
+                // 分かりやすくするため、再生する変化は一度、
+                // 重要メッセージとして表示します。
+                var postMessage = MakePostVariationComment(
+                    variation.MoveList,
+                    null,
+                    variation.Comment);
+                ShogiGlobal.VoteClient.OnNotificationReceived(
+                    new Notification()
+                    {
+                        Type = NotificationType.Important,
+                        Text = postMessage,
+                        VoterId = "$system$",
+                        Timestamp = Ragnarok.Net.NtpClient.GetTime(),
+                    });
+            });
+        }
+        #endregion
 
         /// <summary>
         /// 古い局面から新しい局面に到達するための指し手のリストを取得します。
