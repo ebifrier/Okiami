@@ -10,7 +10,7 @@ OPT_CSFLAGS = -target:exe -define:__LINUX__ -define:MONO
 OPT_LDFLAGS = -keyfile:VoteServer.snk
 OPT_LIBS    = -r:Mono.Posix.dll -r:VoteProtocol.dll
 
-DEPEND_LIBPATH = ../Protocol
+DEPEND_LIBPATH = ../VoteProtocol
 
 make-main:
 	@gmcs -recurse:*.cs $(CSFLAGS) -out:$(TARGET) $(LDFLAGS) $(LIBS) $^

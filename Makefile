@@ -2,7 +2,7 @@
 #
 #
 
-SUBDIRS = Server
+SUBDIRS = VoteServer
 
 all:
 	@for d in $(SUBDIRS); do \
