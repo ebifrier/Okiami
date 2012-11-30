@@ -64,7 +64,7 @@ end
 # クライアントのバージョンを取得します。
 #
 def get_client_version(distpath)
-  filepath = File.join(distpath, "..", "Client", "Properties", "AssemblyInfo.cs")
+  filepath = File.join(distpath, "..", "VoteClient", "Properties", "AssemblyInfo.cs")
   str = File.open(filepath).read
   
   if /\[assembly: AssemblyVersion\("([\d\.]+)"\)\]/ =~ str then
@@ -173,12 +173,9 @@ def compute_md5(filename)
 end
 
 #
-# versioninfo.xmlを更新します。
+# templateファイルを置き換えます。
 #
-def make_versioninfo(version, zipname)
-  input_path = File.join("versioninfo_templ.xml")
-  output_path = File.join("versioninfo.xml")
-  
+def convert_template(input_path, output_path, version, zipname)
   data = File.open(input_path).read
   data = data.gsub("${VERSION}", version)
   data = data.gsub("${_VERSION}", version.gsub(".", "_"))
@@ -191,6 +188,26 @@ def make_versioninfo(version, zipname)
     f.write(data)
     printf("wrote %s\n", output_path)
   end
+end
+
+#
+# versioninfo.xmlを更新します。
+#
+def make_versioninfo(version, zipname)
+  input_path = File.join("versioninfo_templ.xml")
+  output_path = File.join("versioninfo.xml")
+
+  convert_template(input_path, output_path, version, zipname)
+end
+
+#
+# VoteClient.htmlを更新します。
+#
+def make_recent(version, zipname)
+  input_path = File.join("VoteClient_templ.html")
+  output_path = File.join("VoteClient.html")
+
+  convert_template(input_path, output_path, version, zipname)
 end
 
 #
@@ -332,4 +349,5 @@ make_zip(dirname, zippath)
 
 # versioninfo.xmlを更新します。
 make_versioninfo(version, zipname)
+make_recent(version, zipname)
 write_release_note(version)

@@ -11,7 +11,7 @@ $HtmlBasePath = "E:/Dropbox/NicoNico/homepage/public_html/programs/votesystem"
 # クライアントのバージョンを取得します。
 #
 def get_client_version(distpath)
-  filepath = File.join(distpath, "..", "Client", "Properties", "AssemblyInfo.cs")
+  filepath = File.join(distpath, "..", "VoteClient", "Properties", "AssemblyInfo.cs")
   str = File.open(filepath).read
   
   if /\[assembly: AssemblyVersion\("([\d\.]+)"\)\]/ =~ str then
@@ -32,5 +32,6 @@ zipname = "VoteClient_" + version_ + ".zip"
 
 # 必要なファイルをコピーします。
 FileUtils.copy(File.join(distpath, zipname), File.join($HtmlBasePath, "download"))
+FileUtils.copy(File.join(distpath, "VoteClient.html"), File.join($HtmlBasePath, "download"))
 FileUtils.copy(File.join(distpath, "release_note.html"), File.join($HtmlBasePath, "update"))
 FileUtils.copy(File.join(distpath, "versioninfo.xml"), File.join($HtmlBasePath, "update"))
