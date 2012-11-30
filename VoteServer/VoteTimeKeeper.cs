@@ -184,12 +184,9 @@ namespace VoteSystem.Server
 
                 // 投票停止時間を検出するタイマを開始します。
                 AdjustTimer();
-
-                // TODO: 今のところTotalVoteSpanを最初に同期することができないので、
-                // ここで同期しています。
-                this.RaisePropertyChanged("TotalVoteSpan");
             }
 
+            this.voteRoom.Updated();
             this.voteRoom.BroadcastSystemNotification(
                 SystemNotificationType.VoteStart);
         }
@@ -228,6 +225,7 @@ namespace VoteSystem.Server
                 AdjustTimer();
             }
 
+            this.voteRoom.Updated();
             this.voteRoom.BroadcastSystemNotification(
                 SystemNotificationType.VotePause);
         }
@@ -256,6 +254,8 @@ namespace VoteSystem.Server
 
                 AdjustTimer();
             }
+
+            this.voteRoom.Updated();
         }
 
         /// <summary>
@@ -278,6 +278,7 @@ namespace VoteSystem.Server
                 VoteEnded(VoteState.Stop, progressTime);
             }
 
+            this.voteRoom.Updated();
             this.voteRoom.BroadcastSystemNotification(
                 SystemNotificationType.VoteStop);
         }
@@ -285,11 +286,24 @@ namespace VoteSystem.Server
         /// <summary>
         /// 投票時間を追加します。(メッセージは出さない)
         /// </summary>
+        /// <remarks>
+        /// 条件）
+        /// ・投票時間は持ち時間以上には設定できない。
+        /// </remarks>
         private bool AddVoteSpanInternal(TimeSpan diff)
         {
             using (LazyLock())
             {
-                if (VoteSpan == TimeSpan.MaxValue)
+                var span = VoteSpan;
+
+                // 持ち時間が有限なら、投票時間も有限にしかできません。
+                if (TotalVoteSpan != TimeSpan.MaxValue)
+                {
+                    span = MathEx.Min(span, TotalVoteSpan);
+                }
+
+                // 投票時間が無限なら、時間の増減はできません。
+                if (span == TimeSpan.MaxValue)
                 {
                     return false;
                 }
@@ -301,7 +315,7 @@ namespace VoteSystem.Server
                         // 残り時間が０以下なら０にします。
                         VoteSpan = MathEx.Max(
                             TimeSpan.Zero,
-                            MathEx.Min(VoteSpan + diff, TotalVoteSpan));
+                            MathEx.Min(span + diff, TotalVoteSpan));
                         break;
 
                     case VoteState.Stop:
@@ -311,8 +325,9 @@ namespace VoteSystem.Server
 
                 // 投票停止時間を検出するタイマを開始します。
                 AdjustTimer();
-                return true;
             }
+
+            return true;
         }
 
         /// <summary>
@@ -320,11 +335,6 @@ namespace VoteSystem.Server
         /// </summary>
         public void SetVoteSpan(TimeSpan span)
         {
-            if (IsVoteNoLimit)
-            {
-                return;
-            }
-
             // 投票時間は投票開始時間(ntp)と全体の長さを元に決定されます。
             // つまり、残り時間を与えられた時間に合わせるためには
             // 少し工夫して行う必要があります。
@@ -334,6 +344,7 @@ namespace VoteSystem.Server
 
             if (AddVoteSpanInternal(span - leaveTime))
             {
+                this.voteRoom.Updated();
                 this.voteRoom.BroadcastSystemNotification(
                     SystemNotificationType.ChangeVoteSpan);
             }
@@ -344,13 +355,9 @@ namespace VoteSystem.Server
         /// </summary>
         public void AddVoteSpan(TimeSpan diff)
         {
-            if (IsVoteNoLimit)
-            {
-                return;
-            }
-
             if (AddVoteSpanInternal(diff))
             {
+                this.voteRoom.Updated();
                 this.voteRoom.BroadcastSystemNotification(
                     SystemNotificationType.ChangeVoteSpan);
             }
@@ -364,16 +371,19 @@ namespace VoteSystem.Server
             using (LazyLock())
             {
                 // 無制限投票中なら、全投票時間を有限時間にすることはできません。
-                if (IsVoteNoLimit && span != TimeSpan.MaxValue)
+                /*if (IsVoteNoLimit && span != TimeSpan.MaxValue)
                 {
                     Log.Error(this,
                         "無制限投票中に全投票時間を有限にすることはできません。");
 
                     return;
-                }
+                }*/
 
                 TotalVoteSpan = MathEx.Max(span, TimeSpan.Zero);
-                AddVoteSpan(TimeSpan.Zero);
+
+                // 持ち時間を変えた後、投票時間を再調整します。
+                AddVoteSpanInternal(TimeSpan.Zero);
+                this.voteRoom.Updated();
             }
         }
 
@@ -390,7 +400,10 @@ namespace VoteSystem.Server
                 }
 
                 TotalVoteSpan = MathEx.Max(TotalVoteSpan + diff, TimeSpan.Zero);
-                AddVoteSpan(TimeSpan.Zero);
+
+                // 持ち時間を変えた後、投票時間を再調整します。
+                AddVoteSpanInternal(TimeSpan.Zero);
+                this.voteRoom.Updated();
             }
         }
 
@@ -407,6 +420,7 @@ namespace VoteSystem.Server
                 {
                     VoteEnded(VoteState.End, VoteSpan);
 
+                    this.voteRoom.Updated();
                     this.voteRoom.BroadcastSystemNotification(
                         SystemNotificationType.VoteEnd);
                 }
@@ -576,126 +590,6 @@ namespace VoteSystem.Server
         }
         #endregion
 
-        /*private void AddTestVoterList()
-        {
-            AddJoinedVoter(new VoterInfo()
-            {
-                Color = NotificationColor.Default,
-                Id = "1",
-                LiveSite = LiveSite.NicoNama,
-                Name = "テスト1",
-            });
-
-            AddJoinedVoter(new VoterInfo()
-            {
-                Color = NotificationColor.Red,
-                Id = "2",
-                LiveSite = LiveSite.NicoNama,
-                Name = "テスト２",
-                Skill = "5段",
-            });
-
-            AddJoinedVoter(new VoterInfo()
-            {
-                Color = NotificationColor.Blue,
-                Id = "3",
-                LiveSite = LiveSite.NicoNama,
-                Name = "テスト3",
-                Skill = "初段",
-            });
-
-            AddJoinedVoter(new VoterInfo()
-            {
-                Color = NotificationColor.Default,
-                Id = "4",
-                LiveSite = LiveSite.NicoNama,
-                Name = "テスト４さんだおお",
-                Skill = "15級",
-            });
-
-            AddJoinedVoter(new VoterInfo()
-            {
-                Color = NotificationColor.Cyan,
-                Id = "6",
-                LiveSite = LiveSite.NicoNama,
-                Name = "5",
-                Skill = "3級",
-            });
-
-            AddJoinedVoter(new VoterInfo()
-            {
-                Color = NotificationColor.Green,
-                Id = "6",
-                LiveSite = LiveSite.NicoNama,
-                Name = "５",
-                Skill = "9級",
-            });
-
-
-            AddJoinedVoter(new VoterInfo()
-            {
-                Color = NotificationColor.Green,
-                Id = "7",
-                LiveSite = LiveSite.NicoNama,
-                Name = "x５",
-                Skill = "9級",
-            });
-
-            AddJoinedVoter(new VoterInfo()
-            {
-                Color = NotificationColor.Green,
-                Id = "8",
-                LiveSite = LiveSite.NicoNama,
-                Name = "５x",
-                Skill = "9級",
-            });
-
-            AddJoinedVoter(new VoterInfo()
-            {
-                Color = NotificationColor.Default,
-                Id = "9",
-                LiveSite = LiveSite.NicoNama,
-                Name = "ーー",
-                Skill = "｜｜",
-            });
-
-            AddJoinedVoter(new VoterInfo()
-            {
-                Color = NotificationColor.Yellow,
-                Id = "10",
-                LiveSite = LiveSite.NicoNama,
-                Name = "￣￣￣",
-                Skill = "＿＿＿",
-            });
-
-            AddJoinedVoter(new VoterInfo()
-            {
-                Color = NotificationColor.Purple,
-                Id = "11",
-                LiveSite = LiveSite.NicoNama,
-                Name = "~~~",
-                Skill = "___",
-            });
-
-            AddJoinedVoter(new VoterInfo()
-            {
-                Color = NotificationColor.Pink,
-                Id = "12",
-                LiveSite = LiveSite.NicoNama,
-                Name = "----",
-                Skill = "",
-            });
-
-            AddUnjoinedVoter(new VoterInfo()
-            {
-                Color = NotificationColor.Pink,
-                Id = "12",
-                LiveSite = LiveSite.NicoNama,
-                Name = "----",
-                Skill = "",
-            });
-        }*/
-
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -707,10 +601,6 @@ namespace VoteSystem.Server
             VoteStartTimeNtp = DateTime.MinValue;
             VoteSpan = TimeSpan.Zero;
             TotalVoteSpan = TimeSpan.FromSeconds(120 * 60 + 0.9);
-
-#if !__LINUX__
-            //AddTestVoterList();
-#endif
 
             this.timer = new Timer(
                 (_) => Util.SafeCall(CheckVoteEnd),

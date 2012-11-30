@@ -4,10 +4,8 @@ package VoteSystem.Protocol;
 enum NotificationType { type_dummy = 1; }
 enum NotificationTypeMask { Unknown = 0; }
 
-message BoolObject {}
 message ProtocolVersion {}
 message LiveData {}
 message LiveRoomData {}
 message LiveAttribute {}
-message VoteRoomInfo {}
 message Notification {}

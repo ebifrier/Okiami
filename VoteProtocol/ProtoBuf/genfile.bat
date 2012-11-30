@@ -3,7 +3,7 @@
 set PROTOGEN="%HOME%\..\bin\protogen.exe"
 
 %PROTOGEN% -i:Protocol.proto -o:Protocol.cs
-%PROTOGEN% -i:VoteProtocol.proto -o:VoteProtocol.cs
+rem %PROTOGEN% -i:VoteProtocol.proto -o:VoteProtocol.cs
 %PROTOGEN% -i:CommenterProtocol.proto -o:CommenterProtocol.cs
 
 if not %ERRORLEVEL%==0 goto on_error
@@ -12,15 +12,15 @@ set PROLOGUE=#pragma warning disable 1591
 echo %PROLOGUE% > ..\Protocol.cs
 type Protocol.cs >> ..\Protocol.cs
 
-echo %PROLOGUE% > ..\Vote\VoteProtocol.cs
-type VoteProtocol.cs >> ..\Vote\VoteProtocol.cs
+rem echo %PROLOGUE% > ..\Vote\VoteProtocol.cs
+rem type VoteProtocol.cs >> ..\Vote\VoteProtocol.cs
 
 echo %PROLOGUE% > ..\Commenter\CommenterProtocol.cs
 type CommenterProtocol.cs >> ..\Commenter\CommenterProtocol.cs
 
 rem ƒtƒ@ƒCƒ‹íœ
 del Protocol.cs
-del VoteProtocol.cs
+rem del VoteProtocol.cs
 del CommenterProtocol.cs
 
 echo OK

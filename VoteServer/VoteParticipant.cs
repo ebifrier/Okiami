@@ -305,27 +305,6 @@ namespace VoteSystem.Server
                 this.connection.SendCommand(command, isOutLog);
             }
         }
-
-        /// <summary>
-        /// オブジェクトのプロパティ変更通知を送信します。
-        /// </summary>
-        public void SendObjectChangedCommand(string objectName,
-                                             string propertyName,
-                                             Type propertyType,
-                                             object propertyValue)
-        {
-            var command = new PbPropertyChanged()
-            {
-                ObjectId = objectName,
-                PropertyName = propertyName,
-                PropertyType = propertyType,
-                PropertyValue = propertyValue,
-            };
-
-            command.SerializePropertyValue();
-
-            this.connection.SendCommand(command);
-        }
         #endregion
 
         #region リクエスト処理
@@ -684,10 +663,10 @@ namespace VoteSystem.Server
             // リクエスト
             connection.AddRequestHandler<
                 GetVoteRoomCountRequest, GetVoteRoomCountResponse>(
-                    HandleGetVoteRoomCountRequest);
+                    HandleGetVoteRoomCountRequest, false);
             connection.AddRequestHandler<
                 GetVoteRoomListRequest, GetVoteRoomListResponse>(
-                    HandleGetVoteRoomListRequest);
+                    HandleGetVoteRoomListRequest, false);
             connection.AddRequestHandler<
                 SetParticipantAttributeRequest,
                 SetParticipantAttributeResponse>(

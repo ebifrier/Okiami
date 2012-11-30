@@ -152,8 +152,8 @@ namespace VoteSystem.Server
                 }
 
                 // 投票戦略を変更します。
-                this.VoteMode = mode;
                 this.voteStrategy = strategy;
+                this.VoteMode = mode;
 
                 OnVoteResultChanged();
             }
@@ -164,19 +164,22 @@ namespace VoteSystem.Server
         /// </summary>
         public void ClearVote()
         {
-            // 投票結果を消す前にそれをログに残しておきます。
-            var result = VoteResult;
-            var strs = result.CandidateList.Select(pair =>
-                string.Format("{0}: {1}", pair.Candidate, pair.Point));
+            using (LazyLock())
+            {
+                // 投票結果を消す前にそれをログに残しておきます。
+                var result = VoteResult;
+                var strs = result.CandidateList.Select(pair =>
+                    string.Format("{0}: {1}", pair.Candidate, pair.Point));
 
-            Log.Info(this,
-                "投票結果{0}" +
-                "  {1}",
-                Environment.NewLine,
-                string.Join(Environment.NewLine + "  ", strs.ToArray()));
+                Log.Info(this,
+                    "投票結果{0}" +
+                    "  {1}",
+                    Environment.NewLine,
+                    string.Join(Environment.NewLine + "  ", strs.ToArray()));
 
-            this.voteStrategy.ClearVote();
-            OnVoteResultChanged();
+                this.voteStrategy.ClearVote();
+                OnVoteResultChanged();
+            }
 
             Log.Info(this,
                 "投票結果がすべてクリアされました。");
@@ -747,6 +750,8 @@ namespace VoteSystem.Server
             }
 
             // メッセージが投票ルームのオーナーによるものかを判定します。
+            // 通知は放送のコメントすべてが放送主から送られてくるため、
+            // 放送主から送られてきたものだけを特別扱いする必要があります。
             var isFromVoteRoomOwner = (
                 e.Command.IsFromLiveOwner &&
                 voteRoom.IsRoomOwnerConnection(sender as PbConnection));

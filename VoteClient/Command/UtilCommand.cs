@@ -12,8 +12,6 @@ using Ragnarok.Presentation;
 
 namespace VoteSystem.Client.Command
 {
-    using Protocol.Vote;
-
     public static partial class Commands
     {
         /// <summary>

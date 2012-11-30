@@ -265,6 +265,9 @@ namespace VoteSystem.Protocol.Vote
         /// <summary>
         /// その部屋に接続している参加者の情報を取得または設定します。
         /// </summary>
+        /// <remarks>
+        /// Listのみ更新したい場合があるので、privateにしてはいけません。
+        /// </remarks>
         [DataMember(Order = 11, IsRequired = true)]
         public VoteParticipantInfo[] ParticipantList
         {

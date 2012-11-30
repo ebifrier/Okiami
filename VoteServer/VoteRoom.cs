@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.ComponentModel;
 
 using Ragnarok;
 using Ragnarok.Net;
@@ -287,13 +287,8 @@ namespace VoteSystem.Server
                 this.voteResultThread = null;
             }
 
-            if (this.voteTimeKeeper != null)
-            {
-                this.voteTimeKeeper.PropertyChanged -= voteModel_PropertyChanged;
-            }
-
             // 参加者が０になったら、投票ルームを削除します。
-            GlobalControl.Instance.RemoveVoteRoom(this.Id);
+            GlobalControl.Instance.RemoveVoteRoom(Id);
 
             Log.Info(this,
                 "投票ルームを削除しました。");
@@ -382,7 +377,9 @@ namespace VoteSystem.Server
 
             if (participant != null && e.PropertyName == "Info")
             {
-                this.RaisePropertyChanged("ParticipantList");
+                // TODO: これは遅いかも
+                //this.RaisePropertyChanged("ParticipantList");
+                Updated();
             }
         }
 
@@ -424,7 +421,8 @@ namespace VoteSystem.Server
 
                 this.participantList.Add(participant);
 
-                this.RaisePropertyChanged("ParticipantList");
+                // 参加者の変化を通知します。
+                Updated();
             }
 
             Log.Info(this,
@@ -463,7 +461,8 @@ namespace VoteSystem.Server
                 participant.Disconnected -= participant_Disconnected;
                 participant.SetVoteRoom(null, -1);
 
-                this.RaisePropertyChanged("ParticipantList");
+                // 参加者の変化やオーナーの変更を通知します。
+                Updated();
             }
 
             Log.Info(this,
@@ -478,6 +477,32 @@ namespace VoteSystem.Server
         #endregion
 
         #region 通知などのブロードキャスト
+        /// <summary>
+        /// このオブジェクトの状態が変わった時に呼ばれます。
+        /// </summary>
+        /// <remarks>
+        /// 状態変化をすべての参加者に通知します。
+        /// </remarks>
+        public void Updated()
+        {
+            using (LazyLock())
+            {
+                var command = new SendVoteRoomInfoCommand
+                {
+                    RoomInfo = Info,
+                };
+
+                foreach (var participant in this.participantList)
+                {
+                    participant.SendCommand(command, true);
+                }
+
+                Log.Info(this,
+                    "VoteRoomの状態をすべての参加者({0})に送信しました。",
+                    this.participantList.Count());
+            }
+        }
+
         /// <summary>
         /// メッセージを登録情報に応じて修正します。
         /// </summary>
@@ -696,106 +721,24 @@ namespace VoteSystem.Server
         }
         #endregion
 
-        #region プロパティ値変更通知
-        private void voteModel_PropertyChanged(object sender,
-                                               PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case "VoteState":
-                    VoteRoomInfoChanged("State");
-                    break;
-                case "VoteMode":
-                    VoteRoomInfoChanged("Mode");
-                    break;
-                case "VoteStartTimeNtp":
-                    VoteRoomInfoChanged("BaseTimeNtp");
-                    break;
-                case "VoteSpan":
-                    VoteRoomInfoChanged("VoteSpan");
-                    break;
-                case "TotalVoteSpan":
-                    VoteRoomInfoChanged("TotalVoteSpan");
-                    break;
-            }
-
-            Log.Trace(this,
-                "VoteModel.{0}: 変更されました。",
-                e.PropertyName);
-        }
-
-        private void VoteRoom_PropertyChanged(object sender,
-                                              PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case "VoteRoomOwner":
-                    VoteRoomInfoChanged("OwnerNo");
-                    break;
-                case "ParticipantList":
-                    VoteRoomInfoChanged("ParticipantList");
-                    break;
-            }
-
-            Log.Trace(this,
-                "VoteRoom.{0}: 変更されました。",
-                e.PropertyName);
-        }
-
-        /// <summary>
-        /// 投票ルームの状態が変更されたときに呼ばれます。
-        /// </summary>
-        private void VoteRoomInfoChanged(string propertyName)
-        {
-            // 全参加者に投票ルームの状態変化を通知します。
-            using (LazyLock())
-            {
-                var info = Info;
-
-                // 指定のプロパティと、その値を取得します。
-                var property = MethodUtil.GetPropertyInfo(
-                    typeof(VoteRoomInfo), propertyName);
-                if (property == null)
-                {
-                    throw new InvalidOperationException(
-                        string.Format(
-                            "'{0}': 指定のプロパティ名は存在しません。",
-                            propertyName));
-                }
-
-                var value = property.GetValue(info, null);
-
-                // 全参加者にプロパティ値の変更を通知します。
-                foreach (var participant in this.participantList)
-                {
-                    participant.SendObjectChangedCommand(
-                        "VoteRoomInfo",
-                        propertyName,
-                        property.PropertyType,
-                        value);
-                }
-            }
-
-            Log.Trace(this,
-                "Info.{0}: 変更されました。",
-                propertyName);
-        }
-        #endregion
-
         /// <summary>
         /// コンストラクタ
         /// </summary>
         public VoteRoom(VoteParticipant voteRoomOwner, int id,
                         string name, string password)
         {
+            // VoteModelのプロパティ値変更は、自動で全参加者に通知します。
             this.voteModel = new VoteModel(this);
+            this.voteModel.AddPropertyChangedHandler(
+                "VoteMode",
+                (_, __) => Updated());
 
+            // TimeKeeperの方は手動で更新します。
+            // そうしないと遅くなるためです。
             this.voteTimeKeeper = new VoteTimeKeeper(this);
-            this.voteTimeKeeper.PropertyChanged += voteModel_PropertyChanged;
             
             this.voterListManager = new VoterListManager();
 
-            this.PropertyChanged += VoteRoom_PropertyChanged;
             this.voteRoomOwner = voteRoomOwner;
             this.id = id;
             this.name = name;

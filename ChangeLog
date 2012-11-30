@@ -1,3 +1,14 @@
+2012-11-30  - Ver 1.1.5.4
+
+	* VoteClient/Model/VoteClient.cs: 投票ルームの状態変化をプロパティ
+	ごとではなく一括で受け取るようにしました。ただし、VoteRoomInfoを再
+	設定すると更新処理が過大になるため、プロパティごとに値を更新してい
+	ます。
+	* VoteProtocol/Protocol.cs: Vote/VoteProtocol.csの内容とマージし、
+	VoteProtocol.csファイルは削除しました。
+	* VoteServer/VoteRoom.cs: 投票ルームの状態変化を、プロパティごとで
+	はなく一括で送信するようにしました。
+
 2012-11-30  - Ver 1.1.5.3
 
 	* VoteServer/VoteRoom.cs: 全参加者に通知を出すとき、個別の通知の送

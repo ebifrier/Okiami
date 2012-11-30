@@ -12,6 +12,7 @@ using Ragnarok.Net.ProtoBuf;
 using Ragnarok.NicoNico.Live;
 using Ragnarok.Shogi;
 using Ragnarok.ObjectModel;
+using Ragnarok.Utility;
 
 namespace VoteSystem.Client.Model
 {
@@ -1177,6 +1178,50 @@ namespace VoteSystem.Client.Model
 
         #region コマンド受信
         /// <summary>
+        /// 投票ルームの状態変更を処理します。
+        /// </summary>
+        private void HandleVoteRoomInfoCommand(
+            object sender, PbCommandEventArgs<SendVoteRoomInfoCommand> e)
+        {
+            var roomInfo = e.Command.RoomInfo;
+            if (roomInfo == null || !roomInfo.Validate())
+            {
+                return;
+            }
+
+            using (LazyLock())
+            {
+                if (VoteRoomInfo == null)
+                {
+                    VoteRoomInfo = roomInfo;
+                }
+                else
+                {
+                    // VoteRoomInfoオブジェクトを直接変更すると
+                    // すべてのプロパティが変更されたことになってしまい、
+                    // サーバーへの通知を含めた無駄な処理がいくつも行われます。
+                    // それを避けるため、ここではプロパティごとに値の設定を行っています。
+                    var propPairList = MethodUtil.GetPropertyDic(typeof(VoteRoomInfo));
+
+                    foreach (var propPair in propPairList)
+                    {
+                        var property = propPair.Value;
+                        if (!property.CanRead || !property.CanWrite)
+                        {
+                            continue;
+                        }
+
+                        // プロパティごとに値を設定します。
+                        var value = property.GetValue(roomInfo);
+                        property.SetValue(this.voteRoomInfo, value);
+                    }
+                }
+
+                Global.InvalidateCommand();
+            }
+        }
+
+        /// <summary>
         /// 投票結果を受信します。
         /// </summary>
         private void HandleVoteResultCommand(
@@ -1190,8 +1235,7 @@ namespace VoteSystem.Client.Model
                 return;
             }
 
-            Global.UIProcess(() =>
-                VoteResult = voteResult);
+            VoteResult = voteResult;
         }
 
         /// <summary>
@@ -1209,29 +1253,6 @@ namespace VoteSystem.Client.Model
             }
 
             OnNotificationReceived(notification);
-        }
-
-        /// <summary>
-        /// オブジェクトのプロパティ変更要求を処理します。
-        /// </summary>
-        private void HandlePropertyChangedCommand(
-            object sender, PbCommandEventArgs<PbPropertyChanged> e)
-        {
-            using (LazyLock())
-            {
-                if (this.voteRoomInfo == null)
-                {
-                    return;
-                }
-
-                // プロパティ値を更新します。
-                Ragnarok.Utility.MethodUtil.SetPropertyValue(
-                    this.voteRoomInfo,
-                    e.Command.PropertyName,
-                    e.Command.PropertyValue);
-
-                Global.InvalidateCommand();
-            }
         }
 
         #region コメンター
@@ -1352,9 +1373,9 @@ namespace VoteSystem.Client.Model
                 ProtocolVersion = ServerSettings.ProtocolVersion,
             };
 
+            conn.AddCommandHandler<SendVoteRoomInfoCommand>(HandleVoteRoomInfoCommand);
             conn.AddCommandHandler<SendVoteResultCommand>(HandleVoteResultCommand);
             conn.AddCommandHandler<NotificationCommand>(HandleNotificationCommand);
-            conn.AddCommandHandler<PbPropertyChanged>(HandlePropertyChangedCommand);
 
             conn.AddCommandHandler<NotifyNewLiveCommand>(HandleNotifyNewLiveCommand);
             conn.AddCommandHandler<NotifyClosedLiveCommand>(HandleNotifyClosedLiveCommand);
