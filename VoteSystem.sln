@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protocol", "Protocol\Protocol.csproj", "{06216C89-D40E-417D-847B-A4D982472D8C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoteProtocol", "VoteProtocol\VoteProtocol.csproj", "{06216C89-D40E-417D-847B-A4D982472D8C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ragnarok", "..\Ragnarok\Ragnarok\Ragnarok.csproj", "{A348968A-DD91-47B4-9420-C7D370A2BE92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{58620A4C-C6BC-43A9-8265-F9CC6743530E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoteServer", "VoteServer\VoteServer.csproj", "{58620A4C-C6BC-43A9-8265-F9CC6743530E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{A1036139-2DAE-4C31-9684-C5A0C5FDFC69}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoteClient", "VoteClient\VoteClient.csproj", "{A1036139-2DAE-4C31-9684-C5A0C5FDFC69}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginShogi", "PluginShogi\PluginShogi.csproj", "{E84BEE5F-09DB-4A00-BE56-8CD578202326}"
 EndProject

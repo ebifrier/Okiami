@@ -524,17 +524,17 @@
       <Project>{A348968A-DD91-47B4-9420-C7D370A2BE92}</Project>
       <Name>Ragnarok</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Client\Client.csproj">
+    <ProjectReference Include="..\VoteClient\VoteClient.csproj">
       <Project>{A1036139-2DAE-4C31-9684-C5A0C5FDFC69}</Project>
-      <Name>Client</Name>
+      <Name>VoteClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\FlintSharp\twoD\FlintSharp.csproj">
       <Project>{CAF419D7-50B7-49F6-9B1A-8E6448339074}</Project>
       <Name>FlintSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Protocol\Protocol.csproj">
+    <ProjectReference Include="..\VoteProtocol\VoteProtocol.csproj">
       <Project>{06216C89-D40E-417D-847B-A4D982472D8C}</Project>
-      <Name>Protocol</Name>
+      <Name>VoteProtocol</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

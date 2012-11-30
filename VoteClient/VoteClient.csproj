@@ -331,9 +331,9 @@
       <Project>{A348968A-DD91-47B4-9420-C7D370A2BE92}</Project>
       <Name>Ragnarok</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Protocol\Protocol.csproj">
+    <ProjectReference Include="..\VoteProtocol\VoteProtocol.csproj">
       <Project>{06216C89-D40E-417D-847B-A4D982472D8C}</Project>
-      <Name>Protocol</Name>
+      <Name>VoteProtocol</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

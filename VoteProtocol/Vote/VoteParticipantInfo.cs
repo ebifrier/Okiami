@@ -133,19 +133,19 @@ namespace VoteSystem.Protocol.Vote
         /// </summary>
         public bool Validate()
         {
-            if (string.IsNullOrEmpty(this.Name))
+            if (string.IsNullOrEmpty(Name))
             {
                 return false;
             }
 
-            if (this.LiveDataList == null)
+            if (LiveDataList == null)
             {
                 return false;
             }
 
             // 放送データはなくてもかまいませんが、もし放送データが
             // 存在する場合、その内容が間違っていれば不正な値とします。
-            if (this.LiveDataList.Any(liveData => !liveData.Validate()))
+            if (LiveDataList.Any(_ => !_.Validate()))
             {
                 return false;
             }
@@ -162,9 +162,9 @@ namespace VoteSystem.Protocol.Vote
         {
             // protobufは、配列の要素数が０だと、
             // nullになることがあります。
-            if (this.LiveDataList == null)
+            if (LiveDataList == null)
             {
-                this.LiveDataList = new LiveData[0];
+                LiveDataList = new LiveData[0];
             }
         }
     }
