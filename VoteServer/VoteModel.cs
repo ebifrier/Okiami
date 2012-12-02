@@ -750,8 +750,8 @@ namespace VoteSystem.Server
             }
 
             // メッセージが投票ルームのオーナーによるものかを判定します。
-            // 通知は放送のコメントすべてが放送主から送られてくるため、
-            // 放送主から送られてきたものだけを特別扱いする必要があります。
+            // 放送のコメントすべてが通知として放送主から送られてくるため、
+            // 放送主から投稿されたものだけを特別扱いする必要があります。
             var isFromVoteRoomOwner = (
                 e.Command.IsFromLiveOwner &&
                 voteRoom.IsRoomOwnerConnection(sender as PbConnection));

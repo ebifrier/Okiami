@@ -574,7 +574,7 @@ namespace VoteSystem.Client.Model
 
                 this.conn.SendRequest(
                     request,
-                    TimeSpan.FromSeconds(5),
+                    TimeSpan.FromSeconds(20),
                     (object sender,
                      PbResponseEventArgs<SetParticipantAttributeResponse> e) =>
                     {
@@ -980,11 +980,22 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public void StopVote()
         {
+            StopVote(TimeSpan.Zero);
+        }
+
+        /// <summary>
+        /// 全投票時間の再設定と、投票の停止を行います。
+        /// </summary>
+        public void StopVote(TimeSpan addTotalTimeSeconds)
+        {
             using (LazyLock())
             {
                 CheckEnteringVoteRoom(true);
 
-                this.conn.SendCommand(new StopVoteCommand());
+                this.conn.SendCommand(new StopVoteCommand
+                {
+                    AddTotalTimeSeconds = addTotalTimeSeconds.TotalSeconds,
+                });
             }
         }
 

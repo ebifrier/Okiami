@@ -989,15 +989,23 @@ namespace VoteSystem.PluginShogi.ViewModel
                     }
 
                     var addTime = dialog.AddLimitTime;
-                    if (addTime != null && addTime.IsUse)
-                    {
-                        voteClient.AddTotalVoteSpan(addTime.TimeSpan);
-                    }
-
-                    // 現局面更新前に投票を停止します。
+                    var addTimeSpan =
+                        (addTime != null && addTime.IsUse ?
+                         addTime.TimeSpan :
+                         TimeSpan.Zero);
+                    
                     if (dialog.IsStopVote)
                     {
-                        voteClient.StopVote();
+                        // 現局面更新前に投票を停止する場合
+                        voteClient.StopVote(addTimeSpan);
+                    }
+                    else
+                    {
+                        // 時間変更のみの場合
+                        if (addTimeSpan != TimeSpan.Zero)
+                        {
+                            voteClient.AddTotalVoteSpan(addTime.TimeSpan);
+                        }
                     }
 
                     // 現局面更新

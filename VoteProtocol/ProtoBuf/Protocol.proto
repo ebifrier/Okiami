@@ -186,6 +186,7 @@ message PauseVoteCommand {
 // 投票を停止します。
 // クライアントからサーバーに送られます。
 message StopVoteCommand {
+	required double AddTotalTimeSeconds = 1;
 }
 
 // 投票時間を設定します。

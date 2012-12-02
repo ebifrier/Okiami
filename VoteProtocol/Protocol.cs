@@ -529,6 +529,13 @@ namespace VoteSystem.Protocol
   {
     public StopVoteCommand() {}
     
+    private double _AddTotalTimeSeconds;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"AddTotalTimeSeconds", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public double AddTotalTimeSeconds
+    {
+      get { return _AddTotalTimeSeconds; }
+      set { _AddTotalTimeSeconds = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
