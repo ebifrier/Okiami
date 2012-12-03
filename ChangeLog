@@ -1,3 +1,11 @@
+2012-12-04  - Ver 1.1.6.2
+
+	* VoteClient/Command/VoteCommands.cs: 通信遅延に関わる処理を消去し
+	ました。
+	* VoteServer/VoteTimeKeeper.cs: 投票開始時と終了時に投票時間と全投
+	票時間を調整するようにしました。具体的には秒以下を切り捨て、最後に
+	通信遅延分の0.3を加算するようにしました。
+
 2012-12-02  - Ver 1.1.6.1
 
 	* PluginShogi/ViewModel/Commands.cs: 投票停止時に一緒に残り時間を追

@@ -17,13 +17,37 @@ namespace VoteSystem.Server
     using VoteSystem.Server.VoteStrategy;
 
     /// <summary>
-    /// 投票の時間管理をを行うオブジェクトです。
+    /// 投票の開始／停止、時間管理などを行うオブジェクトです。
     /// </summary>
     /// <remarks>
-    /// 投票の開始／停止、時間管理などを行います。
+    /// 時間について）
+    /// ・投票時間は全投票時間（持ち時間）以上に設定できません。
+    /// ・投票時間は停止時に秒の小数点数が.3に設定されます。
+    /// ・投票時間／全投票時間は秒の単位でしか、追加・設定できません。
+    /// 
+    /// 理由）
+    /// １、投票時間と全投票時間の小数点数は常に同じ値とするため。
+    /// 　　値が違うと画面表示がずれることがあるため。
+    /// ２、常にコンマ数秒の余裕があるため、２分ジャストの投票時間でも
+    /// 　　各クライアントが「残り２分です」という通知を発行できます。
+    /// 　　その余裕がないと通信遅延のせいで、クライアントからは
+    /// 　　投票時間が１分５９．９秒くらいに見えてしまいます。
+    /// 
+    /// 管理方法）
+    /// 投票時間／全投票時間は、投票開始時刻(これは両者共通)と投票の全期間の
+    /// セットで管理されます。投票残り時間は現在時刻を使い随時計算します。
+    /// 全投票時間は投票状態にかかわりなく一貫して管理されます。
+    /// ・投票中　→　VoteSpanは投票の全期間
+    /// ・停止中　→　VoteSpanは０
+    /// ・一時停止中　→　VoteSpanは投票残り時間。一時停止時に時間が再計算されます。
     /// </remarks>
     public class VoteTimeKeeper : NotifyObject, ILogObject
     {
+        /// <summary>
+        /// 投票時間の既定の端数です。
+        /// </summary>
+        private static readonly double Fraction = 0.3;
+
         private readonly VoteRoom voteRoom;
         private DateTime votePauseTimeNtp = DateTime.MinValue;
         private readonly Timer timer;
@@ -84,10 +108,7 @@ namespace VoteSystem.Server
         [DependOnProperty("VoteSpan")]
         public bool IsVoteNoLimit
         {
-            get
-            {
-                return (VoteSpan == TimeSpan.MaxValue);
-            }
+            get { return (VoteSpan == TimeSpan.MaxValue); }
         }
 
         /// <summary>
@@ -96,45 +117,48 @@ namespace VoteSystem.Server
         [DependOnProperty("TotalVoteSpan")]
         public bool IsTotalVoteNoLimit
         {
-            get
+            get { return (TotalVoteSpan == TimeSpan.MaxValue); }
+        }
+
+        /// <summary>
+        /// 全時間から現在までの経過時間を考慮し、投票残り時間を計算します。
+        /// </summary>
+        private TimeSpan CalcLeaveTime(TimeSpan allSpan)
+        {
+            using (LazyLock())
             {
-                return (TotalVoteSpan == TimeSpan.MaxValue);
+                if (allSpan == TimeSpan.MaxValue)
+                {
+                    return TimeSpan.MaxValue;
+                }
+
+                if (VoteState != VoteState.Voting)
+                {
+                    return allSpan;
+                }
+
+                // 投票終了時刻から現在時刻を減算し、残り時間を出します。
+                var baseTimeNtp = Ragnarok.Net.NtpClient.GetTime();
+                var endTimeNtp = VoteStartTimeNtp + allSpan;
+                return (endTimeNtp - baseTimeNtp);
             }
         }
 
         /// <summary>
-        /// 投票の残り時間を取得します。
+        /// 投票開始からの経過時間を計算します。
         /// </summary>
-        [DependOnProperty("VoteState")]
-        [DependOnProperty("VoteSpan")]
-        public TimeSpan VoteLeaveTime
+        private TimeSpan CalcProgressTime()
         {
-            get
+            using (LazyLock())
             {
-                using (LazyLock())
+                if (VoteState != VoteState.Voting)
                 {
-                    if (VoteSpan == TimeSpan.MaxValue)
-                    {
-                        return TimeSpan.MaxValue;
-                    }
-
-                    // 残り時間を計算します。
-                    var baseTimeNtp = Ragnarok.Net.NtpClient.GetTime();
-                    switch (VoteState)
-                    {
-                        case VoteState.Voting:
-                            // 終了時刻から現在時刻を減算し、残り時間を出します。
-                            var endTimeNtp = VoteStartTimeNtp + VoteSpan;
-                            return (endTimeNtp - baseTimeNtp);
-                        case VoteState.Pause:
-                            return VoteSpan;
-                        case VoteState.Stop:
-                        case VoteState.End:
-                            return TimeSpan.Zero;
-                    }
-
                     return TimeSpan.Zero;
                 }
+
+                // 経過時間 = 現在時刻 - 投票開始時刻
+                var baseTimeNtp = Ragnarok.Net.NtpClient.GetTime();
+                return (baseTimeNtp - VoteStartTimeNtp);
             }
         }
 
@@ -172,6 +196,9 @@ namespace VoteSystem.Server
                             TimeSpan.Zero,
                             MathEx.Min(voteSpan, TotalVoteSpan));
                         VoteState = VoteState.Voting;
+
+                        // 開始前にも投票時間を正規化しておきます。
+                        NormalizeVoteSpan();
                         break;
 
                     case VoteState.Pause:
@@ -229,20 +256,62 @@ namespace VoteSystem.Server
         }
 
         /// <summary>
-        /// 投票終了/停止時に呼ばれます。
+        /// 時間の秒数の小数点以下を切り捨てます。
         /// </summary>
-        private void VoteEnded(VoteState state, TimeSpan subTime)
+        private TimeSpan FloorSeconds(TimeSpan span)
+        {
+            var seconds = span.TotalSeconds;
+            seconds = Math.Floor(seconds);
+
+            return TimeSpan.FromSeconds(seconds);
+        }
+
+        /// <summary>
+        /// 投票時間と全投票時間の秒数の小数点を規定値に合わせます。
+        /// </summary>
+        private void NormalizeVoteSpan()
         {
             using (LazyLock())
             {
+                if (!IsVoteNoLimit && VoteSpan > TimeSpan.Zero)
+                {
+                    var seconds = VoteSpan.TotalSeconds;
+                    seconds = Math.Floor(seconds) + Fraction;
+
+                    VoteSpan = TimeSpan.FromSeconds(seconds);
+                }
+
+                if (!IsTotalVoteNoLimit && TotalVoteSpan > TimeSpan.Zero)
+                {
+                    var seconds = TotalVoteSpan.TotalSeconds;
+                    seconds = Math.Floor(seconds) + Fraction;
+
+                    TotalVoteSpan = TimeSpan.FromSeconds(seconds);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 投票終了/停止時に呼ばれます。
+        /// </summary>
+        private void VoteEnded(VoteState state)
+        {
+            using (LazyLock())
+            {
+                // 全投票の残り時間は状態変更前に取得します。
+                var leaveTime = CalcLeaveTime(TotalVoteSpan);
+
                 VoteSpan = TimeSpan.Zero;
                 VoteState = state;
 
-                // 経過時間だけ投票時間は減ります。
-                if (!IsTotalVoteNoLimit && subTime != TimeSpan.MaxValue)
+                // 全投票時間は減ります。
+                if (!IsTotalVoteNoLimit)
                 {
-                    TotalVoteSpan -= subTime;
+                    TotalVoteSpan = leaveTime;
                 }
+
+                // 全投票時間の秒数を合わせます。
+                NormalizeVoteSpan();
 
                 // 投票終了時に延長要求もクリアします。
                 this.voteRoom.VoteModel.ClearTimeExtendDemand();
@@ -271,13 +340,8 @@ namespace VoteSystem.Server
                     return;
                 }
 
-                // (経過時間 = 投票時間 - 残り時間)だけ全投票時間は減ります。
-                var progressTime =
-                    (VoteSpan != TimeSpan.MaxValue && VoteLeaveTime != TimeSpan.MaxValue
-                    ? VoteSpan - VoteLeaveTime
-                    : TimeSpan.Zero);
-
-                VoteEnded(VoteState.Stop, progressTime);
+                // 経過時間だけ全投票時間は減ります。
+                VoteEnded(VoteState.Stop);
 
                 // 必要なら全投票時間を再設定します。
                 AddTotalVoteSpanInternal(addTotalVoteTimeSpan);
@@ -292,41 +356,39 @@ namespace VoteSystem.Server
         /// 投票時間を追加します。(メッセージは出さない)
         /// </summary>
         /// <remarks>
+        /// 有限時間から無限大時間への変更、またはその逆は
+        /// このメソッドではできません。
+        /// 
         /// 条件）
-        /// ・投票時間は持ち時間以上には設定できない。
+        /// ・投票時間は全投票時間以上には設定できない。
         /// </remarks>
-        private bool AddVoteSpanInternal(TimeSpan diff)
+        private bool AddVoteSpanInternal(TimeSpan addSpan)
         {
             using (LazyLock())
             {
-                var span = VoteSpan;
-
-                // 持ち時間が有限なら、投票時間も有限にしかできません。
-                if (TotalVoteSpan != TimeSpan.MaxValue)
-                {
-                    span = MathEx.Min(span, TotalVoteSpan);
-                }
-
-                // 投票時間が無限なら、時間の増減はできません。
-                if (span == TimeSpan.MaxValue)
+                // 停止中は投票時間を変更できません（必ず０です）
+                if (VoteState == VoteState.Stop || VoteState == VoteState.End)
                 {
                     return false;
                 }
 
-                switch (VoteState)
+                // 時間無限はパス
+                if (IsVoteNoLimit)
                 {
-                    case VoteState.Voting:
-                    case VoteState.Pause:
-                        // 残り時間が０以下なら０にします。
-                        VoteSpan = MathEx.Max(
-                            TimeSpan.Zero,
-                            MathEx.Min(span + diff, TotalVoteSpan));
-                        break;
-
-                    case VoteState.Stop:
-                    case VoteState.End:
-                        return false;
+                    return false;
                 }
+
+                // 投票時間が無限なら、時間の増減はできません。
+                if (addSpan == TimeSpan.MaxValue)
+                {
+                    Log.Error("全投票時間に無限大時間を追加することはできません。");
+                    return false;
+                }
+
+                // 条件:０ <= 投票時間 <= 全投票時間
+                VoteSpan = MathEx.Max(
+                    TimeSpan.Zero,
+                    MathEx.Min(VoteSpan + addSpan, TotalVoteSpan));
 
                 // 投票停止時間を検出するタイマを開始します。
                 AdjustTimer();
@@ -336,9 +398,13 @@ namespace VoteSystem.Server
         }
 
         /// <summary>
-        /// 全投票時間を延長(短縮)します。
+        /// 全投票時間を追加します。
         /// </summary>
-        private bool AddTotalVoteSpanInternal(TimeSpan diff)
+        /// <remarks>
+        /// 有限時間から無限大時間への変更、またはその逆は
+        /// このメソッドではできません。
+        /// </remarks>
+        private bool AddTotalVoteSpanInternal(TimeSpan addSpan)
         {
             using (LazyLock())
             {
@@ -347,11 +413,18 @@ namespace VoteSystem.Server
                     return false;
                 }
 
-                TotalVoteSpan = MathEx.Max(TotalVoteSpan + diff, TimeSpan.Zero);
-                
-                // 持ち時間を変えた後、投票時間を再調整します。
-                AddVoteSpanInternal(TimeSpan.Zero);
+                if (addSpan == TimeSpan.MaxValue)
+                {
+                    Log.Error("全投票時間に無限大時間を追加することはできません。");
+                    return false;
+                }
 
+                // 時間再設定でなければ追加です。
+                TotalVoteSpan = MathEx.Max(
+                    TotalVoteSpan + addSpan, TimeSpan.Zero);
+
+                // 全投票時間を変えた後、投票時間を再調整します。
+                AddVoteSpanInternal(TimeSpan.Zero);
                 return true;
             }
         }
@@ -359,16 +432,25 @@ namespace VoteSystem.Server
         /// <summary>
         /// 投票時間を再設定します。
         /// </summary>
-        public void SetVoteSpan(TimeSpan span)
+        public void SetVoteSpan(TimeSpan newSpan)
         {
-            // 投票時間は投票開始時間(ntp)と全体の長さを元に決定されます。
-            // つまり、残り時間を与えられた時間に合わせるためには
-            // 少し工夫して行う必要があります。
-            // ここでは現在の残り時間と指定の時間を、全体の投票時間に加算する
-            // ことでこの処理を行っています。
-            var leaveTime = VoteLeaveTime; // 現在の残り時間
+            newSpan = FloorSeconds(newSpan);
 
-            if (AddVoteSpanInternal(span - leaveTime))
+            if (newSpan != TimeSpan.MaxValue)
+            {
+                // 投票時間は投票開始時間(ntp)と全体の長さを元に決定されます。
+                // つまり、今の残り時間を指定の時間にするためには
+                // 少し工夫して行う必要があり、
+                // ここでは<現在の残り時間>と<新しい残り時間>の差を、
+                // 全体の投票時間に加算することで実現しています。
+                var leaveTime = CalcLeaveTime(VoteSpan);
+
+                // <新しい残り時間> - <現在の残り時間>
+                // を投票の全期間に足すことで、新しい期間を計算します。
+                newSpan -= leaveTime;
+            }
+
+            if (AddVoteSpanInternal(newSpan))
             {
                 this.voteRoom.Updated();
                 this.voteRoom.BroadcastSystemNotification(
@@ -381,6 +463,8 @@ namespace VoteSystem.Server
         /// </summary>
         public void AddVoteSpan(TimeSpan diff)
         {
+            diff = FloorSeconds(diff);
+
             if (AddVoteSpanInternal(diff))
             {
                 this.voteRoom.Updated();
@@ -392,24 +476,29 @@ namespace VoteSystem.Server
         /// <summary>
         /// 全投票時間を再設定します。
         /// </summary>
-        public void SetTotalVoteSpan(TimeSpan span)
+        public void SetTotalVoteSpan(TimeSpan newSpan)
         {
-            using (LazyLock())
+            newSpan = FloorSeconds(newSpan);
+
+            if (newSpan != TimeSpan.MaxValue)
             {
-                // 無制限投票中なら、全投票時間を有限時間にすることはできません。
-                /*if (IsVoteNoLimit && span != TimeSpan.MaxValue)
-                {
-                    Log.Error(this,
-                        "無制限投票中に全投票時間を有限にすることはできません。");
+                // 投票時間は投票開始時間(ntp)と全体の長さを元に決定されます。
+                // つまり、今の残り時間を指定の時間にするためには
+                // 少し工夫して行う必要があり、
+                // ここでは<現在の残り時間>と<新しい残り時間>の差を、
+                // 全体の投票時間に加算することで実現しています。
+                var leaveTime = CalcLeaveTime(TotalVoteSpan);
 
-                    return;
-                }*/
+                // <新しい残り時間> - <現在の残り時間>
+                // を投票の全期間に足すことで、新しい期間を計算します。
+                newSpan -= leaveTime;
+            }
 
-                TotalVoteSpan = MathEx.Max(span, TimeSpan.Zero);
-
-                // 持ち時間を変えた後、投票時間を再調整します。
-                AddVoteSpanInternal(TimeSpan.Zero);
+            if (AddTotalVoteSpanInternal(newSpan))
+            {
                 this.voteRoom.Updated();
+                this.voteRoom.BroadcastSystemNotification(
+                    SystemNotificationType.ChangeVoteSpan);
             }
         }
 
@@ -418,11 +507,13 @@ namespace VoteSystem.Server
         /// </summary>
         public void AddTotalVoteSpan(TimeSpan diff)
         {
+            diff = FloorSeconds(diff);
+
             if (AddTotalVoteSpanInternal(diff))
             {
-                // 持ち時間を変えた後、投票時間を再調整します。
-                AddVoteSpanInternal(TimeSpan.Zero);
                 this.voteRoom.Updated();
+                this.voteRoom.BroadcastSystemNotification(
+                    SystemNotificationType.ChangeVoteSpan);
             }
         }
 
@@ -435,9 +526,9 @@ namespace VoteSystem.Server
             {
                 // -1秒になったら投票を終了します。
                 if (VoteState == VoteState.Voting &&
-                    VoteLeaveTime < TimeSpan.Zero)
+                    CalcLeaveTime(VoteSpan) < TimeSpan.Zero)
                 {
-                    VoteEnded(VoteState.End, VoteSpan);
+                    VoteEnded(VoteState.End);
 
                     this.voteRoom.Updated();
                     this.voteRoom.BroadcastSystemNotification(
@@ -451,12 +542,15 @@ namespace VoteSystem.Server
         /// </summary>
         public void AdjustTimer()
         {
+            TimeSpan span;
+
             using (LazyLock())
             {
                 switch (VoteState)
                 {
                     case VoteState.Voting:
-                        StartTimer((int)VoteLeaveTime.TotalMilliseconds);
+                        span = CalcLeaveTime(VoteSpan);
+                        StartTimer((int)span.TotalMilliseconds);
                         break;
                     case VoteState.Pause:
                     case VoteState.Stop:

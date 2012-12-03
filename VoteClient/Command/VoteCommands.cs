@@ -412,11 +412,6 @@ namespace VoteSystem.Client.Command
         }
 
         /// <summary>
-        /// データ送信にかかる遅延時間(参考)です。
-        /// </summary>
-        private readonly static TimeSpan FractionTime = TimeSpan.FromSeconds(0.99);
-
-        /// <summary>
         /// ウィンドウから時間間隔を取得します。
         /// </summary>
         private static TimeSpan? GetTimeSpan(TimeSpan defaultValue)
@@ -661,20 +656,6 @@ namespace VoteSystem.Client.Command
         {
             try
             {
-                /*if (Global.VoteClient.VoteState != VoteState.Stop)
-                {
-                    var result = MessageBox.Show(
-                        "投票が停止中ではありませんが\n退室してもいいですか？",
-                        "退室確認",
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Question,
-                        MessageBoxResult.No);
-                    if (result != MessageBoxResult.Yes)
-                    {
-                        return;
-                    }
-                }
-                else*/
                 if (Global.VoteClient.IsVoteRoomOwner)
                 {
                     if (!MessageUtil.Confirm(
@@ -730,10 +711,8 @@ namespace VoteSystem.Client.Command
                     return;
                 }
 
-                // 制限時間を秒が繰り上がらない程度に増やします。
-                // これは2:00ぴったりの投票時間を指定したときに、
-                // 「残り２分です」と読み上げるためなどに必要な処理です。
-                Global.VoteClient.StartVote(timeSpan.Value + FractionTime);
+                // 制限時間を設定します。
+                Global.VoteClient.StartVote(timeSpan.Value);
 
                 // 設定した時間を次回のために保存します。
                 Global.Settings.DefaultVoteSpan = timeSpan.Value;
@@ -823,9 +802,8 @@ namespace VoteSystem.Client.Command
                     return;
                 }
 
-                // 制限時間を秒が繰り上がらない程度に増やします。
-                // (遅延時間分などを余分に追加)
-                Global.VoteClient.SetVoteSpan(timeSpan.Value + FractionTime);
+                // 制限時間を設定します。
+                Global.VoteClient.SetVoteSpan(timeSpan.Value);
 
                 // 設定した時間を次回のために保存します。
                 Global.Settings.SetVoteSpan = timeSpan.Value;
@@ -854,7 +832,6 @@ namespace VoteSystem.Client.Command
                 }
 
                 // 残り時間の追加をします。
-                // (データ送信などにかかる遅延時間は考慮しません)
                 Global.VoteClient.AddVoteSpan(timeSpan.Value);
 
                 // 設定した時間を次回のために保存します。
@@ -883,9 +860,8 @@ namespace VoteSystem.Client.Command
                     return;
                 }
 
-                // 制限時間を秒が繰り上がらない程度に増やします。
-                // (遅延時間分などを余分に追加)
-                Global.VoteClient.SetTotalVoteSpan(timeSpan.Value + FractionTime);
+                // 全制限時間を設定します。
+                Global.VoteClient.SetTotalVoteSpan(timeSpan.Value);
 
                 // 設定した時間を次回のために保存します。
                 Global.Settings.SetTotalVoteSpan = timeSpan.Value;
@@ -914,7 +890,6 @@ namespace VoteSystem.Client.Command
                 }
 
                 // 残り時間の追加をします。
-                // (データ送信などにかかる遅延時間は考慮しません)
                 Global.VoteClient.AddTotalVoteSpan(timeSpan.Value);
 
                 // 設定した時間を次回のために保存します。
