@@ -1,3 +1,9 @@
+2012-12-08  - Ver 1.1.6.3
+
+	* VoteClient/Model/CommenterCommentClient.cs: コメンターのエラー処
+	理などを追加しました。
+	* externals: 不要なファイルを削除しました。
+
 2012-12-04  - Ver 1.1.6.2
 
 	* VoteClient/Command/VoteCommands.cs: 通信遅延に関わる処理を消去し

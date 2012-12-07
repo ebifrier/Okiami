@@ -544,7 +544,8 @@ namespace VoteSystem.Client.Model
                         {
                             callback(this, e);
                         }
-                    });
+                    },
+                    false);
             }
         }
 

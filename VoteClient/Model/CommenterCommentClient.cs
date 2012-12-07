@@ -66,13 +66,8 @@ namespace VoteSystem.Client.Model
     /// </summary>
     public class CommenterCommentClient : NotifyObject
     {
-        private static readonly TimeSpan ErrorInternal = TimeSpan.FromSeconds(120);
-        private CommentClientState state;
-        private CommentClient commentClient;
+        private static readonly TimeSpan ErrorInternal = TimeSpan.FromMinutes(5);
         private PlayerStatus playerStatus;
-        private bool isAllowToConnect = false;
-        private bool isWatching = false;
-        private bool isPostCommentEnabled = false;
         private DateTime lastErrorDateTime = DateTime.Now;
         private DateTime lastCheckTimeToWatch = DateTime.Now;
 
@@ -95,14 +90,8 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public CommentClientState State
         {
-            get
-            {
-                return this.state;
-            }
-            private set
-            {
-                SetValue("State", value, ref this.state);
-            }
+            get { return GetValue<CommentClientState>("State"); }
+            private set { SetValue("State", value); }
         }
 
         /// <summary>
@@ -110,29 +99,8 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public CommentClient CommentClient
         {
-            get
-            {
-                return this.commentClient;
-            }
-            private set
-            {
-                SetValue("CommentClient", value, ref this.commentClient);
-            }
-        }
-
-        /// <summary>
-        /// 放送説明などを取得します。
-        /// </summary>
-        public PlayerStatus PlayerStatus
-        {
-            get
-            {
-                return this.playerStatus;
-            }
-            private set
-            {
-                SetValue("PlayerStatus", value, ref this.playerStatus);
-            }
+            get { return GetValue<CommentClient>("CommentClient"); }
+            private set { SetValue("CommentClient", value); }
         }
 
         /// <summary>
@@ -140,14 +108,8 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public bool IsAllowToConnect
         {
-            get
-            {
-                return this.isAllowToConnect;
-            }
-            set
-            {
-                SetValue("IsAllowToConnect", value, ref this.isAllowToConnect);
-            }
+            get { return GetValue<bool>("IsAllowToConnect"); }
+            set { SetValue("IsAllowToConnect", value); }
         }
 
         /// <summary>
@@ -155,14 +117,8 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public bool IsWatching
         {
-            get
-            {
-                return this.isWatching;
-            }
-            private set
-            {
-                SetValue("IsWatching", value, ref this.isWatching);
-            }
+            get { return GetValue<bool>("IsWatching"); }
+            private set { SetValue("IsWatching", value); }
         }
 
         /// <summary>
@@ -170,14 +126,8 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public bool IsPostCommentEnabled
         {
-            get
-            {
-                return this.isPostCommentEnabled;
-            }
-            private set
-            {
-                SetValue("IsPostCommentEnabled", value, ref this.isPostCommentEnabled);
-            }
+            get { return GetValue<bool>("IsPostCommentEnabled"); }
+            private set { SetValue("IsPostCommentEnabled", value); }
         }
 
         /// <summary>
@@ -264,9 +214,9 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
-        /// オブジェクトの状態を更新し、必要なフィールドも一緒に変更します。
+        /// コメントクライアントを初期化し、オブジェクトの状態も更新します。
         /// </summary>
-        private void SetState(CommentClientState state)
+        private void ResetState(CommentClientState state)
         {
             using (LazyLock())
             {
@@ -315,7 +265,7 @@ namespace VoteSystem.Client.Model
                     commentClient.Disconnected += commentClient_Disconnected;
 
                     // 状態の更新を行います。
-                    SetState(CommentClientState.Connect);
+                    ResetState(CommentClientState.Connect);
                     CommentClient = commentClient;
 
                     SendConnectedCommand();
@@ -326,7 +276,7 @@ namespace VoteSystem.Client.Model
                         "CommenterCommentClient: {0}放送への接続に失敗しました。",
                         LiveId);
 
-                    SetState(CommentClientState.Error);
+                    ResetState(CommentClientState.Error);
                 }
 
                 return true;
@@ -355,7 +305,7 @@ namespace VoteSystem.Client.Model
                 }
 
                 // 接続待ち状態に移行します。
-                SetState(CommentClientState.Wait);
+                ResetState(CommentClientState.Wait);
 
                 SendDisconnectedCommand();
             }
@@ -370,7 +320,7 @@ namespace VoteSystem.Client.Model
             {
                 Disconnect();
 
-                SetState(CommentClientState.Deleted);
+                ResetState(CommentClientState.Deleted);
             }
         }
 
@@ -379,13 +329,13 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public void PostComment(Notification notification)
         {
+            if (notification == null || !notification.Validate())
+            {
+                return;
+            }
+
             using (LazyLock())
             {
-                if (notification == null || !notification.Validate())
-                {
-                    return;
-                }
-
                 if (State != CommentClientState.Connect)
                 {
                     return;
@@ -429,28 +379,34 @@ namespace VoteSystem.Client.Model
 
             try
             {
+                var cc = Global.MainModel.NicoClient.CookieContainer;
                 var now = DateTime.Now;
                 if (now < lastCheckTimeToWatch + TimeSpan.FromSeconds(10))
                 {
                     return;
                 }
 
-                var playerStatus = PlayerStatus;
-                if (playerStatus == null)
+                // PlayerStatusが取れないと、視聴中ではありません。
+                if (this.playerStatus == null)
                 {
-                    IsWatching = false;
-                    return;
+                    this.playerStatus = PlayerStatus.Create(LiveId, cc);
+
+                    // 取得してみて失敗または例外が返ってきたら諦めます。
+                    if (this.playerStatus == null)
+                    {
+                        IsWatching = false;
+                        return;
+                    }
                 }
 
                 // heartbeatを取得します。(失敗時は例外発生)
-                var cc = Global.MainModel.NicoClient.CookieContainer;
-                var heartbeat = Heartbeat.Create(this.LiveId, cc);
+                var heartbeat = Heartbeat.Create(LiveId, cc);
                 // ここまで例外なく来たら、視聴中の可能性があります。
 
                 // 
                 var count = Global.ConnectionCounter.GetCount(
-                    playerStatus.MS.Address,
-                    playerStatus.MS.Port);
+                    this.playerStatus.MS.Address,
+                    this.playerStatus.MS.Port);
                 IsWatching = (count > 0);
             }
             catch (NicoLiveException)
@@ -473,12 +429,6 @@ namespace VoteSystem.Client.Model
             {
                 Disconnect();
                 return false;
-            }
-
-            if (this.playerStatus == null)
-            {
-                var cc = Global.MainModel.NicoClient.CookieContainer;
-                PlayerStatus = PlayerStatus.Create(LiveId, cc);
             }
 
             // コメントの投稿可能状態を更新します。
@@ -548,14 +498,6 @@ namespace VoteSystem.Client.Model
             return false;
         }
 
-        void this_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "IsWatching")
-            {
-                SendCommenterStateChangedCommand();
-            }
-        }
-
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -567,10 +509,14 @@ namespace VoteSystem.Client.Model
                 throw new ArgumentNullException("liveId");
             }
 
-            this.PropertyChanged += this_PropertyChanged;
+            AddPropertyChangedHandler("IsWatching",
+                (_, __) => SendCommenterStateChangedCommand());
 
             LiveId = liveId;
             State = CommentClientState.Wait;
+            IsAllowToConnect = false;
+            IsWatching = false;
+            IsPostCommentEnabled = false;
         }
     }
 }
