@@ -23,8 +23,8 @@ namespace VoteSystem.Protocol
         /// 投票サーバーのアドレスです。
         /// </summary>
         public static readonly string VoteAddress =
-            //"garnet-alice.net";
-            "localhost";
+           "garnet-alice.net";
+            //"localhost";
 
         /// <summary>
         /// コメンターサーバーのアドレスです。
