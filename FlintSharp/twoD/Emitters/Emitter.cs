@@ -228,7 +228,6 @@ namespace FlintSharp.Emitters
         /// <summary>
         /// Used internally and in derived public classes to update the emitter.
         /// </summary>
-        /// <param name="g">Graphics object for drawing</param>
         /// <param name="elapsedTime">The duration, in seconds, of the current frame.</param>
         public void OnUpdateFrame(double elapsedTime)
         {
