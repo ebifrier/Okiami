@@ -74,6 +74,11 @@ namespace VoteSystem.Server
     /// </remarks>
     public class LiveRoom : ILogObject, IDisposable
     {
+        /// <summary>
+        /// ミラーコメントの印です。
+        /// </summary>
+        public const string MirrorCommentMark = ProtocolUtil.MirrorCommentMark;
+
         private readonly object SyncRoot = new object();
         private readonly LiveData liveData;
         private readonly VoteParticipant liveOwner;
@@ -190,7 +195,7 @@ namespace VoteSystem.Server
                 Live = this.liveData,
             };
 
-            participant.SendCommand(command);
+            participant.SendCommand(command, false);
         }
 
         /// <summary>
@@ -317,6 +322,10 @@ namespace VoteSystem.Server
                     SendNotifyClosedLive(participant);
                 }
 
+                Log.Debug(
+                    "NotifyClosedLiveCommandをすべての放送参加者({0})に送信しました。",
+                    this.alreadySentNotifySet.Count());
+
                 foreach (var commenterList in this.commenterSetList)
                 {
                     // イベントだけ外して一斉削除します。
@@ -408,6 +417,10 @@ namespace VoteSystem.Server
             // 文字列部分を置き換えます。
             Notification cloned = notification.Clone();
 
+            // コテハン名がつくため、@と＠を別の文字に置き換えます。
+            cloned.Text = cloned.Text.Replace("@", "\u24D0");
+            cloned.Text = cloned.Text.Replace("＠", "\u24D0");
+
             // 投票コメントの場合、確認コメントなら票部分のみを
             // ミラーコメントなら全部を投稿します。
             if (notification.FromLiveRoom != null &&
@@ -425,12 +438,12 @@ namespace VoteSystem.Server
                 }
 
                 // 先頭に無幅空白を挿入します。
-                cloned.Text = "\u200C! " + text;
+                cloned.Text = MirrorCommentMark + "! " + text;
                 return cloned;
             }
             else
             {
-                cloned.Text = "\u200C!! " + text;
+                cloned.Text = MirrorCommentMark + "!! " + text;
                 return cloned;
             }
         }

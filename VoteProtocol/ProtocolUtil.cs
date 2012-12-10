@@ -136,6 +136,11 @@ namespace VoteSystem.Protocol
         }
 
         /// <summary>
+        /// ミラーコメントの印です。
+        /// </summary>
+        public const string MirrorCommentMark = "\u200C";
+
+        /// <summary>
         /// 必要なら先頭に無幅空白を追加します。
         /// </summary>
         public static string MakeMirrorComment(string text)
@@ -145,7 +150,8 @@ namespace VoteSystem.Protocol
                 return string.Empty;
             }
 
-            return (IsMirrorComment(text) ? "" : "\u200C") + text;
+            var mark = (IsMirrorComment(text) ? "" : MirrorCommentMark);
+            return  (mark + text);
         }
 
         /// <summary>
@@ -158,12 +164,19 @@ namespace VoteSystem.Protocol
                 return false;
             }
 
+            if (text.StartsWith(MirrorCommentMark))
+            {
+                return true;
+            }
+
             // たいていのコメビュではコメントの先頭が'/'であるかどうかで、
             // 読み上げるかどうかを決定しているため、
             // 読み上げたくない場合は先頭に'/'をつける必要があります。
-            // ミラーコメントでそれをしたければ、'/'コメントをミラーとして
-            // 扱うしかありません。
-            return (text[0] == '\u200C' || text[0] == '/');
+            // ミラーコメントに読み上げない設定をつけたければ、
+            // '/'コメントをミラーとして扱うしかありません。
+            // また、'/'コメントにはコマンドも多いので、
+            // 他放送に拡散させないためミラーコメントとして扱っています。
+            return (text[0] == '/');
         }
 
         /// <summary>

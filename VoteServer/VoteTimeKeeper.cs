@@ -651,7 +651,10 @@ namespace VoteSystem.Server
         private void HandleStopVoteCommand(
             object sender, PbCommandEventArgs<StopVoteCommand> e)
         {
-            StopVote();
+            // 変更時間を取得します。
+            var span = TimeSpan.FromSeconds(e.Command.AddTotalTimeSeconds);
+
+            StopVote(span);
         }
 
         /// <summary>

@@ -513,21 +513,21 @@ namespace VoteSystem.Server
         /// 延長要求コマンドの正規表現です。
         /// </summary>
         private static Regex ExtendRegex = new Regex(
-            "^(MOTTOMOTTO|MOTMOT|HOTTOMOTTO|HOTMOT|もっともっと|ほっともっと)(!|！)*",
+            @"^(MOTTOMOTTO|MOTMOT|HOTTOMOTTO|HOTMOT|もっともっと|ほっともっと)(!|！)*",
             RegexOptions.IgnoreCase);
 
         /// <summary>
         /// 時間短縮要求コマンドの正規表現です。
         /// </summary>
         private static Regex StableRegex = new Regex(
-            "^(あ|あっ)?(、)?(もう)?(、)?(けっこうです|結構です|いりません)(。)?",
+            @"^(あ|あっ)?(、)?(もう)?(、)?(けっこうです|かっこうです|結構です|いりません|格好です|月光です)(。)?",
             RegexOptions.IgnoreCase);
 
         /// <summary>
         /// 時間短縮要求コマンドの正規表現です。
         /// </summary>
         private static Regex StableRegex2 = new Regex(
-            "^(主の)?遊びは(ここ|そこ)まで(だ)?(。)?",
+            @"^(主の)?遊びは(ここ|そこ)まで(だ)?(。)?",
             RegexOptions.IgnoreCase);
 
         /// <summary>

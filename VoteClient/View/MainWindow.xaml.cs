@@ -33,17 +33,21 @@ namespace VoteSystem.Client.View
                 var voteClient = Global.VoteClient;
                 if (voteClient != null && voteClient.IsLogined)
                 {
-                    MessageUtil.ErrorMessage(string.Format(
+                    e.Cancel = !MessageUtil.Confirm(string.Format(
                         "投票ルームに入室中です。{0}{0}" +
-                        "一度退室してから、アプリを終了してください。(T▽T)",
-                        Environment.NewLine));
-
-                    e.Cancel = true;
+                        "それでもアプリを終了しますか？ (ﾟｰﾟ*?)",
+                        Environment.NewLine),
+                        "確認");
                 }
             };
 
             Closed += (sender, e) =>
             {
+                if (Global.VoteClient != null)
+                {
+                    Global.VoteClient.Disconnect();
+                }
+
                 Global.StatusBar = null;
                 Global.MainWindow = null;
 
