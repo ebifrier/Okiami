@@ -494,7 +494,7 @@ namespace VoteSystem.Server
 
                 foreach (var participant in this.participantList)
                 {
-                    participant.SendCommand(command, true);
+                    participant.SendCommand(command, false);
                 }
 
                 Log.Info(this,

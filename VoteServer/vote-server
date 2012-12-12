@@ -13,7 +13,7 @@ test -f /usr/sbin/cron || exit 0
 
 #PIDFILE=/var/run/vote-server.pid
 PIDFILE=/tmp/vote-server.pid
-SERVER_DIR=/home/ebifrier/programs/VoteSystem/Server
+SERVER_DIR=/home/ebifrier/programs/VoteSystem/VoteServer
 SERVER=bin/VoteServer.exe
 DAEMON=/usr/bin/mono-service2
 USER=ebifrier
