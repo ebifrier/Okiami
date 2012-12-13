@@ -54,13 +54,25 @@ namespace VoteSystem.Client.View.Control
                 return new List<ParticipantWithVoteRoomInfo>();
             }
 
+            // 自分であると確認するためには、投票ルームとその参加者Noが
+            // 一致する必要があります。
+            var isSameRoom = (voteRoomInfo.Id == Global.VoteClient.VoteRoomId);
+            var myNo = Global.VoteClient.VoteParticipantNo;
+            var offset1 = int.MaxValue / 2;
+            var offset2 = int.MaxValue / 4;
+
             // リストを作成します。
-            return voteRoomInfo.ParticipantList.Select(participant =>
-                new ParticipantWithVoteRoomInfo()
-                {
-                    Participant = participant,
-                    VoteRoom = voteRoomInfo,
-                });
+            return voteRoomInfo.ParticipantList
+                .OrderBy(participant =>
+                    participant.No +
+                    (isSameRoom && participant.No == myNo ? 0 : offset1) +
+                    (participant.LiveDataList.Any() ? 0 : offset2))
+                .Select(participant =>
+                    new ParticipantWithVoteRoomInfo()
+                    {
+                        Participant = participant,
+                        VoteRoom = voteRoomInfo,
+                    });
         }
 
         /// <summary>

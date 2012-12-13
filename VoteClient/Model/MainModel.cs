@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Threading;
-using System.ComponentModel;
 
 using Ragnarok;
 using Ragnarok.Utility;
@@ -279,9 +280,21 @@ namespace VoteSystem.Client.Model
         /// 中継したコメント一覧を取得します。
         /// </summary>
         [DependOnProperty(typeof(VoteClient), "PostCommentList")]
-        public NotifyCollection<PostCommentData> PostCommentList
+        public CollectionView PostCommentList
         {
-            get { return this.voteClient.PostCommentList; }
+            get
+            {
+                var view = (CollectionView)
+                    CollectionViewSource.GetDefaultView(
+                        this.voteClient.PostCommentList);
+
+                view.SortDescriptions.Add(
+                    new SortDescription(
+                        "Timestamp",
+                        ListSortDirection.Descending));
+
+                return view;
+            }
         }
 
         /// <summary>

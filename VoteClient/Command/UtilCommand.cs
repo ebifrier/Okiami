@@ -164,12 +164,41 @@ namespace VoteSystem.Client.Command
                     ExecuteOpenEndRollWindow));
         }
 
+        private static List<Model.VoteClient> voteClients =
+            new List<Model.VoteClient>();
+
         /// <summary>
         /// ネットワークの負荷テストを行います。
         /// </summary>
         private static void ExecuteNetworkProfile(object sender,
                                                   ExecutedRoutedEventArgs e)
         {
+            voteClients.ForEach(_ => _.Disconnect());
+            voteClients.Clear();
+
+            for (var i = 0; i < 100; ++i)
+            {
+                var client = new Model.VoteClient(false);
+
+                client.Connect(
+                    Protocol.ServerSettings.VoteAddress,
+                    Protocol.ServerSettings.VotePort);
+                client.EnterVoteRoom(
+                    0, null, Guid.NewGuid(),
+                    "テストさん" + i,
+                    null,
+                    (_, e_) =>
+                    {
+                        if (e_.ErrorCode == 0)
+                        {
+                            lock (voteClients)
+                            {
+                                voteClients.Add(client);
+                            }
+                        }
+                    });
+            }
+#if false
             const int MaxCount = 50;
             DateTime startTime;
             var count = 0;
@@ -223,6 +252,7 @@ namespace VoteSystem.Client.Command
                     MaxCount,
                     ellapse.TotalMilliseconds,
                     ellapse.TotalMilliseconds / MaxCount));
+#endif
         }
 
         /// <summary>

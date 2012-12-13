@@ -161,10 +161,7 @@ namespace VoteSystem.Server
         [DependOnProperty("VoteRoom")]
         public bool IsEnteringVoteRoom
         {
-            get
-            {
-                return (VoteRoom != null);
-            }
+            get { return (VoteRoom != null); }
         }
 
         /// <summary>
@@ -178,18 +175,18 @@ namespace VoteSystem.Server
         {
             using (LazyLock())
             {
-                if (this.VoteRoom != null)
+                if (VoteRoom != null)
                 {
-                    this.VoteRoom.DisconnectHandlers(this.connection);
+                    VoteRoom.DisconnectHandlers(this.connection);
                 }
 
-                this.VoteRoom = voteRoom;
-                this.No = no;
+                VoteRoom = voteRoom;
+                No = no;
 
                 // 処理ハンドラを設定します。
-                if (this.VoteRoom != null)
+                if (VoteRoom != null)
                 {
-                    this.VoteRoom.ConnectHandlers(this.connection);
+                    VoteRoom.ConnectHandlers(this.connection);
                 }
 
                 // 投票ルームが変わったときは、投票ルーム内の参加者から
@@ -428,6 +425,8 @@ namespace VoteSystem.Server
             PbRequestEventArgs<CreateVoteRoomRequest,
                                CreateVoteRoomResponse> e)
         {
+            VoteRoom voteRoom;
+
             using (LazyLock())
             {
                 // 投票ルームへの未入室確認を行います。
@@ -471,7 +470,7 @@ namespace VoteSystem.Server
                 }
 
                 // 新たに部屋を作成します。
-                var voteRoom = GlobalControl.Instance.CreateVoteRoom(
+                voteRoom = GlobalControl.Instance.CreateVoteRoom(
                     this, e.Request.RoomName, e.Request.Password);
                 if (voteRoom == null)
                 {
@@ -486,17 +485,17 @@ namespace VoteSystem.Server
                     "投票ルームを作成しました。");
 
                 // 名前と画像URLを設定します。
-                this.Id = guid.Value;
-                this.Name = e.Request.OwnerName;
-                this.ImageUrl = e.Request.ImageUrl;
-
-                // レスポンスを返します。
-                e.Response = new CreateVoteRoomResponse()
-                {
-                    RoomInfo = voteRoom.Info,
-                    ParticipantNo = No,
-                };
+                Id = guid.Value;
+                Name = e.Request.OwnerName;
+                ImageUrl = e.Request.ImageUrl;
             }
+
+            // レスポンスを返します。
+            e.Response = new CreateVoteRoomResponse()
+            {
+                RoomInfo = voteRoom.Info,
+                ParticipantNo = No,
+            };
         }
 
         /// <summary>
@@ -507,6 +506,8 @@ namespace VoteSystem.Server
             PbRequestEventArgs<EnterVoteRoomRequest,
                                EnterVoteRoomResponse> e)
         {
+            VoteRoom voteRoom;
+
             // IDを事前にパースします。
             var guid = ProtocolUtil.ParseId(e.Request.ParticipantId);
             if (guid == null)
@@ -540,7 +541,7 @@ namespace VoteSystem.Server
                 }
 
                 // 指定のＩＤを持つ部屋を探します。
-                var voteRoom = GlobalControl.Instance.FindVoteRoom(e.Request.RoomId);
+                voteRoom = GlobalControl.Instance.FindVoteRoom(e.Request.RoomId);
                 if (voteRoom == null)
                 {
                     Log.Error(this,
@@ -552,17 +553,17 @@ namespace VoteSystem.Server
                 }
 
 #if false
-            // 接続切れなどの問題に対応するため、IDチェックは行いません。
-            // 同じルームに同じIDのメンバーが入室することもありえます。
-            if (voteRoom.GetParticipant(guid.Value) != null)
-            {
-                Log.Error(this,
-                    "指定の投票ルームには既に参加しています。(Index = {0})",
-                    e.Request.RoomId);
+                // 接続切れなどの問題に対応するため、IDチェックは行いません。
+                // 同じルームに同じIDのメンバーが入室することもありえます。
+                if (voteRoom.GetParticipant(guid.Value) != null)
+                {
+                    Log.Error(this,
+                        "指定の投票ルームには既に参加しています。(Index = {0})",
+                        e.Request.RoomId);
 
-                e.ErrorCode = ErrorCode.AlreadyEnteredVoteRoom;
-                return;
-            }
+                    e.ErrorCode = ErrorCode.AlreadyEnteredVoteRoom;
+                    return;
+                }
 #endif
 
                 // パスワードが一致するか調べます。
@@ -580,19 +581,23 @@ namespace VoteSystem.Server
                 }
 
                 // 名前と画像URLを設定します。
-                this.Id = guid.Value;
-                this.Name = e.Request.ParticipantName;
-                this.ImageUrl = e.Request.ImageUrl;
-
-                // 所属ルームを設定し、Noなどを設定してもらいます。
-                voteRoom.AddParticipant(this);
-
-                e.Response = new EnterVoteRoomResponse()
-                {
-                    RoomInfo = voteRoom.Info,
-                    ParticipantNo = No,
-                };
+                Id = guid.Value;
+                Name = e.Request.ParticipantName;
+                ImageUrl = e.Request.ImageUrl;
             }
+
+            // lock外でVoteRoomのメソッドを呼びます。
+            // こうしないとロック順序の関係で
+            // (VoteRoomは自分→VoteParticipantの順でロックするが、
+            //  VoteParticipantは自分→VoteRoomの順でロックする)
+            // デッドロックすることがあります。
+            voteRoom.AddParticipant(this);
+
+            e.Response = new EnterVoteRoomResponse()
+            {
+                RoomInfo = voteRoom.Info,
+                ParticipantNo = No,
+            };
         }
         #endregion
 
@@ -638,12 +643,16 @@ namespace VoteSystem.Server
                     e.ErrorCode = error;
                     return;
                 }
-
-                // 投票ルームから削除します。
-                VoteRoom.RemoveParticipant(this);
-
-                e.Response = new LeaveVoteRoomResponse();
             }
+
+            // lock外でVoteRoomのメソッドを呼びます。
+            // こうしないとロック順序の関係で
+            // (VoteRoomは自分→VoteParticipantの順でロックするが、
+            //  VoteParticipantは自分→VoteRoomの順でロックする)
+            // デッドロックすることがあります。
+            VoteRoom.RemoveParticipant(this);
+
+            e.Response = new LeaveVoteRoomResponse();
         }
         #endregion
 

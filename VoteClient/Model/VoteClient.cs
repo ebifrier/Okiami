@@ -1228,9 +1228,9 @@ namespace VoteSystem.Client.Model
                         property.SetValue(this.voteRoomInfo, value);
                     }
                 }
-
-                Global.InvalidateCommand();
             }
+
+            Global.InvalidateCommand();
         }
 
         /// <summary>

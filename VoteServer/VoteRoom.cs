@@ -147,9 +147,9 @@ namespace VoteSystem.Server
                     // パスワードは渡しません。
                     var voteRoomInfo = new VoteRoomInfo()
                     {
-                        Id = this.Id,
-                        Name = this.Name,
-                        HasPassword = this.HasPassword,
+                        Id = Id,
+                        Name = Name,
+                        HasPassword = HasPassword,
                         OwnerNo = ownerId,
                         State = this.voteTimeKeeper.VoteState,
                         Mode = this.voteModel.VoteMode,
@@ -161,8 +161,6 @@ namespace VoteSystem.Server
                         // 放送主を先に表示します。
                         ParticipantList = this.participantList
                             .Select(participant => participant.Info)
-                            .OrderBy(info => info.No +
-                                (info.LiveDataList.Any() ? 0 : int.MaxValue / 2))
                             .ToArray(),
                     };
 
@@ -468,7 +466,7 @@ namespace VoteSystem.Server
             Log.Info(this,
                 "参加者を削除しました。");
 
-            if (this.ParticipantCount == 0)
+            if (ParticipantCount == 0)
             {
                 // 参加者が０になったら、投票ルームを削除します。
                 Close();

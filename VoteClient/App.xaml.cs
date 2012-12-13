@@ -23,6 +23,10 @@ namespace VoteSystem.Client
 
             try
             {
+                /*var s = DateTime.Now.ToString("HH:mm:ss.ffff");
+                Console.Write(s);
+
+                Test();*/
                 Start();
             }
             catch (Exception ex)
@@ -53,6 +57,16 @@ namespace VoteSystem.Client
             // ウィンドウ作成後にプラグインを初期化します。
             Global.InitPlugin();
         }
+
+#if true
+        private void Test()
+        {
+            var data = Ragnarok.Util.ReadFile("protobuf.dump");
+
+            Ragnarok.Net.ProtoBuf.PbUtil.Deserialize(
+                data, typeof(Protocol.SendVoteRoomInfoCommand));
+        }
+#endif
 
         void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
