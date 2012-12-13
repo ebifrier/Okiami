@@ -529,8 +529,12 @@ namespace VoteSystem.PluginShogi.ViewModel
                 var model = new ShogiSettingDialogViewModel();
                 var dialog = new ShogiSettingDialog()
                 {
+                    Owner = ShogiGlobal.MainWindow,
                     DataContext = model,
                 };
+
+                dialog.Loaded += (_, __) =>
+                    dialog.AdjustInDisplay();
 
                 dialog.ShowDialog();
             }
