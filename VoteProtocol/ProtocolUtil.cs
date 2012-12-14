@@ -138,7 +138,7 @@ namespace VoteSystem.Protocol
         /// <summary>
         /// ミラーコメントの印です。
         /// </summary>
-        public const string MirrorCommentMark = "\u200C";
+        public const char MirrorCommentMark = '\u200C';
 
         /// <summary>
         /// 必要なら先頭に無幅空白を追加します。
@@ -150,8 +150,15 @@ namespace VoteSystem.Protocol
                 return string.Empty;
             }
 
-            var mark = (IsMirrorComment(text) ? "" : MirrorCommentMark);
-            return  (mark + text);
+            if (IsMirrorComment(text))
+            {
+                // ミラーコメントならそのまま。
+                return text;
+            }
+            else
+            {
+                return (MirrorCommentMark + text);
+            }
         }
 
         /// <summary>
@@ -164,7 +171,7 @@ namespace VoteSystem.Protocol
                 return false;
             }
 
-            if (text.StartsWith(MirrorCommentMark))
+            if (text[0] == MirrorCommentMark)
             {
                 return true;
             }

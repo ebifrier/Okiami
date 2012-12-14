@@ -1,3 +1,8 @@
+2012-12-15  - Ver 1.1.7.4
+
+	* VoteProtocol/ProtocolUtil.cs: ミラーコメントの判定を変えました。
+	* dist/history.xaml: 更新履歴を更新しました。
+
 2012-12-14  - Ver 1.1.7.3
 
 	* PluginShogi/ViewModel/Commands.cs: 設定ダイアログが画面内に表示さ

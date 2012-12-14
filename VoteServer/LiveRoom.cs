@@ -77,7 +77,7 @@ namespace VoteSystem.Server
         /// <summary>
         /// ミラーコメントの印です。
         /// </summary>
-        public const string MirrorCommentMark = ProtocolUtil.MirrorCommentMark;
+        public const char MirrorCommentMark = ProtocolUtil.MirrorCommentMark;
 
         private readonly object SyncRoot = new object();
         private readonly LiveData liveData;
