@@ -16,7 +16,7 @@ namespace VoteSystem.Protocol.Vote
         /// <summary>
         /// GUIDに変換可能な識別子を取得または設定します。
         /// </summary>
-        [DataMember(Order = 10, IsRequired = true)]
+        //[DataMember(Order = 10, IsRequired = true)]
         public string Id
         {
             get;
@@ -34,7 +34,7 @@ namespace VoteSystem.Protocol.Vote
         }
 
         /// <summary>
-        /// ユーザー名を取得します。
+        /// ユーザー名を取得または設定します。
         /// </summary>
         [DataMember(Order = 2, IsRequired = true)]
         public string Name
@@ -61,10 +61,19 @@ namespace VoteSystem.Protocol.Vote
         }
 
         /// <summary>
-        /// ユーザー画像へのURLを取得します。
+        /// ユーザー画像へのURLを取得または設定します。
+        /// </summary>
+        public string ImageUrl
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// データ通信用に短く符号化された画像URLを取得または設定します。
         /// </summary>
         [DataMember(Order = 3, IsRequired = true)]
-        public string ImageUrl
+        private string EncodedImageUrl
         {
             get;
             set;
@@ -155,16 +164,46 @@ namespace VoteSystem.Protocol.Vote
         }
 
         /// <summary>
+        /// 画像URLを短く符号化するために使われます。
+        /// </summary>
+        private static readonly Dictionary<string, string> ImageUrlTable =
+            new Dictionary<string, string>
+            {
+                {"$", "pack://application:,,,/Resources/Image/koma/"},
+            };
+
+        /// <summary>
+        /// デシリアライズ前に呼ばれます。
+        /// </summary>
+        [OnSerializing()]
+        private void BeforeSeserialize(StreamingContext context)
+        {
+            if (!string.IsNullOrEmpty(ImageUrl))
+            {
+                EncodedImageUrl = ImageUrlTable.Aggregate(
+                    ImageUrl,
+                    (seed, pair) => seed.Replace(pair.Value, pair.Key));
+            }
+        }
+
+        /// <summary>
         /// デシリアライズ後に呼ばれます。
         /// </summary>
         [OnDeserialized()]
-        private void AfterDeserialized(StreamingContext context)
+        private void AfterDeserialize(StreamingContext context)
         {
             // protobufは、配列の要素数が０だと、
             // nullになることがあります。
             if (LiveDataList == null)
             {
                 LiveDataList = new LiveData[0];
+            }
+
+            if (!string.IsNullOrEmpty(EncodedImageUrl))
+            {
+                ImageUrl = ImageUrlTable.Aggregate(
+                    EncodedImageUrl,
+                    (seed, pair) => seed.Replace(pair.Key, pair.Value));
             }
         }
     }

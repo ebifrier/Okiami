@@ -176,9 +176,12 @@ namespace VoteSystem.Client.Command
             voteClients.ForEach(_ => _.Disconnect());
             voteClients.Clear();
 
-            for (var i = 0; i < 100; ++i)
+            for (var i = 0; i < 50; ++i)
             {
-                var client = new Model.VoteClient(false);
+                var client = new Model.VoteClient(false)
+                {
+                    IsShowErrorMessage = false,
+                };
 
                 client.Connect(
                     Protocol.ServerSettings.VoteAddress,
