@@ -507,6 +507,8 @@ namespace VoteSystem.Server
                 };
 
                 var sendData = new PbSendData(command);
+                sendData.Serialize();
+
                 foreach (var participant in this.participantList)
                 {
                     participant.SendData(sendData, false);
