@@ -200,7 +200,7 @@ namespace VoteSystem.Client.Command
                             }
                         }
                     });
-                System.Threading.Thread.Sleep(2000);
+                //System.Threading.Thread.Sleep(2000);
             }
 #if false
             const int MaxCount = 50;

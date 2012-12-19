@@ -506,9 +506,10 @@ namespace VoteSystem.Server
                     RoomInfo = Info,
                 };
 
+                var sendData = new PbSendData(command);
                 foreach (var participant in this.participantList)
                 {
-                    participant.SendCommand(command, false);
+                    participant.SendData(sendData, false);
                 }
 
                 Log.Info(this,

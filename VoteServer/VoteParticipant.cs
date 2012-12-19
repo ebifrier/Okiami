@@ -258,7 +258,7 @@ namespace VoteSystem.Server
 
         #region コマンド送信
         /// <summary>
-        /// 投票結果を送信します。
+        /// コマンドを送信します。
         /// </summary>
         public void SendCommand<T>(T command, bool isOutLog = true)
             where T: class
@@ -274,6 +274,24 @@ namespace VoteSystem.Server
             }
 
             this.connection.SendCommand(command, isOutLog);
+        }
+
+        /// <summary>
+        /// 投票結果を送信します。
+        /// </summary>
+        public void SendData(PbSendData sendData, bool isOutLog = true)
+        {
+            if (sendData == null)
+            {
+                return;
+            }
+
+            if (this.connection == null)
+            {
+                return;
+            }
+
+            this.connection.SendData(sendData, isOutLog);
         }
 
         /// <summary>
