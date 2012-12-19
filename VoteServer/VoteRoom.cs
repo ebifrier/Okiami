@@ -36,7 +36,7 @@ namespace VoteSystem.Server
         private readonly string password;
         private VoteParticipant voteRoomOwner;
         private Thread voteResultThread;
-        private volatile bool isClosed;
+        private int isIntClosed;
 
         /// <summary>
         /// ログ出力用の名前を取得します。
@@ -106,6 +106,14 @@ namespace VoteSystem.Server
         public bool HasPassword
         {
             get { return (this.password != null); }
+        }
+
+        /// <summary>
+        /// ルームが閉じられたかどうか取得します。
+        /// </summary>
+        public bool IsClosed
+        {
+            get { return (this.isIntClosed != 0); }
         }
 
         /// <summary>
@@ -275,7 +283,11 @@ namespace VoteSystem.Server
         /// </summary>
         public void Close()
         {
-            this.isClosed = true;
+            if (Interlocked.Exchange(ref this.isIntClosed, 1) != 0)
+            {
+                // すでに閉じています。
+                return;
+            }
 
             if (this.voteResultThread != null)
             {
@@ -413,9 +425,13 @@ namespace VoteSystem.Server
 
             using (LazyLock())
             {
+                // このメソッドでプロパティが変更されます。
+                // その時参加者一覧を送ることを避けるため、
+                // PropertyChangedなどのイベントは後で設定します。
+                participant.SetVoteRoom(this, NextLiveOwnerId());
+
                 participant.PropertyChanged += participant_PropertyChanged;
                 participant.Disconnected += participant_Disconnected;
-                participant.SetVoteRoom(this, NextLiveOwnerId());
 
                 this.participantList.Add(participant);
 
@@ -445,6 +461,9 @@ namespace VoteSystem.Server
                     return;
                 }
 
+                Log.Info(this,
+                   "参加者を削除しました。");
+
                 // もし投票ルームのオーナーが退出した場合は、
                 // 別の人をオーナーに設定します。
                 if (participant == this.voteRoomOwner)
@@ -462,9 +481,6 @@ namespace VoteSystem.Server
                 // 参加者の変化やオーナーの変更を通知します。
                 Updated();
             }
-
-            Log.Info(this,
-                "参加者を削除しました。");
 
             if (ParticipantCount == 0)
             {
@@ -701,7 +717,7 @@ namespace VoteSystem.Server
         /// </remarks>
         private void UpdateVoteResultLoop()
         {
-            while (!this.isClosed)
+            while (!IsClosed)
             {
                 try
                 {

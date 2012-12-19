@@ -1,6 +1,7 @@
 syntax: glob
 obj/
 bin/
+tmp/
 Client/VoteClient.xml
 Protocol/VoteProtocol.xml
 Server/VoteServer.xml
