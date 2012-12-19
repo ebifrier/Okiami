@@ -938,7 +938,7 @@ namespace VoteSystem.Client.Model
                         var conn = this.conn;
                         if (conn != null)
                         {
-                            conn.Disconnect();
+                            conn.Shutdown();
                         }
                     });
             }
@@ -1336,7 +1336,7 @@ namespace VoteSystem.Client.Model
                     TimeSpan.FromSeconds(30));
                 if (result != PbVersionCheckResult.Ok)
                 {
-                    conn.Disconnect();
+                    conn.Shutdown();
 
                     throw new VersionUnmatchedException(
                         result,

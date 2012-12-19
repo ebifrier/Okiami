@@ -453,10 +453,9 @@ namespace VoteSystem.Client.Command
         }
 
         /// <summary>
-        /// ローカル投票を選択します。
+        /// 新たな投票部屋を作成します。
         /// </summary>
-        public static void ExecuteSelectLocalVote(object sender,
-                                                  ExecutedRoutedEventArgs e)
+        public static void DoCreateVoteRoom(string address, int port)
         {
             if (!ProtocolUtil.CheckVoteRoomName(
                 Global.MainModel.NickName))
@@ -476,12 +475,10 @@ namespace VoteSystem.Client.Command
 
             try
             {
-                Global.VoteClient.Connect(
-                    "localhost",
-                    ServerSettings.VotePort);
+                // 投票サーバーに接続します。
+                Global.VoteClient.Connect(address, port);
 
-                // 投票ルーム名などは設定されていない可能性があるため、
-                // あらかじめ設定してある固定値を使います。
+                // 部屋の作成要求をサーバーに出します。
                 Global.VoteClient.CreateVoteRoom(
                     Global.MainModel.VoteRoomName,
                     Global.MainModel.VoteRoomPassword,
@@ -511,61 +508,25 @@ namespace VoteSystem.Client.Command
         }
 
         /// <summary>
+        /// ローカル投票を選択します。
+        /// </summary>
+        public static void ExecuteSelectLocalVote(object sender,
+                                                  ExecutedRoutedEventArgs e)
+        {
+            DoCreateVoteRoom(
+                "localhost",
+                ServerSettings.VotePort);
+        }
+
+        /// <summary>
         /// 新たな投票部屋を作成します。
         /// </summary>
         public static void ExecuteCreateVoteRoom(object sender,
                                                  ExecutedRoutedEventArgs e)
         {
-            if (!ProtocolUtil.CheckVoteRoomName(
-                Global.MainModel.NickName))
-            {
-                MessageUtil.ErrorMessage(
-                    "ニックネームが正しくありませぬ o(><*)o");
-                return;
-            }
-
-            if (!ProtocolUtil.CheckVoteRoomName(
-                Global.MainModel.VoteRoomName))
-            {
-                MessageUtil.ErrorMessage(
-                    "ルーム名が正しくありませぬ o(><*)o");
-                return;
-            }
-
-            try
-            {
-                // 投票サーバーに接続します。
-                Global.VoteClient.Connect(
-                    ServerSettings.VoteAddress,
-                    ServerSettings.VotePort);
-
-                // 部屋の作成要求をサーバーに出します。
-                Global.VoteClient.CreateVoteRoom(
-                    Global.MainModel.VoteRoomName,
-                    Global.MainModel.VoteRoomPassword,
-                    Global.MainModel.Id,
-                    Global.MainModel.NickName,
-                    Global.MainModel.ImageUrl,
-                    (sender_, e_) =>
-                    {
-                        if (e_.ErrorCode != ErrorCode.None)
-                        {
-                            MessageUtil.ErrorMessage(
-                                e_.ErrorCode,
-                                "投票ルームの作成に失敗しました (≧ヘ≦)");
-                        }
-                        else
-                        {
-                            MessageUtil.Message(
-                                "投票ルームの作成に成功しました (≧∇≦)b");
-                        }
-                    });
-            }
-            catch (Exception ex)
-            {
-                MessageUtil.ErrorMessage(ex,
-                    "投票ルームの作成に失敗しました (≧ヘ≦)");
-            }
+            DoCreateVoteRoom(
+                ServerSettings.VoteAddress,
+                ServerSettings.VotePort);
         }
 
         /// <summary>

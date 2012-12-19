@@ -176,7 +176,7 @@ namespace VoteSystem.Client.Command
             voteClients.ForEach(_ => _.Disconnect());
             voteClients.Clear();
 
-            for (var i = 0; i < 50; ++i)
+            for (var i = 0; i < 100; ++i)
             {
                 var client = new Model.VoteClient(false)
                 {
@@ -200,6 +200,7 @@ namespace VoteSystem.Client.Command
                             }
                         }
                     });
+                System.Threading.Thread.Sleep(2000);
             }
 #if false
             const int MaxCount = 50;
