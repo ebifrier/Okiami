@@ -12,6 +12,9 @@
     <pubDate>${PUB_DATE}</pubDate>
     <item>
       <title>Version ${VERSION}</title>
+      <sparkle:updatePackLink>
+        http://garnet-alice.net/programs/update/UpdatePack.exe
+      </sparkle:updatePackLink>
       <sparkle:releaseNotesLink>
         http://garnet-alice.net/programs/votesystem/update/release_note.html?v=${RAND}
       </sparkle:releaseNotesLink>

@@ -154,12 +154,12 @@ namespace VoteSystem.Client.ViewModel
                         this.voteClient.Disconnect();
                     }
                 }
-                catch (VersionUnmatchedException ex)
+                catch (VersionUnmatchedException)
                 {
                     // アプリのバージョンが低いため、接続できません。
                     Global.UIProcess(() =>
                     {
-                        MessageUtil.ErrorMessage(ex.Message);
+                        //MessageUtil.ErrorMessage(ex.Message);
 
                         VoteRoomInfoList.Clear();
                     });

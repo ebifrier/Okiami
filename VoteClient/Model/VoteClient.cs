@@ -1336,7 +1336,7 @@ namespace VoteSystem.Client.Model
                     TimeSpan.FromSeconds(30));
                 if (result != PbVersionCheckResult.Ok)
                 {
-                    conn.Shutdown();
+                    conn.Disconnect();
 
                     throw new VersionUnmatchedException(
                         result,
