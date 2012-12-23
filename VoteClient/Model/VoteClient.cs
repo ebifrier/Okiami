@@ -1336,7 +1336,7 @@ namespace VoteSystem.Client.Model
                     TimeSpan.FromSeconds(30));
                 if (result != PbVersionCheckResult.Ok)
                 {
-                    conn.Disconnect();
+                    conn.Shutdown();
 
                     throw new VersionUnmatchedException(
                         result,
@@ -1350,7 +1350,11 @@ namespace VoteSystem.Client.Model
 
                 // 既存の接続を切断し、新たな接続を設定します。
                 Disconnect();
+
+                // 切断イベントはここで設定します。
+                // でないとバージョンミスマッチの時も呼ばれてしまいます。
                 this.conn = conn;
+                this.conn.Disconnected += connection_Disconnected;
 
                 VoteRoomInfo = null;
                 VoteParticipantNo = -1;
@@ -1392,8 +1396,6 @@ namespace VoteSystem.Client.Model
             conn.AddCommandHandler<NotifyNewLiveCommand>(HandleNotifyNewLiveCommand);
             conn.AddCommandHandler<NotifyClosedLiveCommand>(HandleNotifyClosedLiveCommand);
             conn.AddCommandHandler<NotificationForPostCommand>(HandleNotificationForPostCommand);
-
-            conn.Disconnected += connection_Disconnected;
 
             Plugin_ConnectHandlers(conn);
             return conn;
