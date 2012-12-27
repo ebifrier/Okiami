@@ -31,21 +31,22 @@ namespace VoteSystem.Client.Model
     /// </summary>
     public class VoteClient : NotifyObject, IDisposable
     {
+        private readonly CommenterManager commenterManager;
         private PbConnection conn = null;
         private bool showErrorMessage = true;        
         private VoteRoomInfo voteRoomInfo = null;
         private int participantNo = -1;
         private VoteResult voteResult = new VoteResult();
-        private readonly CommenterManager commenterManager;
+        private DateTime roomInfoLastUpdated = DateTime.MinValue;
         private bool disposed = false;
 
         /// <summary>
-        /// 通常メッセージの受信時に呼ばれます。
+        /// 通投票サーバーからの通知受信時に呼ばれます。
         /// </summary>
         public event EventHandler<NotificationEventArgs> NotificationReceived;
 
         /// <summary>
-        /// 投票サーバーからのメッセージ受信時に呼ばれます。
+        /// 投票サーバーからの通知受信時に呼ばれます。
         /// </summary>
         public void OnNotificationReceived(Notification notification)
         {
@@ -948,6 +949,33 @@ namespace VoteSystem.Client.Model
 
         #region コマンド送信
         /// <summary>
+        /// 入室中投票ルームの情報取得要求を出します。
+        /// </summary>
+        private void GetVoteRoomInfoFromServer()
+        {
+            using (LazyLock())
+            {
+                CheckEnteringVoteRoom(null);
+
+                // ルーム情報の連続取得を避けるため、
+                // "結果が返ってきていない and 一定時間立っていない"
+                // 間は取得コマンドの送信を行わないようにします。
+                // 結果受信時にroomInfoLastUpdatedはMinValueに設定されます。
+                //
+                // roomInfoLastUpdatedはMinValueの可能性があるため
+                // 加減算ができません＞＜
+                var baseTime = DateTime.Now - TimeSpan.FromSeconds(30);
+                if (baseTime < this.roomInfoLastUpdated)
+                {
+                    return;
+                }
+
+                this.conn.SendCommand(new GetVoteRoomInfoCommand());
+                this.roomInfoLastUpdated = DateTime.Now;
+            }
+        }
+
+        /// <summary>
         /// 投票開始コマンドを送信します。
         /// </summary>
         public void StartVote(TimeSpan voteSpan)
@@ -1190,19 +1218,40 @@ namespace VoteSystem.Client.Model
 
         #region コマンド受信
         /// <summary>
-        /// 投票ルームの状態変更を処理します。
+        /// ParticipantListはサイズが大きいため、設定されていないことがあります。
+        /// </summary>
+        private static bool IgnoreProperty(IPropertyObject property,
+                                           object value)
+        {
+            if (property.Name == "ParticipantList")
+            {
+                var list = value as NotifyCollection<VoteParticipantInfo>;
+                if (list == null || !list.Any())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 入室中のルーム情報をすべて更新します。
         /// </summary>
         private void HandleVoteRoomInfoCommand(
             object sender, PbCommandEventArgs<SendVoteRoomInfoCommand> e)
         {
-            var roomInfo = e.Command.RoomInfo;
-            if (roomInfo == null || !roomInfo.Validate())
-            {
-                return;
-            }
-
             using (LazyLock())
             {
+                // ルーム情報の更新時間はエラーに関係なく設定します。
+                this.roomInfoLastUpdated = DateTime.MinValue;
+
+                var roomInfo = e.Command.RoomInfo;
+                if (roomInfo == null || !roomInfo.Validate())
+                {
+                    return;
+                }
+            
                 if (VoteRoomInfo == null)
                 {
                     VoteRoomInfo = roomInfo;
@@ -1213,24 +1262,99 @@ namespace VoteSystem.Client.Model
                     // すべてのプロパティが変更されたことになってしまい、
                     // サーバーへの通知を含めた無駄な処理がいくつも行われます。
                     // それを避けるため、ここではプロパティごとに値の設定を行っています。
-                    var propPairList = MethodUtil.GetPropertyDic(typeof(VoteRoomInfo));
+                    var updatePropList =
+                        from pair in MethodUtil.GetPropertyDic(typeof(VoteRoomInfo))
+                        let property = pair.Value
+                        where property.CanRead && property.CanWrite
+                        let value = property.GetValue(roomInfo)
+                        // ParticipantListはサイズが大きいため、無視することがあります。
+                        where !IgnoreProperty(property, value)
+                        select new { property, value };
 
-                    foreach (var propPair in propPairList)
-                    {
-                        var property = propPair.Value;
-                        if (!property.CanRead || !property.CanWrite)
-                        {
-                            continue;
-                        }
-
-                        // プロパティごとに値を設定します。
-                        var value = property.GetValue(roomInfo);
-                        property.SetValue(this.voteRoomInfo, value);
-                    }
+                    updatePropList.ForEach(
+                        _ => _.property.SetValue(this.voteRoomInfo, _.value));
                 }
             }
 
             Global.InvalidateCommand();
+        }
+
+        /// <summary>
+        /// 参加者情報の差分を受け取ります。
+        /// </summary>
+        private void HandleChangeParticipantInfoCommand(
+            object sender, PbCommandEventArgs<ChangeParticipantInfoCommand> e)
+        {
+            var op = e.Command.Operation;
+            var info = e.Command.Info;
+            if (info == null || !info.Validate())
+            {
+                Log.Error("ChangeParticipantInfoCommand.Infoが正しくありません。");
+                return;
+            }
+
+            Global.UIProcess(() =>
+                ParticipantListChanged(op, info, e.Command.ListCount));
+        }
+
+        /// <summary>
+        /// 参加者リストの一部を更新します。
+        /// </summary>
+        private void ParticipantListChanged(CollectionOperation op,
+                                            VoteParticipantInfo info,
+                                            int listCount)
+        {
+            using (LazyLock())
+            {
+                var voteRoomInfo = this.voteRoomInfo;
+                if (voteRoomInfo == null)
+                {
+                    // ルーム未入室の場合
+                    return;
+                }
+
+                var participantList = voteRoomInfo.ParticipantList;
+                if (participantList == null)
+                {
+                    return;
+                }
+
+                bool error = false;
+                int index;
+                switch (op)
+                {
+                    case CollectionOperation.CollectionAdd:
+                        participantList.Add(info);
+                        break;
+                    case CollectionOperation.CollectionRemove:
+                        if (!participantList.RemoveIf(_ => _.No == info.No))
+                        {
+                            Log.Error("参加者情報の削除に失敗しました。");
+                            error = true;
+                        }
+                        break;
+                    case CollectionOperation.CollectionReplace:
+                        index = participantList.FindIndex(_ => _.No == info.No);
+                        if (index < 0)
+                        {
+                            Log.Error("参加者情報の置換に失敗しました。");
+                            error = true;
+                        }
+                        else
+                        {
+                            // 参加者情報を置き換えます。
+                            participantList[index] = info;
+                        }
+                        break;
+                }
+
+                // 参加者リストの更新が上手くいかなかった場合は、
+                // リストをすべて更新します。
+                if (error || participantList.Count() != listCount)
+                {
+                    GetVoteRoomInfoFromServer();
+                }
+            }
         }
 
         /// <summary>
@@ -1390,6 +1514,7 @@ namespace VoteSystem.Client.Model
             };
 
             conn.AddCommandHandler<SendVoteRoomInfoCommand>(HandleVoteRoomInfoCommand);
+            conn.AddCommandHandler<ChangeParticipantInfoCommand>(HandleChangeParticipantInfoCommand);
             conn.AddCommandHandler<SendVoteResultCommand>(HandleVoteResultCommand);
             conn.AddCommandHandler<NotificationCommand>(HandleNotificationCommand);
 

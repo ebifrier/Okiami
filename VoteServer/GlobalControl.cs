@@ -76,7 +76,7 @@ namespace VoteSystem.Server
                 lock (this.voteRoomList)
                 {
                     return this.voteRoomList
-                        .Select(room => (room != null ? room.Info : null))
+                        .Select(room => (room != null ? room.GetInfo(true) : null))
                         .ToArray();
                 }
             }

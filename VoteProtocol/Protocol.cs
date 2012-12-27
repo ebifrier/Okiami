@@ -444,6 +444,16 @@ namespace VoteSystem.Protocol
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"GetVoteRoomInfoCommand")]
+  public partial class GetVoteRoomInfoCommand : global::ProtoBuf.IExtensible
+  {
+    public GetVoteRoomInfoCommand() {}
+    
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"SendVoteRoomInfoCommand")]
   public partial class SendVoteRoomInfoCommand : global::ProtoBuf.IExtensible
   {
@@ -455,6 +465,37 @@ namespace VoteSystem.Protocol
     {
       get { return _RoomInfo; }
       set { _RoomInfo = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ChangeParticipantInfoCommand")]
+  public partial class ChangeParticipantInfoCommand : global::ProtoBuf.IExtensible
+  {
+    public ChangeParticipantInfoCommand() {}
+    
+    private VoteSystem.Protocol.CollectionOperation _Operation;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"Operation", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public VoteSystem.Protocol.CollectionOperation Operation
+    {
+      get { return _Operation; }
+      set { _Operation = value; }
+    }
+    private VoteSystem.Protocol.Vote.VoteParticipantInfo _Info;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"Info", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public VoteSystem.Protocol.Vote.VoteParticipantInfo Info
+    {
+      get { return _Info; }
+      set { _Info = value; }
+    }
+    private int _ListCount;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"ListCount", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int ListCount
+    {
+      get { return _ListCount; }
+      set { _ListCount = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -804,6 +845,20 @@ namespace VoteSystem.Protocol
             
       [global::ProtoBuf.ProtoEnum(Name=@"GetAttribute", Value=4)]
       GetAttribute = 4
+    }
+  
+    [global::ProtoBuf.ProtoContract(Name=@"CollectionOperation")]
+    public enum CollectionOperation
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"CollectionAdd", Value=0)]
+      CollectionAdd = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"CollectionRemove", Value=1)]
+      CollectionRemove = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"CollectionReplace", Value=2)]
+      CollectionReplace = 2
     }
   
 }

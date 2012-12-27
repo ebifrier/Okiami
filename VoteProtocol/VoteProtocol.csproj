@@ -65,6 +65,7 @@
     <Compile Include="NotificationColor.cs" />
     <Compile Include="NotificationEventArgs.cs" />
     <Compile Include="NotificationType.cs" />
+    <Compile Include="Protocol.cs" />
     <Compile Include="ProtocolUtil.cs" />
     <Compile Include="SystemNotificationType.cs" />
     <Compile Include="View\EndRollControl.cs" />
@@ -81,7 +82,6 @@
     <Compile Include="ErrorCode.cs" />
     <Compile Include="LiveData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Protocol.cs" />
     <Compile Include="Vote\VoteState.cs" />
     <Compile Include="Vote\VoteResult.cs" />
   </ItemGroup>

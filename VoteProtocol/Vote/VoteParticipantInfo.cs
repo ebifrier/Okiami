@@ -16,7 +16,7 @@ namespace VoteSystem.Protocol.Vote
         /// <summary>
         /// GUIDに変換可能な識別子を取得または設定します。
         /// </summary>
-        //[DataMember(Order = 10, IsRequired = true)]
+        [DataMember(Order = 10, IsRequired = true)]
         public string Id
         {
             get;
@@ -164,7 +164,7 @@ namespace VoteSystem.Protocol.Vote
         }
 
         /// <summary>
-        /// 画像URLを短く符号化するために使われます。
+        /// 画像URLを短く符号化するために使います。
         /// </summary>
         private static readonly Dictionary<string, string> ImageUrlTable =
             new Dictionary<string, string>

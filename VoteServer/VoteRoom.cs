@@ -117,14 +117,6 @@ namespace VoteSystem.Server
         }
 
         /// <summary>
-        /// PropertyChanged用のプロパティです。使わないで下さい。
-        /// </summary>
-        private List<VoteParticipant> ParticipantList
-        {
-            get { return this.participantList; }
-        }
-
-        /// <summary>
         /// 部屋に接続されている参加者の数を取得します。
         /// </summary>
         public int ParticipantCount
@@ -141,39 +133,39 @@ namespace VoteSystem.Server
         /// <summary>
         /// 投票部屋の情報を取得します。
         /// </summary>
-        public VoteRoomInfo Info
+        public VoteRoomInfo GetInfo(bool needList)
         {
-            get
+            using (LazyLock())
             {
-                using (LazyLock())
+                var ownerId = (
+                    this.voteRoomOwner != null ?
+                    this.voteRoomOwner.No :
+                    -1);
+
+                // パスワードは渡しません。
+                var voteRoomInfo = new VoteRoomInfo()
                 {
-                    var ownerId = (
-                        this.voteRoomOwner != null ?
-                        this.voteRoomOwner.No :
-                        -1);
+                    Id = Id,
+                    Name = Name,
+                    HasPassword = HasPassword,
+                    OwnerNo = ownerId,
+                    State = this.voteTimeKeeper.VoteState,
+                    Mode = this.voteModel.VoteMode,
+                    BaseTimeNtp = this.voteTimeKeeper.VoteStartTimeNtp,
+                    VoteSpan = this.voteTimeKeeper.VoteSpan,
+                    TotalVoteSpan = this.voteTimeKeeper.TotalVoteSpan,
+                };
 
-                    // パスワードは渡しません。
-                    var voteRoomInfo = new VoteRoomInfo()
-                    {
-                        Id = Id,
-                        Name = Name,
-                        HasPassword = HasPassword,
-                        OwnerNo = ownerId,
-                        State = this.voteTimeKeeper.VoteState,
-                        Mode = this.voteModel.VoteMode,
-                        BaseTimeNtp = this.voteTimeKeeper.VoteStartTimeNtp,
-                        VoteSpan = this.voteTimeKeeper.VoteSpan,
-                        TotalVoteSpan = this.voteTimeKeeper.TotalVoteSpan,
-
-                        // 投票ルームに参加している各参加者の情報を設定します。
-                        // 放送主を先に表示します。
-                        ParticipantList = this.participantList
-                            .Select(participant => participant.Info)
-                            .ToArray(),
-                    };
-
-                    return voteRoomInfo;
+                if (needList)
+                {
+                    // 投票ルームに参加している各参加者の情報を設定します。
+                    voteRoomInfo.ParticipantList =
+                        new NotifyCollection<VoteParticipantInfo>(
+                            this.participantList
+                            .Select(participant => participant.Info));
                 }
+
+                return voteRoomInfo;
             }
         }
 
@@ -389,7 +381,9 @@ namespace VoteSystem.Server
             {
                 // TODO: これは遅いかも
                 //this.RaisePropertyChanged("ParticipantList");
-                Updated();
+                ParticipantUpdated(
+                    CollectionOperation.CollectionReplace,
+                    participant, false);
             }
         }
 
@@ -436,7 +430,9 @@ namespace VoteSystem.Server
                 this.participantList.Add(participant);
 
                 // 参加者の変化を通知します。
-                Updated();
+                ParticipantUpdated(
+                    CollectionOperation.CollectionAdd,
+                    participant, true);
             }
 
             Log.Info(this,
@@ -479,7 +475,9 @@ namespace VoteSystem.Server
                 participant.SetVoteRoom(null, -1);
 
                 // 参加者の変化やオーナーの変更を通知します。
-                Updated();
+                ParticipantUpdated(
+                    CollectionOperation.CollectionRemove,
+                    participant, true);
             }
 
             if (ParticipantCount == 0)
@@ -492,18 +490,61 @@ namespace VoteSystem.Server
 
         #region 通知などのブロードキャスト
         /// <summary>
-        /// このオブジェクトの状態が変わった時に呼ばれます。
+        /// 参加者の状態が変わった時に呼ばれます。
         /// </summary>
         /// <remarks>
-        /// 状態変化をすべての参加者に通知します。
+        /// 参加者の状態をすべての参加者に通知します。
+        /// </remarks>
+        public void ParticipantUpdated(CollectionOperation op,
+                                       VoteParticipant participant,
+                                       bool exceptSelf)
+        {
+            if (participant == null)
+            {
+                return;
+            }
+
+            using (LazyLock())
+            {
+                var command = new ChangeParticipantInfoCommand
+                {
+                    Operation = op,
+                    Info = participant.Info,
+                    ListCount = this.participantList.Count(),
+                };
+
+                var sendData = new PbSendData(command);
+                foreach (var p in this.participantList)
+                {
+                    if (exceptSelf && ReferenceEquals(participant, p))
+                    {
+                        continue;
+                    }
+
+                    p.SendData(sendData, false);
+                }
+
+                Log.Info(this,
+                    "VoteParticipant(No.{0})の状態変化をすべての参加者({1})に送信しました。",
+                    command.Info.No,
+                    this.participantList.Count());
+            }
+        }
+
+        /// <summary>
+        /// 参加者の状態が変わった時に呼ばれます。
+        /// </summary>
+        /// <remarks>
+        /// 参加者の状態をすべての参加者に通知します。
         /// </remarks>
         public void Updated()
         {
             using (LazyLock())
             {
+                // 参加者一覧は送りません。
                 var command = new SendVoteRoomInfoCommand
                 {
-                    RoomInfo = Info,
+                    RoomInfo = GetInfo(false),
                 };
 
                 var sendData = new PbSendData(command);

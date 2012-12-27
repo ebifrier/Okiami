@@ -511,7 +511,7 @@ namespace VoteSystem.Server
             // レスポンスを返します。
             e.Response = new CreateVoteRoomResponse()
             {
-                RoomInfo = voteRoom.Info,
+                RoomInfo = voteRoom.GetInfo(true),
                 ParticipantNo = No,
             };
         }
@@ -613,7 +613,7 @@ namespace VoteSystem.Server
 
             e.Response = new EnterVoteRoomResponse()
             {
-                RoomInfo = voteRoom.Info,
+                RoomInfo = voteRoom.GetInfo(true),
                 ParticipantNo = No,
             };
         }
@@ -674,6 +674,23 @@ namespace VoteSystem.Server
         }
         #endregion
 
+        #region コマンド処理
+        /// <summary>
+        /// 入室している投票ルームの情報を取得します。
+        /// </summary>
+        private void HandleGetVoteRoomInfoCommand(
+             object sender,
+             PbCommandEventArgs<GetVoteRoomInfoCommand> e)
+        {
+            var voteRoom = VoteRoom;
+
+            SendCommand(new SendVoteRoomInfoCommand
+            {
+                RoomInfo = (voteRoom != null ? voteRoom.GetInfo(true) : null),
+            });
+        }
+        #endregion
+
         /// <summary>
         /// 新しいコネクションを作成します。
         /// </summary>
@@ -719,6 +736,9 @@ namespace VoteSystem.Server
                     HandleLeaveVoteRoomRequest);
 
             // コマンド
+            connection.AddCommandHandler<GetVoteRoomInfoCommand>(
+                HandleGetVoteRoomInfoCommand);
+
             connection.AddCommandHandler<LiveConnectedCommand>(
                 this.liveRoomManager.HandleLiveConnectedAsCommenterCommand);
             connection.AddCommandHandler<LiveDisconnectedCommand>(

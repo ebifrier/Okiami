@@ -30,6 +30,13 @@ enum LiveOperation {
 	GetAttribute = 4;
 }
 
+// コレクションの変化を通知します。
+enum CollectionOperation {
+	CollectionAdd = 0;
+	CollectionRemove = 1;
+	CollectionReplace = 2;
+}
+
 
 ///////////////////////////////////////////////////////////
 //
@@ -148,6 +155,11 @@ message LeaveVoteRoomResponse {
 // コマンドは応答のない指示です。
 //
 
+// 投票ルームの状態を取得します。
+// クライアントからサーバーに送られます。
+message GetVoteRoomInfoCommand {
+}
+
 // 投票ルームの状態が変わった時に送信します。
 // サーバーからクライアントに送られます。
 message SendVoteRoomInfoCommand {
@@ -156,9 +168,11 @@ message SendVoteRoomInfoCommand {
 
 // 投票ルームに入室中の参加者の状態が変わった時に送信します。
 // サーバーからクライアントに送られます。
-/*message SendVoteRoomParticipantListCommand {
-	repeated Vote.VoteRoomParticipantInfo InfoList = 1;
-}*/
+message ChangeParticipantInfoCommand {
+	required CollectionOperation Operation = 1;
+	required Vote.VoteParticipantInfo Info = 2;
+	required int32 ListCount = 3;
+}
 
 // 投票結果を送信します。
 // サーバーからクライアントに送られます。

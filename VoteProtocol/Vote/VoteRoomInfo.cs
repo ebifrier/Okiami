@@ -27,8 +27,8 @@ namespace VoteSystem.Protocol.Vote
         private DateTime baseTimeNtp;
         private TimeSpan totalVoteSpan;
         private TimeSpan voteSpan;
-        private VoteParticipantInfo[] participantList =
-            new VoteParticipantInfo[0];
+        private NotifyCollection<VoteParticipantInfo> participantList =
+            new NotifyCollection<VoteParticipantInfo>();
         private DateTime createTime = DateTime.Now;
 
         /// <summary>
@@ -269,7 +269,7 @@ namespace VoteSystem.Protocol.Vote
         /// Listのみ更新したい場合があるので、privateにしてはいけません。
         /// </remarks>
         [DataMember(Order = 11, IsRequired = true)]
-        public VoteParticipantInfo[] ParticipantList
+        public NotifyCollection<VoteParticipantInfo> ParticipantList
         {
             get
             {
@@ -322,12 +322,12 @@ namespace VoteSystem.Protocol.Vote
                 return false;
             }
 
-            if (this.ParticipantList == null)
+            if (ParticipantList == null)
             {
                 return false;
             }
 
-            if (!this.ParticipantList.All(part => part.Validate()))
+            if (!ParticipantList.All(part => part.Validate()))
             {
                 return false;
             }
@@ -391,7 +391,7 @@ namespace VoteSystem.Protocol.Vote
             // リストは要素数が０だとnullになることがあります。
             if (this.participantList == null)
             {
-                this.participantList = new VoteParticipantInfo[0];
+                this.participantList = new NotifyCollection<VoteParticipantInfo>();
             }
         }
     }

@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Data;
 using System.Globalization;
+
+using Ragnarok;
+using Ragnarok.ObjectModel;
 
 namespace VoteSystem.Client.View.Control
 {
@@ -13,7 +19,7 @@ namespace VoteSystem.Client.View.Control
     /// <summary>
     /// 投票参加者と投票ルームの組となるオブジェクトです。
     /// </summary>
-    public class ParticipantWithVoteRoomInfo
+    public sealed class ParticipantWithVoteRoomInfo
     {
         /// <summary>
         /// 投票参加者の情報を取得または設定します。
@@ -38,7 +44,7 @@ namespace VoteSystem.Client.View.Control
     /// <see cref="VoteRoomInfo"/>から<see cref="ParticipantWithVoteRoomInfo"/>
     /// オブジェクトのリストに変換します。
     /// </summary>
-    [ValueConversion(typeof(VoteRoomInfo), typeof(List<ParticipantWithVoteRoomInfo>))]
+    [ValueConversion(typeof(VoteRoomInfo), typeof(ObservableCollection<ParticipantWithVoteRoomInfo>))]
     public class VoteRoomWithParticipantConverter : IMultiValueConverter
     {
         /// <summary>
@@ -48,12 +54,28 @@ namespace VoteSystem.Client.View.Control
         public object Convert(object[] value, Type targetType,
                               object parameter, CultureInfo culture)
         {
+            var createdList = new ObservableCollection<ParticipantWithVoteRoomInfo>();
+
             var voteRoomInfo = (VoteRoomInfo)value[0];
             if (voteRoomInfo == null)
             {
-                return new List<ParticipantWithVoteRoomInfo>();
+                return createdList;
             }
 
+            voteRoomInfo.ParticipantList.CollectionChanged +=
+                (sender, e) => SetupParticipantList(voteRoomInfo, createdList);
+
+            SetupParticipantList(voteRoomInfo, createdList);
+            return createdList;
+        }
+
+        /// <summary>
+        /// 元のリスト更新時に、変換後のリストも更新します。
+        /// </summary>
+        void SetupParticipantList(
+            VoteRoomInfo voteRoomInfo,
+            ObservableCollection<ParticipantWithVoteRoomInfo> createdList)
+        {
             // 自分であると確認するためには、投票ルームとその参加者Noが
             // 一致する必要があります。
             var isSameRoom = (voteRoomInfo.Id == Global.VoteClient.VoteRoomId);
@@ -61,8 +83,8 @@ namespace VoteSystem.Client.View.Control
             var offset1 = int.MaxValue / 2;
             var offset2 = int.MaxValue / 4;
 
-            // リストを作成します。
-            return voteRoomInfo.ParticipantList
+            // 変換後のリストを作成します。
+            var list = voteRoomInfo.ParticipantList
                 .OrderBy(participant =>
                     participant.No +
                     (isSameRoom && participant.No == myNo ? 0 : offset1) +
@@ -73,6 +95,12 @@ namespace VoteSystem.Client.View.Control
                         Participant = participant,
                         VoteRoom = voteRoomInfo,
                     });
+
+            createdList.Clear();
+            foreach (var item in list)
+            {
+                createdList.Add(item);
+            }
         }
 
         /// <summary>

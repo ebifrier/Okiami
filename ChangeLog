@@ -1,3 +1,21 @@
+2012-12-27  - Ver 1.1.9.1
+
+	* VoteClient/Model/VoteClient.cs: 投票ルームに入室している参加者情
+	報を一括から差分で行うようにしました。
+	* VoteClient/View/Control/VoteRoomWithParticipantConverter.cs: ルー
+	ム入室中の参加者が変わったら、GUIに渡すコレクションも自動で更新され
+	るようにしました。
+	* VoteProtocol/Vote/VoteRoomInfo.cs: ParticipantListを単なるListか
+	らNotifyCollectionに変更しました。リストの動きを監視できるようにす
+	るためです。
+	* VoteServer/VoteParticipant.cs: ルーム情報の受信要求を処理するよう
+	にしました。
+	* VoteServer/VoteRoom.cs: 投票ルーム状態に変化があった場合、今まで
+	はすべてのルーム情報を入室している全参加者に必ず送っていました。参
+	加者の数が増えると送信データの量が巨大化するため、今はルーム情報と
+	参加者情報を適宜分けて送信するようにしました。参加者情報は差分で送
+	られます。
+
 2012-12-23  - Ver 1.1.9.0
 
 	* バージョンを1.1.9に上げました。
