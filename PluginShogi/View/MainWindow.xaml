@@ -144,7 +144,7 @@
             <!-- エンドロールです。-->
             <s:EndRollControl x:Name="endRoll"
                               VoterListGetter="{x:Static l:ShogiGlobal.VoterListGetter}"
-                              Background="#C0000000"
+                              Background="#A0000000"
                               RollTimeSeconds="30"
                               LineHeight="30.0"
                               OpacityLineCount="3"

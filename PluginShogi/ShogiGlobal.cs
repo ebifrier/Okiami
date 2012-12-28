@@ -30,14 +30,9 @@ namespace VoteSystem.PluginShogi
         /// </summary>
         public static void Initialize(ShogiPlugin plugin)
         {
-            Ragnarok.Initializer.Initialize();
+            WpfUtil.InitWpf();
 
-            Ragnarok.Util.SetPropertyChangedCaller(
-                WpfUtil.CallPropertyChanged);
-            Ragnarok.Util.SetColletionChangedCaller(
-                WpfUtil.CallCollectionChanged);
-            Ragnarok.Util.SetEventCaller(
-                WpfUtil.UIProcess);
+            FlintSharp.Utils.ScreenSize = new Size(640, 480);
 
             ShogiPlugin = plugin;
             Settings = Settings.CreateSettings<Settings>();

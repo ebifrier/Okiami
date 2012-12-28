@@ -1581,8 +1581,8 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public VoteClient(bool isUseCommenterManager)
         {
-            Global.PluginLoaded += ((sender, e) =>
-                Plugin_ConnectHandlers(this.conn));
+            Global.PluginLoaded +=
+                (sender, e) => Plugin_ConnectHandlers(this.conn);
             
             if (isUseCommenterManager)
             {

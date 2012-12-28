@@ -207,6 +207,7 @@ namespace VoteSystem.PluginShogi.View
             model.SetBoard(board);
 
             // 音は消します。
+            var oldUseSound = ShogiGlobal.Settings.SD_IsUseEffectSound;
             ShogiGlobal.Settings.SD_IsUseEffectSound = false;
 
             var autoPlay = new AutoPlay(model.Board, AutoPlayType.Redo)
@@ -218,6 +219,15 @@ namespace VoteSystem.PluginShogi.View
             };
             model.StartAutoPlay(autoPlay);
 
+            // エンドロール後は音の設定を元に戻します。
+            RoutedEventHandler handler = null;
+            handler = (_, __) =>
+            {
+                ShogiGlobal.Settings.SD_IsUseEffectSound = oldUseSound;
+                this.endRoll.Stopped -= handler;
+            };
+            this.endRoll.Stopped += handler;
+
             this.endRoll.RollTimeSeconds = (int)total.TotalSeconds;            
             this.endRoll.Play();
         }
@@ -227,6 +237,13 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public void StopEndRoll()
         {
+            var model = ShogiGlobal.ShogiModel;
+            if (model != null)
+            {
+                // 駒の自動再生を止めます。
+                model.StopAutoPlay();
+            }
+
             this.endRoll.Stop();
         }
 

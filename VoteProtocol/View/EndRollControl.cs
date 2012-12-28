@@ -149,6 +149,78 @@ namespace VoteSystem.Protocol.View
                 "Stop",
                 typeof(EndRollControl));
 
+        /// <summary>
+        /// エンドロールの再生開始時に呼ばれるイベントです。
+        /// </summary>
+        public static readonly RoutedEvent StartedEvent =
+            EventManager.RegisterRoutedEvent(
+                "Started", RoutingStrategy.Bubble,
+                typeof(RoutedEventArgs), typeof(EndRollControl));
+        /// <summary>
+        /// エンドロールの一時停止時に呼ばれるイベントです。
+        /// </summary>
+        public static readonly RoutedEvent PausedEvent =
+            EventManager.RegisterRoutedEvent(
+                "Paused", RoutingStrategy.Bubble,
+                typeof(RoutedEventArgs), typeof(EndRollControl));
+        /// <summary>
+        /// エンドロールの停止時に呼ばれるイベントです。
+        /// </summary>
+        public static readonly RoutedEvent StoppedEvent =
+            EventManager.RegisterRoutedEvent(
+                "Stopped", RoutingStrategy.Bubble,
+                typeof(RoutedEventArgs), typeof(EndRollControl));
+
+        /// <summary>
+        /// エンドロールの再生開始時に呼ばれるイベントです。
+        /// </summary>
+        public event RoutedEventHandler Started
+        {
+            add { base.AddHandler(EndRollControl.StartedEvent, value); }
+            remove { base.RemoveHandler(EndRollControl.StartedEvent, value); }
+        }
+        /// <summary>
+        /// エンドロールの一時停止時に呼ばれるイベントです。
+        /// </summary>
+        public event RoutedEventHandler Paused
+        {
+            add { base.AddHandler(EndRollControl.PausedEvent, value); }
+            remove { base.RemoveHandler(EndRollControl.PausedEvent, value); }
+        }
+        /// <summary>
+        /// エンドロールの停止時に呼ばれるイベントです。
+        /// </summary>
+        public event RoutedEventHandler Stopped
+        {
+            add { base.AddHandler(EndRollControl.StoppedEvent, value); }
+            remove { base.RemoveHandler(EndRollControl.StoppedEvent, value); }
+        }
+
+        /// <summary>
+        /// 状態に応じたイベントを発行します。
+        /// </summary>
+        private void RaiseStateEvent(EndRollState state)
+        {
+            RoutedEvent ev = null;
+            switch (state)
+            {
+                case EndRollState.Play:
+                    ev = StartedEvent;
+                    break;
+                case EndRollState.Pause:
+                    ev = PausedEvent;
+                    break;
+                case EndRollState.Stop:
+                    ev = StoppedEvent;
+                    break;
+            }
+
+            if (ev != null)
+            {
+                RaiseEvent(new RoutedEventArgs(ev, this));
+            }
+        }
+
         #region プロパティ
         /// <summary>
         /// フォーマットファイルのパスを示す依存プロパティです。
@@ -272,6 +344,7 @@ namespace VoteSystem.Protocol.View
                     this.state = value;
 
                     WpfUtil.InvalidateCommand();
+                    RaiseStateEvent(value);
                 }
             }
         }

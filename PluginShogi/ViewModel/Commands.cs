@@ -680,7 +680,8 @@ namespace VoteSystem.PluginShogi.ViewModel
                     return;
                 }
 
-                using (var reader = new StreamReader(dialog.FileName))
+                using (var reader = new StreamReader(dialog.FileName,
+                                                     KifuObject.DefaultEncoding))
                 {
                     LoadKif(reader);
                 }

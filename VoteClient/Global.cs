@@ -337,17 +337,9 @@ namespace VoteSystem.Client
         /// </summary>
         public static void Initialize()
         {
-            Ragnarok.Initializer.Initialize();
-
-            Ragnarok.Util.SetPropertyChangedCaller(
-                Ragnarok.Presentation.WpfUtil.CallPropertyChanged);
-            Ragnarok.Util.SetColletionChangedCaller(
-                Ragnarok.Presentation.WpfUtil.CallCollectionChanged);
-            Ragnarok.Util.SetEventCaller(
-                Ragnarok.Presentation.WpfUtil.UIProcess);
+            Ragnarok.Presentation.WpfUtil.InitWpf();
 
             Settings = Settings.CreateSettings<Settings>();
-
             SoundManager = new Model.SoundManager();
             ConnectionCounter = new Model.ConnectionCounter();
             MainModel = new Model.MainModel();
