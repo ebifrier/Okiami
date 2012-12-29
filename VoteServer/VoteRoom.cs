@@ -159,10 +159,12 @@ namespace VoteSystem.Server
                 if (needList)
                 {
                     // 投票ルームに参加している各参加者の情報を設定します。
-                    voteRoomInfo.ParticipantList =
-                        new NotifyCollection<VoteParticipantInfo>(
-                            this.participantList
-                            .Select(participant => participant.Info));
+                    var list = new NotifyCollection<VoteParticipantInfo>();
+                    this.participantList
+                        .Select(_ => _.Info)
+                        .ForEach(_ => list.Add(_));
+
+                    voteRoomInfo.ParticipantList = list;
                 }
 
                 return voteRoomInfo;
