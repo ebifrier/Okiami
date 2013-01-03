@@ -45,9 +45,13 @@ namespace VoteSystem.Protocol.Vote
         /// </summary>
         public override bool Equals(object obj)
         {
-            var other = obj as VoterId;
+            var result = this.PreEquals(obj);
+            if (result.HasValue)
+            {
+                return result.Value;
+            }
 
-            return Equals(other);
+            return Equals(obj as VoterId);
         }
 
         /// <summary>
@@ -104,7 +108,7 @@ namespace VoteSystem.Protocol.Vote
         /// </summary>
         public static bool operator ==(VoterId lhs, VoterId rhs)
         {
-            return Util.GenericClassEquals(lhs, rhs);
+            return Util.GenericEquals(lhs, rhs);
         }
 
         /// <summary>

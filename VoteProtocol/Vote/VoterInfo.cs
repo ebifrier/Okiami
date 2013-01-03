@@ -84,9 +84,13 @@ namespace VoteSystem.Protocol.Vote
         /// </summary>
         public override bool Equals(object obj)
         {
-            var other = obj as VoterInfo;
+            var result = this.PreEquals(obj);
+            if (result.HasValue)
+            {
+                return result.Value;
+            }
 
-            return Equals(other);
+            return Equals(obj as VoterInfo);
         }
 
         /// <summary>
@@ -137,7 +141,7 @@ namespace VoteSystem.Protocol.Vote
         /// </summary>
         public static bool operator ==(VoterInfo lhs, VoterInfo rhs)
         {
-            return Util.GenericClassEquals(lhs, rhs);
+            return Util.GenericEquals(lhs, rhs);
         }
 
         /// <summary>

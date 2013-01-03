@@ -36,9 +36,13 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public override bool Equals(object obj)
         {
-            var other = obj as AddressPort;
+            var result = this.PreEquals(obj);
+            if (result.HasValue)
+            {
+                return result.Value;
+            }
 
-            return Equals(other);
+            return Equals(obj as AddressPort);
         }
 
         /// <summary>
@@ -69,7 +73,7 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public static bool operator ==(AddressPort x, AddressPort y)
         {
-            return Util.GenericClassEquals(x, y);
+            return Util.GenericEquals(x, y);
         }
 
         /// <summary>
