@@ -255,29 +255,22 @@ namespace VoteSystem.PluginShogi
 
         #region 変化を処理
         /// <summary>
-        /// 変化の投稿用コメントを作成します。
+        /// 変化表示のための放送主用コメントを作成します。
         /// このコメントは変化が投稿されたことを周知するために使われます。
         /// </summary>
-        private string MakePostVariationComment(IEnumerable<Move> moveList,
-                                                string name,
-                                                string moveComment)
+        private string MakeOwnerVariationComment(IEnumerable<Move> moveList,
+                                                 string moveComment)
         {
             var result = new StringBuilder(128);
             var model = ShogiGlobal.ShogiModel;
 
             // 以下のようなコメントが作成されます。
-            //   - "変化:　コメント　by Name"
-            //   - "変化:　by Name"
             //   - "変化:　コメント　"
             //   - "変化:　"
             result.Append("変化:　");
             if (!Util.IsWhiteSpaceOnly(moveComment))
             {
                 result.Append(moveComment + "　");
-            }
-            if (!string.IsNullOrEmpty(name))
-            {
-                result.Append("by " + name);
             }
 
             // とりあえず改行します。
@@ -346,9 +339,8 @@ namespace VoteSystem.PluginShogi
 
                 // 分かりやすくするため、再生する変化は一度、
                 // 重要メッセージとして表示します。
-                var postMessage = MakePostVariationComment(
+                var postMessage = MakeOwnerVariationComment(
                     variation.MoveList,
-                    null,
                     variation.Comment);
                 ShogiGlobal.VoteClient.OnNotificationReceived(
                     new Notification()
