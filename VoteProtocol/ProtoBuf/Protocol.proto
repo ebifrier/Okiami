@@ -23,11 +23,11 @@ enum NicoLoginType {
 
 // 放送ルームへの操作IDです。
 enum LiveOperation {
-	None = 0;
-	Add = 1;
-	Remove = 2;
-	SetAttribute = 3;
-	GetAttribute = 4;
+	LiveNone = 0;
+	LiveAdd = 1;
+	LiveRemove = 2;
+	LiveSetAttribute = 3;
+	LiveGetAttribute = 4;
 }
 
 // コレクションの変化を通知します。
@@ -282,6 +282,8 @@ message ShogiSetCurrentBoardCommand {
 message ShogiSendVariationCommand {
 	repeated Ragnarok.Shogi.Move MoveList = 1;
 	required string Note = 2;
+	optional int32 Id = 3;
+	optional int32 NextId = 4;
 }
 
 

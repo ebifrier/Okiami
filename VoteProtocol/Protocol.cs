@@ -774,6 +774,24 @@ namespace VoteSystem.Protocol
       get { return _Note; }
       set { _Note = value; }
     }
+
+    private int _Id = default(int);
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"Id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int Id
+    {
+      get { return _Id; }
+      set { _Id = value; }
+    }
+
+    private int _NextId = default(int);
+    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"NextId", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int NextId
+    {
+      get { return _NextId; }
+      set { _NextId = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -831,20 +849,20 @@ namespace VoteSystem.Protocol
     public enum LiveOperation
     {
             
-      [global::ProtoBuf.ProtoEnum(Name=@"None", Value=0)]
-      None = 0,
+      [global::ProtoBuf.ProtoEnum(Name=@"LiveNone", Value=0)]
+      LiveNone = 0,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"Add", Value=1)]
-      Add = 1,
+      [global::ProtoBuf.ProtoEnum(Name=@"LiveAdd", Value=1)]
+      LiveAdd = 1,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"Remove", Value=2)]
-      Remove = 2,
+      [global::ProtoBuf.ProtoEnum(Name=@"LiveRemove", Value=2)]
+      LiveRemove = 2,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"SetAttribute", Value=3)]
-      SetAttribute = 3,
+      [global::ProtoBuf.ProtoEnum(Name=@"LiveSetAttribute", Value=3)]
+      LiveSetAttribute = 3,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"GetAttribute", Value=4)]
-      GetAttribute = 4
+      [global::ProtoBuf.ProtoEnum(Name=@"LiveGetAttribute", Value=4)]
+      LiveGetAttribute = 4
     }
   
     [global::ProtoBuf.ProtoContract(Name=@"CollectionOperation")]

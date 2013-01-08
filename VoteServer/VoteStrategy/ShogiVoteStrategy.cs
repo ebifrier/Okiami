@@ -245,13 +245,8 @@ namespace VoteSystem.Server.VoteStrategy
                     return null;
                 }
 
-                var text = Util.ReadFile(filepath, Encoding.ASCII);
-                text = (text != null ? text : "");
-
-                // 各行に評価値や名前が入っています。
-                return text.Split(
-                    new[] { "\r\n", "\n", "\r" },
-                    StringSplitOptions.RemoveEmptyEntries);
+                var lines = Util.ReadLines(filepath, Encoding.ASCII);
+                return (lines != null ? lines.ToArray() : new string[0]);
             }
             catch (Exception ex)
             {
@@ -282,15 +277,14 @@ namespace VoteSystem.Server.VoteStrategy
                     return null;
                 }
 
-                // 参加者を参加者一覧に加えます。
+                // 二行目以降は参加者の名前一覧
                 var joiners = lines.Skip(1).ToList();
                 foreach (var name in joiners)
                 {
                     this.voteRoom.VoterListManager.AddModeCustomJoiner(name);
                 }
-
-                // 二行目以降は名前一覧
-                var command = new ShogiSetWhaleClientListCommand()
+                
+                var command = new ShogiSetWhaleClientListCommand
                 {
                     Value = value,
                 };
@@ -422,12 +416,17 @@ namespace VoteSystem.Server.VoteStrategy
 
             // 変化コマンドを処理します。
             var note = string.Empty;
-            var moveList = ParseVariation(notification.Text, out note);
+            var id = -1;
+            var nextId = -1;
+            var moveList = ParseVariation(notification.Text, out note,
+                                          out id, out nextId);
             if (moveList != null)
             {
                 var command = new ShogiSendVariationCommand
                 {
                     Note = note,
+                    Id = id,
+                    NextId = nextId,
                 };
                 command.MoveList.AddRange(moveList);
 
@@ -436,15 +435,48 @@ namespace VoteSystem.Server.VoteStrategy
         }
 
         /// <summary>
+        /// 部分変化を受け入れるための処置です。
+        /// </summary>
+        /// <example>
+        /// 例１
+        /// 76歩34歩56歩54歩
+        /// 
+        /// 例２
+        /// 76歩34歩56歩54歩 これ大丈夫か？
+        /// 
+        /// 例３
+        /// 76歩34歩56歩54歩 $234
+        /// $234 86歩24歩85歩 $235
+        /// $235 25歩 まあええか
+        /// </example>
+        public static readonly Regex PartialVariationRegex = new Regex(
+            @"^\s*(?:[$](\d+)\s+)?\s*([^$]+)\s*(?:[$](\d+))?\s*$");
+
+        /// <summary>
         /// 変化をパースします。
         /// </summary>
-        private List<Move> ParseVariation(string text, out string note)
+        private static List<Move> ParseVariation(string text, out string note,
+                                                 out int id, out int nextId)
         {
+            var m = PartialVariationRegex.Match(text);
+            if (!m.Success)
+            {
+                note = null;
+                id = -1;
+                nextId = -1;
+                return null;
+            }
+
+            id = (m.Groups[1].Success ? int.Parse(m.Groups[1].Value) : -1);
+            nextId = (m.Groups[3].Success ? int.Parse(m.Groups[3].Value) : -1);
+
             // まず、文字列から指し手リストを作成します。
-            var moveList = BoardExtension.MakeMoveList(text, out note);
+            var moveText = m.Groups[2].Value;
+            var moveList = BoardExtension.MakeMoveList(moveText, out note);
 
             // 最短手数以上の変化なら、よしとします。
-            if (moveList != null && moveList.Count() >= 3)
+            if (id >= 0 || nextId >= 0 ||
+                (moveList != null && moveList.Count() >= 3))
             {
                 return moveList;
             }
@@ -464,27 +496,6 @@ namespace VoteSystem.Server.VoteStrategy
                 Vote(move, notification);
                 return;
             }
-        }
-
-        /// <summary>
-        /// 文字列中の空白があるインデックスを取得します。
-        /// </summary>
-        private static int IndexOfWhitespace(string text)
-        {
-            if (string.IsNullOrEmpty(text))
-            {
-                return -1;
-            }
-
-            for (var i = 0; i < text.Length; ++i)
-            {
-                if (char.IsWhiteSpace(text[i]))
-                {
-                    return i;
-                }
-            }
-
-            return -1;
         }
 
         /// <summary>
@@ -518,7 +529,7 @@ namespace VoteSystem.Server.VoteStrategy
             // 文字列を"指し手 + 全角空白 + 残り"となるように再構成します。
             // クライアント側で指し手と残りのメッセージが一意に取り出せる
             // ようにするためです。
-            var whitespaceIndex = IndexOfWhitespace(text);
+            var whitespaceIndex = Util.IndexOfWhitespace(text);
             if (whitespaceIndex >= 0)
             {
                 var moveText = text.Substring(0, whitespaceIndex);
@@ -549,7 +560,7 @@ namespace VoteSystem.Server.VoteStrategy
                 // どうかを区別しています。
                 if (oldPlayer == null || source.Timestamp > oldPlayer.Timestamp)
                 {
-                    AddVoter(player, source, true);
+                    AddVoter(player, source, false);
 
                     Log.Info(this,
                         "プレイヤー='{0}'が参加しました。",
@@ -604,7 +615,7 @@ namespace VoteSystem.Server.VoteStrategy
                     // 票数を更新します。
                     this.moveStatistics.Vote(player, move, source.Timestamp);
 
-                    AddVoter(player, source, false);
+                    AddVoter(player, source, true);
 
                     Log.Info(this,
                         "指し手={0}が受理されました。",
@@ -661,7 +672,8 @@ namespace VoteSystem.Server.VoteStrategy
         /// <summary>
         /// 参加者を登録します。
         /// </summary>
-        private void AddVoter(ShogiPlayer player, Notification source, bool joined)
+        private void AddVoter(ShogiPlayer player, Notification source,
+                              bool isAnonymous)
         {
             lock (SyncRoot)
             {
@@ -669,22 +681,22 @@ namespace VoteSystem.Server.VoteStrategy
                 {
                     LiveSite = LiveSite.NicoNama,
                     Id = player.PlayerId,
-                    Name = (joined ? player.Nickname : string.Empty),
+                    Name = (isAnonymous ? string.Empty : player.Nickname),
                     Skill = player.SkillLevel.ToString(),
                     Color = GetPlayerColor(player.SkillLevel),
                 };
 
-                if (joined)
+                if (isAnonymous)
+                {
+                    // 無名投票者リストに追加します。
+                    this.voteRoom.VoterListManager.AddUnjoinedVoter(voter);
+                }
+                else
                 {
                     // 棋力登録＆参加者登録を行います。
                     this.playerPool.Add(player, source.Timestamp);
 
                     this.voteRoom.VoterListManager.AddJoinedVoter(voter);
-                }
-                else
-                {
-                    // 無名投票者リストに追加します。
-                    this.voteRoom.VoterListManager.AddUnjoinedVoter(voter);
                 }
 
                 // 指し手のポイントが変わることがあります。

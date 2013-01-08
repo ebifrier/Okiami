@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ShogiTimeSpan.cs" />
-    <Compile Include="VariationCommentManager.cs" />
+    <Compile Include="Model\VariationCommentManager.cs" />
     <Compile Include="ViewModel\AutoPlay.cs" />
     <Compile Include="Model\EachStateManager.cs" />
     <Compile Include="ImageType.cs" />

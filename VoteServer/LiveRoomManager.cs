@@ -215,16 +215,16 @@ namespace VoteSystem.Server
 
             switch (e.Request.Operation)
             {
-                case LiveOperation.Add:
+                case LiveOperation.LiveAdd:
                     AddLiveRequest(e);
                     break;
-                case LiveOperation.Remove:
+                case LiveOperation.LiveRemove:
                     RemoveLiveRequest(e);
                     break;
-                case LiveOperation.SetAttribute:
+                case LiveOperation.LiveSetAttribute:
                     SetLiveAttributeRequest(e);
                     break;
-                case LiveOperation.GetAttribute:
+                case LiveOperation.LiveGetAttribute:
                     GetLiveAttributeRequest(e);
                     break;
                 default:
@@ -263,9 +263,9 @@ namespace VoteSystem.Server
 
                 if (e.Request.Attribute == null)
                 {
-                    e.Response = new LiveOperationResponse()
+                    e.Response = new LiveOperationResponse
                     {
-                        Operation = LiveOperation.Add,
+                        Operation = LiveOperation.LiveAdd,
                         LiveData = liveData,
                         Attribute = null,
                     };
@@ -283,9 +283,9 @@ namespace VoteSystem.Server
                     }
                     else
                     {
-                        e.Response = new LiveOperationResponse()
+                        e.Response = new LiveOperationResponse
                         {
-                            Operation = LiveOperation.Add,
+                            Operation = LiveOperation.LiveAdd,
                             LiveData = e.Response.LiveData,
                             Attribute = e.Response.Attribute,
                         };
@@ -312,9 +312,9 @@ namespace VoteSystem.Server
                     return;
                 }
 
-                e.Response = new LiveOperationResponse()
+                e.Response = new LiveOperationResponse
                 {
-                    Operation = LiveOperation.Remove,
+                    Operation = LiveOperation.LiveRemove,
                     LiveData = liveData,
                     Attribute = null,
                 };
@@ -360,9 +360,9 @@ namespace VoteSystem.Server
                 attribute.ConfirmCommentTypeMask,
                 attribute.MirrorCommentTypeMask);
 
-            e.Response = new LiveOperationResponse()
+            e.Response = new LiveOperationResponse
             {
-                Operation = LiveOperation.SetAttribute,
+                Operation = LiveOperation.LiveSetAttribute,
                 LiveData = liveData,
                 Attribute = live.Attribute,
             };
@@ -385,9 +385,9 @@ namespace VoteSystem.Server
                 return;
             }
 
-            e.Response = new LiveOperationResponse()
+            e.Response = new LiveOperationResponse
             {
-                Operation = LiveOperation.GetAttribute,
+                Operation = LiveOperation.LiveGetAttribute,
                 LiveData = liveData,
                 Attribute = live.Attribute,
             };

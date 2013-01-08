@@ -275,7 +275,7 @@ namespace VoteSystem.Client.Model.Live
 
                 // 投票クライアントに放送のIDを設定します。
                 VoteClient.OperateLive(
-                    LiveOperation.Add,
+                    LiveOperation.LiveAdd,
                     liveData,
                     Attribute,
                     LiveConnectedCallback);
@@ -329,7 +329,7 @@ namespace VoteSystem.Client.Model.Live
                 {
                     // 投票クライアントに放送のIDを設定します。
                     VoteClient.OperateLive(
-                        LiveOperation.Remove,
+                        LiveOperation.LiveRemove,
                         liveData,
                         null,
                         LiveDisconnectedCallback);
@@ -375,7 +375,7 @@ namespace VoteSystem.Client.Model.Live
             {
                 // 放送属性を設定します。
                 VoteClient.OperateLive(
-                    LiveOperation.SetAttribute,
+                    LiveOperation.LiveSetAttribute,
                     LiveData,
                     Attribute,
                     LiveAttributeChangedCallback);

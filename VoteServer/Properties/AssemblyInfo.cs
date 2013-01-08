@@ -36,3 +36,10 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 //[assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: InternalsVisibleTo("VoteServer.Test,PublicKey=" +
+    "002400000480000094000000060200000024000052534131000400000100010009dd54d548007a" +
+    "980cfaaa4571bb5279fe6ea6de37a226b42fb1dbaf532a1bdc8eaddabdb01dd2192eabda3a60f5" +
+    "5387a0238247f85458c6497abc1be1d1e3a04a469e054ca4a8988d102580d05b698cdb97477881" +
+    "9ab8ecd3e40511020ad3b79ebbbee34f55c8a36e05b1737dbab771d0367878866c9673ad2fd7c3" +
+    "bbb9daac")]

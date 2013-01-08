@@ -31,6 +31,7 @@ namespace VoteSystem.PluginShogi
     /// </summary>
     public class ShogiPlugin : IPlugin
     {
+        private VariationCommentManager vcManager = new VariationCommentManager();
         private List<string> whaleNameList;
 
         /// <summary>
@@ -217,6 +218,7 @@ namespace VoteSystem.PluginShogi
                 HandleSetWhaleClientListCommand);
         }
 
+        #region エンドロール
         /// <summary>
         /// エンドロールを開始します。
         /// </summary>
@@ -252,6 +254,7 @@ namespace VoteSystem.PluginShogi
             WpfUtil.UIProcess(() =>
                 window.StopEndRoll());
         }
+        #endregion
 
         #region 変化を処理
         /// <summary>
@@ -312,25 +315,19 @@ namespace VoteSystem.PluginShogi
             object sender,
             PbCommandEventArgs<ShogiSendVariationCommand> e)
         {
-            var model = ShogiGlobal.ShogiModel;
-
-            var moveList = e.Command.MoveList;
-            if (moveList == null || !moveList.All(_ => _.Validate()))
-            {
-                return;
-            }
-
-            var variation = Variation.Create(
-                model.CurrentBoard, moveList,
-                e.Command.Note, true);
-            if (variation == null ||
-                variation.MoveList.Count() <= Variation.ShortestMove)
+            var variation = this.vcManager.ProcessMoveList(
+                e.Command.MoveList,
+                e.Command.Note,
+                e.Command.Id,
+                e.Command.NextId);
+            if (variation == null)
             {
                 return;
             }
 
             WpfUtil.UIProcess(() =>
             {
+                var model = ShogiGlobal.ShogiModel;
                 var ret = model.AddVariation(variation, true, true);
                 if (!ret)
                 {

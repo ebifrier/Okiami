@@ -1197,6 +1197,66 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// 指し手をコメント投稿用の文字列に変換します。
+        /// </summary>
+        /// <remarks>
+        /// 指し手が長すぎる場合は分割してコメント投稿します。
+        /// </remarks>
+        private static IEnumerable<string> MakePostComments(IEnumerable<Move> moveList,
+                                                            string comment,
+                                                            int lineMaxLength)
+        {
+            // 一時変数を使っているので、先に配列化しておきます。
+            var index = 0;
+            var nextList = moveList
+                .Select(_ => Stringizer.ToString(_, MoveTextStyle.Simple))
+                .Select(_ => new { Text = _, Index = (index += _.Length) })
+                .ToList();
+
+            var nextId = MathEx.RandInt(1, 9500);
+            var nextMaxLength = lineMaxLength - 6; // 6は最後のID分
+            var isFirst = true;
+            var localComment = (comment ?? string.Empty);
+
+            while (nextList.Any())
+            {
+                var list = nextList.TakeWhile(_ => _.Index < nextMaxLength);
+                nextList = nextList.SkipWhile(_ => _.Index < nextMaxLength).ToList();
+
+                var idText = (isFirst ?
+                    "" : string.Format("${0:D4} ", nextId));
+                var nextIdText = (
+                    !nextList.Any() && string.IsNullOrEmpty(localComment) ?
+                    "" : string.Format(" ${0:D4}", nextId + 1));
+
+                var mainText =
+                    string.Join("", list.Select(_ => _.Text).ToArray());
+                if (!nextList.Any() &&
+                    mainText.Length + localComment.Length < lineMaxLength - 6)
+                {
+                    mainText += "　" + localComment;
+                    localComment = null;
+                }
+
+                yield return string.Format(
+                    "{0}{1}{2}",
+                    idText, mainText, nextIdText);
+
+                nextMaxLength += lineMaxLength - 12; // 12は前後のID分
+                nextId += 1;
+                isFirst = false;
+            }
+
+            // もしコメントが残っていたら、それも送ります。
+            if (!string.IsNullOrEmpty(localComment))
+            {
+                yield return string.Format(
+                    "${0:D4} {1}",
+                    nextId, localComment);
+            }
+        }
+
+        /// <summary>
         /// 変化コメントを投稿します。
         /// </summary>
         public static void DoPostVariationComment()
@@ -1213,27 +1273,23 @@ namespace VoteSystem.PluginShogi.ViewModel
                     return;
                 }
 
-                if (string.IsNullOrEmpty(model.MoveTextFromCurrentBoard))
+                if (!model.MoveFromCurrentBoard.Any())
                 {
                     ShogiGlobal.ErrorMessage(
                         "指し手がありません (/□≦､)");
                     return;
                 }
 
-                var text = string.Format(
-                    "{0}{2}{1}",
-                    model.MoveTextFromCurrentBoard,
-                    model.Comment,
-                    (string.IsNullOrEmpty(model.Comment) ? "" : "　"));
-
                 const int NiconamaMaxCommentLength = 60 - 4;
-                if (text.Length > NiconamaMaxCommentLength)
+                var lines = MakePostComments(
+                    model.MoveFromCurrentBoard,
+                    model.Comment,
+                    NiconamaMaxCommentLength)
+                    .ToArray();
+                if (!lines.Any())
                 {
                     ShogiGlobal.ErrorMessage(
-                        "投稿コメント）{0}{1}{0}{0}文字数制限{0}{2}文字オーバーしてます (/□≦､)",
-                        Environment.NewLine,
-                        text,
-                        text.Length - NiconamaMaxCommentLength);
+                        "投稿用コメントの作成に失敗しました (/□≦､)");
                     return;
                 }
 
@@ -1242,7 +1298,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                     string.Format(
                         "コメント）{0}{1}{0}{0}を投稿します。(*´ω｀*)",
                         Environment.NewLine,
-                        text),
+                        string.Join(Environment.NewLine, lines)),
                     "確認",
                     MessageBoxButton.OKCancel,
                     MessageBoxResult.OK);
@@ -1251,7 +1307,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                     return;
                 }
 
-                commentClient.SendComment(text, "184 ");
+                lines.ForEach(_ => commentClient.SendComment(_, "184 "));
             }
             catch (Exception ex)
             {

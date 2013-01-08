@@ -6,10 +6,8 @@ using System.Text;
 using Ragnarok;
 using Ragnarok.Shogi;
 
-namespace VoteSystem.PluginShogi
+namespace VoteSystem.PluginShogi.Model
 {
-    using Model;
-
     /// <summary>
     /// 投稿された変化の一部分を保持します。
     /// </summary>
@@ -64,11 +62,17 @@ namespace VoteSystem.PluginShogi
             get { return this.nextId; }
         }
 
+        /// <summary>
+        /// 最初の部分変化かどうかを取得します。
+        /// </summary>
         public bool IsHead
         {
             get { return (Id < 0 && NextId >= 0); }
         }
 
+        /// <summary>
+        /// 最後の部分変化かどうかを取得します。
+        /// </summary>
         public bool IsTail
         {
             get { return (NextId < 0); }
@@ -110,37 +114,54 @@ namespace VoteSystem.PluginShogi
         }
 
         /// <summary>
+        /// 部分変化から変化を作成します。
+        /// </summary>
+        private List<PartialVariation> CreateVariationFromPartial(PartialVariation head)
+        {
+            lock (this.pvList)
+            {
+                var result = new List<PartialVariation>();
+                result.Add(head);
+
+                PartialVariation next = null;
+                for (var node = head; !node.IsTail; node = next)
+                {
+                    next = FindPartialVariation(node.NextId);
+                    if (next == null)
+                    {
+                        return null;
+                    }
+
+                    result.Add(next);
+                }
+
+                // 変化完成
+                return result;
+            }
+        }
+
+        /// <summary>
         /// 部分変化を処理します。
         /// </summary>
         private Variation AddPartialVariation(PartialVariation pv)
         {
             lock (this.pvList)
             {
+                // 最初に要素を追加します。
                 this.pvList.Add(pv);
 
                 foreach(var head in this.pvList.Where(_ => _.IsHead))
                 {
-                    var result = new List<PartialVariation>();
-                    result.Add(head);
-
-                    var node = head;
-                    while (true)
+                    var partialList = CreateVariationFromPartial(head);
+                    if (partialList != null)
                     {
-                        var next = FindPartialVariation(node.NextId);
-                        if (next == null)
-                        {
-                            result = null;
-                            break;
-                        }
+                        var variation = CreateVariation(
+                            partialList.SelectMany(_ => _.MoveList),
+                            partialList.Last().Note);
 
-                        if (next.IsTail)
-                        {
-                            result.Add(next);
-                            break;
-                        }
-
-                        result.Add(next);
-                        node = next;
+                        // リストから取り出された部分変化を削除します。
+                        partialList.ForEach(_ => this.pvList.Remove(_));
+                        return variation;
                     }
                 }
 
@@ -149,12 +170,37 @@ namespace VoteSystem.PluginShogi
         }
 
         /// <summary>
+        /// 指し手から変化オブジェクトを作成します。
+        /// </summary>
+        private Variation CreateVariation(IEnumerable<Move> moveList, string note)
+        {
+            var model = ShogiGlobal.ShogiModel;
+            var variation = Variation.Create(
+                model.CurrentBoard,
+                moveList,
+                note, true);
+
+            if (variation == null ||
+                variation.MoveList.Count() <= Variation.ShortestMove)
+            {
+                return null;
+            }
+
+            return variation;
+        }
+
+        /// <summary>
         /// 受信した変化を処理します。
         /// </summary>
-        public Variation ProcessVariation(List<Move> moveList, string note,
-                                          int id, int nextId)
+        public Variation ProcessMoveList(List<Move> moveList, string note,
+                                         int id, int nextId)
         {
             if (moveList == null || !moveList.All(_ => _.Validate()))
+            {
+                return null;
+            }
+
+            if (id >= 0 && id == nextId)
             {
                 return null;
             }
@@ -162,17 +208,7 @@ namespace VoteSystem.PluginShogi
             if (id < 0 && nextId < 0)
             {
                 // この変化のIDも、次変化のIDもない場合は、部分変化ではありません。
-                var model = ShogiGlobal.ShogiModel;
-                var variation = Variation.Create(
-                    model.CurrentBoard, moveList,
-                    note, true);
-                if (variation == null ||
-                    variation.MoveList.Count() <= Variation.ShortestMove)
-                {
-                    return null;
-                }
-
-                return variation;
+                return CreateVariation(moveList, note);
             }
             else
             {

@@ -1,3 +1,15 @@
+2013-01-09  - Ver 1.2.1.1
+
+	* VoteSystem/PluginShogi/ShogiPlugin.cs: 変化コメントの処理をすべて
+	VariationCommentManagerに移譲しました。
+	* PluginShogi/ViewModel/Commands.cs: 長い変化を複数のコメントに分割
+	して投稿するようにしました。
+	* VoteServer/VoteStrategy/ShogiVoteStrategy.cs: 部分変化に対応しま
+	した。具体的には部分変化IDやその次にくる部分変化のIDなどをパースす
+	るようにしました。
+	* PluginShogi/Model/VariationCommentManager.cs: 部分変化の追加、そ
+	の結合などを行うようにしました。
+
 2013-01-05  - Ver 1.2.0.2
 
 	* dist/history.yaml: 更新履歴を更新しました。

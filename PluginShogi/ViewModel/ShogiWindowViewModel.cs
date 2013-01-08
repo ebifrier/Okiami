@@ -122,6 +122,15 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// 現局面からの指し手を取得します。
+        /// </summary>
+        public ReadOnlyCollection<Move> MoveFromCurrentBoard
+        {
+            get { return GetValue<ReadOnlyCollection<Move>>("MoveFromCurrentBoard"); }
+            private set { SetValue("MoveFromCurrentBoard", value); }
+        }
+
+        /// <summary>
         /// 現局面からの指し手を文字列として取得します。
         /// </summary>
         public string MoveTextFromCurrentBoard
@@ -374,12 +383,15 @@ namespace VoteSystem.PluginShogi.ViewModel
         {
             if (moveList == null)
             {
+                MoveFromCurrentBoard = new ReadOnlyCollection<Move>(new Move[0]);
                 MoveTextFromCurrentBoard = null;
                 return;
             }
 
             // 表示されている局面を戻すと現局面と一致するので、
             // 現局面からの指し手を文字列に直します。
+            MoveFromCurrentBoard = new ReadOnlyCollection<Move>(moveList.ToList());
+
             MoveTextFromCurrentBoard = string.Join("",
                 moveList.Select(move =>
                     Stringizer.ToString(move, MoveTextStyle.Simple)));

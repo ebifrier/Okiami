@@ -12,5 +12,6 @@ PluginShogi/Resources/Image/koma/
 _ReSharper.VoteSystem/
 ShogiApp/
 document/
+TestResults/
 syntax: regexp
 dist/VoteClient_[0-9_]+
