@@ -1,3 +1,8 @@
+2013-01-10  - Ver 1.2.1.2
+
+	* VoteServer/VoteStrategy/Tests/ShogiVoteStrategyTest.cs: 
+	ShogiVoteStrategyクラスのテスト用クラスを追加しました。
+
 2013-01-09  - Ver 1.2.1.1
 
 	* VoteSystem/PluginShogi/ShogiPlugin.cs: 変化コメントの処理をすべて

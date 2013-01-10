@@ -449,14 +449,14 @@ namespace VoteSystem.Server.VoteStrategy
         /// $234 86歩24歩85歩 $235
         /// $235 25歩 まあええか
         /// </example>
-        public static readonly Regex PartialVariationRegex = new Regex(
+        private static readonly Regex PartialVariationRegex = new Regex(
             @"^\s*(?:[$](\d+)\s+)?\s*([^$]+)\s*(?:[$](\d+))?\s*$");
 
         /// <summary>
         /// 変化をパースします。
         /// </summary>
-        private static List<Move> ParseVariation(string text, out string note,
-                                                 out int id, out int nextId)
+        public static List<Move> ParseVariation(string text, out string note,
+                                                out int id, out int nextId)
         {
             var m = PartialVariationRegex.Match(text);
             if (!m.Success)
