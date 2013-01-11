@@ -1,3 +1,7 @@
+2013-01-11  - Ver 1.2.1.3
+
+	* 通信プロトコルのバージョンを上げました。
+
 2013-01-10  - Ver 1.2.1.2
 
 	* VoteServer/VoteStrategy/Tests/ShogiVoteStrategyTest.cs: 

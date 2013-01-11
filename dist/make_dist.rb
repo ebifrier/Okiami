@@ -104,7 +104,7 @@ def build(distpath, output)
   end
   
   # ビルドコマンドを実行します。
-  path_command = "call e:\\Dropbox\\bin\\path-vc10"
+  path_command = "call \"%VS100COMNTOOLS%vsvars32.bat\""
   build_command =
     "msbuild /nologo \"#{sln}\" /t:Rebuild /p:DefineConstants=\"CLR_V4;PUBLISHED\" " +
     "/p:OutputPath=\"#{output}\" /p:Configuration=Release"
@@ -122,6 +122,8 @@ def setup_dist(output)
   
   Dir.glob(File.join(output, "*")).each do |name|
     if /\.(pdb|xml)$/i =~ name
+      deleteall(name)
+    elsif /nunit\.framework\./ =~ name
       deleteall(name)
     elsif /Plugin\w*\.dll$/i =~ name
       FileUtils.mv(name, File.join(output, "Plugin", File.basename(name)))
