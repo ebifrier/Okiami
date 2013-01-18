@@ -4,34 +4,20 @@
 #
 
 require 'fileutils'
+require 'make_release'
 
 $HtmlBasePath = "E:/Dropbox/NicoNico/homepage/public_html/programs/votesystem"
 
-#
-# クライアントのバージョンを取得します。
-#
-def get_client_version(distpath)
-  filepath = File.join(distpath, "..", "VoteClient", "Properties", "AssemblyInfo.cs")
-  str = File.open(filepath).read
-  
-  if /\[assembly: AssemblyVersion\("([\d\.]+)"\)\]/ =~ str then
-    version = $1
-  else
-    puts "Not found client's assembly version."
-    exit(-1)
-  end
-end
-
 # このスクリプトのパスは $basepath/dist/xxx.rb となっています。
-distpath = File.dirname(File.expand_path($0))
+dist_path = File.dirname(File.expand_path($0))
 
 # 出力ディレクトリ名
-version = get_client_version(distpath)
-version_ = version.gsub(".", "_")
-zipname = "VoteClient_" + version_ + ".zip"
+assemblyinfo_path = File.join(dist_path,
+  "..", "VoteClient", "Properties", "AssemblyInfo.cs")
+appdata = AppData.new("votesystem", dist_path, assemblyinfo_path, nil)
 
 # 必要なファイルをコピーします。
-FileUtils.copy(File.join(distpath, zipname), File.join($HtmlBasePath, "download"))
-FileUtils.copy(File.join(distpath, "VoteClient.html"), File.join($HtmlBasePath, "download"))
-FileUtils.copy(File.join(distpath, "release_note.html"), File.join($HtmlBasePath, "update"))
-FileUtils.copy(File.join(distpath, "versioninfo.xml"), File.join($HtmlBasePath, "update"))
+FileUtils.copy(appdata.zip_path, File.join($HtmlBasePath, "download"))
+FileUtils.copy(appdata.versioninfo_path, File.join($HtmlBasePath, "update"))
+FileUtils.copy(appdata.releasenote_path, File.join($HtmlBasePath, "update"))
+FileUtils.copy(File.join(dist_path, "VoteClient.html"), File.join($HtmlBasePath, "download"))
