@@ -46,9 +46,6 @@ namespace VoteSystem.Client
             // 静的オブジェクトの初期化を行います。
             Global.Initialize();
 
-            // 更新作業の開始
-            UpdateChecker.CheckUpdate();
-
             // ウィンドウを作成します。
             var controlWindow = new View.MainWindow();
             controlWindow.Show();

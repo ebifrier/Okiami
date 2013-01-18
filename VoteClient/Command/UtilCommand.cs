@@ -39,6 +39,14 @@ namespace VoteSystem.Client.Command
                 "SendErrorLog",
                 typeof(Window));
         /// <summary>
+        /// 新バージョンの確認を行います。
+        /// </summary>
+        public readonly static ICommand CheckToUpdate =
+            new RoutedUICommand(
+                "新バージョンの確認を行います。",
+                "CheckToUpdate",
+                typeof(Window));
+        /// <summary>
         /// バージョンを表示します。
         /// </summary>
         public readonly static ICommand ShowVersion =
@@ -128,6 +136,10 @@ namespace VoteSystem.Client.Command
                 new CommandBinding(
                     Commands.SendErrorLog,
                     ExecuteSendErrorLog));
+            bindings.Add(
+                new CommandBinding(
+                    Commands.CheckToUpdate,
+                    ExecuteCheckToUpdate));
             bindings.Add(
                 new CommandBinding(
                     Commands.ShowVersion,
@@ -363,6 +375,25 @@ namespace VoteSystem.Client.Command
             {
                 Log.ErrorException(ex,
                     "ダイアログの表示に失敗しました。");
+            }
+        }
+
+        /// <summary>
+        /// 新バージョンの確認を行います。
+        /// </summary>
+        private static void ExecuteCheckToUpdate(object sender,
+                                                 ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                var timeout = TimeSpan.FromSeconds(20);
+
+                Global.Updater.CheckToUpdate(timeout);
+            }
+            catch (Exception ex)
+            {
+                Log.ErrorException(ex,
+                    "新バージョンの確認に失敗しました。");
             }
         }
 

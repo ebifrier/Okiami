@@ -13,6 +13,7 @@ using System.Windows.Media;
 using Ragnarok.Net;
 using Ragnarok.Net.ProtoBuf;
 using Ragnarok.NicoNico.Live;
+using Ragnarok.Presentation.Update;
 
 namespace VoteSystem.Client
 {
@@ -154,6 +155,15 @@ namespace VoteSystem.Client
         /// 投票ルームリストを取得するためのモデルを取得します。
         /// </summary>
         public static ViewModel.VoteRoomInfoViewModel VoteRoomInfoModel
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 更新用オブジェクトを取得します。
+        /// </summary>
+        public static PresentationUpdater Updater
         {
             get;
             private set;
@@ -345,6 +355,10 @@ namespace VoteSystem.Client
             MainModel = new Model.MainModel();
             MainViewModel = new ViewModel.MainViewModel(MainModel);
             VoteRoomInfoModel = new ViewModel.VoteRoomInfoViewModel();
+
+            Updater = new PresentationUpdater(
+                "http://garnet-alice.net/programs/votesystem/update/versioninfo.xml");
+            Updater.Start();
         }
 
         /// <summary>

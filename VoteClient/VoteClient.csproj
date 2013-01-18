@@ -131,7 +131,6 @@
     <Compile Include="Model\VoteClient.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Settings.part.cs" />
-    <Compile Include="UpdateChecker.cs" />
     <Compile Include="ViewModel\EndRollWindowViewModel.cs" />
     <Compile Include="ViewModel\EvaluateWindowViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
