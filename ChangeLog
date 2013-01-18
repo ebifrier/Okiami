@@ -1,20 +1,20 @@
-2013-01-19  - Ver 1.2.1.4
+2013-01-19  - Ver 1.2.0.6
 
 	* VoteClient/Command/UtilCommand.cs: 新バージョンの確認メニューを追
 	加しました。
 	* VoteClient/Global.cs: Update用のオブジェクトをGlobalに移動しまし
 	た。
 
-2013-01-11  - Ver 1.2.1.3
+2013-01-11  - Ver 1.2.0.5
 
 	* 通信プロトコルのバージョンを上げました。
 
-2013-01-10  - Ver 1.2.1.2
+2013-01-10  - Ver 1.2.0.4
 
 	* VoteServer/VoteStrategy/Tests/ShogiVoteStrategyTest.cs: 
 	ShogiVoteStrategyクラスのテスト用クラスを追加しました。
 
-2013-01-09  - Ver 1.2.1.1
+2013-01-09  - Ver 1.2.0.3
 
 	* VoteSystem/PluginShogi/ShogiPlugin.cs: 変化コメントの処理をすべて
 	VariationCommentManagerに移譲しました。
@@ -25,10 +25,6 @@
 	るようにしました。
 	* PluginShogi/Model/VariationCommentManager.cs: 部分変化の追加、そ
 	の結合などを行うようにしました。
-	
-2013-01-05  - Ver 1.2.1.0
-
-	* バージョンを1.2.1に上げました。
 
 2013-01-05  - Ver 1.2.0.2
 

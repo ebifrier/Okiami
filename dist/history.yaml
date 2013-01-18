@@ -3,11 +3,13 @@
 #
 
 - version: 1.2.1
-  date: 2013/01/05
+  date: 2013/01/19
   thumbnail: ruka_uu.jpg
   content:
   - 本体: CookieGetterSharp.dllを使わないようにしました。
   - 本体: サーバーとの応答確認処理を修正しました。
+  - 本体: 更新システムを修正しました。
+  - 将棋: 長い変化を分割してコメント投稿できるようにしました。
 
 - version: 1.2.0
   date: 2012/12/28
