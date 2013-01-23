@@ -12,7 +12,7 @@ using System.Windows.Markup;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("co516151")]
 [assembly: AssemblyProduct("VoteClient")]
-[assembly: AssemblyCopyright("Copyright © えびふらい 2010 - 2012")]
+[assembly: AssemblyCopyright("Copyright © 2010-2013 えびふらい")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

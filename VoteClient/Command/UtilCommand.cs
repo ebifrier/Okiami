@@ -9,6 +9,7 @@ using System.Windows.Media;
 using Ragnarok;
 using Ragnarok.Extra.Sound;
 using Ragnarok.Presentation;
+using Ragnarok.Presentation.Control;
 
 namespace VoteSystem.Client.Command
 {
@@ -405,7 +406,7 @@ namespace VoteSystem.Client.Command
         {
             try
             {
-                var dialog = new View.VersionWindow()
+                var dialog = new VersionWindow(null)
                 {
                     Owner = Global.MainWindow,
                 };

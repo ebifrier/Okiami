@@ -3,11 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vc="clr-namespace:VoteSystem.Client.View.Control"
         xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
-        Title="設定ダイアログ" Height="350" Width="400"
+        Title="設定ダイアログ" Height="380" Width="340"
         Topmost="True">
     
     <!-- 投票結果ウィンドウとバッティングする可能性があるため、
          最前面に表示します -->
+    
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Ragnarok.Presentation;component/Themes/Common.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     
     <Grid>
         <Grid.RowDefinitions>
@@ -16,6 +24,10 @@
         </Grid.RowDefinitions>
         
         <TabControl Grid.Row="0">
+            <TabItem Header="基本設定">
+                <vc:BasicSettingControl />
+            </TabItem>
+            
             <TabItem Header="システムメッセージ設定">
                 <vc:SystemMessageSettingControl />
             </TabItem>
@@ -25,15 +37,7 @@
             </TabItem>            
         </TabControl>
 
-        <StackPanel Grid.Row="1"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right">
-            <Button Content="OK" MinWidth="50"
-                    Margin="3,3,10,3"
-                    Command="{x:Static rp:DialogCommands.OK}" />
-            <Button Content="キャンセル"
-                    Margin="3,3,3,3"
-                    Command="{x:Static rp:DialogCommands.Cancel}" />
-        </StackPanel>
+        <ContentControl Grid.Row="1"
+                        Template="{StaticResource ButtonsTemplate}" />
     </Grid>
 </Window>

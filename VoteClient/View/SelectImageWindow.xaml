@@ -1,22 +1,23 @@
 ﻿<Window x:Class="VoteSystem.Client.View.SelectImageWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+        xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+        xmlns:v="clr-namespace:VoteSystem.Client.View"
         Title="アイコン一覧" Height="300" Width="300" ResizeMode="NoResize"
-        SizeToContent="WidthAndHeight">
+        SizeToContent="WidthAndHeight" Name="window">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="CommonDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <rp:ImageConverter x:Key="imageConverter" />
+            <p:ImageConverter x:Key="imageConverter" />
        
             <!-- 画像を一列表示するためのテンプレート -->
             <DataTemplate x:Key="imageListTemplate" DataType="List">
                 <ListBox SelectionMode="Single"
                          ItemsSource="{Binding}"
-                         SelectionChanged="ListBox_SelectionChanged">
+                         SelectedItem="{Binding SelectedImageUrl, ElementName=window}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel Orientation="Horizontal" />
@@ -36,7 +37,7 @@
     </Window.Resources>
 
     <StackPanel Orientation="Vertical">
-        <ItemsControl ItemsSource="{Binding ImageUrlList}"
+        <ItemsControl ItemsSource="{x:Static v:SelectImageWindow.ImageUrlList}"
                       ItemTemplate="{StaticResource imageListTemplate}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -48,9 +49,9 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="ＯＫ"
                     Margin="8,8,0,8" MinWidth="50"
-                    Click="OkButton_Click" />
-            <Button Margin="10,8,8,8" Content="キャンセル"
-                    Click="CancelButton_Click" />
+                    Command="{x:Static p:DialogCommands.OK}" />
+            <Button Margin="8" Content="キャンセル"
+                    Command="{x:Static p:DialogCommands.Cancel}" />
         </StackPanel>
     </StackPanel>
 </Window>

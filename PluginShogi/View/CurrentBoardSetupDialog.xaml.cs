@@ -15,6 +15,8 @@ using Ragnarok.Presentation;
 
 namespace VoteSystem.PluginShogi.View
 {
+    using Protocol.Model;
+
     /// <summary>
     /// 手番ごとの特殊操作を選択するときに使われます。
     /// </summary>
@@ -87,7 +89,7 @@ namespace VoteSystem.PluginShogi.View
         /// <summary>
         /// 投票開始時の投票時間を取得します。
         /// </summary>
-        public ShogiTimeSpan VoteSpan
+        public SimpleTimeSpan VoteSpan
         {
             get
             {
@@ -119,7 +121,7 @@ namespace VoteSystem.PluginShogi.View
         /// <summary>
         /// 追加する持ち時間を取得します。
         /// </summary>
-        public ShogiTimeSpan AddLimitTime
+        public SimpleTimeSpan AddLimitTime
         {
             get
             {

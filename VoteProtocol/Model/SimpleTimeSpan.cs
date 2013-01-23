@@ -7,12 +7,12 @@ using System.Runtime.Serialization;
 using Ragnarok;
 using Ragnarok.ObjectModel;
 
-namespace VoteSystem.PluginShogi
+namespace VoteSystem.Protocol.Model
 {
     /// <summary>
     /// 将棋用の持ち時間などを保持します。
     /// </summary>
-    public sealed class ShogiTimeSpan : NotifyObject
+    public sealed class SimpleTimeSpan : NotifyObject
     {
         /// <summary>
         /// 時間を使用するかどうかを取得または設定します。
@@ -52,7 +52,7 @@ namespace VoteSystem.PluginShogi
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public ShogiTimeSpan()
+        public SimpleTimeSpan()
         {
             IsUse = true;
         }

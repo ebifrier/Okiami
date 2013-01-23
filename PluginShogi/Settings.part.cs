@@ -17,6 +17,7 @@ using Ragnarok.Utility;
 namespace VoteSystem.PluginShogi
 {
     using ViewModel;
+    using Protocol.Model;
 
     [Serializable()]
     public sealed partial class Settings : Ragnarok.Presentation.WpfSettingsBase
@@ -49,15 +50,15 @@ namespace VoteSystem.PluginShogi
             set { SetValue("CBS_IsStopVote", value); }
         }
 
-        public ShogiTimeSpan CBS_AddLimitTime
+        public SimpleTimeSpan CBS_AddLimitTime
         {
-            get { return GetValue<ShogiTimeSpan>("CBS_AddLimitTime"); }
+            get { return GetValue<SimpleTimeSpan>("CBS_AddLimitTime"); }
             set { SetValue("CBS_AddLimitTime", value); }
         }
 
-        public ShogiTimeSpan CBS_VoteSpan
+        public SimpleTimeSpan CBS_VoteSpan
         {
-            get { return GetValue<ShogiTimeSpan>("CBS_VoteSpan"); }
+            get { return GetValue<SimpleTimeSpan>("CBS_VoteSpan"); }
             set { SetValue("CBS_VoteSpan", value); }
         }
         #endregion
@@ -136,7 +137,7 @@ namespace VoteSystem.PluginShogi
 
             if (CBS_AddLimitTime == null)
             {
-                CBS_AddLimitTime = new ShogiTimeSpan
+                CBS_AddLimitTime = new SimpleTimeSpan
                 {
                     Minutes = 3,
                 };
@@ -144,7 +145,7 @@ namespace VoteSystem.PluginShogi
 
             if (CBS_VoteSpan == null)
             {
-                CBS_VoteSpan = new ShogiTimeSpan()
+                CBS_VoteSpan = new SimpleTimeSpan
                 {
                     Minutes = 3,
                 };

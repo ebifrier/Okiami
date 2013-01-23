@@ -1,3 +1,16 @@
+2013-01-24  - Ver 1.2.1.2
+
+	* dist/build.rb: 全体的なリファクタリングを行いました。
+	* PluginShog/ShogiData/Background/SpringEffect/Back.jpg: 将棋盤の春
+	画像を著作権の関係で昔のバージョンに戻しました。
+	* VoteClient/View/SelectImageWindow.xaml: WPFの書き方などについてリ
+	ファクタリングを行いました。
+	* VoteClient/View/SettingDialog.xaml: 基本設定タブを追加しました。
+	* VoteClient/View/Control/BasicSettingControl.xaml: 設定ダイアログ
+	の基本設定タブを追加しました。
+	* VoteProtocol/Model/SimpleTimeSpan.cs: 時間を分と秒のみで管理する
+	ための簡易的なクラスを追加しました。
+
 2013-01-21  - Ver 1.2.1.1
 
 	* nunit.framework.dllの参照先を変えました。

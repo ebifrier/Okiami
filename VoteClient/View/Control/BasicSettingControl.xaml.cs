@@ -9,33 +9,22 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using Ragnarok.Presentation;
-
-namespace VoteSystem.Client.View
+namespace VoteSystem.Client.View.Control
 {
     /// <summary>
-    /// VersionWindow.xaml の相互作用ロジック
+    /// Page.xaml の相互作用ロジック
     /// </summary>
-    public partial class VersionWindow : Window
+    public partial class BasicSettingControl : UserControl
     {
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public VersionWindow()
+        public BasicSettingControl()
         {
             InitializeComponent();
-
-            CommandBindings.Add(
-                new CommandBinding(
-                    DialogCommands.OK,
-                    ExecuteOK));
-        }
-
-        void ExecuteOK(object sender, ExecutedRoutedEventArgs e)
-        {
-            DialogResult = true;
         }
     }
 }

@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby -Ku
+﻿#!/usr/local/bin/ruby -Ku
 #
 # Releaseバージョンを作成します。
 #
@@ -6,8 +6,8 @@
 require 'fileutils'
 require 'make_release'
 
-$RagnarokUpdatePath = "..\\..\\Ragnarok\\Ragnarok\\Update"
-                               
+$HtmlBasePath = "E:/Dropbox/NicoNico/homepage/public_html/programs/votesystem"
+
 #
 # ビルドしたファイルを配布用ディレクトリにコピーします。
 #
@@ -49,27 +49,45 @@ def make_recent(appdata)
   appdata.convert_template(input_path, output_path)
 end
 
+#
+# 配布用ファイルを作成します。
+#
+def make_dist()
+  # アセンブリバージョンが入ったディレクトリに
+  # 作成ファイルを出力します。
+  solution_path = File.join(File.dirname(appdata.dist_path), "VoteSystem.sln")
+  appdata.build(solution_path, "CLR_V4;PUBLISHED")
+  setup_dist(appdata)
+  
+  # zipに圧縮します。
+  appdata.make_zip()
+  
+  # versioninfo.xmlなどを更新します。
+  appdata.make_versioninfo()
+  appdata.make_release_note()
+  make_recent(appdata)
+end
+
+#
+# 必要なファイルをコピーします。
+#
+def copy_dist()
+  FileUtils.copy(appdata.zip_path, File.join($HtmlBasePath, "download"))
+  FileUtils.copy(appdata.versioninfo_path, File.join($HtmlBasePath, "update"))
+  FileUtils.copy(appdata.releasenote_path, File.join($HtmlBasePath, "update"))
+  FileUtils.copy(File.join(dist_path, "VoteClient.html"), File.join($HtmlBasePath, "download"))
+end
+
 # このスクリプトのパスは $basepath/dist/xxx.rb となっています。
 dist_path = File.dirname(File.expand_path($0))
 
-assemblyinfo_path = File.join(dist_path,
-  "..", "VoteClient", "Properties", "AssemblyInfo.cs")
+assemblyinfo_path = File.join(dist_path, "../VoteClient/Properties/AssemblyInfo.cs")
 history_path = File.join(dist_path, "history.yaml")
 appdata = AppData.new("votesystem", dist_path, assemblyinfo_path, history_path)
 
-# アセンブリバージョンが入ったディレクトリに
-# 作成ファイルを出力します。
-solution_path = File.join(File.dirname(dist_path), "VoteSystem.sln")
-appdata.build(solution_path, "CLR_V4;PUBLISHED")
-setup_dist(appdata)
-
-# zipに圧縮します。
-appdata.make_zip()
-
-# versioninfo.xmlを更新します。
-versioninfo_tmpl = File.join($RagnarokUpdatePath, "versioninfo_tmpl.xml")
-releasenote_tmpl = File.join($RagnarokUpdatePath, "release_note_tmpl.html")
-
-appdata.make_versioninfo(versioninfo_tmpl)
-make_recent(appdata)
-appdata.make_release_note(releasenote_tmpl)
+ARGV.each do |arg|
+  case arg
+  when "make": make_dist(appdata)
+  when "copy": copy_dist(appdata)
+  end
+end

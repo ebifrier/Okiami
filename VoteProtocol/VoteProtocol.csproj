@@ -61,6 +61,7 @@
     <Compile Include="LiveAttribute.cs" />
     <Compile Include="LiveInfoData.cs" />
     <Compile Include="Model\EndRollList.cs" />
+    <Compile Include="Model\SimpleTimeSpan.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="NotificationColor.cs" />
     <Compile Include="NotificationEventArgs.cs" />
@@ -107,6 +108,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Resource Include="View\SimpleTimeSpanView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
     <Page Include="View\EndRollControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

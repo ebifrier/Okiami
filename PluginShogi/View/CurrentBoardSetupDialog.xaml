@@ -11,6 +11,11 @@
         d:DesignHeight="416" d:DesignWidth="250">
     <Window.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Ragnarok.Presentation;component/Themes/Common.xaml" />
+                <ResourceDictionary Source="/VoteProtocol;component/View/SimpleTimeSpanView.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
             <p:EnumToBooleanConverter x:Key="enumToBooleanConverter" />
             
             <Style x:Key="timeSpanStyle" TargetType="p:NumericUpDown">
@@ -22,33 +27,6 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-
-            <!-- 秒と時刻で投票期間などを設定します。-->
-            <DataTemplate x:Key="shogiTimeTemplate" DataType="top:ShogiTimeSpan">
-                <Grid IsEnabled="{Binding IsUse, Mode=OneWay}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <Label Grid.Column="1"
-                           Content="分:" />
-                    <p:NumericUpDown Grid.Column="2"
-                                     Width="60" Minimum="0" Maximum="600"
-                                     Value="{Binding Minutes}"
-                                     Style="{StaticResource timeSpanStyle}" />
-                    <Label Grid.Column="4"
-                           Content="秒:" />
-                    <p:NumericUpDown Grid.Column="5"
-                                     Width="50" Minimum="0" Maximum="59"
-                                     Value="{Binding Seconds}"
-                                     Style="{StaticResource timeSpanStyle}" />
-                </Grid>
-            </DataTemplate>
             
             <!-- 相手の手番の時の更新用操作 -->
             <StackPanel x:Key="myTurnStackPanel"
@@ -59,7 +37,7 @@
                 <CheckBox Content="持ち時間を追加"
                           IsChecked="{Binding CBS_AddLimitTime.IsUse}" />
                 <ContentControl Content="{Binding CBS_AddLimitTime}"
-                                ContentTemplate="{StaticResource shogiTimeTemplate}"
+                                ContentTemplate="{StaticResource SimpleTimeSpanView}"
                                 HorizontalAlignment="Right" />
             </StackPanel>
 
@@ -72,7 +50,7 @@
                 <CheckBox Content="投票時間を設定"
                           IsChecked="{Binding CBS_VoteSpan.IsUse}" />
                 <ContentControl Content="{Binding CBS_VoteSpan}"
-                                ContentTemplate="{StaticResource shogiTimeTemplate}"
+                                ContentTemplate="{StaticResource SimpleTimeSpanView}"
                                 HorizontalAlignment="Right" />
             </StackPanel>
         </ResourceDictionary>
@@ -138,13 +116,8 @@
         
         <Border Grid.Row="4"
                 Background="LightGray" />
-        <StackPanel Grid.Row="4"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right">
-            <Button Margin="10" MinWidth="40" Content="ＯＫ"
-                    Command="{x:Static p:DialogCommands.OK}" />
-            <Button Margin="10" Content="キャンセル"
-                    Command="{x:Static p:DialogCommands.Cancel}" />
-        </StackPanel>
+
+        <ContentControl Grid.Row="4"
+                        Template="{StaticResource ButtonsTemplate}" />
     </Grid>
 </Window>
