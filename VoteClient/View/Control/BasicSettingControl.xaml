@@ -6,7 +6,7 @@
              xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
              xmlns:l="clr-namespace:VoteSystem.Client"
              mc:Ignorable="d" 
-             d:DesignHeight="321" d:DesignWidth="300">
+             d:DesignHeight="373" d:DesignWidth="300">
     
     <UserControl.Resources>
         <ResourceDictionary>
@@ -23,58 +23,21 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="10" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <!-- 対局者名など -->
-                    <GroupBox Header="対局者情報" Padding="5">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="5" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="5" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <Label Grid.Row="0" Grid.Column="1"
-                                   Content="先手：" />
-                            <TextBox Grid.Row="0" Grid.Column="2"
-                                     VerticalContentAlignment="Center"
-                                     Text="サンプルネーム" />
-
-                            <Label Grid.Row="2" Grid.Column="1"
-                                   Content="後手：" />
-                            <TextBox Grid.Row="2" Grid.Column="2"
-                                     VerticalContentAlignment="Center"
-                                     Text="サンプルネーム" />
-
-                            <Label Grid.Row="4" Grid.Column="1"
-                                   Content="手番：" />
-                            <ComboBox Grid.Row="4" Grid.Column="2"
-                                      VerticalContentAlignment="Center"
-                                      DisplayMemberPath="Label"
-                                      ItemsSource="{p:EnumList p:BWType}" />
-                        </Grid>
-                    </GroupBox>
-
                     <!-- 延長時間設定など -->
-                    <GroupBox Grid.Row="2"
-                              Header="延長時間設定" Padding="5">
+                    <GroupBox Grid.Row="0"
+                              Header="延長時間設定" Padding="5"
+                              IsEnabled="{Binding IsVoteRoomOwner,
+                                                  Source={x:Static l:Global.VoteClient}}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="5" />
+                                <RowDefinition Height="0" />
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="5" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="5" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
@@ -82,21 +45,31 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
+                            
+                            <Label Grid.Row="0" Grid.ColumnSpan="3"
+                                   Content="設定できるのはルームオーナーのみです。"
+                                   Foreground="DarkRed" />
 
                             <Label
-                                Grid.Row="0" Grid.ColumnSpan="3"
+                                Grid.Row="2" Grid.ColumnSpan="3"
                                 Content="投票打ち切り回数" />
                             <p:NumericUpDown
-                                Grid.Row="2" Grid.Column="1"
+                                Grid.Row="3" Grid.Column="1"
                                 Minimum="0" Maximum="1000"
-                                Value="5" />
+                                Value="{Binding VoteEndCount}" />
 
                             <Label
-                                Grid.Row="4" Grid.ColumnSpan="3"
+                                Grid.Row="5" Grid.ColumnSpan="3"
                                 Content="投票時間を延長／短縮した場合の変更時間" />
-                            <ContentControl
-                                Grid.Row="6" Grid.Column="1"
-                                ContentTemplate="{StaticResource SimpleTimeSpanView}" />
+                            <GroupBox Grid.Row="6" Grid.Column="1">
+                                <GroupBox.Header>
+                                    <CheckBox Content="時間変更を行う"
+                                              IsChecked="{Binding VoteExtendTime.IsUse}" />
+                                </GroupBox.Header>
+                                <ContentControl
+                                    ContentTemplate="{StaticResource SimpleTimeSpanView}"
+                                    Content="{Binding VoteExtendTime}" />
+                            </GroupBox>
                         </Grid>
                     </GroupBox>
                 </Grid>

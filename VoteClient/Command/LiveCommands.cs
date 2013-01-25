@@ -14,7 +14,7 @@ using Ragnarok.Presentation.NicoNico;
 
 namespace VoteSystem.Client.Command
 {
-    using VoteSystem.Client.Model.Live;
+    using Model.Live;
 
     public static partial class Commands
     {

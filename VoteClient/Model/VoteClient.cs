@@ -16,9 +16,9 @@ using Ragnarok.Utility;
 
 namespace VoteSystem.Client.Model
 {
-    using VoteSystem.Protocol;
-    using VoteSystem.Protocol.Vote;
-    using VoteSystem.Protocol.Commenter;
+    using Protocol;
+    using Protocol.Vote;
+    using Protocol.Commenter;
 
     /// <summary>
     /// 各リクエストのリスポンスを受け取ったときに使われます。
@@ -654,6 +654,11 @@ namespace VoteSystem.Client.Model
                         {
                             VoteRoomInfo = e.Response.RoomInfo;
                             VoteParticipantNo = e.Response.ParticipantNo;
+
+                            // ルーム作成時に時間に関する設定を行います。
+                            SetTimeExtendSetting(
+                                Global.Settings.VoteEndCount,
+                                Global.Settings.VoteExtendTime);
                         }
 
                         if (callback != null)
@@ -1088,6 +1093,31 @@ namespace VoteSystem.Client.Model
                 this.conn.SendCommand(new AddTotalVoteSpanCommand()
                 {
                     DiffSeconds = diff.TotalSeconds,
+                });
+            }
+        }
+
+        /// <summary>
+        /// 時間延長・短縮に関する設定を行います。
+        /// </summary>
+        public void SetTimeExtendSetting(int? voteEndCount,
+                                         SimpleTimeSpan voteExtendTimeSpan)
+        {
+            using (LazyLock())
+            {
+                if (!IsVoteRoomOwner)
+                {
+                    return;
+                }
+
+                CheckEnteringVoteRoom(true);                
+
+                this.conn.SendCommand(new SetTimeExtendSettingCommand()
+                {
+                    VoteEndCount = (voteEndCount ?? -1),
+                    VoteExtendTimeSeconds =
+                        (SimpleTimeSpan.NotNullAndUse(voteExtendTimeSpan) ?
+                         voteExtendTimeSpan.TotalSeconds : -1),
                 });
             }
         }

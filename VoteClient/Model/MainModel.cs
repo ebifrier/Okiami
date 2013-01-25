@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Data;
@@ -19,9 +17,9 @@ using Ragnarok.Presentation;
 
 namespace VoteSystem.Client.Model
 {
-    using VoteSystem.Protocol;
-    using VoteSystem.Protocol.Vote;
-    using VoteSystem.Client.Model.Live;
+    using Protocol;
+    using Protocol.Vote;
+    using Live;
 
     /// <summary>
     /// 放送主用のモデルオブジェクトです。

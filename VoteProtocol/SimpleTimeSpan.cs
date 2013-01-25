@@ -7,11 +7,12 @@ using System.Runtime.Serialization;
 using Ragnarok;
 using Ragnarok.ObjectModel;
 
-namespace VoteSystem.Protocol.Model
+namespace VoteSystem.Protocol
 {
     /// <summary>
     /// 将棋用の持ち時間などを保持します。
     /// </summary>
+    [Serializable()]
     public sealed class SimpleTimeSpan : NotifyObject
     {
         /// <summary>
@@ -47,6 +48,22 @@ namespace VoteSystem.Protocol.Model
         public TimeSpan TimeSpan
         {
             get { return TimeSpan.FromSeconds(Minutes * 60 + Seconds); }
+        }
+
+        /// <summary>
+        /// トータルの秒数を取得します。
+        /// </summary>
+        public int TotalSeconds
+        {
+            get { return (Minutes * 60 + Seconds); }
+        }
+
+        /// <summary>
+        /// nullでない and IsUseが真 ならば真を返します。
+        /// </summary>
+        public static bool NotNullAndUse(SimpleTimeSpan value)
+        {
+            return (value != null && value.IsUse);
         }
 
         /// <summary>

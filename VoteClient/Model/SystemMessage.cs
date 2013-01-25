@@ -16,51 +16,15 @@ namespace VoteSystem.Client.Model
     /// システムメッセージなどを音声付きで通知するためのオブジェクトです。
     /// </summary>
     [Serializable()]
-    public class SystemMessage : IModel
+    public sealed class SystemMessage : NotifyObject
     {
-        private bool isPostComment = true;
-        //private bool isPostOwnerComment = true;
-        private string commentName = "";
-        private string commentText = "";
-        
-        /// <summary>
-        /// プロパティ値の変更を通知するイベントです。
-        /// </summary>
-        [field:NonSerialized()]
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// プロパティ値の変更を通知します。
-        /// </summary>
-        void IModel.NotifyPropertyChanged(PropertyChangedEventArgs e)
-        {
-            var handler = PropertyChanged;
-
-            if (handler != null)
-            {
-                Global.UIProcess(() =>
-                    handler(this, e));
-            }
-        }
-
         /// <summary>
         /// メッセージ通知時にコメントを投稿するかどうかを取得または設定します。
         /// </summary>
         public bool IsPostComment
         {
-            get
-            {
-                return this.isPostComment;
-            }
-            set
-            {
-                if (this.isPostComment != value)
-                {
-                    this.isPostComment = value;
-
-                    this.RaisePropertyChanged("IsPostComment");
-                }
-            }
+            get { return GetValue<bool>("IsPostComment"); }
+            set { SetValue("IsPostComment", value); }
         }
 
         /*/// <summary>
@@ -68,19 +32,8 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public bool IsPostOwnerComment
         {
-            get
-            {
-                return this.isPostOwnerComment;
-            }
-            set
-            {
-                if (this.isPostOwnerComment != value)
-                {
-                    this.isPostOwnerComment = value;
-
-                    this.RaisePropertyChanged("IsPostOwnerComment");
-                }
-            }
+            get { return GetValue<bool>("IsPostOwnerComment"); }
+            set { SetValue("IsPostOwnerComment", value); }
         }*/
 
         /// <summary>
@@ -88,19 +41,8 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public string CommentName
         {
-            get
-            {
-                return this.commentName;
-            }
-            set
-            {
-                if (this.commentName != value)
-                {
-                    this.commentName = value;
-
-                    this.RaisePropertyChanged("CommentName");
-                }
-            }
+            get { return GetValue<string>("CommentName"); }
+            set { SetValue("CommentName", value); }
         }
 
         /// <summary>
@@ -108,19 +50,8 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public string CommentText
         {
-            get
-            {
-                return this.commentText;
-            }
-            set
-            {
-                if (this.commentText != value)
-                {
-                    this.commentText = value;
-
-                    this.RaisePropertyChanged("CommentText");
-                }
-            }
+            get { return GetValue<string>("CommentText"); }
+            set { SetValue("CommentText", value); }
         }
     }
 }

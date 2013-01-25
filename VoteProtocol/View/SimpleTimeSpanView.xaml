@@ -4,7 +4,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
-    xmlns:m="clr-namespace:VoteSystem.Protocol.Model">
+    xmlns:l="clr-namespace:VoteSystem.Protocol">
     <p:EnumToBooleanConverter x:Key="enumToBooleanConverter" />
             
     <Style x:Key="timeSpanStyle" TargetType="p:NumericUpDown">
@@ -18,7 +18,7 @@
     </Style>
 
     <!-- 秒と時刻で投票期間などを設定します。-->
-    <DataTemplate x:Key="SimpleTimeSpanView" DataType="m:SimpleTimeSpan">
+    <DataTemplate x:Key="SimpleTimeSpanView" DataType="l:SimpleTimeSpan">
         <Grid IsEnabled="{Binding IsUse, Mode=OneWay}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0" />

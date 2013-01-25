@@ -14,6 +14,8 @@ using Ragnarok;
 
 namespace VoteSystem.Client
 {
+    using Protocol;
+
     [Serializable()]
     public sealed partial class Settings : Ragnarok.Presentation.WpfSettingsBase
     {
@@ -69,6 +71,23 @@ namespace VoteSystem.Client
         #endregion
 
         #region Setting Dialog
+        #region Basic Setting
+        [DefaultValue(5)]
+        public int VoteEndCount
+        {
+            get { return (int)this["VoteEndCount"]; }
+            set { this["VoteEndCount"] = value; }
+        }
+
+        [DefaultValue(null)]
+        public SimpleTimeSpan VoteExtendTime
+        {
+            get { return (SimpleTimeSpan)this["VoteExtendTime"]; }
+            set { this["VoteExtendTime"] = value; }
+        }
+        #endregion
+
+        #region Sound Setting
         [DefaultValue(true)]
         public bool IsUseSE
         {
@@ -89,7 +108,9 @@ namespace VoteSystem.Client
             get { return (string)this["SoundSetDir"]; }
             set { this["SoundSetDir"] = value; }
         }
+        #endregion
 
+        #region System Message Setting
         public Model.SystemMessage VoteStartSystemMessage
         {
             get { return (Model.SystemMessage)this["VoteStartSystemMessage"]; }
@@ -119,6 +140,7 @@ namespace VoteSystem.Client
             get { return (Model.SystemMessage)this["ChangeVoteSpanSystemMessage"]; }
             set { this["ChangeVoteSpanSystemMessage"] = value; }
         }
+        #endregion
         #endregion
 
         #region Auto Save

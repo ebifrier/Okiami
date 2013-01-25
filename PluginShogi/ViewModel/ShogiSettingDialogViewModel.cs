@@ -5,18 +5,49 @@ using System.Text;
 using System.ComponentModel;
 
 using Ragnarok;
-using Ragnarok.Utility;
 using Ragnarok.ObjectModel;
+using Ragnarok.Shogi;
+using Ragnarok.Utility;
 
 namespace VoteSystem.PluginShogi.ViewModel
 {
-    using VoteSystem.PluginShogi.Model;
+    using Model;
 
     /// <summary>
     /// 設定ダイアログ用のビューモデルです。
     /// </summary>
-    public class ShogiSettingDialogViewModel : NotifyObject
+    public sealed class ShogiSettingDialogViewModel : NotifyObject
     {
+        /// <summary>
+        /// 先手番の対局者名を取得または設定します。
+        /// </summary>
+        [DependOnProperty(typeof(Settings), "SD_BlackPlayerName")]
+        public string BlackPlayerName
+        {
+            get { return ShogiGlobal.Settings.SD_BlackPlayerName; }
+            set { ShogiGlobal.Settings.SD_BlackPlayerName = value; }
+        }
+
+        /// <summary>
+        /// 後手番の対局者名を取得または設定します。
+        /// </summary>
+        [DependOnProperty(typeof(Settings), "SD_WhitePlayerName")]
+        public string WhitePlayerName
+        {
+            get { return ShogiGlobal.Settings.SD_WhitePlayerName; }
+            set { ShogiGlobal.Settings.SD_WhitePlayerName = value; }
+        }
+
+        /// <summary>
+        /// 手番を取得または設定します。
+        /// </summary>
+        [DependOnProperty(typeof(Settings), "SD_Teban")]
+        public BWType Teban
+        {
+            get { return ShogiGlobal.Settings.SD_Teban; }
+            set { ShogiGlobal.Settings.SD_Teban = value; }
+        }
+
         /// <summary>
         /// 現局面を自動的に更新するかを取得または設定します。
         /// </summary>

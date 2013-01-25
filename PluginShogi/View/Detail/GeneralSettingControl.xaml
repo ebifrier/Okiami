@@ -2,73 +2,53 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
                     xmlns:t="clr-namespace:VoteSystem.PluginShogi">
-    <GridLength x:Key="space">
-    </GridLength>
-
-    <!-- 画像選択 -->
-    <ControlTemplate x:Key="imageSelectGrid">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="{StaticResource space}" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="{StaticResource space}" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="{StaticResource space}" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <Label Grid.Row="0" Content="駒の選択" />
-            <ComboBox Grid.Row="1"
-                      ItemsSource="{p:EnumList EnumType=t:KomaImageType}"
-                      SelectedValue="{Binding KomaImage}"
-                      SelectedValuePath="Value"
-                      DisplayMemberPath="Label"
-                      ToolTip="駒画像を選択します"
-                      IsReadOnly="True" />
-
-            <Label Grid.Row="3" Content="盤の選択" />
-            <ComboBox Grid.Row="4"
-                      ItemsSource="{p:EnumList EnumType=t:BanImageType}"
-                      SelectedValue="{Binding BanImage}"
-                      SelectedValuePath="Value"
-                      DisplayMemberPath="Label"
-                      ToolTip="盤画像を選択します"
-                      IsReadOnly="True" />
-
-            <Label Grid.Row="6" Content="駒台の選択" />
-            <ComboBox Grid.Row="7"
-                      ItemsSource="{p:EnumList EnumType=t:KomadaiImageType}"
-                      SelectedValue="{Binding KomadaiImage}"
-                      SelectedValuePath="Value"
-                      DisplayMemberPath="Label"
-                      ToolTip="駒台画像を選択します"
-                      IsReadOnly="True" />
-
-            <Label Grid.Row="9" Content="背景画像選択" />
-            <Grid Grid.Row="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <TextBox Text="{Binding BackgroundPath}" />
-                <Button Grid.Column="1" Content=" ･･･ "
-                        Command="Open" />
-            </Grid>
-        </Grid>
-    </ControlTemplate>
-
     <Grid x:Key="generalSettingControl">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <GroupBox Header="設定">
+        <!-- 対局者名など -->
+        <GroupBox Header="対局者情報" Padding="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="1"
+                       Content="先手：" />
+                <TextBox Grid.Row="0" Grid.Column="2"
+                         VerticalContentAlignment="Center"
+                         Text="{Binding BlackPlayerName}" />
+
+                <Label Grid.Row="2" Grid.Column="1"
+                       Content="後手：" />
+                <TextBox Grid.Row="2" Grid.Column="2"
+                         VerticalContentAlignment="Center"
+                         Text="{Binding WhitePlayerName}" />
+
+                <Label Grid.Row="4" Grid.Column="1"
+                       Content="手番：" />
+                <ComboBox Grid.Row="4" Grid.Column="2"
+                          VerticalContentAlignment="Center"
+                          DisplayMemberPath="Label"
+                          SelectedValuePath="Value"
+                          SelectedValue="{Binding Teban}"
+                          ItemsSource="{p:EnumList p:BWType}" />
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="2" Header="設定">
             <CheckBox Content="現局面を自動的に更新する"
                       IsChecked="{Binding IsAutoUpdateCurrentBoard}" />
         </GroupBox>

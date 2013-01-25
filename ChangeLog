@@ -1,3 +1,27 @@
+2013-01-26  - Ver 1.2.1.3
+
+	* PluginShogi/Settings.part.cs, 
+	PluginShogi/ViewModel/ShogiSettingDialogViewModel.cs: 対局者名など
+	のプロパティを追加しました。
+	* PluginShogi/View/CurrentBoardSetupDialog.xaml.cs: 現局面設定時に、
+	手番情報を考慮した操作を行えるようにしました。
+	* PluginShogi/View/Detail/GeneralSettingControl.xaml: 対局者情報や
+	手番などの設定を可能にしました。
+	* VoteClient/Model/VoteClient.cs: 時間延長や投票打ち切りなどの設定
+	をサーバー側に送るようにしました。
+	* VoteClient/Settings.part.cs: 時間延長や投票打ち切りに関するプロパ
+	ティを追加しました。
+	* VoteClient/View/Control/BasicSettingControl.xaml: 対局者名や手番
+	などの設定項目が含まれていたため、それを削除しました。
+	* VoteClient/View/SettingDialog.xaml.cs: ダイアログによる設定後に、
+	延長時間などの設定をサーバーに送るようにしました。これはルームオー
+	ナーのみの設定です。
+	* VoteProtocol/ProtoBuf/Protocol.proto: 時間延長に関わるコマンドを
+	追加しました。
+	* VoteServer/VoteModel.cs: 時間延長や投票打ち切りに関するサーバー側
+	の処理を追加しました。
+	* VoteProtocol/SimpleTimeSpan.cs: Modelディレクトリから移動しました。
+
 2013-01-24  - Ver 1.2.1.2
 
 	* dist/build.rb: 全体的なリファクタリングを行いました。

@@ -229,6 +229,13 @@ message AddTotalVoteSpanCommand {
 	required double DiffSeconds = 1;
 }
 
+// 時間延長・短縮に関する設定を行います。
+// クライアントからサーバーに送られます。
+message SetTimeExtendSettingCommand {
+	optional int32 VoteEndCount = 1;
+	optional int32 VoteExtendTimeSeconds = 2;
+}
+
 // 投票結果のクリアを行います。
 // クライアントからサーバーに送られます。
 message ClearVoteCommand {

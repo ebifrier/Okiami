@@ -9,6 +9,7 @@ using System.Windows.Media;
 
 using Ragnarok;
 using Ragnarok.ObjectModel;
+using Ragnarok.Shogi;
 using Ragnarok.Utility;
 
 // コメント不足への警告を無くします。
@@ -17,7 +18,7 @@ using Ragnarok.Utility;
 namespace VoteSystem.PluginShogi
 {
     using ViewModel;
-    using Protocol.Model;
+    using Protocol;
 
     [Serializable()]
     public sealed partial class Settings : Ragnarok.Presentation.WpfSettingsBase
@@ -64,6 +65,27 @@ namespace VoteSystem.PluginShogi
         #endregion
 
         #region 設定ダイアログ
+        [DefaultValue("てんて～")]
+        public string SD_BlackPlayerName
+        {
+            get { return GetValue<string>("SD_BlackPlayerName"); }
+            set { SetValue("SD_BlackPlayerName", value); }
+        }
+
+        [DefaultValue("ひふみん")]
+        public string SD_WhitePlayerName
+        {
+            get { return GetValue<string>("SD_WhitePlayerName"); }
+            set { SetValue("SD_WhitePlayerName", value); }
+        }
+
+        [DefaultValue(BWType.None)]
+        public BWType SD_Teban
+        {
+            get { return GetValue<BWType>("SD_Teban"); }
+            set { SetValue("SD_Teban", value); }
+        }
+
         [DefaultValue(false)]
         public bool SD_IsAutoUpdateCurrentBoard
         {

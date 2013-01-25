@@ -61,7 +61,7 @@
     <Compile Include="LiveAttribute.cs" />
     <Compile Include="LiveInfoData.cs" />
     <Compile Include="Model\EndRollList.cs" />
-    <Compile Include="Model\SimpleTimeSpan.cs" />
+    <Compile Include="SimpleTimeSpan.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="NotificationColor.cs" />
     <Compile Include="NotificationEventArgs.cs" />

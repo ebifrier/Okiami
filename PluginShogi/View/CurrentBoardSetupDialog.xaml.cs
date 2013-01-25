@@ -13,9 +13,12 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Ragnarok.Presentation;
 
+using Ragnarok;
+using Ragnarok.Shogi;
+
 namespace VoteSystem.PluginShogi.View
 {
-    using Protocol.Model;
+    using Protocol;
 
     /// <summary>
     /// 手番ごとの特殊操作を選択するときに使われます。
@@ -140,6 +143,26 @@ namespace VoteSystem.PluginShogi.View
         public CurrentBoardSetupDialog(Settings settings)
         {
             InitializeComponent();
+
+            // ダイアログ表示時に操作対象となる手番を設定します。
+            var board = ShogiGlobal.ShogiModel.Board;
+            if (board != null)
+            {
+                if (board.MovePriority == BWType.None ||
+                    settings.SD_Teban == BWType.None)
+                {
+                    SelectedRadioButton = CBS_SelectedRadioButton.Default;
+                }
+                else
+                {
+                    // "次の手番"が自分の手番ならば、
+                    // 前に指したのは相手の手です。
+                    SelectedRadioButton =
+                        (board.MovePriority == settings.SD_Teban ?
+                        CBS_SelectedRadioButton.YourTurn :
+                        CBS_SelectedRadioButton.MyTurn);
+                }
+            }
 
             this.settings = settings;
             DataContext = settings;

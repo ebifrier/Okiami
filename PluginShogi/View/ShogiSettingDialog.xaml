@@ -12,6 +12,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Ragnarok.Presentation;component/Themes/Common.xaml" />
                 <ResourceDictionary Source="Detail/GeneralSettingControl.xaml" />
                 <ResourceDictionary Source="Detail/BanSettingControl.xaml" />
                 <ResourceDictionary Source="Detail/EffectSettingControl.xaml" />
@@ -39,16 +40,8 @@
                 <StaticResource ResourceKey="effectSettingControl" />
             </TabItem>
         </TabControl>
-        
-        <StackPanel Grid.Row="2"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right">
-            <Button Margin="5,5,5,5" MinWidth="50"
-                    Content="ＯＫ"
-                    Command="{x:Static rp:DialogCommands.OK}" />
-            <Button Margin="5,5,5,5"
-                    Content="キャンセル"
-                    Command="{x:Static rp:DialogCommands.Cancel}" />
-        </StackPanel>
+
+        <ContentControl Grid.Row="2"
+                        Template="{StaticResource ButtonsTemplate}" />
     </Grid>
 </Window>

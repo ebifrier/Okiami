@@ -650,6 +650,34 @@ namespace VoteSystem.Protocol
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"SetTimeExtendSettingCommand")]
+  public partial class SetTimeExtendSettingCommand : global::ProtoBuf.IExtensible
+  {
+    public SetTimeExtendSettingCommand() {}
+    
+
+    private int _VoteEndCount = default(int);
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"VoteEndCount", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int VoteEndCount
+    {
+      get { return _VoteEndCount; }
+      set { _VoteEndCount = value; }
+    }
+
+    private int _VoteExtendTimeSeconds = default(int);
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"VoteExtendTimeSeconds", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int VoteExtendTimeSeconds
+    {
+      get { return _VoteExtendTimeSeconds; }
+      set { _VoteExtendTimeSeconds = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ClearVoteCommand")]
   public partial class ClearVoteCommand : global::ProtoBuf.IExtensible
   {

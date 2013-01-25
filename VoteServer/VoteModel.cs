@@ -26,6 +26,8 @@ namespace VoteSystem.Server
         private VoteStrategy.IVoteStrategy voteStrategy;
         private VoteMode voteMode = VoteMode.Shogi;
         private bool isVoteResultChanged = true;
+        private int voteEndCount = 5;
+        private TimeSpan voteExtendTime = TimeSpan.FromSeconds(60);
 
         private readonly Dictionary<string, TimeExtendKind> timeExtendDic =
             new Dictionary<string, TimeExtendKind>();
@@ -615,7 +617,7 @@ namespace VoteSystem.Server
             var timeKeeper = this.voteRoom.VoteTimeKeeper;
 
             // 5票以上集まったら、投票自体を打ち切ります。
-            if (TimeStablePoint >= 5)
+            if (TimeStablePoint >= this.voteEndCount)
             {
                 timeKeeper.SetVoteSpan(TimeSpan.Zero);
                 return;
@@ -623,11 +625,11 @@ namespace VoteSystem.Server
 
             if (kind == TimeExtendKind.Extend)
             {
-                timeKeeper.AddVoteSpan(TimeSpan.FromMinutes(2));
+                timeKeeper.AddVoteSpan(this.voteExtendTime);
             }
             else
             {
-                timeKeeper.AddVoteSpan(-TimeSpan.FromMinutes(2));
+                timeKeeper.AddVoteSpan(-this.voteExtendTime);
             }
         }
 
@@ -691,6 +693,8 @@ namespace VoteSystem.Server
         {
             connection.AddCommandHandler<ChangeVoteModeCommand>(
                HandleChangeVoteModeCommand);
+            connection.AddCommandHandler<SetTimeExtendSettingCommand>(
+               HandleSetTimeExtendSettingCommand);
             connection.AddCommandHandler<NotificationCommand>(
                HandleNotificationCommand);
             connection.AddCommandHandler<ClearVoteCommand>(
@@ -713,6 +717,7 @@ namespace VoteSystem.Server
             }
 
             connection.RemoveHandler<ChangeVoteModeCommand>();
+            connection.RemoveHandler<SetTimeExtendSettingCommand>();
             connection.RemoveHandler<NotificationCommand>();
             connection.RemoveHandler<ClearVoteCommand>();
         }
@@ -737,18 +742,42 @@ namespace VoteSystem.Server
         }
 
         /// <summary>
+        /// 時間延長に関する設定を行います。
+        /// </summary>
+        private void HandleSetTimeExtendSettingCommand(
+            object sender, PbCommandEventArgs<SetTimeExtendSettingCommand> e)
+        {
+            var voteEndCount = e.Command.VoteEndCount;
+            var voteExtendTime = e.Command.VoteExtendTimeSeconds;
+
+            using (LazyLock())
+            {
+                if (voteEndCount > 0)
+                {
+                    this.voteEndCount = voteEndCount;
+
+                    Log.Info(
+                        "投票打ち切りのカウントを設定しました: {0}",
+                        voteEndCount);
+                }
+
+                if (voteExtendTime >= 0)
+                {
+                    this.voteExtendTime = TimeSpan.FromSeconds(voteExtendTime);
+
+                    Log.Info(
+                        "時間延長・短縮時の時間を設定しました: {0}",
+                        this.voteExtendTime);
+                }
+            }
+        }
+
+        /// <summary>
         /// 通知メッセージを処理します。
         /// </summary>
         private void HandleNotificationCommand(
             object sender, PbCommandEventArgs<NotificationCommand> e)
         {
-            var voteRoom = this.voteRoom;
-            if (voteRoom == null)
-            {
-                throw new InvalidOperationException(
-                    "投票ルームに入室していません。");
-            }
-
             // メッセージが投票ルームのオーナーによるものかを判定します。
             // 放送のコメントすべてが通知として放送主から送られてくるため、
             // 放送主から投稿されたものだけを特別扱いする必要があります。

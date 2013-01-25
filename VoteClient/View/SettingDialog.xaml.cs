@@ -55,6 +55,17 @@ namespace VoteSystem.Client.View
         {
             Global.Settings.Save();
 
+            // 投票ルームの時間設定を変更します。
+            // ここでやるのはおかしいかなぁ。。。
+            var voteClient = Global.VoteClient;
+            if (voteClient != null && voteClient.IsLogined &&
+                voteClient.IsVoteRoomOwner)
+            {
+                voteClient.SetTimeExtendSetting(
+                    Global.Settings.VoteEndCount,
+                    Global.Settings.VoteExtendTime);
+            }
+
             DialogResult = true;
         }
 
