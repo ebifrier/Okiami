@@ -1,4 +1,4 @@
-﻿#!/usr/local/bin/ruby -Ku
+#!/usr/local/bin/ruby -Ku
 #
 # Releaseバージョンを作成します。
 #
@@ -52,7 +52,7 @@ end
 #
 # 配布用ファイルを作成します。
 #
-def make_dist()
+def make_dist(appdata)
   # アセンブリバージョンが入ったディレクトリに
   # 作成ファイルを出力します。
   solution_path = File.join(File.dirname(appdata.dist_path), "VoteSystem.sln")
@@ -71,11 +71,11 @@ end
 #
 # 必要なファイルをコピーします。
 #
-def copy_dist()
+def copy_dist(appdata)
   FileUtils.copy(appdata.zip_path, File.join($HtmlBasePath, "download"))
   FileUtils.copy(appdata.versioninfo_path, File.join($HtmlBasePath, "update"))
   FileUtils.copy(appdata.releasenote_path, File.join($HtmlBasePath, "update"))
-  FileUtils.copy(File.join(dist_path, "VoteClient.html"), File.join($HtmlBasePath, "download"))
+  FileUtils.copy(File.join(appdata.dist_path, "VoteClient.html"), File.join($HtmlBasePath, "download"))
 end
 
 # このスクリプトのパスは $basepath/dist/xxx.rb となっています。
