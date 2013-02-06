@@ -1,3 +1,11 @@
+2013-02-06  - Ver 1.2.2.1
+
+	* VoteClient/Model/SystemMessage.cs: 設定ファイルへの保存に失敗して
+	いたため、クラスにDataContract/DataMember属性を追加しました。
+	* VoteSystem/VoteProtocol/SimpleTimeSpan.cs: 設定ファイルへの保存に
+	失敗していたため、クラスにDataContract/DataMember属性を追加しました。 
+	* VoteProtocol/View/EndRollControl.cs: 文字を太くしました。
+
 2013-01-27  - Ver 1.2.2.0
 
 	* バージョンを1.2.2に更新しました。

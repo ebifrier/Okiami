@@ -407,7 +407,7 @@ namespace VoteSystem.Protocol.View
                 Text = elem.Text,
                 FontSize = 20,
                 Foreground = new SolidColorBrush(elem.Color),
-                //FontWeight = FontWeights.Bold,
+                FontWeight = FontWeights.Bold,
                 Stroke = Brushes.Black,
                 StrokeThickness = 0.3,
                 Effect = new DropShadowEffect() {Opacity = 0.6},

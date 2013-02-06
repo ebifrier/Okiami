@@ -13,11 +13,13 @@ namespace VoteSystem.Protocol
     /// 将棋用の持ち時間などを保持します。
     /// </summary>
     [Serializable()]
+    [DataContract()]
     public sealed class SimpleTimeSpan : NotifyObject
     {
         /// <summary>
         /// 時間を使用するかどうかを取得または設定します。
         /// </summary>
+        [DataMember(Order = 1, IsRequired = true)]
         public bool IsUse
         {
             get { return GetValue<bool>("IsUse"); }
@@ -27,6 +29,7 @@ namespace VoteSystem.Protocol
         /// <summary>
         /// 持ち時間の分を取得または設定します。
         /// </summary>
+        [DataMember(Order = 2, IsRequired = true)]
         public int Minutes
         {
             get { return GetValue<int>("Minutes"); }
@@ -36,6 +39,7 @@ namespace VoteSystem.Protocol
         /// <summary>
         /// 持ち時間の秒を取得または設定します。
         /// </summary>
+        [DataMember(Order = 3, IsRequired = true)]
         public int Seconds
         {
             get { return GetValue<int>("Seconds"); }

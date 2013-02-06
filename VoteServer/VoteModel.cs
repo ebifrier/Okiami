@@ -554,7 +554,7 @@ namespace VoteSystem.Server
 
             // とりあえず文字列を正規化します。
             var normalizedText = StringNormalizer.NormalizeText(
-                text, NormalizeTextOption.Kana);
+                text, NormalizeTextOption.Kana | NormalizeTextOption.Alphabet);
 
             if (ExtendRegex.IsMatch(normalizedText))
             {
