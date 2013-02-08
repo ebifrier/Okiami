@@ -757,7 +757,8 @@ namespace VoteSystem.PluginShogi.ViewModel
                     return;
                 }
 
-                using (var writer = new StreamWriter(dialog.FileName))
+                using (var writer = new StreamWriter(dialog.FileName, false,
+                                                     KifuObject.DefaultEncoding))
                 {
                     SaveKif(writer);
                 }

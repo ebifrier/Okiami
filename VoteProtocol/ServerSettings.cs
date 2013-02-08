@@ -17,7 +17,7 @@ namespace VoteSystem.Protocol
         /// 通信プロトコルのバージョンです。
         /// </summary>
         public static readonly PbProtocolVersion ProtocolVersion =
-            new PbProtocolVersion(2, 1, 5);
+            new PbProtocolVersion(2, 1, 6);
 
         /// <summary>
         /// 投票サーバーのアドレスです。

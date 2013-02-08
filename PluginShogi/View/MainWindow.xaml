@@ -88,9 +88,6 @@
                               Command="{x:Static svm:Commands.CopyKifFile}" />
                 </MenuItem>
                 <Separator />
-                <MenuItem Header="各種設定(_S)"
-                          Command="{x:Static svm:Commands.ShowSettingDialog}" />
-                <Separator />
                 <MenuItem Header="NCVログを読み込み"
                           Command="{x:Static svm:Commands.ReadNcvLog}"
                           Visibility="{x:Static s:Global.IsNonPublishedVisibility}" />
@@ -104,8 +101,10 @@
                           Command="{x:Static svm:Commands.SetReverseBoard}"
                           CommandParameter="{Binding IsChecked, ElementName=boardReverse}" />
                 <Separator />
-                <MenuItem Header="変化ウィンドウ"
+                <MenuItem Header="変化ウィンドウ(_V)"
                           Command="{x:Static svm:Commands.ShowMoveManageView}" />
+                <MenuItem Header="各種設定(_S)"
+                          Command="{x:Static svm:Commands.ShowSettingDialog}" />
             </MenuItem>
         </Menu>
 

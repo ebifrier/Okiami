@@ -20,7 +20,7 @@
                     <CheckBox Content="コメントを投稿する"
                               IsChecked="{Binding IsPostComment}"/>
                     <GroupBox Header="コメント投稿"
-                              IsEnabled="{Binding IsPostComment}">
+                              IsEnabled="{Binding IsPostComment, Mode=OneWay}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition />

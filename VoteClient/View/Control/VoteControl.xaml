@@ -16,12 +16,7 @@
                 <ResourceDictionary Source="./VoteRoomInfoTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- 投票モードを表示するコンボボックスのスタイルです。-->
-            <Style x:Key="voteModeComboStyle" TargetType="ComboBox">
-                <Setter Property="Width" Value="60" />
-                <Setter Property="SelectedIndex" Value="0" />
-                <Setter Property="IsEditable" Value="False" />
-                <Setter Property="IsReadOnly" Value="True" />
+            <Style x:Key="roomOwnerStyle" TargetType="FrameworkElement">
                 <Setter Property="IsEnabled" Value="False" />
 
                 <Style.Triggers>
@@ -33,6 +28,15 @@
                         <Setter Property="IsEnabled" Value="True" />
                     </MultiDataTrigger>
                 </Style.Triggers>
+            </Style>
+
+            <!-- 投票モードを表示するコンボボックスのスタイルです。-->
+            <Style x:Key="voteModeComboStyle" TargetType="ComboBox"
+                   BasedOn="{StaticResource roomOwnerStyle}">
+                <Setter Property="Width" Value="60" />
+                <Setter Property="SelectedIndex" Value="0" />
+                <Setter Property="IsEditable" Value="False" />
+                <Setter Property="IsReadOnly" Value="True" />
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -48,14 +52,14 @@
                           SelectedValue="{Binding CurrentVoteMode}"
                           SelectedValuePath="Value"
                           DisplayMemberPath="Label"
-                          ToolTip="投票モードを選択します"
-                          IsReadOnly="True" />
+                          ToolTip="投票モードを選択します" />
 
                 <Separator />
 
-                <CheckBox Content="ミラー？"
+                <CheckBox Style="{StaticResource roomOwnerStyle}"
+                          Content="ｺﾒﾝﾄﾐﾗｰ?"
                           IsChecked="{Binding IsMirrorMode}"
-                          ToolTip="全コメントのミラーを行う場合はチェックしてください。" />
+                          ToolTip="全コメントのミラーリングを行う場合はチェックしてください。" />
 
                 <Separator />
 
