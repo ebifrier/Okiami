@@ -24,7 +24,6 @@ namespace VoteSystem.Server
         private readonly Dictionary<VoteMode, VoteStrategy.IVoteStrategy> strategyList =
             new Dictionary<VoteMode, VoteStrategy.IVoteStrategy>();
         private VoteStrategy.IVoteStrategy voteStrategy;
-        private VoteMode voteMode = VoteMode.Shogi;
         private bool isVoteResultChanged = true;
         private int voteEndCount = 5;
         private TimeSpan voteExtendTime = TimeSpan.FromSeconds(60);
@@ -45,26 +44,21 @@ namespace VoteSystem.Server
         }
 
         /// <summary>
-        /// 投票モードを取得または設定します。
+        /// 投票モードを取得まします。
         /// </summary>
         public VoteMode VoteMode
         {
-            get
-            {
-                return this.voteMode;
-            }
-            private set
-            {
-                using (LazyLock())
-                {
-                    if (this.voteMode != value)
-                    {
-                        this.voteMode = value;
+            get { return GetValue<VoteMode>("VoteMode"); }
+            private set { SetValue("VoteMode", value); }
+        }
 
-                        this.RaisePropertyChanged("VoteMode");
-                    }
-                }
-            }
+        /// <summary>
+        /// 全コメントをミラーするモードかどうかを取得します。
+        /// </summary>
+        public bool IsMirrorMode
+        {
+            get { return GetValue<bool>("IsMirrorMode"); }
+            private set { SetValue("IsMirrorMode", value); }
         }
 
         /// <summary>
@@ -133,10 +127,16 @@ namespace VoteSystem.Server
         /// <summary>
         /// 投票モードを変更します。
         /// </summary>
-        public void ChangeMode(VoteMode mode)
+        public void ChangeMode(VoteMode mode, bool isMirrorMode)
         {
             using (LazyLock())
             {
+                if (mode == VoteMode && isMirrorMode == IsMirrorMode)
+                {
+                    // 何もする必要がありません。
+                    return;
+                }
+
                 if (this.voteRoom.VoteTimeKeeper.VoteState != VoteState.Stop)
                 {
                     Log.Error(this,
@@ -156,9 +156,13 @@ namespace VoteSystem.Server
                 // 投票戦略を変更します。
                 this.voteStrategy = strategy;
                 this.VoteMode = mode;
+                this.IsMirrorMode = isMirrorMode;
 
                 OnVoteResultChanged();
             }
+
+            // モードの変更を通知します。
+            this.voteRoom.Updated();
         }        
 
         /// <summary>
@@ -731,14 +735,15 @@ namespace VoteSystem.Server
             var mode = e.Command.VoteMode;
             if (!Enum.IsDefined(typeof(VoteMode), mode))
             {
-                throw new ArgumentException("e",
+                throw new ArgumentException(
                     string.Format(
                         "投票モードの値({0})が正しくありません。",
-                        (int)mode));
+                        (int)mode),
+                    "e");
             }
 
             // 投票モードの変更を行います。
-            ChangeMode(mode);
+            ChangeMode(mode, e.Command.IsMirrorMode);
         }
 
         /// <summary>
@@ -806,6 +811,7 @@ namespace VoteSystem.Server
         /// </summary>
         public VoteModel(VoteRoom voteRoom)
         {
+            VoteMode = VoteMode.Shogi;
             this.voteRoom = voteRoom;
 
             // 投票モードが変わっても参加者リストを保存するために、
@@ -813,6 +819,7 @@ namespace VoteSystem.Server
             //strategyList[VoteMode.Kaos] = new VoteStrategy.KaosVoteStrategy(this);
             strategyList[VoteMode.Shogi] = new VoteStrategy.ShogiVoteStrategy(voteRoom);
             strategyList[VoteMode.Mirror] = new VoteStrategy.MirroringStrategy(voteRoom);
+            this.voteStrategy = strategyList[VoteMode.Shogi];
 
             // VoteRoomの初期化中にここが呼ばれるため、ここでモードを変えると
             // VoteRoomプロパティを参照することによるnullエラーが出ます。

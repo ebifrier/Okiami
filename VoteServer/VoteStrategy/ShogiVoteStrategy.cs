@@ -48,14 +48,25 @@ namespace VoteSystem.Server.VoteStrategy
                 var moveList = this.moveStatistics.MoveList;
 
                 // 指し手を投票結果に変換します。
-                return moveList.Select(pair =>
-                    new VoteCandidatePair()
+                return moveList.Select(
+                    _ => new VoteCandidatePair
                     {
-                        Candidate = pair.Move.ToString(),
-                        Point = pair.Point,
+                        Candidate = _.Move.ToString(),
+                        Point = _.Point,
                     })
-                    .Where(pair => pair.Validate())
+                    .Where(_ => _.Validate())
                     .ToArray();
+            }
+        }
+
+        /// <summary>
+        /// 全コメントをミラー中かどうか取得します。
+        /// </summary>
+        public bool IsMirrorMode
+        {
+            get
+            {
+                return this.voteRoom.VoteModel.IsMirrorMode;
             }
         }
         
@@ -432,6 +443,12 @@ namespace VoteSystem.Server.VoteStrategy
 
                 this.voteRoom.BroadcastCommand(command);
             }
+
+            if (IsMirrorMode)
+            {
+                // ミラーコメントとして各放送に送ります。
+                this.voteRoom.BroadcastNotification(notification, false, true);
+            }
         }
 
         /// <summary>
@@ -566,21 +583,24 @@ namespace VoteSystem.Server.VoteStrategy
                         "プレイヤー='{0}'が参加しました。",
                         player);
 
-                    // プレイヤーの参加表明を全ユーザーに通知します。
-                    var notification = new Notification()
+                    if (!IsMirrorMode)
                     {
-                        Text = player + "さんが参加しました",
-                        Type = NotificationType.Join,
-                        Color = GetPlayerColor(player.SkillLevel),
-                        VoterId = player.PlayerId,
-                        VoterName = (
-                            !string.IsNullOrEmpty(source.VoterName) ?
-                            source.VoterName : player.Nickname),
-                        FromLiveRoom = source.FromLiveRoom,
-                        Timestamp = source.Timestamp,
-                    };
+                        // プレイヤーの参加表明を全ユーザーに通知します。
+                        var notification = new Notification()
+                        {
+                            Text = player + "さんが参加しました",
+                            Type = NotificationType.Join,
+                            Color = GetPlayerColor(player.SkillLevel),
+                            VoterId = player.PlayerId,
+                            VoterName = (
+                                !string.IsNullOrEmpty(source.VoterName) ?
+                                source.VoterName : player.Nickname),
+                            FromLiveRoom = source.FromLiveRoom,
+                            Timestamp = source.Timestamp,
+                        };
 
-                    this.voteRoom.BroadcastNotification(notification, true, true);
+                        this.voteRoom.BroadcastNotification(notification, true, true);
+                    }
                 }
             }
         }
@@ -621,21 +641,24 @@ namespace VoteSystem.Server.VoteStrategy
                         "指し手={0}が受理されました。",
                         move.ToString());
 
-                    // 投票された指し手を全ユーザーに通知します。
-                    var notification = new Notification()
+                    if (!IsMirrorMode)
                     {
-                        Text = move.OriginalText,
-                        Type = NotificationType.Vote,
-                        Color = GetPlayerColor(player.SkillLevel),
-                        VoterId = source.VoterId,
-                        VoterName = (
-                            !string.IsNullOrEmpty(source.VoterName) ?
-                            source.VoterName : player.Nickname),
-                        FromLiveRoom = source.FromLiveRoom,
-                        Timestamp = source.Timestamp,
-                    };
+                        // 投票された指し手を全ユーザーに通知します。
+                        var notification = new Notification()
+                        {
+                            Text = move.OriginalText,
+                            Type = NotificationType.Vote,
+                            Color = GetPlayerColor(player.SkillLevel),
+                            VoterId = source.VoterId,
+                            VoterName = (
+                                !string.IsNullOrEmpty(source.VoterName) ?
+                                source.VoterName : player.Nickname),
+                            FromLiveRoom = source.FromLiveRoom,
+                            Timestamp = source.Timestamp,
+                        };
 
-                    this.voteRoom.BroadcastNotification(notification, true, true);
+                        this.voteRoom.BroadcastNotification(notification, true, true);
+                    }
                 }
             }
         }

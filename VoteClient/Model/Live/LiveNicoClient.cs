@@ -115,7 +115,7 @@ namespace VoteSystem.Client.Model.Live
             // 受信したメッセージを放送に再投稿します。
             // システムメッセージのみ。
             if (this.commentClient.IsConnected &&
-                ProtocolUtil.IsPostComment(notification, Attribute, LiveData))
+                ProtocolUtil.IsPostComment(notification, false, Attribute, LiveData))
             {
                 var message = ModifyOwnerComment(notification.Text);
                 var nicoColorStr = ColorConverter.ToNicoColorString(

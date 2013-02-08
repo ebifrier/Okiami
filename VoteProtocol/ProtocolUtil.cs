@@ -189,8 +189,8 @@ namespace VoteSystem.Protocol
         /// <summary>
         /// 通知をニコ生のコメントとして投稿するか調べます。
         /// </summary>
-        public static bool IsPostComment(Notification notification, LiveAttribute attribute,
-                                         LiveData myLiveData)
+        public static bool IsPostComment(Notification notification, bool isMirrorMode,
+                                         LiveAttribute attribute, LiveData myLiveData)
         {
             if (notification == null || !notification.Validate())
             {
@@ -208,6 +208,14 @@ namespace VoteSystem.Protocol
                 return HasFlag(
                     attribute.SystemCommentTypeMask,
                     notification.Type);
+            }
+
+            // とりあえず全コメントをミラーします。
+            // 同じ放送ルームから投稿されたコメントはミラーしませんが、
+            // ルーム番号が分からないので、ここではその判断ができません。
+            if (isMirrorMode)
+            {
+                return true;
             }
 
             // もしメッセージの送信元と送信先が同じなら

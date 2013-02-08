@@ -53,6 +53,12 @@
 
                 <Separator />
 
+                <CheckBox Content="ミラー？"
+                          IsChecked="{Binding IsMirrorMode}"
+                          ToolTip="全コメントのミラーを行う場合はチェックしてください。" />
+
+                <Separator />
+
                 <!-- 投票状態をアイコンで表示します。-->
                 <Label Content="投票状態:" />
                 <Image Width="16" Height="16"

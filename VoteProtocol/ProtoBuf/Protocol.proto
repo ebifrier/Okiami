@@ -184,6 +184,7 @@ message SendVoteResultCommand {
 // クライアントからサーバーに送られます。
 message ChangeVoteModeCommand {
 	required Vote.VoteMode VoteMode = 1;
+	required bool IsMirrorMode = 2;
 }
 
 // 投票を開始します。

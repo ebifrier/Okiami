@@ -168,6 +168,15 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
+        /// 全コメントをミラーするモードかどうかを取得または設定します。
+        /// </summary>
+        public bool IsMirrorMode
+        {
+            get { return GetValue<bool>("IsMirrorMode"); }
+            set { SetValue("IsMirrorMode", value); }
+        }
+
+        /// <summary>
         /// 投票モードごとに固有の評価値を取得または設定します。
         /// </summary>
         /// <remarks>
@@ -473,7 +482,7 @@ namespace VoteSystem.Client.Model
             if (this.voteClient.IsLogined &&
                 this.voteClient.IsVoteRoomOwner)
             {
-                this.voteClient.ChangeVoteMode(CurrentVoteMode);
+                this.voteClient.ChangeVoteMode(CurrentVoteMode, IsMirrorMode);
             }
         }
 
@@ -507,6 +516,16 @@ namespace VoteSystem.Client.Model
                 UpdateVoteMode();
                 UpdateLiveRoomAttribute();
             }
+
+            if (e.PropertyName == "VoteMode")
+            {
+                CurrentVoteMode = this.voteClient.VoteMode;
+            }
+
+            if (e.PropertyName == "IsMirrorMode")
+            {
+                IsMirrorMode = this.voteClient.IsMirrorMode;
+            }
         }
 
         void nicoClient_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -515,14 +534,6 @@ namespace VoteSystem.Client.Model
             if (e.PropertyName == "IsLogined")
             {
                 UpdateNicoLoginStatus();
-            }
-        }
-
-        void MainModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "CurrentVoteMode")
-            {
-                UpdateVoteMode();
             }
         }
 
@@ -551,7 +562,12 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public MainModel()
         {
-            PropertyChanged += MainModel_PropertyChanged;
+            AddPropertyChangedHandler(
+                "CurrentVoteMode",
+                (_, __) => UpdateVoteMode());
+            AddPropertyChangedHandler(
+                "IsMirrorMode",
+                (_, __) => UpdateVoteMode());
 
             this.voteClient = new VoteClient(true);
             this.voteClient.NotificationReceived += HandleNotification;

@@ -75,9 +75,17 @@ namespace VoteSystem.Server
     public class LiveRoom : ILogObject, IDisposable
     {
         /// <summary>
-        /// ミラーコメントの印です。
+        /// ミラーコメントの印（無幅空白）です。
         /// </summary>
         public const char MirrorCommentMark = ProtocolUtil.MirrorCommentMark;
+        /// <summary>
+        /// 確認コメントの印（可視）です。
+        /// </summary>
+        public const string ComfirmCommentPrefix = "! ";
+        /// <summary>
+        /// ミラーコメントの印（可視）です。
+        /// </summary>
+        public const string MirrorCommentPrefix = "!! ";
 
         private readonly object SyncRoot = new object();
         private readonly LiveData liveData;
@@ -148,6 +156,20 @@ namespace VoteSystem.Server
                     return this.commenterSetList.Sum(
                         commenterList => commenterList.Count);
                 }
+            }
+        }
+
+        /// <summary>
+        /// 全コメントをミラーするモードかどうかを取得します。
+        /// </summary>
+        public bool IsMirrorMode
+        {
+            get
+            {
+                // 全コメントをミラーするモードなら
+                // コメントの最初にミラーコメントのマークである'!'をつけません。
+                var voteRoom = this.liveOwner.VoteRoom;
+                return (voteRoom != null && voteRoom.VoteModel.IsMirrorMode);
             }
         }
 
@@ -437,13 +459,27 @@ namespace VoteSystem.Server
                     }
                 }
 
+                // 全コメントのミラー時は確認コメントは送りません。
+                if (IsMirrorMode)
+                {
+                    return null;
+                }
+
                 // 先頭に無幅空白を挿入します。
-                cloned.Text = MirrorCommentMark + "! " + text;
+                cloned.Text = string.Format(
+                    "{0}{1}{2}",
+                    MirrorCommentMark,
+                    ComfirmCommentPrefix,
+                    text);
                 return cloned;
             }
             else
             {
-                cloned.Text = MirrorCommentMark + "!! " + text;
+                cloned.Text = string.Format(
+                    "{0}{1}{2}",
+                    MirrorCommentMark,
+                    (IsMirrorMode ? "" : MirrorCommentPrefix),
+                    text);
                 return cloned;
             }
         }
@@ -466,7 +502,8 @@ namespace VoteSystem.Server
             }
 
             // 投稿する設定になっていなければ帰ります。
-            if (!ProtocolUtil.IsPostComment(notification, Attribute, LiveData))
+            if (!ProtocolUtil.IsPostComment(
+                notification, IsMirrorMode, Attribute, LiveData))
             {
                 return;
             }
@@ -484,13 +521,19 @@ namespace VoteSystem.Server
                         // コメントのミラーを諦めます。
                         if (commenter == null)
                         {
-                            return;
+                            continue;
+                        }
+
+                        var modified = ModifyNotification(notification, i);
+                        if (modified == null)
+                        {
+                            continue;
                         }
 
                         // 通知は放送＆ルーム番号ごとに調整します。
-                        var command = new NotificationForPostCommand()
+                        var command = new NotificationForPostCommand
                         {
-                            Notification = ModifyNotification(notification, i),
+                            Notification = modified,
                             ToLive = LiveData,
                         };
 

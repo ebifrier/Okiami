@@ -15,40 +15,10 @@ namespace VoteSystem.Protocol.Vote
     /// </summary>
     [DataContract()]
     [Serializable()]
-    public class VoteRoomInfo : IModel, IEquatable<VoteRoomInfo>
+    public sealed class VoteRoomInfo : NotifyObject, IEquatable<VoteRoomInfo>
     {
-        private int id = -1;
-        private string name = string.Empty;
-        private int ownerNo = -1;
-        private bool hasPassword = false;
-        private string password;
-        private VoteState state = VoteState.Stop;
-        private VoteMode mode = VoteMode.Shogi;
-        private DateTime baseTimeNtp;
-        private TimeSpan totalVoteSpan;
-        private TimeSpan voteSpan;
         private NotifyCollection<VoteParticipantInfo> participantList =
             new NotifyCollection<VoteParticipantInfo>();
-        private DateTime createTime = DateTime.Now;
-
-        /// <summary>
-        /// プロパティの変更時に呼ばれるイベントです。
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// プロパティの変更通知を出します。
-        /// </summary>
-        public void NotifyPropertyChanged(PropertyChangedEventArgs e)
-        {
-            var handler = this.PropertyChanged;
-
-            if (handler != null)
-            {
-                Util.SafeCall(() =>
-                    handler(this, e));
-            }
-        }
 
         /// <summary>
         /// 部屋IDを取得します。
@@ -56,19 +26,8 @@ namespace VoteSystem.Protocol.Vote
         [DataMember(Order = 1, IsRequired = true)]
         public int Id
         {
-            get
-            {
-                return this.id;
-            }
-            set
-            {
-                if (this.id != value)
-                {
-                    this.id = value;
-
-                    this.RaisePropertyChanged("Id");
-                }
-            }
+            get { return GetValue<int>("Id"); }
+            set { SetValue("Id", value); }
         }
 
         /// <summary>
@@ -77,19 +36,8 @@ namespace VoteSystem.Protocol.Vote
         [DataMember(Order = 2, IsRequired = true)]
         public string Name
         {
-            get
-            {
-                return this.name;
-            }
-            set
-            {
-                if (this.name != value)
-                {
-                    this.name = value;
-
-                    this.RaisePropertyChanged("Name");
-                }
-            }
+            get { return GetValue<string>("Name"); }
+            set { SetValue("Name", value); }
         }
 
         /// <summary>
@@ -98,19 +46,8 @@ namespace VoteSystem.Protocol.Vote
         [DataMember(Order = 3, IsRequired = true)]
         public int OwnerNo
         {
-            get
-            {
-                return this.ownerNo;
-            }
-            set
-            {
-                if (this.ownerNo != value)
-                {
-                    this.ownerNo = value;
-
-                    this.RaisePropertyChanged("OwnerNo");
-                }
-            }
+            get { return GetValue<int>("OwnerNo"); }
+            set { SetValue("OwnerNo", value); }
         }
 
         /// <summary>
@@ -119,19 +56,8 @@ namespace VoteSystem.Protocol.Vote
         [DataMember(Order = 4, IsRequired = true)]
         public bool HasPassword
         {
-            get
-            {
-                return this.hasPassword;
-            }
-            set
-            {
-                if (this.hasPassword != value)
-                {
-                    this.hasPassword = value;
-
-                    this.RaisePropertyChanged("HasPassword");
-                }
-            }
+            get { return GetValue<bool>("HasPassword"); }
+            set { SetValue("HasPassword", value); }
         }
 
         /// <summary>
@@ -140,19 +66,8 @@ namespace VoteSystem.Protocol.Vote
         [DataMember(Order = 5, IsRequired = false)]
         public string Password
         {
-            get
-            {
-                return this.password;
-            }
-            set
-            {
-                if (this.password != value)
-                {
-                    this.password = value;
-
-                    this.RaisePropertyChanged("Password");
-                }
-            }
+            get { return GetValue<string>("Password"); }
+            set { SetValue("Password", value); }
         }
 
         /// <summary>
@@ -161,19 +76,8 @@ namespace VoteSystem.Protocol.Vote
         [DataMember(Order = 6, IsRequired = true)]
         public VoteState State
         {
-            get
-            {
-                return this.state;
-            }
-            set
-            {
-                if (this.state != value)
-                {
-                    this.state = value;
-
-                    this.RaisePropertyChanged("State");
-                }
-            }
+            get { return GetValue<VoteState>("State"); }
+            set { SetValue("State", value); }
         }
 
         /// <summary>
@@ -182,19 +86,18 @@ namespace VoteSystem.Protocol.Vote
         [DataMember(Order = 7, IsRequired = true)]
         public VoteMode Mode
         {
-            get
-            {
-                return this.mode;
-            }
-            set
-            {
-                if (this.mode != value)
-                {
-                    this.mode = value;
+            get { return GetValue<VoteMode>("Mode"); }
+            set { SetValue("Mode", value); }
+        }
 
-                    this.RaisePropertyChanged("Mode");
-                }
-            }
+        /// <summary>
+        /// 全コメントをミラーするモードかどうかを取得または設定します。
+        /// </summary>
+        [DataMember(Order = 13, IsRequired = true)]
+        public bool IsMirrorMode
+        {
+            get { return GetValue<bool>("IsMirrorMode"); }
+            set { SetValue("IsMirrorMode", value); }
         }
 
         /// <summary>
@@ -203,19 +106,8 @@ namespace VoteSystem.Protocol.Vote
         [DataMember(Order = 8, IsRequired = true)]
         public DateTime BaseTimeNtp
         {
-            get
-            {
-                return this.baseTimeNtp;
-            }
-            set
-            {
-                if (this.baseTimeNtp != value)
-                {
-                    this.baseTimeNtp = value;
-
-                    this.RaisePropertyChanged("BaseTimeNtp");
-                }
-            }
+            get { return GetValue<DateTime>("BaseTimeNtp"); }
+            set { SetValue("BaseTimeNtp", value); }
         }
 
         /// <summary>
@@ -225,19 +117,8 @@ namespace VoteSystem.Protocol.Vote
         [DataMember(Order = 9, IsRequired = true)]
         public TimeSpan TotalVoteSpan
         {
-            get
-            {
-                return this.totalVoteSpan;
-            }
-            set
-            {
-                if (this.totalVoteSpan != value)
-                {
-                    this.totalVoteSpan = value;
-
-                    this.RaisePropertyChanged("TotalVoteSpan");
-                }
-            }
+            get { return GetValue<TimeSpan>("TotalVoteSpan"); }
+            set { SetValue("TotalVoteSpan", value); }
         }
 
         /// <summary>
@@ -247,19 +128,8 @@ namespace VoteSystem.Protocol.Vote
         [DataMember(Order = 10, IsRequired = true)]
         public TimeSpan VoteSpan
         {
-            get
-            {
-                return this.voteSpan;
-            }
-            set
-            {
-                if (this.voteSpan != value)
-                {
-                    this.voteSpan = value;
-
-                    this.RaisePropertyChanged("VoteSpan");
-                }
-            }
+            get { return GetValue<TimeSpan>("VoteSpan"); }
+            set { SetValue("VoteSpan", value); }
         }
 
         /// <summary>
@@ -297,19 +167,8 @@ namespace VoteSystem.Protocol.Vote
         [DataMember(Order = 12, IsRequired = true)]
         public DateTime CreateTime
         {
-            get
-            {
-                return this.createTime;
-            }
-            private set
-            {
-                if (this.createTime != value)
-                {
-                    this.createTime = value;
-
-                    this.RaisePropertyChanged("CreateTime");
-                }
-            }
+            get { return GetValue<DateTime>("CreateTime"); }
+            set { SetValue("CreateTime", value); }
         }
 
         /// <summary>
@@ -317,7 +176,7 @@ namespace VoteSystem.Protocol.Vote
         /// </summary>
         public bool Validate()
         {
-            if (string.IsNullOrEmpty(this.Name))
+            if (string.IsNullOrEmpty(Name))
             {
                 return false;
             }
@@ -327,7 +186,7 @@ namespace VoteSystem.Protocol.Vote
                 return false;
             }
 
-            if (!ParticipantList.All(part => part.Validate()))
+            if (!ParticipantList.All(_ => _.Validate()))
             {
                 return false;
             }
@@ -397,6 +256,20 @@ namespace VoteSystem.Protocol.Vote
             {
                 this.participantList = new NotifyCollection<VoteParticipantInfo>();
             }
+        }
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public VoteRoomInfo()
+        {
+            Id = -1;
+            Name = string.Empty;
+            OwnerNo = -1;
+            State = VoteState.Stop;
+            Mode = VoteMode.Shogi;
+            IsMirrorMode = false;
+            CreateTime = DateTime.Now;
         }
     }
 }

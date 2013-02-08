@@ -531,6 +531,13 @@ namespace VoteSystem.Protocol
       get { return _VoteMode; }
       set { _VoteMode = value; }
     }
+    private bool _IsMirrorMode;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"IsMirrorMode", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public bool IsMirrorMode
+    {
+      get { return _IsMirrorMode; }
+      set { _IsMirrorMode = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }

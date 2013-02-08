@@ -151,6 +151,7 @@ namespace VoteSystem.Server
                     OwnerNo = ownerId,
                     State = this.voteTimeKeeper.VoteState,
                     Mode = this.voteModel.VoteMode,
+                    IsMirrorMode = this.voteModel.IsMirrorMode,
                     BaseTimeNtp = this.voteTimeKeeper.VoteStartTimeNtp,
                     VoteSpan = this.voteTimeKeeper.VoteSpan,
                     TotalVoteSpan = this.voteTimeKeeper.TotalVoteSpan,
@@ -534,10 +535,10 @@ namespace VoteSystem.Server
         }
 
         /// <summary>
-        /// 参加者の状態が変わった時に呼ばれます。
+        /// 投票ルームの状態が変わった時に呼ばれます。
         /// </summary>
         /// <remarks>
-        /// 参加者の状態をすべての参加者に通知します。
+        /// ルームの状態をすべての参加者に通知します。
         /// </remarks>
         public void Updated()
         {
@@ -589,7 +590,8 @@ namespace VoteSystem.Server
         /// </summary>
         public void BroadcastNotification(Notification notification,
                                           bool sendAsNotification,
-                                          bool sendToLiveRoom)
+                                          bool sendToLiveRoom,
+                                          VoteParticipant except = null)
         {
             if (notification == null || !notification.Validate())
             {
@@ -606,6 +608,11 @@ namespace VoteSystem.Server
                 // 各放送主にメッセージを送信します。
                 foreach (var participant in this.participantList)
                 {
+                    if (ReferenceEquals(participant, except))
+                    {
+                        continue;
+                    }
+
                     participant.SendNotificationCommand(
                         newNotification,
                         sendAsNotification,
@@ -626,7 +633,8 @@ namespace VoteSystem.Server
         public void BroadcastNotification(NotificationType type,
                                           Notification source,
                                           bool sendAsNotification,
-                                          bool sendToLiveRoom)
+                                          bool sendToLiveRoom,
+                                          VoteParticipant except = null)
         {
             if (source == null || !source.Validate())
             {
@@ -639,7 +647,8 @@ namespace VoteSystem.Server
             BroadcastNotification(
                 newNotification,
                 sendAsNotification,
-                sendToLiveRoom);
+                sendToLiveRoom,
+                except);
         }
 
         /// <summary>
@@ -648,7 +657,8 @@ namespace VoteSystem.Server
         public void BroadcastNotification(string text, NotificationType type,
                                           Notification source,
                                           bool sendAsNotification,
-                                          bool sendToLiveRoom)
+                                          bool sendToLiveRoom,
+                                          VoteParticipant except = null)
         {
             if (source == null || !source.Validate())
             {
@@ -662,7 +672,8 @@ namespace VoteSystem.Server
             BroadcastNotification(
                 newNotification,
                 sendAsNotification,
-                sendToLiveRoom);
+                sendToLiveRoom,
+                except);
         }
 
         /// <summary>
@@ -785,11 +796,8 @@ namespace VoteSystem.Server
         public VoteRoom(VoteParticipant voteRoomOwner, int id,
                         string name, string password)
         {
-            // VoteModelのプロパティ値変更は、自動で全参加者に通知します。
+            // VoteModelのプロパティ値は変更は、VoteRoom側で行います。
             this.voteModel = new VoteModel(this);
-            this.voteModel.AddPropertyChangedHandler(
-                "VoteMode",
-                (_, __) => Updated());
 
             // TimeKeeperの方は手動で更新します。
             // そうしないと遅くなるためです。
@@ -806,7 +814,7 @@ namespace VoteSystem.Server
             this.password = (string.IsNullOrEmpty(password) ? null : password);
 
             AddParticipant(voteRoomOwner);
-            this.voteModel.ChangeMode(VoteMode.Shogi);
+            this.voteModel.ChangeMode(VoteMode.Shogi, false);
 
             // 投票結果を送るためのスレッドを初期化します。
             voteResultThread = new Thread(UpdateVoteResultLoop)

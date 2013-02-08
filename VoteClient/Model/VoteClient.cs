@@ -270,6 +270,46 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
+        /// 投票モードを取得します。
+        /// </summary>
+        [DependOnProperty(typeof(VoteRoomInfo), "Mode")]
+        public VoteMode VoteMode
+        {
+            get
+            {
+                using (LazyLock())
+                {
+                    if (this.voteRoomInfo == null)
+                    {
+                        return VoteMode.Mirror;
+                    }
+
+                    return this.voteRoomInfo.Mode;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 全コメントをミラーするモードか取得します。
+        /// </summary>
+        [DependOnProperty(typeof(VoteRoomInfo), "IsMirrorMode")]
+        public bool IsMirrorMode
+        {
+            get
+            {
+                using (LazyLock())
+                {
+                    if (this.voteRoomInfo == null)
+                    {
+                        return false;
+                    }
+
+                    return this.voteRoomInfo.IsMirrorMode;
+                }
+            }
+        }
+
+        /// <summary>
         /// 全投票期間を取得します。
         /// </summary>
         [DependOnProperty(typeof(VoteRoomInfo), "TotalVoteSpan")]
@@ -1125,7 +1165,7 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// 投票モード変更コマンドを送信します。
         /// </summary>
-        public void ChangeVoteMode(VoteMode mode)
+        public void ChangeVoteMode(VoteMode mode, bool isMirrorMode)
         {
             using (LazyLock())
             {
@@ -1134,6 +1174,7 @@ namespace VoteSystem.Client.Model
                 this.conn.SendCommand(new ChangeVoteModeCommand()
                 {
                     VoteMode = mode,
+                    IsMirrorMode = isMirrorMode,
                 });
             }
         }

@@ -1,3 +1,16 @@
+2013-02-08  - Ver 1.2.2.2
+
+	* VoteClient/Model/MainModel.cs: ミラーモードをクライアント側から設
+	定できるようにしました。
+	* VoteClient/Model/VoteClient.cs: 投票モードとミラーモードに関する
+	プロパティを追加しました。これはサーバー側に変更があった場合は、自
+	動的に再設定されます。
+	* VoteProtocol/Vote/VoteRoomInfo.cs: NotifyObjectを使用しました。
+	* VoteServer/LiveRoom.cs: 全コメントのミラーリングモードに対応しま
+	した。
+	* VoteServer/VoteStrategy/ShogiVoteStrategy.cs: 全コメントのミラー
+	リング時に余計なコメントを投稿しないようにしました。
+
 2013-02-06  - Ver 1.2.2.1
 
 	* VoteClient/Model/SystemMessage.cs: 設定ファイルへの保存に失敗して
