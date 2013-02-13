@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -72,7 +73,7 @@ namespace VoteSystem.Protocol.Model
     /// <summary>
     /// 各行の部分文字列を保持します。
     /// </summary>
-    public class Element
+    public sealed class Element
     {
         /// <summary>
         /// 文字列を取得または設定します。
@@ -87,6 +88,24 @@ namespace VoteSystem.Protocol.Model
         /// 色を取得または設定します。
         /// </summary>
         public Color Color
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// フォントスタイルを取得または設定します。
+        /// </summary>
+        public FontStyle FontStyle
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// フォントウェイトを取得または設定します。
+        /// </summary>
+        public FontWeight FontWeight
         {
             get;
             set;
@@ -125,6 +144,8 @@ namespace VoteSystem.Protocol.Model
         public Element()
         {
             Color = Colors.White;
+            FontStyle = FontStyles.Normal;
+            FontWeight = FontWeights.Normal;
             Column = 0;
             ColumnSpan = 1;
             HorizontalAlignment = HorizontalAlignment.Center;
@@ -134,7 +155,7 @@ namespace VoteSystem.Protocol.Model
     /// <summary>
     /// 横列を指定するオブジェクトです。
     /// </summary>
-    public class Column
+    public sealed class Column
     {
         /// <summary>
         /// 横幅比を取得または設定します。
@@ -149,7 +170,7 @@ namespace VoteSystem.Protocol.Model
     /// <summary>
     /// 各行文字列の情報を保持します。
     /// </summary>
-    public class Line
+    public sealed class Line
     {
         /// <summary>
         /// 1行にある文字列のリストを取得します。
@@ -172,9 +193,9 @@ namespace VoteSystem.Protocol.Model
     /// <summary>
     /// エンドロール用のスタッフリストを扱います。
     /// </summary>
-    public class EndRollList
+    public sealed class EndRollList
     {
-        private static readonly Regex propertyRegex = new Regex(
+        private static readonly Regex PropertyRegex = new Regex(
             @"[$](?:[(]([\w_]*)[)]|([\w_]*))");
 
         /// <summary>
@@ -228,7 +249,7 @@ namespace VoteSystem.Protocol.Model
 
             // プロパティ名の最初が$なら、指定の名前のプロパティから
             // 値を取得します。
-            return propertyRegex.Replace(value, m =>
+            return PropertyRegex.Replace(value, m =>
             {
                 // $(name)で示される名前を持つプロパティを探し、
                 // その値で値を置き換えます。
@@ -323,6 +344,53 @@ namespace VoteSystem.Protocol.Model
         }
 
         /// <summary>
+        /// 静的公開プロパティの名前と値をペアにした辞書を作成します。
+        /// </summary>
+        private static Dictionary<string, TType> CreateDic<TType>(Type containerType)
+        {
+            var flags =
+                BindingFlags.GetProperty |
+                BindingFlags.Public |
+                BindingFlags.Static;
+
+            return containerType
+                .GetProperties(flags)
+                .Where(_ => _.PropertyType == typeof(TType))
+                .ToDictionary(
+                    _ => _.Name.ToLower(),
+                    _ => (TType)_.GetValue(null, null));
+        }
+
+        /// <summary>
+        /// FontStyleを文字列から変換するときに使います。
+        /// </summary>
+        private static readonly Dictionary<string, FontStyle> FontStyleDic =
+            CreateDic<FontStyle>(typeof(FontStyles));
+
+        /// <summary>
+        /// FontWeightを文字列から変換するときに使います。
+        /// </summary>
+        private static readonly Dictionary<string, FontWeight> FontWeightDic =
+            CreateDic<FontWeight>(typeof(FontWeights));
+
+        /// <summary>
+        /// 各属性値を文字列から取得します。
+        /// </summary>
+        private T ConvertFromDic<T>(string text, Dictionary<string, T> dic)
+        {
+            text = (!string.IsNullOrEmpty(text) ? text.ToLower() : text);
+
+            T value;
+            if (!dic.TryGetValue(text, out value))
+            {
+                throw new EndRollListException(
+                    text + ": 属性値の解析に失敗しました。");
+            }
+
+            return value;
+        }
+
+        /// <summary>
         /// Formatタグを処理します。
         /// </summary>
         /// <remarks>
@@ -362,6 +430,22 @@ namespace VoteSystem.Protocol.Model
                     }
                 }
 
+                attr = elem.Attribute("FontStyle");
+                if (attr != null)
+                {
+                    value = GetPropertyObject(data, attr.Value);
+
+                    result.FontStyle = ConvertFromDic(value, FontStyleDic);
+                }
+
+                attr = elem.Attribute("FontWeight");
+                if (attr != null)
+                {
+                    value = GetPropertyObject(data, attr.Value);
+
+                    result.FontWeight = ConvertFromDic(value, FontWeightDic);
+                }
+
                 attr = elem.Attribute("Column");
                 if (attr != null)
                 {
@@ -399,20 +483,20 @@ namespace VoteSystem.Protocol.Model
         {
             return new Line()
             {
-                ElementList = elem.Elements().Select(elemChild =>
+                ElementList = elem.Elements().Select(_ =>
                 {
-                    if (elemChild.Name.LocalName == "Format")
+                    if (_.Name.LocalName == "Format")
                     {
-                        return ProcessFormatTag(elemChild, data);
+                        return ProcessFormatTag(_, data);
                     }
                     else
                     {
                         throw new EndRollListException(
                             string.Format("{0}タグには対応していません。",
-                                elemChild.Name.LocalName),
-                            elemChild);
+                                _.Name.LocalName),
+                            _);
                     }
-                }).ToList(),
+                }).Where(_ => _ != null).ToList(),
             };
         }
 
@@ -421,7 +505,7 @@ namespace VoteSystem.Protocol.Model
         /// </summary>
         private List<object> GetDataObject(VoterList voterList, string propertyName)
         {
-            var m = propertyRegex.Match(propertyName);
+            var m = PropertyRegex.Match(propertyName);
             if (!m.Success)
             {
                 return null;
@@ -485,7 +569,8 @@ namespace VoteSystem.Protocol.Model
                         }
 
                         return ProcessLineTag(line, data);
-                    }));
+                    }))
+                .Where(_ => _.ElementList.Any());
         }
 
         /// <summary>

@@ -127,6 +127,7 @@
     <Compile Include="Model\SoundManager.cs" />
     <Compile Include="Model\SystemMessage.cs" />
     <Compile Include="Model\SoundSetInfo.cs" />
+    <Compile Include="Model\TestVoterList.cs" />
     <Compile Include="Resources\Image\ImageConstants.cs" />
     <Compile Include="Model\VoteClient.cs" />
     <Compile Include="Global.cs" />

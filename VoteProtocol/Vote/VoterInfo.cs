@@ -155,6 +155,20 @@ namespace VoteSystem.Protocol.Vote
         /// <summary>
         /// コンストラクタ
         /// </summary>
+        public VoterInfo(string id, string name, string skill = null,
+                         NotificationColor color = NotificationColor.Default)
+            : this()
+        {
+            LiveSite = LiveSite.NicoNama;
+            Id = id;
+            Name = name;
+            Skill = skill;
+            Color = color;
+        }
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public VoterInfo()
         {
             LiveSite = LiveSite.Unknown;

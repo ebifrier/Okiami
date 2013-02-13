@@ -1,3 +1,10 @@
+2013-02-14  - Ver 1.2.3.1
+
+	* VoteProtocol/Model/EndRollList.cs: エンドロール用のフォーマットファイ
+	ルでFontStyleやFontWeightを指定可能にしました。
+	* VoteClient/Model/TestVoterList.cs: テスト用のエンドロールスタッフ一覧
+	を返すメソッドを追加しました。
+
 2013-02-09  - Ver 1.2.3.0
 
 	* バージョンを1.2.3に更新しました。
@@ -8,14 +15,14 @@
 
 2013-02-09  - Ver 1.2.2.3
 
-	* PluginShogi/View/MainWindow.xaml: 将棋盤の設定ダイアログメニュー
-	の位置を変更しました。
-	* PluginShogi/ViewModel/Commands.cs: 棋譜ファイルをSJISエンコーディ
-	ングで保存するようにしました。
-	* VoteClient/View/Control/VoteControl.xaml: 「コメントミラー？」の
-	チェックを投票停止中のルームオーナーのみに可能な操作としました。
-	* VoteProtocol/ServerSettings.cs: プロトコルのバージョンを一つ上げ
-	ました。
+	* PluginShogi/View/MainWindow.xaml: 将棋盤の設定ダイアログメニューの位
+	置を変更しました。
+	* PluginShogi/ViewModel/Commands.cs: 棋譜ファイルをSJISエンコーディング
+	で保存するようにしました。
+	* VoteClient/View/Control/VoteControl.xaml: 「コメントミラー？」のチェ
+	ックを投票停止中のルームオーナーのみに可能な操作としました。
+	* VoteProtocol/ServerSettings.cs: プロトコルのバージョンを一つ上げまし
+	た。
 
 2013-02-08  - Ver 1.2.2.2
 
