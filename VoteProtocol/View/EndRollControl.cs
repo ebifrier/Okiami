@@ -247,7 +247,7 @@ namespace VoteSystem.Protocol.View
                 new FrameworkPropertyMetadata(10.0));
 
         /// <summary>
-        /// エンドロールの流れる分間隔を示す依存プロパティです。
+        /// エンドロールの流れる時間（秒）を示す依存プロパティです。
         /// </summary>
         public static readonly DependencyProperty RollTimeSecondsProperty =
             DependencyProperty.Register(
