@@ -34,6 +34,14 @@ namespace VoteSystem.Protocol.Vote
         }
 
         /// <summary>
+        /// 全投票者の数を取得します。
+        /// </summary>
+        public int VoterCount
+        {
+            get { return (JoinedVoterList.Count() + UnjoinedVoterCount); }
+        }
+
+        /// <summary>
         /// 放送主一覧を取得または設定します。
         /// </summary>
         [DataMember(Order = 3, IsRequired = true)]
@@ -44,6 +52,14 @@ namespace VoteSystem.Protocol.Vote
         }
 
         /// <summary>
+        /// 放送主数を取得します。
+        /// </summary>
+        public int LiveOwnerCount
+        {
+            get { return LiveOwnerList.Count(); }
+        }
+
+        /// <summary>
         /// モード固有の参加者一覧を取得または設定します。
         /// </summary>
         [DataMember(Order = 4, IsRequired = true)]
@@ -51,6 +67,32 @@ namespace VoteSystem.Protocol.Vote
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// モード固有の参加者数を取得します。
+        /// </summary>
+        public int ModeCustomJoinerCount
+        {
+            get { return ModeCustomJoinerList.Count(); }
+        }
+
+        /// <summary>
+        /// 寄付者一覧を取得または設定します。
+        /// </summary>
+        [DataMember(Order = 5, IsRequired = true)]
+        public List<string> DonorList
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 寄付者数を取得します。
+        /// </summary>
+        public int DonorCount
+        {
+            get { return DonorList.Count(); }
         }
 
         /// <summary>
@@ -73,6 +115,11 @@ namespace VoteSystem.Protocol.Vote
             {
                 ModeCustomJoinerList = new List<string>();
             }
+
+            if (DonorList == null)
+            {
+                DonorList = new List<string>();
+            }
         }
 
         /// <summary>
@@ -83,6 +130,7 @@ namespace VoteSystem.Protocol.Vote
             JoinedVoterList = new List<VoterInfo>();
             LiveOwnerList = new List<VoterInfo>();
             ModeCustomJoinerList = new List<string>();
+            DonorList = new List<string>();
         }
     }
 }

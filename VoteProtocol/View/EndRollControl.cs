@@ -405,12 +405,12 @@ namespace VoteSystem.Protocol.View
             {
                 IsUpdateVisual = false, // 字形の自動作成はしない。
                 Text = elem.Text,
-                FontSize = 20,
+                FontSize = 18,
                 Foreground = new SolidColorBrush(elem.Color),
                 FontStyle = elem.FontStyle,
                 FontWeight = elem.FontWeight,
                 Stroke = Brushes.Black,
-                StrokeThickness = 0.3,
+                StrokeThickness = 0.1,
                 Effect = new DropShadowEffect() {Opacity = 0.6},
             };
 

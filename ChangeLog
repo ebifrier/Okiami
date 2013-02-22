@@ -1,3 +1,18 @@
+2013-02-22  - Ver 1.2.4.1
+
+	* PluginShogi/ShogiData/Background/SummerEffect/Back.jpg: 夏の画像を変
+	更しました。
+	* PluginShogi/ShogiData/Background/WinterEffect/Back.jpg: 冬の画像を変
+	更しました。
+	* PluginShogi/View/MainWindow.xaml.cs: 棋譜ファイル読み込み時にエンコー
+	ドをShift_JISに設定するようにしました。
+	* VoteClient/Model/TestVoterList.cs: 寄付者名リストを追加しました。
+	* VoteProtocol/Vote/VoterList.cs: 寄付者名リストを追加しました。
+	* VoteProtocol/Model/EndRollList.cs: プロパティの名前から値を取得する方
+	法をswitch-caseからリフレクションに変更しました。
+	* VoteProtocol/View/EndRollControl.cs: エンドロールの文字を見やすくしま
+	した。
+
 2013-02-20  - Ver 1.2.4.0
 
 	* バージョンを1.2.3に更新しました。

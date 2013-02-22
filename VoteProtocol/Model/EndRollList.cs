@@ -512,22 +512,22 @@ namespace VoteSystem.Protocol.Model
             }
 
             var g = (m.Groups[1].Success ? m.Groups[1] : m.Groups[2]);
-            switch (g.Value)
+            var data = MethodUtil.GetPropertyValue(voterList, g.Value);
+            if (data == null)
             {
-                case "UnjoinedVoterCount":
-                    return new List<object>() { voterList.UnjoinedVoterCount };
-                case "LiveOwner":
-                    return new List<object>() { /*Global.MainModel.NickName*/ };
-                    
-                case "JoinedVoterList":
-                    return voterList.JoinedVoterList.ToList<object>();
-                case "LiveOwnerList":
-                    return voterList.LiveOwnerList.ToList<object>();
-                case "ModeCustomJoinerList":
-                    return voterList.ModeCustomJoinerList.ToList<object>();
+                throw new EndRollListException(
+                    string.Format(
+                        "{0}: オブジェクト名が正しくありません。"));
             }
 
-            return null;
+            // データがリストなどなら、それをそのまま返します。
+            var tdata = data as System.Collections.IEnumerable;
+            if (tdata != null)
+            {
+                return tdata.Cast<object>().ToList();
+            }
+
+            return new List<object> { data };
         }
 
         /// <summary>

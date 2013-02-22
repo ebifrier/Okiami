@@ -47,7 +47,6 @@ namespace VoteSystem.Client.Model
                 CreateInfo("Kagemiro", "初段"),
                 CreateInfo("L.C", "3段"),
                 CreateInfo("McAfee", "0段"),
-                CreateInfo("SEいくつあるん？ｗｗｗ"),
                 CreateInfo("acorn"),
                 CreateInfo("an", "特技遠隔操作"),
                 CreateInfo("boki", "フィギュアオタ"),
@@ -72,7 +71,6 @@ namespace VoteSystem.Client.Model
                 CreateInfo("あすか", "はじめてだけど"),
                 CreateInfo("あと一人", "微妙な棋力"),
                 CreateInfo("いえろー"),
-                CreateInfo("いやがってるじゃん"),
                 CreateInfo("うんｋお", "ダークフレイムマスター"),
                 CreateInfo("うんｋふらい", "１５級"),
                 CreateInfo("えびきらい", "せっかくなので"),
@@ -96,9 +94,7 @@ namespace VoteSystem.Client.Model
                 CreateInfo("これは　デスノートです"),
                 CreateInfo("ごだん", "五段"),
                 CreateInfo("さしこ", "ボナの操作"),
-                CreateInfo("されていない自分ｗｗｗｗ"),
                 CreateInfo("しくる", "二段"),
-                CreateInfo("参加します", "とだけ言って本番参加しません"),
                 CreateInfo("じゃあ", "くそ弱い"),
                 CreateInfo("するわ"),
                 CreateInfo("その他", "2級"),
@@ -135,7 +131,6 @@ namespace VoteSystem.Client.Model
                 CreateInfo("クジラちゃんの味方お空ちゃん"),
                 CreateInfo("コテハン", "15級"),
                 CreateInfo("コミュどうしよう", "やめとくか"),
-                CreateInfo("コメント遅れた人は画面の右上に？"),
                 CreateInfo("シャア", "女の子好き"),
                 CreateInfo("タイラント", "１０級"),
                 CreateInfo("ダン", "棋力は内緒"),
@@ -189,7 +184,6 @@ namespace VoteSystem.Client.Model
                 CreateInfo("少年", "7級"),
                 CreateInfo("条件Ｒ５００以下"),
                 CreateInfo("寝坊の名無し", "煽り7段"),
-                CreateInfo("人数増やすなら今から放送予約入れとくとか？"),
                 CreateInfo("人狼王", "早く頼みます"),
                 CreateInfo("水彩", "15級"),
                 CreateInfo("宣誓", "最弱の6段"),
@@ -199,7 +193,6 @@ namespace VoteSystem.Client.Model
                 CreateInfo("滝", "１１級"),
                 CreateInfo("達人に浮気した名無し", "３級"),
                 CreateInfo("誰か", "abcからｇｄｇｄ取ったら何が残る？　"),
-                CreateInfo("遅くないですかｗｗｗ"),
                 CreateInfo("通りすがりの初心者", "自称15級"),
                 CreateInfo("藤井武美", "16級"),
                 CreateInfo("徳川", "大名"),
@@ -220,12 +213,59 @@ namespace VoteSystem.Client.Model
                 CreateInfo("梟", "3級"),
             };
 
+            var liveOwnerList = new List<string>
+            {
+                "のぼる",
+	            "二次元人",
+	            "にくくい",
+	            "かど",	
+	            "メイビス",
+	            "森太",
+	            "たかし",
+	            "にしにっぽん",
+	            "オグリ",
+	            "ねんのために",
+	            "うぬこうじ",
+	            "不☆通",
+	            "人参",
+	            "ベルシタス",
+	            "できすぎ",
+	            "サスケ",
+	            "龍氣槍",
+	            "みーご",
+	            "ルカワ",
+	            "616",
+	            "らふぃ",	
+	            "かるあ",
+	            "るーせる",
+	            "ねぎま",
+	            "じゃんぼ",
+	            "生ちゃん",
+	            "うにうに",
+	            "kendo-arashi",
+	            "さまんさneo",
+	            "みどりの"
+            };
+
             var voterList = new VoterList
             {
                 UnjoinedVoterCount = 236,
             };
             voterList.JoinedVoterList.AddRange(
                 list.OrderBy(_ => Guid.NewGuid()));
+
+            voterList.DonorList.AddRange(
+                list.OrderBy(_ => Guid.NewGuid())
+                    .Take(50).Select(_ => _.Name));
+
+            voterList.LiveOwnerList.AddRange(
+                from name in liveOwnerList
+                orderby Guid.NewGuid()
+                select new VoterInfo
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = name,
+                });
 
             return voterList;
         }

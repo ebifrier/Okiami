@@ -57,7 +57,7 @@ http://www.famfamfam.com/lab/icons/silk/
 http://www.geocities.jp/kuchinashi_community/
 
 ・将棋駒・盤素材
-将棋アプリ用クリエイティブコモンズ画像 mind様
+mind様＆２ちゃんねるの職人様
 http://mucho.girly.jp/bona/
 
 ・評価値の表情画像（伊吹萃香・巡音ルカ）
@@ -87,6 +87,10 @@ http://www.civillink.net/
 ・背景画像
 伍長様
 http://blog.livedoor.jp/gotyou6845/
+
+・背景画像
+とりのあくあ様
+http://www.pixiv.net/member.php?id=1960050
 
 ・効果音素材
 Senses Circuit様

@@ -568,7 +568,7 @@ namespace VoteSystem.Client.Command
             var model = new ViewModel.EndRollWindowViewModel
             {
                 Background = new SolidColorBrush(Color.FromArgb(170, 0, 0, 0)),
-                RollTimeSeconds = 310,
+                RollTimeSeconds = 305,
                 LineHeight = 30.0,
                 OpacityLineCount = 3,
                 Topmost = true,

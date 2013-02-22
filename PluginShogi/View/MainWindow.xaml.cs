@@ -62,7 +62,7 @@ namespace VoteSystem.PluginShogi.View
             var files = e.Data.GetData(DataFormats.FileDrop) as string[];
             if (files != null && files.Any())
             {
-                using (var reader = new StreamReader(files[0]))
+                using (var reader = new StreamReader(files[0], KifuObject.DefaultEncoding))
                 {
                     Commands.LoadKif(reader);
                 }
