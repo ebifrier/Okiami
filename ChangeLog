@@ -1,3 +1,9 @@
+2013-02-23  - Ver 1.2.4.2
+
+	* VoteProtocol/ServerSettings.cs: 通信プロトコルのバージョンを更新しま
+	した。
+	* dist/history.yaml: 更新履歴を更新しました。
+
 2013-02-22  - Ver 1.2.4.1
 
 	* PluginShogi/ShogiData/Background/SummerEffect/Back.jpg: 夏の画像を変

@@ -2,6 +2,14 @@
 # リリース情報
 #
 
+- version: 1.2.5
+  date: 2013/02/23
+  thumbnail: ruka_yabai.jpg
+  content:
+  - 本体: エンドロールの文字を見やすくしました。
+  - 本体: 通信プロトコルのバージョンを更新しました。
+  - 将棋: 夏・冬画像を変更しました。
+
 - version: 1.2.4
   date: 2013/02/16
   thumbnail: ruka_sawagu.jpg
