@@ -2,6 +2,12 @@
 # リリース情報
 #
 
+- version: 1.2.6
+  date: 2013/03/02
+  thumbnail: suika_kirai.jpg
+  content:
+  - 本体: バグ修正）デッドロックを回避しました。
+
 - version: 1.2.5
   date: 2013/02/23
   thumbnail: ruka_yabai.jpg
