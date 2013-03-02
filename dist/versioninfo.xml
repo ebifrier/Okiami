@@ -9,18 +9,18 @@
     </link>
     <description/>
     <language>ja</language>
-    <pubDate>Sat Feb 16 12:42:45 +0900 2013</pubDate>
+    <pubDate>Sat Mar 02 12:29:32 +0900 2013</pubDate>
     <item>
-      <title>Version 1.2.4</title>
+      <title>Version 1.2.6</title>
       <sparkle:updatePackLink>
         http://garnet-alice.net/programs/update/UpdatePack.exe
       </sparkle:updatePackLink>
       <sparkle:releaseNotesLink>
-        http://garnet-alice.net/programs/votesystem/update/release_note.html?v=25951
+        http://garnet-alice.net/programs/votesystem/update/release_note.html?v=8252
       </sparkle:releaseNotesLink>
-      <enclosure url="http://garnet-alice.net/programs/votesystem/download/VoteClient_1_2_4.zip"
-                 sparkle:version="1.2.4"
-                 sparkle:md5Signature="a8f008ec2b33c17205967a37f58ae0eb" />
+      <enclosure url="http://garnet-alice.net/programs/votesystem/download/VoteClient_1_2_6.zip"
+                 sparkle:version="1.2.6"
+                 sparkle:md5Signature="9077b26a1bc61ce05234e7c4a36ff01b" />
     </item>
   </channel>
 </rss>
