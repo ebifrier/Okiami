@@ -62,26 +62,26 @@ namespace VoteSystem.Client.Command
         /// <summary>
         /// コマンドを指定のオブジェクトにバインディングします。
         /// </summary>
-        public static void Bind(CommandBindingCollection bindings)
+        public static void Bind(UIElement element)
         {
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.LoginNico,
                     ExecuteLoginNico,
                     CanExecuteCommand));
 
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.ConnectToLive,
                     ExecuteConnectToLive,
                     CanExecuteCommand));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.DisconnectToLive,
                     ExecuteDisconnectToLive,
                     CanExecuteCommand));
 
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.AddCommenter,
                     ExecuteAddCommenter,

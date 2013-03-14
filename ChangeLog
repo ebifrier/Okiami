@@ -1,3 +1,10 @@
+2013-03-14  - Ver 1.2.6.1
+
+	* PluginShogi/ShogiData/Background/WinterEffect/Back.jpg: 冬の背景画像
+	を更新しました。
+	* VoteClient/Model/Live/LiveClient.cs: NotifyObjectを使うようにしました。
+	* CommandBinding関係のメソッドを修正しました。
+
 2013-03-02  - Ver 1.2.5.1
 
 	* dist/history.yaml: 更新履歴を更新しました。

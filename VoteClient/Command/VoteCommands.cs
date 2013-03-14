@@ -204,98 +204,98 @@ namespace VoteSystem.Client.Command
         /// <summary>
         /// コマンドを指定のオブジェクトにバインディングします。
         /// </summary>
-        public static void Bind(CommandBindingCollection bindings)
+        public static void Bind(UIElement element)
         {
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.SelectImageAsOwner,
                     ExecuteSelectImageAsOwner,
                     CanExecuteCommand));
 
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.SelectLocalVote,
                     ExecuteSelectLocalVote,
                     CanExecuteCommand));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.CreateVoteRoom,
                     ExecuteCreateVoteRoom,
                     CanExecuteCommand));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.EnterVoteRoom,
                     ExecuteEnterVoteRoom,
                     CanExecuteCommand));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.LeaveVoteRoom,
                     ExecuteLeaveVoteRoom,
                     CanExecuteCommand));
 
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.StartVoteWithLimit,
                     ExecuteStartVoteWithLimit,
                     CanExecuteCommand));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.StartVoteWithNolimit,
                     ExecuteStartVoteWithNolimit,
                     CanExecuteCommand));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.PauseVote,
                     ExecutePauseVote,
                     CanExecuteCommand));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.StopVote,
                     ExecuteStopVote,
                     CanExecuteCommand));
 
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.SetVoteSpan,
                     ExecuteSetVoteTime,
                     CanExecuteCommand));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.AddVoteSpan,
                     ExecuteAddVoteTime,
                     CanExecuteCommand));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.SetTotalVoteSpan,
                     ExecuteSetTotalVoteTime,
                     CanExecuteCommand));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.AddTotalVoteSpan,
                     ExecuteAddTotalVoteTime,
                     CanExecuteCommand));
 
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.ClearVote,
                     ExecuteClearVote,
                     CanExecuteCommand));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.ClearTimeExtendDemand,
                     ExecuteClearTimeExtendDemand,
                     CanExecuteCommand));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.ClearEvaluationPoint,
                     ExecuteClearEvaluationPoint,
                     CanExecuteCommand));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.SetMessage,
                     ExecuteSetMessage,
                     CanExecuteCommand));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.SendNotification,
                     ExecuteSendNotification,

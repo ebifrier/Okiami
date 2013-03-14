@@ -24,9 +24,9 @@ namespace VoteSystem.Client.View
         public MainWindow()
         {
             InitializeComponent();
-            Command.UtilCommand.Bind(CommandBindings);
-            Command.LiveCommands.Bind(CommandBindings);
-            Command.VoteCommands.Bind(CommandBindings);
+            Command.UtilCommand.Bind(this);
+            Command.LiveCommands.Bind(this);
+            Command.VoteCommands.Bind(this);
 
             Closing += (sender, e) =>
             {

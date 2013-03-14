@@ -20,18 +20,10 @@ namespace VoteSystem.Client.Model.Live
     /// ニコニコやUstreamなどの生放送への接続や切断、
     /// またはその管理などを行います。。
     /// </remarks>
-    public abstract class LiveClient : ILazyModel, IParentModel
+    public abstract class LiveClient : NotifyObject
     {
-        private readonly object SyncRoot = new object();
-        private readonly LazyModelObject lazyModelObject = new LazyModelObject();
-        private readonly List<object> dependModelList = new List<object>();
         private readonly MainModel participant;
-        private readonly LiveSite liveSite;
-        private readonly string liveSiteTitle;
-        private LiveData liveData;
         private LiveAttribute attribute;
-        //private LiveAttribute oldLiveAttribute = null;
-        private string liveUrlText = "";
 
         /// <summary>
         /// 放送に接続します。
@@ -49,56 +41,11 @@ namespace VoteSystem.Client.Model.Live
         public abstract void HandleNotification(Notification notification);
 
         /// <summary>
-        /// プロパティ値の変更通知イベントです。
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// プロパティ値変更を通知します。
-        /// </summary>
-        public void NotifyPropertyChanged(PropertyChangedEventArgs e)
-        {
-            var handler = this.PropertyChanged;
-
-            if (handler != null)
-            {
-                Global.UIProcess(() =>
-                    Util.SafeCall(() =>
-                       handler(this, e)));
-            }
-        }
-
-        /// <summary>
-        /// 依存モデルのリストを取得します。
-        /// </summary>
-        List<object> IParentModel.DependModelList
-        {
-            get
-            {
-                return this.dependModelList;
-            }
-        }
-
-        /// <summary>
-        /// イベント発火の遅延用オブジェクトを取得します。
-        /// </summary>
-        LazyModelObject ILazyModel.LazyModelObject
-        {
-            get
-            {
-                return this.lazyModelObject;
-            }
-        }
-
-        /// <summary>
         /// 投票参加者オブジェクトを取得します。
         /// </summary>
         public MainModel Participant
         {
-            get
-            {
-                return this.participant;
-            }
+            get { return this.participant; }
         }
 
         /// <summary>
@@ -106,10 +53,7 @@ namespace VoteSystem.Client.Model.Live
         /// </summary>
         public VoteClient VoteClient
         {
-            get
-            {
-                return this.participant.VoteClient;
-            }
+            get { return this.participant.VoteClient; }
         }
 
         /// <summary>
@@ -117,10 +61,8 @@ namespace VoteSystem.Client.Model.Live
         /// </summary>
         public LiveSite LiveSite
         {
-            get
-            {
-                return this.liveSite;
-            }
+            get { return GetValue<LiveSite>("LiveSite"); }
+            private set { SetValue("LiveSite", value); }
         }
 
         /// <summary>
@@ -128,10 +70,8 @@ namespace VoteSystem.Client.Model.Live
         /// </summary>
         public string LiveSiteTitle
         {
-            get
-            {
-                return this.liveSiteTitle;
-            }
+            get { return GetValue<string>("LiveSiteTitle"); }
+            private set { SetValue("LiveSiteTitle", value); }
         }
 
         /// <summary>
@@ -139,22 +79,8 @@ namespace VoteSystem.Client.Model.Live
         /// </summary>
         public LiveData LiveData
         {
-            get
-            {
-                return this.liveData;
-            }
-            protected set
-            {
-                using (new LazyModelLock(this, SyncRoot))
-                {
-                    if (this.liveData != value)
-                    {
-                        this.liveData = value;
-
-                        this.RaisePropertyChanged("LiveData");
-                    }
-                }
-            }
+            get { return GetValue<LiveData>("LiveData"); }
+            private set { SetValue("LiveData", value); }
         }
 
         /// <summary>
@@ -165,12 +91,12 @@ namespace VoteSystem.Client.Model.Live
         {
             get
             {
-                if (this.liveData == null)
+                if (LiveData == null)
                 {
-                    return "";
+                    return string.Empty;
                 }
 
-                return this.liveData.LiveTitle;
+                return LiveData.LiveTitle;
             }
         }
 
@@ -179,19 +105,8 @@ namespace VoteSystem.Client.Model.Live
         /// </summary>
         public string LiveUrlText
         {
-            get
-            {
-                return this.liveUrlText;
-            }
-            set
-            {
-                using (new LazyModelLock(this, SyncRoot))
-                {
-                    this.liveUrlText = value;
-
-                    this.RaisePropertyChanged("LiveUrlText");
-                }
-            }
+            get { return GetValue<string>("LiveUrlText"); }
+            set { SetValue("LiveUrlText", value); }
         }
 
         /// <summary>
@@ -205,7 +120,7 @@ namespace VoteSystem.Client.Model.Live
             }
             private set
             {
-                using (new LazyModelLock(this, SyncRoot))
+                using (LazyLock())
                 {
                     if (value != null)
                     {
@@ -264,7 +179,7 @@ namespace VoteSystem.Client.Model.Live
                     "放送IDが正しくありません。");
             }
 
-            using (new LazyModelLock(this, SyncRoot))
+            using (LazyLock())
             {
                 this.LiveData = liveData;
 
@@ -309,16 +224,16 @@ namespace VoteSystem.Client.Model.Live
         /// </summary>
         protected void LiveDisconnected()
         {
-            using (new LazyModelLock(this, SyncRoot))
+            using (LazyLock())
             {
-                if (this.LiveData == null)
+                if (LiveData == null)
                 {
                     return;
                 }
 
                 // 放送IDはここでクリアするため一時変数に保存します。
-                var liveData = this.LiveData;
-                this.LiveData = null;
+                var liveData = LiveData;
+                LiveData = null;
 
                 if (!VoteClient.IsConnected)
                 {
@@ -366,12 +281,12 @@ namespace VoteSystem.Client.Model.Live
                 return;
             }
 
-            if (this.LiveData == null)
+            if (LiveData == null)
             {
                 return;
             }
 
-            using (new LazyModelLock(this, SyncRoot))
+            using (LazyLock())
             {
                 // 放送属性を設定します。
                 VoteClient.OperateLive(
@@ -403,12 +318,12 @@ namespace VoteSystem.Client.Model.Live
         /// </summary>
         public void VoteLogined()
         {
-            if (this.LiveData == null)
+            if (LiveData == null)
             {
                 return;
             }
 
-            LiveConnected(this.LiveData);
+            LiveConnected(LiveData);
         }
 
         /// <summary>
@@ -417,9 +332,9 @@ namespace VoteSystem.Client.Model.Live
         protected LiveClient(MainModel participant, LiveSite liveSite)
         {
             this.participant = participant;
-            this.liveSite = liveSite;
-            this.liveSiteTitle = EnumEx.GetEnumLabel(liveSite);
-            this.Attribute = new LiveAttribute();
+            LiveSite = liveSite;
+            LiveSiteTitle = EnumEx.GetEnumLabel(liveSite);
+            Attribute = new LiveAttribute();
 
             this.PropertyChanged +=
                 (sender, e) => LiveAttributeChanged();

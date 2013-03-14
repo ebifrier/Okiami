@@ -123,55 +123,55 @@ namespace VoteSystem.Client.Command
         /// <summary>
         /// コマンドをバインドします。
         /// </summary>
-        public static void Bind(CommandBindingCollection bindings)
+        public static void Bind(UIElement element)
         {
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.NetworkProfile,
                     ExecuteNetworkProfile));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.PostComments,
                     ExecutePostComments));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.SendErrorLog,
                     ExecuteSendErrorLog));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.CheckToUpdate,
                     ExecuteCheckToUpdate));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.ShowVersion,
                     ExecuteShowVersion));
 
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.NavigateUrl,
                     ExecuteNavigateUrl));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.PlaySound,
                     ExecutePlaySound));
 
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.RunPlugin,
                     ExecuteRunPlugin));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.OpenSettingDialog,
                     ExecuteOpenSettingDialog));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.OpenVoteResultWindow,
                     ExecuteOpenVoteResultWindow));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.OpenEvaluationWindow,
                     ExecuteOpenEvaluationWindow));
-            bindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.OpenEndRollWindow,
                     ExecuteOpenEndRollWindow));

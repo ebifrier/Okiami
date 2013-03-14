@@ -25,7 +25,7 @@ namespace VoteSystem.Client.View.Control
         {
             InitializeComponent();
 
-            Command.UtilCommand.Bind(CommandBindings);
+            Command.UtilCommand.Bind(this);
         }
     }
 }

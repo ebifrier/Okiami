@@ -111,7 +111,7 @@ namespace VoteSystem.Client.View
         public SelectImageWindow()
         {
             InitializeComponent();
-            DialogCommands.BindCommands(CommandBindings);
+            DialogCommands.BindCommands(this);
         }
     }
 }

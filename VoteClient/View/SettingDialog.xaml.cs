@@ -35,7 +35,7 @@ namespace VoteSystem.Client.View
         /// </summary>
         private void InitializeCommands()
         {
-            Command.UtilCommand.Bind(CommandBindings);
+            Command.UtilCommand.Bind(this);
 
             CommandBindings.Add(
                 new CommandBinding(
