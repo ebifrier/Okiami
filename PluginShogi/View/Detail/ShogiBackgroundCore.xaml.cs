@@ -21,7 +21,7 @@ namespace VoteSystem.PluginShogi.View.Detail
     /// </summary>
     public partial class ShogiBackgroundCore : UserControl
     {
-        private EntityObject rootEffect = null;
+        private EntityObject rootEffect;
 
         /// <summary>
         /// 背景エフェクト名を扱う依存プロパティです。

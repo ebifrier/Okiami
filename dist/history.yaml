@@ -2,6 +2,12 @@
 # リリース情報
 #
 
+- version: 1.2.7
+  date: 2013/03/16
+  thumbnail: suika_uke.jpg
+  content:
+  - 将棋: 冬の背景画像を変更しました。
+
 - version: 1.2.6
   date: 2013/03/02
   thumbnail: suika_kirai.jpg

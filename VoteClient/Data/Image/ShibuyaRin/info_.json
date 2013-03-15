@@ -1,0 +1,22 @@
+﻿{
+  "title": "渋谷凛",
+  "author": "ゆず介",
+  "pixiv": 1042738,
+  "twitter": "yuzusukep",
+  "blog": "http://blog.livedoor.jp/yuzusukep/",
+
+  "imageList":
+  [
+    {"image":"uke.png",     "min":-100000, "max": -10000},
+    {"image":"naku.png",    "min": -10000, "max":  -3000},
+    {"image":"kanasii.png", "min":  -3000, "max":  -1000},
+    {"image":"aseru.png",   "min":  -1000, "max":   -500},
+    {"image":"odoroku.png", "min":   -500, "max":   -300},
+    {"image":"default.png", "min":   -300, "max":    300},
+    {"image":"tereru.png",  "min":    300, "max":    500},
+    {"image":"ikari.png",   "min":    500, "max":   1000},
+    {"image":"suki.png",    "min":   1000, "max":   3000},
+    {"image":"seme.png",    "min":   3000, "max":  10000},
+    {"image":"egao.png",    "min":  10000, "max": 100000}
+  ]
+}
