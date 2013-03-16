@@ -6,7 +6,7 @@
 require 'fileutils'
 require 'make_release'
 
-$HtmlBasePath = "E:/Dropbox/NicoNico/homepage/public_html/programs/votesystem"
+$HtmlBasePath = "E:/Dropbox/NicoNico/homepage/garnet-alice.net/programs/votesystem"
 
 #
 # ビルドしたファイルを配布用ディレクトリにコピーします。

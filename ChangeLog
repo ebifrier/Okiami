@@ -1,3 +1,8 @@
+2013-03-16  - Ver 1.2.7.0
+
+	* バージョンを1.2.7に更新しました。
+	* dist/history.yaml: 更新履歴を更新しました。
+
 2013-03-16  - Ver 1.2.6.2
 
 	* VoteClient/Data/Image/ShibuyaRin: 渋谷凛の評価値画像を追加しました。
@@ -9,9 +14,10 @@
 	* VoteClient/Model/Live/LiveClient.cs: NotifyObjectを使うようにしました。
 	* CommandBinding関係のメソッドを修正しました。
 
-2013-03-02  - Ver 1.2.5.1
+2013-03-02  - Ver 1.2.6.0
 
 	* dist/history.yaml: 更新履歴を更新しました。
+	* バージョンを1.2.6に更新しました。
 
 2013-02-23  - Ver 1.2.5.0
 
