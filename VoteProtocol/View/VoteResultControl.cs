@@ -573,7 +573,10 @@ namespace VoteSystem.Protocol.View
         {
             try
             {
-                var dialog = new VoteResultSettingDialog(this);
+                var dialog = new VoteResultSettingDialog(this)
+                {
+                    Topmost = true,
+                };
 
                 if (dialog.ShowDialog() == true)
                 {
@@ -620,21 +623,22 @@ namespace VoteSystem.Protocol.View
         }
 
         /// <summary>
+        /// このコントロール専用のコマンドを登録します。
+        /// </summary>
+        public void BindCommands(UIElement element)
+        {
+            element.CommandBindings.Add(
+                new CommandBinding(
+                    OpenSettingDialog,
+                    ExecuteOpenSettingDialog));
+        }
+
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         public VoteResultControl()
         {
-            CommandBindings.Add(
-                new CommandBinding(
-                    OpenSettingDialog,
-                    ExecuteOpenSettingDialog));
-
-            Loaded += new RoutedEventHandler(VoteResultControl_Loaded);
-        }
-
-        void VoteResultControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            ExecuteOpenSettingDialog(this, null);
+            BindCommands(this);
         }
     }
 }

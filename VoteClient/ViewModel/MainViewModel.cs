@@ -307,30 +307,33 @@ namespace VoteSystem.Client.ViewModel
                 return;
             }
 
-            // 秒読みSEを鳴らします。
-            if (e.PropertyName == "VoteLeaveTime")
-            {
-                if (this.baseModel.VoteState != VoteState.Voting)
-                {
-                    return;
-                }
-
-                var leaveTime = this.baseModel.VoteLeaveTime;
-                var leaveSeconds = (int)leaveTime.TotalSeconds;
-                Global.SoundManager.PlayCountdownSE(leaveSeconds);
-            }
-
             // 投票状態の変更に応じてSEを再生します。
             if (e.PropertyName == "VoteState")
             {
                 var state = this.baseModel.VoteState;
-                if (state == this.oldVoteState)
+                if (state != this.oldVoteState)
                 {
-                    return;
+                    Global.SoundManager.PlayVoteSE(state);
+                    this.oldVoteState = state;
                 }
+            }
 
-                Global.SoundManager.PlayVoteSE(state);
-                this.oldVoteState = state;
+            // 秒読みSEを鳴らします。
+            if (e.PropertyName == "VoteLeaveTime")
+            {
+                var info = this.baseModel.VoteClient.VoteRoomInfo;
+                var time = Ragnarok.Net.NtpClient.GetTime();
+                var interval = TimeSpan.FromSeconds(1.5);
+
+                if (info != null &&
+                    time - info.BaseTimeNtp > interval &&
+                    this.baseModel.VoteState == VoteState.Voting)
+                {
+                    var leaveTime = this.baseModel.VoteLeaveTime;
+                    var leaveSeconds = (int)leaveTime.TotalSeconds;
+
+                    Global.SoundManager.PlayCountdownSE(leaveSeconds);
+                }
             }
         }
 

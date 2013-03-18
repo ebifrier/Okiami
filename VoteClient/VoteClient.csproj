@@ -163,7 +163,6 @@
       <DependentUpon>VoteLoginControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Control\VoteRoomWithParticipantConverter.cs" />
-    <Compile Include="View\Control\PointToStringConverter.cs" />
     <Compile Include="View\Control\BasicSettingControl.xaml.cs">
       <DependentUpon>BasicSettingControl.xaml</DependentUpon>
     </Compile>
@@ -185,9 +184,6 @@
     </Compile>
     <Compile Include="View\TimeSpanWindow.xaml.cs">
       <DependentUpon>TimeSpanWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\VoteResultSettingDialog.xaml.cs">
-      <DependentUpon>VoteResultSettingDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\VoteResultWindow.xaml.cs">
       <DependentUpon>VoteResultWindow.xaml</DependentUpon>
@@ -230,10 +226,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\TimeSpanWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\VoteResultSettingDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

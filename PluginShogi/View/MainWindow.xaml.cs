@@ -257,6 +257,10 @@ namespace VoteSystem.PluginShogi.View
             Commands.Binding(CommandBindings);
             Commands.Binding(InputBindings);
 
+            this.voteResultControl.BindCommands(this);
+            this.voteResultControl.SettingUpdated +=
+                (_, __) => ShogiGlobal.Settings.Save();
+
             Closed += MainWindow_Closed;
 
             // FPSを表示
@@ -307,11 +311,6 @@ namespace VoteSystem.PluginShogi.View
                             list.Count() - count));
                 }
             }
-        }
-
-        private void VoteResultControl_SettingUpdated(object sender, RoutedEventArgs e)
-        {
-            ShogiGlobal.Settings.Save();
         }
     }
 }

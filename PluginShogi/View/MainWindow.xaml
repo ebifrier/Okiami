@@ -108,6 +108,8 @@
                           Command="{x:Static svm:Commands.ShowMoveManageView}" />
                 <MenuItem Header="各種設定(_S)"
                           Command="{x:Static svm:Commands.ShowSettingDialog}" />
+                <MenuItem Header="投票結果の表示設定(_R)"
+                          Command="{x:Static s:VoteResultControl.OpenSettingDialog}" />
             </MenuItem>
         </Menu>
 
@@ -128,14 +130,52 @@
             <vd:ShogiBackgroundCore x:Name="background1" />
             <vd:ShogiBackgroundCore x:Name="background2" />
 
+            <!-- 投票結果 -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0" />
+                    <RowDefinition Height="101*" />
+                    <RowDefinition Height="100*" />
+                    <RowDefinition Height="2*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="95*" />
+                    <ColumnDefinition Width="300*" />
+                    <ColumnDefinition Width="100*" />
+                </Grid.ColumnDefinitions>
+
+                <s:VoteResultControl
+                    Grid.Row="2" Grid.Column="1"
+                    x:Name="voteResultControl"
+                    VoteResult="{Binding VoteClient.VoteResult}"
+                    VoteState="{Binding VoteClient.VoteState}"
+                    TotalVoteLeaveTime="{Binding VoteClient.TotalVoteLeaveTime}"
+                    VoteLeaveTime="{Binding VoteClient.VoteLeaveTime}"
+                    Foreground="{Binding Settings.VR_FontColor,
+                                        Converter={StaticResource brushConverter}}"
+                    Background="{Binding Settings.VR_BackgroundColor,
+                                        Converter={StaticResource brushConverter}}"
+                    Stroke="{Binding Settings.VR_StrokeColor,
+                                    Converter={StaticResource brushConverter}}"
+                    FontFamily="{Binding Settings.VR_FontFamilyName,
+                                        Converter={StaticResource fontFamilyConverter}}"
+                    FontWeight="{Binding Settings.VR_FontWeight}"
+                    FontStyle="{Binding Settings.VR_FontStyle}"
+                    IsShowStroke="{Binding Settings.VR_IsShowStroke}"
+                    StrokeThicknessInternal="{Binding Settings.VR_StrokeThicknessInternal}"
+                    DisplayCandidateCount="{Binding Settings.VR_DisplayResultCount}"
+                    IsDisplayPointFullWidth="{Binding Settings.VR_IsDisplayPointFullWidth}" />
+            </Grid>
+
+            <!-- 将棋盤 -->
             <p:ShogiControl x:Name="ShogiControl"
                             Board="{Binding Board}"
                             EditMode="{Binding EditMode}"
                             EffectManager="{x:Static l:ShogiGlobal.EffectManager}"
                             PieceImage="{Binding KomaImage}"
                             BanBrush="{StaticResource banBrush}"
-                            PieceBoxBrush="{StaticResource komadaiBrush}">
-            </p:ShogiControl>
+                            PieceBoxBrush="{StaticResource komadaiBrush}" />
 
             <!-- 変化自動再生時の色です。-->
             <Border Style="{StaticResource variationStyle}"
@@ -151,40 +191,6 @@
                               LineHeight="30.0"
                               OpacityLineCount="3"
                               IsHitTestVisible="False" />
-        </Grid>
-
-        <Grid Grid.Row="4" Grid.RowSpan="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            
-            <s:VoteResultControl Grid.Row="2" Grid.Column="0"
-                                 SettingUpdated="VoteResultControl_SettingUpdated"
-                                 VoteResult="{Binding VoteClient.VoteResult}"
-                                 VoteState="{Binding VoteClient.VoteState}"
-                                 TotalVoteLeaveTime="{Binding VoteClient.TotalVoteLeaveTime}"
-                                 VoteLeaveTime="{Binding VoteClient.VoteLeaveTime}"
-                                 Foreground="{Binding Settings.VR_FontColor,
-                                                      Converter={StaticResource brushConverter}}"
-                                 Background="{Binding Settings.VR_BackgroundColor,
-                                                      Converter={StaticResource brushConverter}}"
-                                 Stroke="{Binding Settings.VR_StrokeColor,
-                                                  Converter={StaticResource brushConverter}}"
-                                 FontFamily="{Binding Settings.VR_FontFamilyName,
-                                                      Converter={StaticResource fontFamilyConverter}}"
-                                 FontWeight="{Binding Settings.VR_FontWeight}"
-                                 FontStyle="{Binding Settings.VR_FontStyle}"
-                                 IsShowStroke="{Binding Settings.VR_IsShowStroke}"
-                                 StrokeThicknessInternal="{Binding Settings.VR_StrokeThicknessInternal}"
-                                 DisplayCandidateCount="{Binding Settings.VR_DisplayResultCount}"
-                                 IsDisplayPointFullWidth="{Binding Settings.VR_IsDisplayPointFullWidth}" />
         </Grid>
 
         <!-- ステータスバーです。-->

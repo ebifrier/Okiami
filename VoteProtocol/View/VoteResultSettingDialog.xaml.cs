@@ -190,6 +190,7 @@ namespace VoteSystem.Protocol.View
         /// </summary>
         private void ExecuteYes(object sender, ExecutedRoutedEventArgs e)
         {
+            // OKの場合は、プロパティ値をコントロールに設定します。
             RestorePropertyValues(this.control, this.model);
 
             DialogResult = true;

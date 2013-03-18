@@ -1,3 +1,17 @@
+2013-03-19  - Ver 1.2.7.3
+
+	* PluginShogi/View/MainWindow.xaml: 投票結果の表示を外部のコントロール
+	で行うようにしました。
+	* VoteClient/Model/MainModel.cs: 不要なプロパティを削除しました。
+	* VoteClient/View/VoteResultWindow.xaml: 投票結果の表示を外部のコントロ
+	ールで行うようにしました。
+	* VoteClient/ViewModel/MainViewModel.cs: 投票状態の変更ＳＥと残り時間の
+	ＳＥがかぶらないようにしました。
+	* VoteClient/ViewModel/VoteResultWindowViewModel.cs: 投票結果の表示を外
+	部コントロールにした関係で不要になったプロパティを削除しました。
+	* VoteClient/View/VoteResultSettingDialog.xaml: VoteProtocolに移動しま
+	した。
+
 2013-03-19  - Ver 1.2.7.2
 
 	* VoteProtocol/View/VoteResultControl.xaml: 投票結果表示用のコントロー

@@ -26,30 +26,6 @@ namespace VoteSystem.Client.View
     public partial class VoteResultWindow : MovableWindow
     {
         /// <summary>
-        /// 設定ダイアログを開きます。
-        /// </summary>
-        public readonly static ICommand OpenSettingDialog =
-            new RoutedUICommand(
-                "設定ダイアログを新たに開きます。",
-                "OpenSettingDialog",
-                typeof(Window));
-
-        /// <summary>
-        /// 設定ダイアログを新たに開きます。
-        /// </summary>
-        private void ExecuteOpenSettingDialog(object sender,
-                                              ExecutedRoutedEventArgs e)
-        {
-            var dialog = new View.VoteResultSettingDialog()
-            {
-                DataContext = this.DataContext,
-                Owner = this,
-            };
-
-            dialog.ShowDialog();
-        }
-
-        /// <summary>
         /// 静的コンストラクタ
         /// </summary>
         static VoteResultWindow()
@@ -57,6 +33,9 @@ namespace VoteSystem.Client.View
             TopmostProperty.OverrideMetadata(
                 typeof(VoteResultWindow),
                 new FrameworkPropertyMetadata(true));
+            EdgeLengthProperty.OverrideMetadata(
+                typeof(VoteResultWindow),
+                new FrameworkPropertyMetadata(10.0));
         }
 
         /// <summary>
@@ -66,12 +45,13 @@ namespace VoteSystem.Client.View
         {
             InitializeComponent();
 
-            CommandBindings.Add(
-                new CommandBinding(
-                    OpenSettingDialog,
-                    ExecuteOpenSettingDialog));
+            this.voteResultControl.BindCommands(this);
+            this.voteResultControl.SettingUpdated += VoteResultControl_SettingUpdated;
+        }
 
-            EdgeLength = 20;
+        private void VoteResultControl_SettingUpdated(object sender, RoutedEventArgs e)
+        {
+            Global.Settings.Save();
         }
     }
 }

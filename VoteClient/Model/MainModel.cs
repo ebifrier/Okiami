@@ -39,9 +39,6 @@ namespace VoteSystem.Client.Model
             new List<LiveClient>();
         private readonly ConcurrentQueue<Notification> notificationQueue =
             new ConcurrentQueue<Notification>();
-        private Timer leaveTimeTimer;
-        private int oldVoteLeaveSeconds = -1;
-        private int oldTotalVoteLeaveSeconds = -1;        
 
         /// <summary>
         /// 投票ルームで使われるIDを取得または設定します。
@@ -316,108 +313,28 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// 投票の残り時間を取得します。
         /// </summary>
-        [DependOnProperty(typeof(VoteClient), "VoteState")]
-        [DependOnProperty(typeof(VoteClient), "VoteSpan")]
+        [DependOnProperty(typeof(VoteClient), "VoteLeaveTime")]
         public TimeSpan VoteLeaveTime
         {
-            get
-            {
-                using (LazyLock())
-                {
-                    // 未入室の場合
-                    if (this.voteClient.VoteRoomInfo == null)
-                    {
-                        return TimeSpan.Zero;
-                    }
-
-                    // 時間無制限
-                    if (this.voteClient.VoteSpan == TimeSpan.MaxValue)
-                    {
-                        return TimeSpan.MaxValue;
-                    }
-
-                    // 残り時間を計算します。
-                    var baseTimeNtp = Ragnarok.Net.NtpClient.GetTime();
-                    switch (voteClient.VoteState)
-                    {
-                        case VoteState.Voting:
-                            // 終了時刻から現在時刻を減算し、残り時間を出します。
-                            var endTimeNtp =
-                                this.voteClient.VoteRoomInfo.BaseTimeNtp +
-                                this.voteClient.VoteSpan;
-                            return (endTimeNtp - baseTimeNtp);
-                        case VoteState.Pause:
-                            return this.voteClient.VoteSpan;
-                        case VoteState.Stop:
-                        case VoteState.End:
-                            return TimeSpan.Zero;
-                    }
-
-                    return TimeSpan.Zero;
-                }
-            }
+            get { return this.voteClient.VoteLeaveTime; }
         }
 
         /// <summary>
         /// 投票の全残り時間を取得します。
         /// </summary>
-        [DependOnProperty(typeof(VoteClient), "VoteState")]
-        [DependOnProperty(typeof(VoteClient), "TotalVoteSpan")]
+        [DependOnProperty(typeof(VoteClient), "TotalVoteLeaveTime")]
         public TimeSpan TotalVoteLeaveTime
         {
-            get
-            {
-                using (LazyLock())
-                {
-                    // 未入室の場合
-                    if (this.voteClient.VoteRoomInfo == null)
-                    {
-                        return TimeSpan.Zero;
-                    }
-
-                    // 時間無制限
-                    if (this.voteClient.TotalVoteSpan == TimeSpan.MaxValue)
-                    {
-                        return TimeSpan.MaxValue;
-                    }
-
-                    // 残り時間を計算します。
-                    var baseTimeNtp = Ragnarok.Net.NtpClient.GetTime();
-                    switch (voteClient.VoteState)
-                    {
-                        case VoteState.Voting:
-                            // 終了時刻から現在時刻を減算し、残り時間を出します。
-                            var endTimeNtp =
-                                this.voteClient.VoteRoomInfo.BaseTimeNtp +
-                                this.voteClient.TotalVoteSpan;
-                            return (endTimeNtp - baseTimeNtp);
-                        case VoteState.Pause:
-                        case VoteState.Stop:
-                        case VoteState.End:
-                            return this.voteClient.TotalVoteSpan;
-                    }
-
-                    return TimeSpan.Zero;
-                }
-            }
+            get { return this.voteClient.VoteLeaveTime; }
         }
 
         /// <summary>
         /// 投票時間が無制限かどうかを取得します。
         /// </summary>
-        [DependOnProperty(typeof(VoteClient), "VoteSpan")]
-        public bool IsVoteLeaveTimeNoLimit
+        [DependOnProperty(typeof(VoteClient), "IsVoteSpanNolimit")]
+        public bool IsVoteSpanNolimit
         {
-            get
-            {
-                // 未入室の場合
-                if (this.voteClient.VoteRoomInfo == null)
-                {
-                    return false;
-                }
-
-                return (this.voteClient.VoteSpan == TimeSpan.MaxValue);
-            }
+            get { return this.voteClient.IsVoteSpanNolimit; }
         }
 
         /// <summary>
@@ -538,26 +455,6 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
-        /// 投票時間の更新を行います。
-        /// </summary>
-        private void LeaveTimeTimer_Callback(object state)
-        {
-            var leaveSeconds = (int)VoteLeaveTime.TotalSeconds;
-            if (leaveSeconds != this.oldVoteLeaveSeconds)
-            {
-                this.oldVoteLeaveSeconds = leaveSeconds;
-                this.RaisePropertyChanged("VoteLeaveTime");
-            }
-
-            leaveSeconds = (int)TotalVoteLeaveTime.TotalSeconds;
-            if (leaveSeconds != this.oldTotalVoteLeaveSeconds)
-            {
-                this.oldTotalVoteLeaveSeconds = leaveSeconds;
-                this.RaisePropertyChanged("TotalVoteLeaveTime");
-            }
-        }
-
-        /// <summary>
         /// コンストラクタ
         /// </summary>
         public MainModel()
@@ -572,6 +469,7 @@ namespace VoteSystem.Client.Model
             this.voteClient = new VoteClient(true);
             this.voteClient.NotificationReceived += HandleNotification;
             this.voteClient.PropertyChanged += voteClient_PropertyChanged;
+            this.voteClient.StartLeaveTimeTimer();
 
             // ニコニコへのログインを裏で非同期的に行います。
             this.nicoClient = new NicoClient();
@@ -598,13 +496,6 @@ namespace VoteSystem.Client.Model
 
             this.AddDependModel(this.nicoClient);
             this.AddDependModel(this.voteClient);
-
-            // 投票残り時間を更新するために使います。
-            this.leaveTimeTimer = new Timer(
-                LeaveTimeTimer_Callback,
-                null,
-                TimeSpan.FromMilliseconds(500),
-                TimeSpan.FromMilliseconds(1000));
         }
     }
 }

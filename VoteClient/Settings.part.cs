@@ -212,16 +212,16 @@ namespace VoteSystem.Client
         /// 固定時のウィンドウ色を取得または設定します。
         /// </summary>
         [DefaultValue("#B4FFFFFF")]
-        public Color VR_FixingBackgroundColor
+        public Color VR_BackgroundColor
         {
-            get { return (Color)this["VR_FixingBackgroundColor"]; }
-            set { this["VR_FixingBackgroundColor"] = value; }
+            get { return (Color)this["VR_BackgroundColor"]; }
+            set { this["VR_BackgroundColor"] = value; }
         }
 
         /// <summary>
         /// 表示する投票結果の数を取得または設定します。
         /// </summary>
-        [DefaultValue(10)]
+        [DefaultValue(5)]
         public int VR_DisplayResultCount
         {
             get { return (int)this["VR_DisplayResultCount"]; }
@@ -289,30 +289,30 @@ namespace VoteSystem.Client
         /// 縁取りを行うかどうかを取得または設定します。
         /// </summary>
         [DefaultValue(true)]
-        public bool VR_IsEdged
+        public bool VR_IsShowStroke
         {
-            get { return (bool)this["VR_IsEdged"]; }
-            set { this["VR_IsEdged"] = value; }
-        }
-
-        /// <summary>
-        /// フォントの縁の太さを取得または設定します。
-        /// </summary>
-        [DefaultValue("0.5")]
-        public decimal VR_FontEdgeLengthInternal
-        {
-            get { return (decimal)this["VR_FontEdgeLengthInternal"]; }
-            set { this["VR_FontEdgeLengthInternal"] = value; }
+            get { return (bool)this["VR_IsShowStroke"]; }
+            set { this["VR_IsShowStroke"] = value; }
         }
 
         /// <summary>
         /// フォントの縁色を取得または設定します。
         /// </summary>
         [DefaultValue("#FF00FFFF")]
-        public Color VR_FontEdgeColor
+        public Color VR_StrokeColor
         {
-            get { return (Color)this["VR_FontEdgeColor"]; }
-            set { this["VR_FontEdgeColor"] = value; }
+            get { return (Color)this["VR_StrokeColor"]; }
+            set { this["VR_StrokeColor"] = value; }
+        }
+
+        /// <summary>
+        /// フォントの縁の太さを取得または設定します。
+        /// </summary>
+        [DefaultValue("0.5")]
+        public decimal VR_StokeThicknessInternal
+        {
+            get { return (decimal)this["VR_StokeThicknessInternal"]; }
+            set { this["VR_StokeThicknessInternal"] = value; }
         }
         #endregion
     }
