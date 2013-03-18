@@ -3,5 +3,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/VoteProtocol;component/View/SimpleTimeSpanView.xaml" />
         <ResourceDictionary Source="/VoteProtocol;component/View/EndRollControl.xaml" />
+        <ResourceDictionary Source="/VoteProtocol;component/View/VoteResultControl.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -16,8 +16,11 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="CommonDictionary.xaml" />
                 <ResourceDictionary Source="MainMenu.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <p:FontFamilyConverter x:Key="fontFamilyConverter" />
             
             <ImageBrush x:Key="banBrush"
                         ImageSource="{Binding DataContext.BanImage, ElementName=window}"
@@ -149,7 +152,41 @@
                               OpacityLineCount="3"
                               IsHitTestVisible="False" />
         </Grid>
-        
+
+        <Grid Grid.Row="4" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <s:VoteResultControl Grid.Row="2" Grid.Column="0"
+                                 SettingUpdated="VoteResultControl_SettingUpdated"
+                                 VoteResult="{Binding VoteClient.VoteResult}"
+                                 VoteState="{Binding VoteClient.VoteState}"
+                                 TotalVoteLeaveTime="{Binding VoteClient.TotalVoteLeaveTime}"
+                                 VoteLeaveTime="{Binding VoteClient.VoteLeaveTime}"
+                                 Foreground="{Binding Settings.VR_FontColor,
+                                                      Converter={StaticResource brushConverter}}"
+                                 Background="{Binding Settings.VR_BackgroundColor,
+                                                      Converter={StaticResource brushConverter}}"
+                                 Stroke="{Binding Settings.VR_StrokeColor,
+                                                  Converter={StaticResource brushConverter}}"
+                                 FontFamily="{Binding Settings.VR_FontFamilyName,
+                                                      Converter={StaticResource fontFamilyConverter}}"
+                                 FontWeight="{Binding Settings.VR_FontWeight}"
+                                 FontStyle="{Binding Settings.VR_FontStyle}"
+                                 IsShowStroke="{Binding Settings.VR_IsShowStroke}"
+                                 StrokeThicknessInternal="{Binding Settings.VR_StrokeThicknessInternal}"
+                                 DisplayCandidateCount="{Binding Settings.VR_DisplayResultCount}"
+                                 IsDisplayPointFullWidth="{Binding Settings.VR_IsDisplayPointFullWidth}" />
+        </Grid>
+
         <!-- ステータスバーです。-->
         <p:MessageStatusBar Grid.Row="5"
                             x:Name="MainStatusBar" x:FieldModifier="public"

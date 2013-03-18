@@ -153,6 +153,115 @@ namespace VoteSystem.PluginShogi
         }
         #endregion
 
+        #region VoteResultWindow
+        /// <summary>
+        /// ウィンドウ色を取得または設定します。
+        /// </summary>
+        [DefaultValue("#B4FFFFFF")]
+        public Color VR_BackgroundColor
+        {
+            get { return (Color)this["VR_BackgroundColor"]; }
+            set { this["VR_BackgroundColor"] = value; }
+        }
+
+        /// <summary>
+        /// 表示する投票結果の数を取得または設定します。
+        /// </summary>
+        [DefaultValue(5)]
+        public int VR_DisplayResultCount
+        {
+            get { return (int)this["VR_DisplayResultCount"]; }
+            set { this["VR_DisplayResultCount"] = value; }
+        }
+
+        /// <summary>
+        /// 表示する数字が半角か全角かを取得または設定します。
+        /// </summary>
+        [DefaultValue(true)]
+        public bool VR_IsDisplayPointFullWidth
+        {
+            get { return (bool)this["VR_IsDisplayPointFullWidth"]; }
+            set { this["VR_IsDisplayPointFullWidth"] = value; }
+        }
+
+        /// <summary>
+        /// フォントファミリ名を取得または設定します。
+        /// </summary>
+        [DefaultValue("ＭＳ ゴシック")]
+        public string VR_FontFamilyName
+        {
+            get { return (string)this["VR_FontFamilyName"]; }
+            set
+            {
+                // WPFで初期化時にnullが設定されるため必要。
+                if (string.IsNullOrEmpty(value))
+                {
+                    return;
+                }
+
+                this["VR_FontFamilyName"] = value;
+            }
+        }
+
+        /// <summary>
+        /// フォントの太さを取得または設定します。
+        /// </summary>
+        public FontWeight VR_FontWeight
+        {
+            get { return (FontWeight)this["VR_FontWeight"]; }
+            set { this["VR_FontWeight"] = value; }
+        }
+
+        /// <summary>
+        /// フォントスタイルを取得または設定します。
+        /// </summary>
+        public FontStyle VR_FontStyle
+        {
+            get { return (FontStyle)this["VR_FontStyle"]; }
+            set { this["VR_FontStyle"] = value; }
+        }
+
+        /// <summary>
+        /// フォントの色を取得または設定します。
+        /// </summary>
+        [DefaultValue("#FF000000")]
+        public Color VR_FontColor
+        {
+            get { return (Color)this["VR_FontColor"]; }
+            set { this["VR_FontColor"] = value; }
+        }
+
+        /// <summary>
+        /// 縁取りを行うかどうかを取得または設定します。
+        /// </summary>
+        [DefaultValue(true)]
+        public bool VR_IsShowStroke
+        {
+            get { return (bool)this["VR_IsShowStroke"]; }
+            set { this["VR_IsShowStroke"] = value; }
+        }
+
+        /// <summary>
+        /// フォントの縁色を取得または設定します。
+        /// </summary>
+        [DefaultValue("#FF00FFFF")]
+        public Color VR_StrokeColor
+        {
+            get { return (Color)this["VR_StrokeColor"]; }
+            set { this["VR_StrokeColor"] = value; }
+        }
+
+        /// <summary>
+        /// フォントの縁の太さを取得または設定します。
+        /// </summary>
+        [DefaultValue("0.5")]
+        public decimal VR_StrokeThicknessInternal
+        {
+            get { return (decimal)this["VR_StrokeThicknessInternal"]; }
+            set { this["VR_StrokeThicknessInternal"] = value; }
+        }
+        #endregion
+
         protected override void OnSettingsLoaded(object sender, SettingsLoadedEventArgs e)
         {
             base.OnSettingsLoaded(sender, e);

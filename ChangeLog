@@ -1,3 +1,14 @@
+2013-03-19  - Ver 1.2.7.2
+
+	* VoteProtocol/View/VoteResultControl.xaml: 投票結果表示用のコントロー
+	ルを分離しました。
+	* VoteProtocol/View/VoteResultSettingDialog.xaml: 投票結果表示の設定を
+	行うダイアログを追加しました。
+	* PluginShogi/View/MainWindow.xaml: 将棋ウィンドウに投票結果表示画面を
+	追加しました。
+	* PluginShogi/Settings.part.cs: 投票結果用の設定プロパティを追加しまし
+	た。
+
 2013-03-19  - Ver 1.2.7.1
 
 	* VoteProtocol/Model/EndRollList.cs: FontSize属性を追加しました。

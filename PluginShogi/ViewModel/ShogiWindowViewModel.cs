@@ -150,6 +150,22 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// 投票クライアントを取得します。
+        /// </summary>
+        public Client.Model.VoteClient VoteClient
+        {
+            get { return ShogiGlobal.VoteClient; }
+        }
+
+        /// <summary>
+        /// 設定オブジェクトを取得します。
+        /// </summary>
+        public Settings Settings
+        {
+            get { return ShogiGlobal.Settings; }
+        }
+
+        /// <summary>
         /// コメント一覧を取得します。
         /// </summary>
         public NotifyCollection<string> CommentCandidates

@@ -1,0 +1,157 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:p="clr-namespace:VoteSystem.Protocol"
+                    xmlns:pv="clr-namespace:VoteSystem.Protocol.Vote"
+                    xmlns:l="clr-namespace:VoteSystem.Protocol.View">
+
+    <l:PointToStringConverter x:Key="pointToStringConverter" />
+    <rp:ColorToSolidColorBrushConverter x:Key="brushConverter" />
+    <rp:BooleanToVisibilityConverter x:Key="visibilityConverterHidden"
+                                     DefaultHiddenValue="Hidden" />
+    <rp:BooleanToVisibilityConverter x:Key="visibilityConverterCollapsed"
+                                     DefaultHiddenValue="Collapsed" />
+
+    <!-- 縁取り付き文字 -->
+    <Style x:Key="decoratedTextStyle" TargetType="rp:DecoratedText">
+        <!--<Setter Property="FontFamily" Value="{TemplateBinding FontFamily}" />
+        <Setter Property="FontStyle"
+                Value="{Binding DataContext.VR_FontStyle, ElementName=window}" />-->
+        <Setter Property="FontWeight"
+                Value="{Binding FontWeight,
+                                RelativeSource={RelativeSource AncestorType=l:VoteResultControl}}" />
+        <!--<Setter Property="Foreground"
+                Value="{Binding DataContext.VR_FontColor, ElementName=window,
+                                Converter={StaticResource brushConverter}}" />-->
+        <Setter Property="Stroke"
+                Value="{Binding Stroke,
+                                RelativeSource={RelativeSource AncestorType=l:VoteResultControl}}" />
+        <Setter Property="StrokeThickness"
+                Value="{Binding StrokeThickness,
+                                RelativeSource={RelativeSource AncestorType=l:VoteResultControl}}" />
+    </Style>
+
+    <DataTemplate x:Key="decoratedText" DataType="sys:String">
+        <Viewbox>
+            <rp:DecoratedText Style="{StaticResource decoratedTextStyle}"
+                              Text="{Binding}" />
+        </Viewbox>
+    </DataTemplate>
+
+    <!-- 投票結果の各票を表示します。-->
+    <DataTemplate x:Key="voteResultTemplate" DataType="pv:VoteResult">
+        <Grid Visibility="{Binding Candidate, Mode=OneWay,
+                                   Converter={StaticResource visibilityConverterHidden}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <rp:DecoratedText Grid.Column="0"
+                              Style="{StaticResource decoratedTextStyle}"
+                              Text="{Binding Candidate}"
+                              MaxCharCount="8" />
+            <rp:DecoratedText Grid.Column="3"
+                              Style="{StaticResource decoratedTextStyle}">
+                <rp:DecoratedText.Text>
+                    <!-- 親ウィンドウのDataContextを参照します。-->
+                    <MultiBinding Converter="{StaticResource pointToStringConverter}">
+                        <Binding Path="Point" />
+                        <Binding Path="IsDisplayPointFullWidth"
+                                 RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                    </MultiBinding>
+                </rp:DecoratedText.Text>
+            </rp:DecoratedText>
+        </Grid>
+    </DataTemplate>
+
+    <!-- 投票結果の表示などを行います。-->
+    <ControlTemplate x:Key="mainControl" TargetType="l:VoteResultControl">
+        <Viewbox Stretch="Fill">
+            <Grid Background="{TemplateBinding Background}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="3" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" MinWidth="40" />
+                </Grid.ColumnDefinitions>
+
+                <!-- 投票状態 -->
+                <Grid Grid.Row="0" Grid.ColumnSpan="3">
+                    <Border Background="{Binding VoteLeaveTimeBackgroundColor,
+                                                 Converter={StaticResource brushConverter}}"
+                            Opacity="0.7" />
+                    <rp:DecoratedText Style="{StaticResource decoratedTextStyle}"
+                                      HorizontalAlignment="Right"
+                                      Text="{Binding VoteStateText}" />
+                </Grid>
+
+                <ContentControl Grid.Row="1" Grid.ColumnSpan="2"
+                                Visibility="{Binding IsShowTotalVoteTime,
+                                                     RelativeSource={RelativeSource TemplatedParent},
+                                                     Converter={StaticResource visibilityConverterCollapsed}}"
+                                ContentTemplate="{StaticResource decoratedText}"
+                                Content="持ち時間"
+                                HorizontalAlignment="Left" />
+                <ContentControl Grid.Row="1" Grid.Column="2"
+                                Visibility="{Binding IsShowTotalVoteTime,
+                                                     RelativeSource={RelativeSource TemplatedParent},
+                                                     Converter={StaticResource visibilityConverterCollapsed}}"
+                                ContentTemplate="{StaticResource decoratedText}"
+                                Content="{TemplateBinding TotalVoteLeaveTimeText}"
+                                HorizontalAlignment="Right" />
+
+                <ContentControl Grid.Row="2" Grid.ColumnSpan="2"
+                                ContentTemplate="{StaticResource decoratedText}"
+                                Content="投票時間"
+                                HorizontalAlignment="Left" />
+                <ContentControl Grid.Row="2" Grid.Column="2"
+                                ContentTemplate="{StaticResource decoratedText}"
+                                Content="{TemplateBinding VoteLeaveTimeText}"
+                                HorizontalAlignment="Right" />
+
+                <ContentControl Grid.Row="4" Grid.ColumnSpan="2"
+                                ContentTemplate="{StaticResource decoratedText}"
+                                Content="延長拒否" />
+                <ContentControl Grid.Row="4" Grid.Column="2"
+                                ContentTemplate="{StaticResource decoratedText}"
+                                HorizontalAlignment="Right">
+                    <ContentControl.Content>
+                        <MultiBinding Converter="{StaticResource pointToStringConverter}">
+                            <Binding Path="VoteResult.TimeStablePoint"
+                                     RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                            <Binding Path="IsDisplayPointFullWidth"
+                                     RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                        </MultiBinding>
+                    </ContentControl.Content>
+                </ContentControl>
+
+                <ContentControl Grid.Row="6" Grid.ColumnSpan="3"
+                                ContentTemplate="{StaticResource decoratedText}"
+                                Content="投票結果"
+                                HorizontalAlignment="Left" />
+                <ItemsControl Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2"
+                              ItemsSource="{TemplateBinding DisplayCandidateList}"
+                              ItemTemplate="{StaticResource voteResultTemplate}" />
+            </Grid>
+        </Viewbox>
+    </ControlTemplate>
+
+    <Style TargetType="l:VoteResultControl">
+        <Setter Property="Template" Value="{StaticResource mainControl}" />
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+</ResourceDictionary>

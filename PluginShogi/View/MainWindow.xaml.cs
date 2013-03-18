@@ -308,5 +308,10 @@ namespace VoteSystem.PluginShogi.View
                 }
             }
         }
+
+        private void VoteResultControl_SettingUpdated(object sender, RoutedEventArgs e)
+        {
+            ShogiGlobal.Settings.Save();
+        }
     }
 }

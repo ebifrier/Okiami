@@ -1,5 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation">
+    <rp:ColorToSolidColorBrushConverter x:Key="brushConverter" />
+    
     <!-- 将棋盤の枠線を描くブラシです。-->
     <!-- <SolidColorBrush x:Key="internalGridBrush" Color="#800050ff" />-->
     <SolidColorBrush x:Key="internalGridBrush" Color="Black" />
