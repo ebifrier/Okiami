@@ -38,6 +38,9 @@ namespace VoteSystem.Client.Model
         private int participantNo = -1;
         private VoteResult voteResult = new VoteResult();
         private DateTime roomInfoLastUpdated = DateTime.MinValue;
+        private int oldVoteLeaveSeconds;
+        private int oldTotalVoteLeaveSeconds;
+        private Timer leaveTimeTimer;
         private bool disposed = false;
 
         /// <summary>
@@ -357,6 +360,11 @@ namespace VoteSystem.Client.Model
         {
             get
             {
+                if (VoteRoomInfo == null)
+                {
+                    return false;
+                }
+
                 return (VoteSpan == TimeSpan.MaxValue);
             }
         }
@@ -445,6 +453,93 @@ namespace VoteSystem.Client.Model
                 }
 
                 return this.commenterManager.PostCommentList;
+            }
+        }
+
+        /// <summary>
+        /// 投票の残り時間を取得します。
+        /// </summary>
+        [DependOnProperty("VoteState")]
+        [DependOnProperty("VoteSpan")]
+        public TimeSpan VoteLeaveTime
+        {
+            get
+            {
+                using (LazyLock())
+                {
+                    // 未入室の場合
+                    if (VoteRoomInfo == null)
+                    {
+                        return TimeSpan.Zero;
+                    }
+
+                    // 時間無制限
+                    if (VoteSpan == TimeSpan.MaxValue)
+                    {
+                        return TimeSpan.MaxValue;
+                    }
+
+                    // 残り時間を計算します。
+                    var baseTimeNtp = Ragnarok.Net.NtpClient.GetTime();
+                    switch (VoteState)
+                    {
+                        case VoteState.Voting:
+                            // 終了時刻から現在時刻を減算し、残り時間を出します。
+                            var endTimeNtp =
+                                VoteRoomInfo.BaseTimeNtp + VoteSpan;
+                            return (endTimeNtp - baseTimeNtp);
+                        case VoteState.Pause:
+                            return VoteSpan;
+                        case VoteState.Stop:
+                        case VoteState.End:
+                            return TimeSpan.Zero;
+                    }
+
+                    return TimeSpan.Zero;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 投票の全残り時間を取得します。
+        /// </summary>
+        [DependOnProperty("VoteState")]
+        [DependOnProperty("TotalVoteSpan")]
+        public TimeSpan TotalVoteLeaveTime
+        {
+            get
+            {
+                using (LazyLock())
+                {
+                    // 未入室の場合
+                    if (VoteRoomInfo == null)
+                    {
+                        return TimeSpan.Zero;
+                    }
+
+                    // 時間無制限
+                    if (TotalVoteSpan == TimeSpan.MaxValue)
+                    {
+                        return TimeSpan.MaxValue;
+                    }
+
+                    // 残り時間を計算します。
+                    var baseTimeNtp = Ragnarok.Net.NtpClient.GetTime();
+                    switch (VoteState)
+                    {
+                        case VoteState.Voting:
+                            // 終了時刻から現在時刻を減算し、残り時間を出します。
+                            var endTimeNtp =
+                                VoteRoomInfo.BaseTimeNtp + TotalVoteSpan;
+                            return (endTimeNtp - baseTimeNtp);
+                        case VoteState.Pause:
+                        case VoteState.Stop:
+                        case VoteState.End:
+                            return TotalVoteSpan;
+                    }
+
+                    return TimeSpan.Zero;
+                }
             }
         }
 
@@ -1388,6 +1483,42 @@ namespace VoteSystem.Client.Model
         }
         #endregion
         #endregion
+
+        /// <summary>
+        /// 投票時間の更新を行います。
+        /// </summary>
+        private void LeaveTimeTimer_Callback(object state)
+        {
+            var leaveSeconds = (int)VoteLeaveTime.TotalSeconds;
+            if (leaveSeconds != this.oldVoteLeaveSeconds)
+            {
+                this.oldVoteLeaveSeconds = leaveSeconds;
+                this.RaisePropertyChanged("VoteLeaveTime");
+            }
+
+            leaveSeconds = (int)TotalVoteLeaveTime.TotalSeconds;
+            if (leaveSeconds != this.oldTotalVoteLeaveSeconds)
+            {
+                this.oldTotalVoteLeaveSeconds = leaveSeconds;
+                this.RaisePropertyChanged("TotalVoteLeaveTime");
+            }
+        }
+
+        /// <summary>
+        /// 投票時間の更新を開始します。
+        /// </summary>
+        public void StartLeaveTimeTimer()
+        {
+            using (LazyLock())
+            {
+                // 投票残り時間を更新するために使います。
+                this.leaveTimeTimer = new Timer(
+                    LeaveTimeTimer_Callback,
+                    null,
+                    TimeSpan.FromMilliseconds(500),
+                    TimeSpan.FromMilliseconds(1000));
+            }
+        }
 
         /// <summary>
         /// 投票サーバーに接続します。

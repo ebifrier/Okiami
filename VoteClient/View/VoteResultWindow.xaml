@@ -5,7 +5,7 @@
                   xmlns:p="clr-namespace:VoteSystem.Protocol;assembly=VoteProtocol"
                   xmlns:v="clr-namespace:VoteSystem.Client.View"
                   xmlns:vc="clr-namespace:VoteSystem.Client.View.Control"
-                  xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
                   Name="window" Title="投票結果ウィンドウ"
                   Background="Transparent"
                   Height="216" Width="309" ShowInTaskbar="False">

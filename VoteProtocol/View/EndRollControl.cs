@@ -405,7 +405,7 @@ namespace VoteSystem.Protocol.View
             {
                 IsUpdateVisual = false, // 字形の自動作成はしない。
                 Text = elem.Text,
-                FontSize = 18,
+                FontSize = elem.FontSize,
                 Foreground = new SolidColorBrush(elem.Color),
                 FontStyle = elem.FontStyle,
                 FontWeight = elem.FontWeight,

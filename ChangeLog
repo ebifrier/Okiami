@@ -1,3 +1,9 @@
+2013-03-19  - Ver 1.2.7.1
+
+	* VoteProtocol/Model/EndRollList.cs: FontSize属性を追加しました。
+	* VoteClient/Model/VoteClient.cs: 投票残り時間などのプロパティを追加し
+	ました。
+
 2013-03-16  - Ver 1.2.7.0
 
 	* バージョンを1.2.7に更新しました。

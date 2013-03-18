@@ -94,6 +94,15 @@ namespace VoteSystem.Protocol.Model
         }
 
         /// <summary>
+        /// フォントサイズ(pt)を取得または設定します。
+        /// </summary>
+        public double FontSize
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// フォントスタイルを取得または設定します。
         /// </summary>
         public FontStyle FontStyle
@@ -144,6 +153,7 @@ namespace VoteSystem.Protocol.Model
         public Element()
         {
             Color = Colors.White;
+            FontSize = 18.0;
             FontStyle = FontStyles.Normal;
             FontWeight = FontWeights.Normal;
             Column = 0;
@@ -428,6 +438,14 @@ namespace VoteSystem.Protocol.Model
                         result.Color = (Color)
                             System.Windows.Media.ColorConverter.ConvertFromString(value);
                     }
+                }
+
+                attr = elem.Attribute("FontSize");
+                if (attr != null)
+                {
+                    value = GetPropertyObject(data, attr.Value);
+
+                    result.FontSize = double.Parse(value);
                 }
 
                 attr = elem.Attribute("FontStyle");

@@ -38,10 +38,11 @@ namespace VoteSystem.Client.Model
         {
             var list = new List<VoterInfo>
             {
+                CreateInfo("ーーーー", "----"),
+                CreateInfo("^'''''", "____"),
                 CreateInfo("(｀・ω・´)", "永世15級"),
                 CreateInfo("12きう"),
                 CreateInfo("sc", "1級"),
-                CreateInfo("Azumi", "六段"),
                 CreateInfo("Azumi", "六段"),
                 CreateInfo("kennin", "6段です"),
                 CreateInfo("Kagemiro", "初段"),
@@ -252,7 +253,7 @@ namespace VoteSystem.Client.Model
                 UnjoinedVoterCount = 236,
             };
             voterList.JoinedVoterList.AddRange(
-                list.OrderBy(_ => Guid.NewGuid()));
+                list/*.OrderBy(_ => Guid.NewGuid())*/);
 
             voterList.DonorList.AddRange(
                 list.OrderBy(_ => Guid.NewGuid())
