@@ -9,10 +9,11 @@ using FlintSharp.Particles;
 using FlintSharp.Renderers;
 
 using Ragnarok;
-using Ragnarok.Shogi.View;
 
-namespace VoteSystem.PluginShogi.ViewModel
+namespace VoteSystem.PluginShogi.Effects
 {
+    using View;
+
     /// <summary>
     /// The ParticleCreator is used by the Emitter public class to manage the creation and reuse of particles.
     /// To speed up the particle system, the ParticleCreator public class maintains a pool of dead particles 

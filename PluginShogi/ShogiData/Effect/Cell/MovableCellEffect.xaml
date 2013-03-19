@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
                     xmlns:l="http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi">
-    <p:CellMeshConverter x:Key="cellMeshConv" />
+    <l:CellMeshConverter x:Key="cellMeshConv" />
 
     <l:EffectObject x:Key="Effect"
                     Duration="Forever"

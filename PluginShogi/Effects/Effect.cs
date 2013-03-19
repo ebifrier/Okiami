@@ -12,9 +12,9 @@ using System.Windows.Media.Media3D;
 using System.Xml;
 
 using Ragnarok;
-using Ragnarok.Shogi.ViewModel;
+using Ragnarok.Shogi;
 
-namespace VoteSystem.PluginShogi.ViewModel
+namespace VoteSystem.PluginShogi.Effects
 {
     /// <summary>
     /// エフェクトの各引数を管理します。
@@ -260,7 +260,7 @@ namespace VoteSystem.PluginShogi.ViewModel
     /// <summary>
     /// 読み込み可能なエフェクトのリストです。
     /// </summary>
-    public static class Effects
+    public static class EffectTable
     {
         #region Cell
         /// <summary>

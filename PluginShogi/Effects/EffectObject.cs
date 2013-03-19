@@ -12,9 +12,8 @@ using System.Windows.Media.Media3D;
 using FlintSharp.Renderers;
 using Ragnarok;
 using Ragnarok.Presentation.VisualObject;
-using Ragnarok.Shogi.ViewModel;
 
-namespace VoteSystem.PluginShogi.ViewModel
+namespace VoteSystem.PluginShogi.Effects
 {
     /// <summary>
     /// 描画方式の識別子です。

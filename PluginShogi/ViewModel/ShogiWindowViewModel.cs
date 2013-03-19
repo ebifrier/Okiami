@@ -12,7 +12,6 @@ using System.ComponentModel;
 
 using Ragnarok;
 using Ragnarok.Shogi;
-using Ragnarok.Shogi.View;
 using Ragnarok.NicoNico.Live;
 using Ragnarok.ObjectModel;
 using Ragnarok.Presentation;

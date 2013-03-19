@@ -13,6 +13,7 @@ namespace VoteSystem.PluginShogi
 {
     using Protocol;
     using Protocol.Vote;
+    using Effects;
     using ViewModel;
 
     /// <summary>
@@ -39,7 +40,7 @@ namespace VoteSystem.PluginShogi
             SoundManager = new SoundManager();
             ShogiModel = new ViewModel.ShogiWindowViewModel(new Board()); 
 
-            EffectManager = new ViewModel.EffectManager()
+            EffectManager = new Effects.EffectManager()
             {
                 EffectEnabled = true,
                 IsAutoPlayEffect = false,
@@ -62,7 +63,7 @@ namespace VoteSystem.PluginShogi
         {
             try
             {
-                typeof(Effects).GetFields()
+                typeof(EffectTable).GetFields()
                     .Where(_ => _.FieldType == typeof(EffectInfo))
                     .Select(_ => (EffectInfo)_.GetValue(null))
                     .ForEach(_ => _.PreLoad());
@@ -174,7 +175,7 @@ namespace VoteSystem.PluginShogi
         /// <summary>
         /// 将棋盤のエフェクト管理オブジェクトを取得します。
         /// </summary>
-        public static ViewModel.EffectManager EffectManager
+        public static Effects.EffectManager EffectManager
         {
             get;
             private set;

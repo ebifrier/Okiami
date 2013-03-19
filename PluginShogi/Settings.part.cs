@@ -17,7 +17,7 @@ using Ragnarok.Utility;
 
 namespace VoteSystem.PluginShogi
 {
-    using ViewModel;
+    using Effects;
     using Protocol;
 
     [Serializable()]

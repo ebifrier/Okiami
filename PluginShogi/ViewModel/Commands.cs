@@ -9,7 +9,6 @@ using Microsoft.Win32;
 
 using Ragnarok;
 using Ragnarok.Shogi;
-using Ragnarok.Shogi.View;
 using Ragnarok.NicoNico;
 using Ragnarok.NicoNico.Live;
 using Ragnarok.Presentation;

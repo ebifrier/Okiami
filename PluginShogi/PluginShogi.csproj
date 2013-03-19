@@ -56,14 +56,20 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Xaml\CellMeshConverter.cs" />
+    <Compile Include="Effects\IEffectManager.cs" />
+    <Compile Include="Xaml\MakeMeshExtension.cs" />
+    <Compile Include="Effects\PieceObject.cs" />
+    <Compile Include="Xaml\BoardText.cs" />
+    <Compile Include="Util3D.cs" />
     <Compile Include="Model\VariationCommentManager.cs" />
     <Compile Include="ViewModel\AutoPlay.cs" />
     <Compile Include="Model\EachStateManager.cs" />
     <Compile Include="ImageType.cs" />
     <Compile Include="SoundManager.cs" />
-    <Compile Include="ViewModel\EffectContext.cs" />
-    <Compile Include="ViewModel\EffectManager.cs" />
-    <Compile Include="ViewModel\EffectObject.cs" />
+    <Compile Include="Effects\EffectContext.cs" />
+    <Compile Include="Effects\EffectManager.cs" />
+    <Compile Include="Effects\EffectObject.cs" />
     <Compile Include="Model\Variation.cs" />
     <Compile Include="Model\VariationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,11 +78,11 @@
     <Compile Include="ShogiGlobal.cs" />
     <Compile Include="ShogiPlugin.cs" />
     <Compile Include="ViewModel\Commands.cs" />
-    <Compile Include="ViewModel\Effect.cs" />
-    <Compile Include="ViewModel\Model3DRenderer.cs" />
+    <Compile Include="Effects\Effect.cs" />
+    <Compile Include="Effects\Model3DRenderer.cs" />
     <Compile Include="ViewModel\ShogiSettingDialogViewModel.cs" />
     <Compile Include="ViewModel\ShogiWindowViewModel.cs" />
-    <Compile Include="ViewModel\TebanMeshConverter.cs" />
+    <Compile Include="Xaml\TebanMeshConverter.cs" />
     <Compile Include="View\CurrentBoardSetupDialog.xaml.cs">
       <DependentUpon>CurrentBoardSetupDialog.xaml</DependentUpon>
     </Compile>
@@ -88,6 +94,9 @@
     </Compile>
     <Compile Include="View\MoveManageView.xaml.cs">
       <DependentUpon>MoveManageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ShogiControl.xaml.cs">
+      <DependentUpon>ShogiControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ShogiSettingDialog.xaml.cs">
       <DependentUpon>ShogiSettingDialog.xaml</DependentUpon>
@@ -481,6 +490,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\ShogiControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\ShogiSettingDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -511,10 +524,6 @@
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Presentation\Ragnarok.Presentation.csproj">
       <Project>{2E5515A8-7B34-44A2-9C50-F423C5F87798}</Project>
       <Name>Ragnarok.Presentation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Ragnarok\Ragnarok.Shogi.Presentation\Ragnarok.Shogi.Presentation.csproj">
-      <Project>{7539E7C6-62A7-4136-BC95-FF251250928B}</Project>
-      <Name>Ragnarok.Shogi.Presentation</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Shogi\Ragnarok.Shogi.csproj">
       <Project>{38ABBDA5-B22F-41B7-A415-2A909D0A6A35}</Project>

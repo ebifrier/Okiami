@@ -16,16 +16,16 @@
                 OffsetX="320" OffsetY="240" />
     
     <Vector3D x:Key="backgroundCoord"
-              X="320" Y="240" Z="{x:Static p:ShogiControl.PreEffectZ}" />
+              X="320" Y="240" Z="{x:Static l:ShogiControl.PreEffectZ}" />
 
-    <p:CellMeshConverter x:Key="cellMeshConv" />
-    <p:CellMeshConverter x:Key="cellMeshWideConv" Widen="0.2" />
+    <l:CellMeshConverter x:Key="cellMeshConv" />
+    <l:CellMeshConverter x:Key="cellMeshWideConv" Widen="0.2" />
 
     <l:EffectObject x:Key="Effect"
                     WaitTime="0:0:0.1">
         <!-- 背景を黒く -->
         <l:EffectObject Color="Black"
-                        Mesh="{p:MakeMesh}"
+                        Mesh="{l:MakeMesh}"
                         Duration="0:0:5"
                         MaterialType="Diffuse"
                         BaseScale="640,480,1"

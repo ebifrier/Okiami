@@ -35,10 +35,10 @@
         </l:EffectObject>
     </l:EffectObject>-->
 
-    <p:CellMeshConverter x:Key="cellMeshConv" />
+    <l:CellMeshConverter x:Key="cellMeshConv" />
 
     <Vector3D x:Key="backgroundCoord"
-              X="160" Y="240" Z="{x:Static p:ShogiControl.PreEffectZ}" />
+              X="160" Y="240" Z="{x:Static l:ShogiControl.PreEffectZ}" />
 
     <l:EffectObject x:Key="Effect">
         <!-- カットイン背景 -->

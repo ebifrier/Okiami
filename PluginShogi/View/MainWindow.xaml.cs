@@ -21,6 +21,7 @@ using Ragnarok.Presentation.VisualObject;
 
 namespace VoteSystem.PluginShogi.View
 {
+    using Effects;
     using ViewModel;
     using Detail;
 

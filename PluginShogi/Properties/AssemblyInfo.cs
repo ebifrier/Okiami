@@ -26,9 +26,11 @@ using System.Windows.Markup;
 [assembly: Guid("be591357-5ee0-4343-9ae4-c6a32534b756")]
 
 [assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi", "VoteSystem.PluginShogi")]
+[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi", "VoteSystem.PluginShogi.Effects")]
 [assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi", "VoteSystem.PluginShogi.Model")]
 [assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi", "VoteSystem.PluginShogi.View")]
 [assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi", "VoteSystem.PluginShogi.ViewModel")]
+[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi", "VoteSystem.PluginShogi.Xaml")]
 
 // アセンブリのバージョン情報は、以下の 4 つの値で構成されています:
 //

@@ -175,7 +175,7 @@
             </Grid>
 
             <!-- 将棋盤 -->
-            <p:ShogiControl x:Name="ShogiControl"
+            <v:ShogiControl x:Name="ShogiControl"
                             Board="{Binding Board}"
                             EditMode="{Binding EditMode}"
                             EffectManager="{x:Static l:ShogiGlobal.EffectManager}"

@@ -11,6 +11,7 @@ using Ragnarok.Utility;
 
 namespace VoteSystem.PluginShogi.ViewModel
 {
+    using Effects;
     using Model;
 
     /// <summary>

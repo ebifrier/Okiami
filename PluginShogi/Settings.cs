@@ -16,7 +16,7 @@ namespace VoteSystem.PluginShogi
         /// <summary>
         /// エフェクトの個別の使用フラグを取得します。
         /// </summary>
-        public bool HasEffectFlag(ViewModel.EffectFlag flag)
+        public bool HasEffectFlag(Effects.EffectFlag flag)
         {
             if (!SD_IsUseEffect)
             {

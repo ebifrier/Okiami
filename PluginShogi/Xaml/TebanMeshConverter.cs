@@ -9,7 +9,7 @@ using System.Windows.Media.Media3D;
 
 using Ragnarok.Shogi;
 
-namespace VoteSystem.PluginShogi.ViewModel
+namespace VoteSystem.PluginShogi.Xaml
 {
     /// <summary>
     /// 手番表示のメッシュを作成するコンバーターです。

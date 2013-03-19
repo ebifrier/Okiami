@@ -6,7 +6,7 @@ using System.Windows.Media.Media3D;
 
 using Ragnarok.Shogi;
 
-namespace VoteSystem.PluginShogi.ViewModel
+namespace VoteSystem.PluginShogi.Effects
 {
     /// <summary>
     /// 基本的なエフェクトのコンテキストデータです。

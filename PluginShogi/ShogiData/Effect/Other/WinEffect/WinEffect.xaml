@@ -5,9 +5,9 @@
                     xmlns:l="http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi">
 
     <Vector3D x:Key="backgroundCoord"
-              X="320" Y="240" Z="{x:Static p:ShogiControl.PreEffectZ}" />
+              X="320" Y="240" Z="{x:Static l:ShogiControl.PreEffectZ}" />
     <Vector3D x:Key="foregroundCoord"
-              X="320" Y="240" Z="{x:Static p:ShogiControl.PostEffectZ}" />
+              X="320" Y="240" Z="{x:Static l:ShogiControl.PostEffectZ}" />
     <f:DiscZone x:Key="particlePositionZone"
                 Center="0,0" InnerRadius="4.0" OuterRadius="6.0" />
 
@@ -17,7 +17,7 @@
                         Scale="640,480,1"
                         Coord="{StaticResource backgroundCoord}"
                         Color="Black"
-                        Mesh="{p:MakeMesh}">
+                        Mesh="{l:MakeMesh}">
             <l:EffectObject.Scenario>
                 <p:Scenario>
                     <DoubleAnimationUsingKeyFrames

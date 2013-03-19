@@ -10,12 +10,10 @@ using System.Windows.Media.Media3D;
 
 using Ragnarok;
 using Ragnarok.Shogi;
-using Ragnarok.Shogi.View;
-using Ragnarok.Shogi.ViewModel;
 using Ragnarok.ObjectModel;
 using Ragnarok.Presentation;
 
-namespace VoteSystem.PluginShogi.ViewModel
+namespace VoteSystem.PluginShogi.Effects
 {
     using View;
 
@@ -249,7 +247,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             {
                 var position = board.LastMove.NewPosition;
 
-                var cell = Effects.PrevMovedCell.LoadEffect();
+                var cell = EffectTable.PrevMovedCell.LoadEffect();
                 if (cell != null)
                 {
                     cell.DataContext = CreateCellContext(position);
@@ -299,7 +297,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 select move.NewPosition;
 
             // 移動可能なマスにエフェクトをかけます。
-            var movableCell = Effects.MovableCell.LoadEffect();
+            var movableCell = EffectTable.MovableCell.LoadEffect();
             if (movableCell != null)
             {
                 movableCell.DataContext = CreateCellContext(movePositions, position);
@@ -332,7 +330,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             }
 
             // 移動可能なマスにエフェクトをかけます。
-            var tebanCell = Effects.Teban.LoadEffect();
+            var tebanCell = EffectTable.Teban.LoadEffect();
             if (tebanCell != null)
             {
                 if (Container.ViewSide != BWType.Black)
@@ -381,7 +379,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 {"StartXY", new Vector(p.X, p.Y)},
             };
 
-            var effect = Effects.Castle.LoadEffect(dic);
+            var effect = EffectTable.Castle.LoadEffect(dic);
             if (effect != null)
             {
                 effect.DataContext = CreateCellContext(
@@ -560,7 +558,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             if (EffectMoveCount >= 1000)
             {
                 AddEffect(
-                    Effects.VariationLast,
+                    EffectTable.VariationLast,
                     move.NewPosition);
             }
             else if (EffectMoveCount <= 3)
@@ -572,14 +570,14 @@ namespace VoteSystem.PluginShogi.ViewModel
             else if (EffectMoveCount <= 6)
             {
                 AddVariationEffect(
-                    Effects.VariationFirst,
+                    EffectTable.VariationFirst,
                     move.NewPosition,
                     MoveCountRate(4, 6));
             }
             else
             {
                 AddVariationEffect(
-                    Effects.VariationSecond,
+                    EffectTable.VariationSecond,
                     move.NewPosition,
                     MoveCountRate(7, 9));
             }
@@ -648,7 +646,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 { "Color",  TebanParticleColor(move.BWType) },
             };
 
-            var effect = Effects.PieceMove.LoadEffect(table);
+            var effect = EffectTable.PieceMove.LoadEffect(table);
             AddEffect(effect, position);
         }
 
@@ -670,7 +668,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 { "Color",  TebanParticleColor(bwType) },
             };
 
-            var effect = Effects.PieceTook.LoadEffect(table);
+            var effect = EffectTable.PieceTook.LoadEffect(table);
             AddEffect(effect, position);
         }
         #endregion
@@ -798,7 +796,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 return;
             }
 
-            var effect = Effects.Vote.LoadEffect();
+            var effect = EffectTable.Vote.LoadEffect();
             if (effect != null)
             {
                 AddEffect(effect, position);
@@ -830,7 +828,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 return;
             }
 
-            AddEffect(Effects.Win, position);
+            AddEffect(EffectTable.Win, position);
         }
 
         /// <summary>
@@ -850,11 +848,11 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             if (MathEx.RandInt(0, 2) == 0)
             {
-                AddEffect(Effects.VariationCutIn1, null);
+                AddEffect(EffectTable.VariationCutIn1, null);
             }
             else
             {
-                AddEffect(Effects.VariationCutIn2, null);
+                AddEffect(EffectTable.VariationCutIn2, null);
             }
 
             return true;
@@ -911,11 +909,11 @@ namespace VoteSystem.PluginShogi.ViewModel
 
                     if (move.ActionType == ActionType.Drop)
                     {
-                        AddEffect(Effects.PieceDrop, move.NewPosition);
+                        AddEffect(EffectTable.PieceDrop, move.NewPosition);
                     }
                     else if (move.ActionType == ActionType.Promote)
                     {
-                        AddEffect(Effects.Promote, move.NewPosition);
+                        AddEffect(EffectTable.Promote, move.NewPosition);
                     }
 
                     AddMoveEffect(move.NewPosition, move);
