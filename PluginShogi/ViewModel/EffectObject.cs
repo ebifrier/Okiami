@@ -11,6 +11,7 @@ using System.Windows.Media.Media3D;
 
 using FlintSharp.Renderers;
 using Ragnarok;
+using Ragnarok.Presentation.VisualObject;
 using Ragnarok.Shogi.ViewModel;
 
 namespace VoteSystem.PluginShogi.ViewModel
@@ -484,7 +485,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                         oldImage.Width != newImage.Width ||
                         oldImage.Height != newImage.Height)
                     {
-                        Mesh = Util3D.CreateDefaultMesh(
+                        Mesh = Util3D_.CreateDefaultMesh(
                             1.0, 1.0, newImage.Width, newImage.Height);
                     }
                 }

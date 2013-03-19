@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ragnarok.Shogi", "..\Ragnar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlintSharp", "FlintSharp\twoD\FlintSharp.csproj", "{CAF419D7-50B7-49F6-9B1A-8E6448339074}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ragnarok.Shogi.Presentation", "..\Ragnarok\Ragnarok.Shogi.Presentation\Ragnarok.Shogi.Presentation.csproj", "{7539E7C6-62A7-4136-BC95-FF251250928B}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = VoteSystem.vsmdi
@@ -126,6 +128,16 @@ Global
 		{CAF419D7-50B7-49F6-9B1A-8E6448339074}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CAF419D7-50B7-49F6-9B1A-8E6448339074}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CAF419D7-50B7-49F6-9B1A-8E6448339074}.Release|x86.ActiveCfg = Release|Any CPU
+		{7539E7C6-62A7-4136-BC95-FF251250928B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7539E7C6-62A7-4136-BC95-FF251250928B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7539E7C6-62A7-4136-BC95-FF251250928B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7539E7C6-62A7-4136-BC95-FF251250928B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7539E7C6-62A7-4136-BC95-FF251250928B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7539E7C6-62A7-4136-BC95-FF251250928B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7539E7C6-62A7-4136-BC95-FF251250928B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7539E7C6-62A7-4136-BC95-FF251250928B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7539E7C6-62A7-4136-BC95-FF251250928B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7539E7C6-62A7-4136-BC95-FF251250928B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

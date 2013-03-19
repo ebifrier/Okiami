@@ -16,8 +16,8 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 
 using Ragnarok.Shogi;
-using Ragnarok.Shogi.ViewModel;
 using Ragnarok.Presentation.Utility;
+using Ragnarok.Presentation.VisualObject;
 
 namespace VoteSystem.PluginShogi.View
 {
@@ -279,6 +279,7 @@ namespace VoteSystem.PluginShogi.View
             InitBackground();
 
             this.timer = new FrameTimer();
+            //this.timer.FrameTime = TimeSpan.FromMilliseconds(1000.0 / 20.0);
             this.timer.EnterFrame += (_, e) => Render(e.ElapsedTime);
         }
 
@@ -297,7 +298,7 @@ namespace VoteSystem.PluginShogi.View
                 GC.Collect();
 
                 // エフェクトがメモリリークしてないかチェックしています。
-                var list = Ragnarok.Shogi.ViewModel.EntityObject.GetInstanceList();
+                var list = EntityObject.GetInstanceList();
 
                 // 盤上の駒20枚×２ ＋ 駒台の駒９種(玉と無も込み)×２
                 // ＋ ルート２個 ＋ 前回のマスの位置 ＋ 手番表示

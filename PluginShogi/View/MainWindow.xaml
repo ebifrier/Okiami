@@ -20,6 +20,7 @@
                 <ResourceDictionary Source="MainMenu.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <p:BooleanToVisibilityConverter x:Key="visibilityConverterHidden" />
             <p:FontFamilyConverter x:Key="fontFamilyConverter" />
             
             <ImageBrush x:Key="banBrush"
@@ -103,6 +104,9 @@
                           IsCheckable="True" x:Name="boardReverse"
                           Command="{x:Static svm:Commands.SetReverseBoard}"
                           CommandParameter="{Binding IsChecked, ElementName=boardReverse}" />
+                <MenuItem Header="投票結果を表示(_E)"
+                          IsCheckable="True"
+                          IsChecked="{Binding Settings.AS_IsShowVoteResult}" />
                 <Separator />
                 <MenuItem Header="変化ウィンドウ(_V)"
                           Command="{x:Static svm:Commands.ShowMoveManageView}" />
@@ -148,6 +152,8 @@
                 <s:VoteResultControl
                     Grid.Row="2" Grid.Column="1"
                     x:Name="voteResultControl"
+                    Visibility="{Binding Settings.AS_IsShowVoteResult,
+                                         Converter={StaticResource visibilityConverterHidden}}"
                     VoteResult="{Binding VoteClient.VoteResult}"
                     VoteState="{Binding VoteClient.VoteState}"
                     TotalVoteLeaveTime="{Binding VoteClient.TotalVoteLeaveTime}"

@@ -30,6 +30,13 @@ namespace VoteSystem.PluginShogi
             get { return GetValue<string>("AS_Comment"); }
             set { SetValue("AS_Comment", value); }
         }
+
+        [DefaultValue(true)]
+        public bool AS_IsShowVoteResult
+        {
+            get { return GetValue<bool>("AS_IsShowVoteResult"); }
+            set { SetValue("AS_IsShowVoteResult", value); }
+        }
         #endregion
 
         #region 現局面設定ダイアログ

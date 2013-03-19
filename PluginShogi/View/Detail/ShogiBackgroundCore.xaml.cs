@@ -10,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using Ragnarok.Shogi.ViewModel;
+using Ragnarok.Presentation.VisualObject;
 
 namespace VoteSystem.PluginShogi.View.Detail
 {
