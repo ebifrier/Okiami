@@ -7,7 +7,6 @@
         xmlns:s="http://schemas.garnet-alice.net/votesystem/xaml/presentation"
         xmlns:l="clr-namespace:VoteSystem.PluginShogi"
         xmlns:v="clr-namespace:VoteSystem.PluginShogi.View"
-        xmlns:vd="clr-namespace:VoteSystem.PluginShogi.View.Detail"
         xmlns:svm="clr-namespace:VoteSystem.PluginShogi.ViewModel"
         mc:Ignorable="d" x:Name="window"
         Title="将棋盤ちゃん" Height="560" Width="666"
@@ -131,8 +130,7 @@
 
         <Grid Grid.Row="4" Grid.RowSpan="2">
             <!-- 背景 -->
-            <vd:ShogiBackgroundCore x:Name="background1" />
-            <vd:ShogiBackgroundCore x:Name="background2" />
+            <p:VisualBackground x:Name="background" />
 
             <!-- 投票結果 -->
             <Grid>

@@ -1,5 +1,7 @@
 2013-03-19  - Ver 1.2.7.5
 
+	* PluginShogi/View/Detail/ShogiBackgroundCore.xaml: 
+	Ragnarok.Presentation.VisualObject.Controlに移動しました。
 	* PluginShogi: Ragnarok.Shogi.Presentationのファイルをすべて移動し、ラ
 	イブラリの方は削除しました。
 

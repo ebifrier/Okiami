@@ -4,7 +4,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
-        xmlns:sd="clr-namespace:VoteSystem.PluginShogi.View.Detail"
         mc:Ignorable="d" 
         Title="設定ダイアログ" ResizeMode="NoResize"
         d:DesignHeight="441" d:DesignWidth="342" SizeToContent="WidthAndHeight">

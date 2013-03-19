@@ -18,12 +18,12 @@ using System.Windows.Threading;
 using Ragnarok.Shogi;
 using Ragnarok.Presentation.Utility;
 using Ragnarok.Presentation.VisualObject;
+using Ragnarok.Presentation.VisualObject.Control;
 
 namespace VoteSystem.PluginShogi.View
 {
     using Effects;
     using ViewModel;
-    using Detail;
 
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
@@ -31,8 +31,6 @@ namespace VoteSystem.PluginShogi.View
     public partial class MainWindow : Window
     {
         private readonly ShogiWindowViewModel model;
-        private ShogiBackgroundCore currentBg;
-        private ShogiBackgroundCore nextBg;
         private FrameTimer timer;
 
         /// <summary>
@@ -71,96 +69,15 @@ namespace VoteSystem.PluginShogi.View
         }
 
         /// <summary>
-        /// 背景のトランジションを開始します。
-        /// </summary>
-        private void StartTransition(ShogiBackgroundCore bgFore,
-                                     ShogiBackgroundCore bgBack,
-                                     bool fadeBan)
-        {
-            var fadeTime0 = TimeSpan.FromSeconds(0.0);
-            var fadeTime1 = TimeSpan.FromSeconds(1.0);
-            var fadeTime2 = TimeSpan.FromSeconds(2.0);
-            var fadeTime3 = TimeSpan.FromSeconds(3.0);
-
-            var animFore = new DoubleAnimationUsingKeyFrames();
-            animFore.KeyFrames.Add(new LinearDoubleKeyFrame(0.0, fadeTime0));
-            animFore.KeyFrames.Add(new LinearDoubleKeyFrame(1.0, fadeTime3));
-
-            var animBack = new DoubleAnimationUsingKeyFrames();
-            animBack.KeyFrames.Add(new LinearDoubleKeyFrame(1.0, fadeTime0));
-            animBack.KeyFrames.Add(new LinearDoubleKeyFrame(0.0, fadeTime3));
-
-            animFore.Completed += (_, __) =>
-            {
-                this.currentBg = this.nextBg;
-                this.nextBg =
-                    (this.nextBg == this.background1
-                    ? this.background2
-                    : this.background1);                
-
-                this.nextBg.EffectKey = null;
-            };
-
-            bgFore.BeginAnimation(UIElement.OpacityProperty, animFore);
-            bgBack.BeginAnimation(UIElement.OpacityProperty, animBack);
-
-            if (fadeBan)
-            {
-                // 盤のフェードイン/アウトの設定
-                var banBrush = ShogiControl.BanBrush;
-                if (banBrush != null)
-                {
-                    var opacity = banBrush.Opacity;
-                    var anim = new DoubleAnimationUsingKeyFrames()
-                    {
-                        FillBehavior = FillBehavior.Stop,
-                    };
-                    anim.KeyFrames.Add(new LinearDoubleKeyFrame(opacity, fadeTime0));
-                    anim.KeyFrames.Add(new LinearDoubleKeyFrame(0.0, fadeTime1));
-                    anim.KeyFrames.Add(new LinearDoubleKeyFrame(0.0, fadeTime2));
-                    anim.KeyFrames.Add(new LinearDoubleKeyFrame(opacity, fadeTime3));
-
-                    banBrush.BeginAnimation(Brush.OpacityProperty, anim);
-                }
-                
-                // 駒台のフェードイン/アウトの設定
-                var komadaiBrush = ShogiControl.PieceBoxBrush;
-                if (komadaiBrush != null)
-                {
-                    var opacity = komadaiBrush.Opacity;
-                    var anim = new DoubleAnimationUsingKeyFrames()
-                    {
-                        FillBehavior = FillBehavior.Stop,
-                    };
-                    anim.KeyFrames.Add(new LinearDoubleKeyFrame(opacity, fadeTime0));
-                    anim.KeyFrames.Add(new LinearDoubleKeyFrame(0.0, fadeTime1));
-                    anim.KeyFrames.Add(new LinearDoubleKeyFrame(0.0, fadeTime2));
-                    anim.KeyFrames.Add(new LinearDoubleKeyFrame(opacity, fadeTime3));
-
-                    komadaiBrush.BeginAnimation(Brush.OpacityProperty, anim);
-                }
-            }
-        }
-
-        /// <summary>
         /// 次のエフェクトを設定します。
         /// </summary>
         public void AddEffectKey(string effectKey)
         {
-            // 同じエフェクトは表示しません。
-            if (this.currentBg.EffectKey == effectKey)
-            {
-                return;
-            }
+            // 背景エフェクトの作成。
+            var effectInfo = new EffectInfo(effectKey, null);
+            var effect = effectInfo.LoadBackground();
 
-            this.nextBg.EffectKey = effectKey;
-
-            // 今か次の背景が無なら、盤のフェードは行いません。
-            // → 今も次の背景もあるなら、盤のフェードを行います。
-            StartTransition(
-                this.nextBg, this.currentBg,
-                (!string.IsNullOrEmpty(this.currentBg.EffectKey) &&
-                 !string.IsNullOrEmpty(this.nextBg.EffectKey)));
+            this.background.AddEntity(effect);
         }
 
         /// <summary>
@@ -168,8 +85,7 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         private void InitBackground()
         {
-            this.currentBg = this.background1;
-            this.nextBg = this.background2;
+            this.background.FadeElement = ShogiControl;
 
             if (ShogiGlobal.Settings.HasEffectFlag(EffectFlag.Background))
             {
@@ -184,8 +100,7 @@ namespace VoteSystem.PluginShogi.View
         {
             ShogiControl.Render(elapsedTime);
 
-            this.background1.Render(elapsedTime);
-            this.background2.Render(elapsedTime);
+            this.background.Render(elapsedTime);
         }
 
         /// <summary>
