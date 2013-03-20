@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace VoteSystem.Client.Model
+namespace VoteSystem.Protocol.Model
 {
-    using Protocol;
-    using Protocol.Vote;
+    using Vote;
 
     /// <summary>
     /// ネットワークの投票を行います。
@@ -253,7 +252,7 @@ namespace VoteSystem.Client.Model
                 UnjoinedVoterCount = 236,
             };
             voterList.JoinedVoterList.AddRange(
-                list/*.OrderBy(_ => Guid.NewGuid())*/);
+                list.OrderBy(_ => Guid.NewGuid()));
 
             voterList.DonorList.AddRange(
                 list.OrderBy(_ => Guid.NewGuid())

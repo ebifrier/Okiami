@@ -130,7 +130,8 @@
 
         <Grid Grid.Row="4" Grid.RowSpan="2">
             <!-- 背景 -->
-            <p:VisualBackground x:Name="background" />
+            <p:VisualBackground x:Name="background"
+                                FadeElement="{Binding ElementName=ShogiControl}"/>
 
             <!-- 投票結果 -->
             <Grid>
@@ -189,12 +190,14 @@
 
             <!-- エンドロールです。-->
             <s:EndRollControl x:Name="endRoll"
-                              VoterListGetter="{x:Static l:ShogiGlobal.VoterListGetter}"
+                              DataGetter="{x:Static l:ShogiGlobal.VoterListGetter}"
                               Background="#A0000000"
                               RollTimeSeconds="30"
                               LineHeight="30.0"
                               OpacityLineCount="3"
-                              IsHitTestVisible="False" />
+                              IsHitTestVisible="False"
+                              AutoUpdate="True"
+                              IsUpdateBackground="True" />
         </Grid>
 
         <!-- ステータスバーです。-->

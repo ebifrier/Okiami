@@ -91,12 +91,13 @@
 
                 <!-- 投票状態 -->
                 <Grid Grid.Row="0" Grid.ColumnSpan="3">
-                    <Border Background="{Binding VoteLeaveTimeBackgroundColor,
-                                                 Converter={StaticResource brushConverter}}"
+                    <Border Background="{Binding VoteLeaveTimeBackground,
+                                                 RelativeSource={RelativeSource TemplatedParent}}"
                             Opacity="0.7" />
                     <rp:DecoratedText Style="{StaticResource decoratedTextStyle}"
                                       HorizontalAlignment="Right"
-                                      Text="{Binding VoteStateText}" />
+                                      Text="{Binding VoteStateText,
+                                                     RelativeSource={RelativeSource TemplatedParent}}" />
                 </Grid>
 
                 <ContentControl Grid.Row="1" Grid.ColumnSpan="2"

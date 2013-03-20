@@ -107,6 +107,7 @@ namespace VoteSystem.Protocol.View
             if (VoteResult == null || VoteResult.CandidateList == null)
             {
                 DisplayCandidateList = new VoteCandidatePair[0];
+                return;
             }
 
             var candidateList = VoteResult.CandidateList;
@@ -193,7 +194,8 @@ namespace VoteSystem.Protocol.View
                 "TotalVoteLeaveTime",
                 typeof(TimeSpan),
                 typeof(VoteResultControl),
-                new FrameworkPropertyMetadata(TimeSpan.Zero, OnTotalVoteLeaveTimeChanged));
+                new FrameworkPropertyMetadata(TimeSpan.Zero,
+                    OnTotalVoteLeaveTimeChanged));
 
         private static void OnTotalVoteLeaveTimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -239,7 +241,8 @@ namespace VoteSystem.Protocol.View
                 "VoteLeaveTime",
                 typeof(TimeSpan),
                 typeof(VoteResultControl),
-                new FrameworkPropertyMetadata(TimeSpan.Zero, OnVoteLeaveTimeChanged));
+                new FrameworkPropertyMetadata(TimeSpan.Zero,
+                    OnVoteLeaveTimeChanged));
 
         private static void OnVoteLeaveTimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -356,7 +359,7 @@ namespace VoteSystem.Protocol.View
             switch (VoteState)
             {
                 case VoteState.Voting:
-                    if (leaveTime < TimeSpan.FromSeconds(60))
+                    if (leaveTime < TimeSpan.FromSeconds(30))
                     {
                         color = Color.FromArgb(160, 230, 0, 0);
                     }
@@ -364,7 +367,10 @@ namespace VoteSystem.Protocol.View
                     {
                         color = WpfUtil.MakeColor(180, Colors.DarkOrange);
                     }
-                    color = WpfUtil.MakeColor(200, Colors.DarkGray);
+                    else
+                    {
+                        color = WpfUtil.MakeColor(128, Colors.DarkGray);
+                    }
                     break;
                 case VoteState.End:
                     color = WpfUtil.MakeColor(160, Colors.DarkViolet);
@@ -639,6 +645,12 @@ namespace VoteSystem.Protocol.View
         public VoteResultControl()
         {
             BindCommands(this);
+
+            UpdateDisplayCandidateList();
+            UpdateVoteStateText();
+            UpdateVoteLeaveTimeText();
+            UpdateVoteLeaveTimeBackground();
+            UpdateTotalVoteLeaveTimeText();
         }
     }
 }

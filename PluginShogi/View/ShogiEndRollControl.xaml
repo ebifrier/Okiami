@@ -1,0 +1,56 @@
+﻿<Window x:Class="VoteSystem.PluginShogi.View.ShogiEndRollControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+             xmlns:s="http://schemas.garnet-alice.net/votesystem/xaml/presentation"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:t="clr-namespace:VoteSystem.PluginShogi"
+             xmlns:v="clr-namespace:VoteSystem.PluginShogi.View"
+             Background="Gray"
+        Title="test" Width="640" Height="480" Name="control">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ImageBrush x:Key="banBrush"
+                        ImageSource="{Binding DataContext.BanImage, ElementName=control}"
+                        Opacity="{Binding DataContext.BanOpacity, ElementName=control}" />
+            <ImageBrush x:Key="komadaiBrush"
+                        ImageSource="{Binding DataContext.KomadaiImage, ElementName=control}"
+                        Opacity="{Binding DataContext.BanOpacity, ElementName=control}" />
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <!-- 動画は16:9で作り、必要なら左右を切り捨てて再生する。-->
+    <Viewbox Stretch="UniformToFill"
+             HorizontalAlignment="Center"
+             VerticalAlignment="Center"
+             IsHitTestVisible="False">
+        <Canvas Width="640" Height="360">
+            <Border Width="640" Height="360">
+                <Border.Background>
+                    <DrawingBrush x:Name="MovieBrush"
+                                  Opacity="0.0" />
+                </Border.Background>
+            </Border>
+
+            <Grid Canvas.Left="370" Canvas.Top="225"
+                  Width="190" Height="120"
+                  x:Name="ShogiGrid">
+                <p:VisualBackground x:Name="ShogiBackground" />
+                
+                <v:ShogiControl x:Name="ShogiControl"
+                                EffectManager="{x:Static t:ShogiGlobal.EffectManager}"
+                                PieceImage="{Binding KomaImage}"
+                                BanBrush="{StaticResource banBrush}"
+                                PieceBoxBrush="{StaticResource komadaiBrush}"/>
+            </Grid>
+
+            <s:EndRollControl Width="640" Height="360"
+                              x:Name="EndRoll"
+                              LineHeight="23"
+                              OpacityLineCount="2"
+                              Background="Transparent"
+                              IsUpdateBackground="False"
+                              AutoUpdate="False" />
+        </Canvas>
+    </Viewbox>
+</Window>

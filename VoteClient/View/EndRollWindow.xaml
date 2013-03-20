@@ -113,11 +113,13 @@
             
             <s:EndRollControl x:Name="endRoll"
                               Background="{Binding Background}"
-                              VoterListGetter="{x:Static t:Global.VoterListGetter}"
+                              DataGetter="{x:Static t:Global.VoterListGetter}"
                               LineHeight="{Binding LineHeight}"
                               RollTimeSeconds="{Binding RollTimeSeconds}"
                               OpacityLineCount="{Binding OpacityLineCount}"
-                              CurrentPos="{Binding CurrentPos}" />
+                              CurrentPos="{Binding CurrentPos}"
+                              IsUpdateBackground="True"
+                              AutoUpdate="True" />
 
             <!-- DataContextにコントロールを指定しないとうまく動かない。
                  バインディングを複数回するのが原因かとも思うけど、よくわからない。-->

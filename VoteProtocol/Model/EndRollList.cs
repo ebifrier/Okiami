@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
@@ -15,8 +16,6 @@ using Ragnarok.Utility;
 
 namespace VoteSystem.Protocol.Model
 {
-    using Vote;
-
     /// <summary>
     /// <see cref="EndRollList"/>の例外クラスです。
     /// </summary>
@@ -153,7 +152,7 @@ namespace VoteSystem.Protocol.Model
         public Element()
         {
             Color = Colors.White;
-            FontSize = 18.0;
+            FontSize = 14.0;
             FontStyle = FontStyles.Normal;
             FontWeight = FontWeights.Normal;
             Column = 0;
@@ -183,6 +182,15 @@ namespace VoteSystem.Protocol.Model
     public sealed class Line
     {
         /// <summary>
+        /// カウントの分だけ同じ行を複製します。
+        /// </summary>
+        public int Count
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 1行にある文字列のリストを取得します。
         /// </summary>
         public List<Element> ElementList
@@ -196,6 +204,7 @@ namespace VoteSystem.Protocol.Model
         /// </summary>
         public Line()
         {
+            Count = 1;
             ElementList = new List<Element>();
         }
     }
@@ -499,8 +508,16 @@ namespace VoteSystem.Protocol.Model
         /// </summary>
         private Line ProcessLineTag(XElement elem, object data)
         {
+            var count = 1;
+            var attr = elem.Attribute("Count");
+            if (attr != null)
+            {
+                count = int.Parse(attr.Value);
+            }
+
             return new Line()
             {
+                Count = count,
                 ElementList = elem.Elements().Select(_ =>
                 {
                     if (_.Name.LocalName == "Format")
@@ -521,7 +538,7 @@ namespace VoteSystem.Protocol.Model
         /// <summary>
         /// 情報を持つデータオブジェクトを取得します。
         /// </summary>
-        private List<object> GetDataObject(VoterList voterList, string propertyName)
+        private List<object> GetDataObject(object dataContext, string propertyName)
         {
             var m = PropertyRegex.Match(propertyName);
             if (!m.Success)
@@ -530,7 +547,7 @@ namespace VoteSystem.Protocol.Model
             }
 
             var g = (m.Groups[1].Success ? m.Groups[1] : m.Groups[2]);
-            var data = MethodUtil.GetPropertyValue(voterList, g.Value);
+            var data = MethodUtil.GetPropertyValue(dataContext, g.Value);
             if (data == null)
             {
                 throw new EndRollListException(
@@ -539,7 +556,7 @@ namespace VoteSystem.Protocol.Model
             }
 
             // データがリストなどなら、それをそのまま返します。
-            var tdata = data as System.Collections.IEnumerable;
+            var tdata = data as IEnumerable;
             if (tdata != null)
             {
                 return tdata.Cast<object>().ToList();
@@ -555,7 +572,7 @@ namespace VoteSystem.Protocol.Model
         /// タグの中に複数行の情報が入っています。
         /// これをデータ数と同じ行数に展開します。
         /// </remarks>
-        private IEnumerable<Line> ProcessLinesTag(XElement elem, VoterList voterList)
+        private IEnumerable<Line> ProcessLinesTag(XElement elem, object dataContext)
         {
             var dataAttr = elem.Attribute("Data");
             if (dataAttr == null)
@@ -564,7 +581,7 @@ namespace VoteSystem.Protocol.Model
                     "LineFormatタグにData属性がありません。", elem);
             }
 
-            var dataList = GetDataObject(voterList, dataAttr.Value);
+            var dataList = GetDataObject(dataContext, dataAttr.Value);
             if (dataList == null)
             {
                 throw new EndRollListException(
@@ -594,7 +611,7 @@ namespace VoteSystem.Protocol.Model
         /// <summary>
         /// xmlファイルを読み込みます。
         /// </summary>
-        public void Load(string filename, VoterList voterList)
+        public void Load(string filename, object dataContext)
         {
             var doc = XElement.Load(filename, LoadOptions.SetLineInfo);
             var elemList = doc.Elements();
@@ -610,11 +627,14 @@ namespace VoteSystem.Protocol.Model
                 }
                 else if (elem.Name.LocalName == "Line")
                 {
-                    result.Add(ProcessLineTag(elem, null));
+                    var line = ProcessLineTag(elem, null);
+
+                    result.AddRange(
+                        Enumerable.Range(0, line.Count).Select(_ => line));
                 }
                 else if (elem.Name.LocalName == "Lines")
                 {
-                    result.AddRange(ProcessLinesTag(elem, voterList));
+                    result.AddRange(ProcessLinesTag(elem, dataContext));
                 }
                 else
                 {

@@ -1110,6 +1110,9 @@ namespace VoteSystem.PluginShogi.View
 
                 EffectManager.InitEffect(bwType);
             }
+
+            // 駒などをとりあえず表示させます。
+            Render(TimeSpan.FromMilliseconds(1));
         }
 
         /// <summary>
@@ -1126,22 +1129,25 @@ namespace VoteSystem.PluginShogi.View
                 return;
             }
 
-            foreach (var capturedPieceList in this.capturedPieceObjectList)
-            {
-                if (capturedPieceList != null)
-                {
-                    capturedPieceList.ForEach(_ => _.Terminate());
-                    capturedPieceList.Clear();
-                }
-            }
-            CapturedPieceContainer.Children.Clear();
-
             var bwTypes = new[]
             {
                 BWType.Black,
                 BWType.White
             };
 
+            // 先に駒を削除します。
+            foreach (var capturedPieceList in this.capturedPieceObjectList)
+            {
+                if (capturedPieceList != null)
+                {
+                    capturedPieceList.ToArray()
+                        .ForEach(_ => _.Terminate());
+                    capturedPieceList.Clear();
+                }
+            }
+            CapturedPieceContainer.Children.Clear();
+
+            // 先手・後手用の駒台にある駒を用意します。
             bwTypes.ForEachWithIndex((bwType, index) =>
             {
                 var capturedPieceList = EnumEx.GetValues<PieceType>()
@@ -1246,7 +1252,7 @@ namespace VoteSystem.PluginShogi.View
             }
         }
         #endregion
-
+        
         /// <summary>
         /// 各フレームごとに呼ばれます。
         /// </summary>
@@ -1267,14 +1273,20 @@ namespace VoteSystem.PluginShogi.View
 
             if (this.pieceObjectList != null)
             {
-                this.pieceObjectList.ForEach(_ => _.DoEnterFrame(elapsedTime));
+                // フレーム更新中にオブジェクトが変更されることがあります。
+                this.pieceObjectList.ToArray()
+                    .ForEach(_ => _.DoEnterFrame(elapsedTime));
             }
 
             // 先手・後手盤の駒台上の駒を更新します。
-            // インデックスでアクセスする関係で、駒台の駒にはnullが含まれています。
-            this.capturedPieceObjectList
-                .Where(_ => _ != null)
-                .ForEach(_ => _.ForEach(__ => __.DoEnterFrame(elapsedTime)));
+            foreach (var capturedPieceList in this.capturedPieceObjectList)
+            {
+                if (capturedPieceList != null)
+                {
+                    capturedPieceList.ToArray()
+                        .ForEach(_ => _.DoEnterFrame(elapsedTime));
+                }
+            }
         }
 
         /// <summary>
@@ -1350,7 +1362,8 @@ namespace VoteSystem.PluginShogi.View
 
             if (this.pieceObjectList != null)
             {
-                this.pieceObjectList.ForEach(_ => _.Terminate());
+                this.pieceObjectList.ToArray()
+                    .ForEach(_ => _.Terminate());
                 this.pieceObjectList.Clear();
             }
 
@@ -1358,7 +1371,8 @@ namespace VoteSystem.PluginShogi.View
             {
                 if (capturedPieceList != null)
                 {
-                    capturedPieceList.ForEach(_ => _.Terminate());
+                    capturedPieceList.ToArray()
+                        .ForEach(_ => _.Terminate());
                     capturedPieceList.Clear();
                 }
             }

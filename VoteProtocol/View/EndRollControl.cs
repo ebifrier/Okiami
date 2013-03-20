@@ -23,7 +23,25 @@ using Ragnarok.Presentation.Control;
 namespace VoteSystem.Protocol.View
 {
     using Model;
-    using Vote;
+
+    /// <summary>
+    /// エンドロールの流れている状態です。
+    /// </summary>
+    public enum EndRollState
+    {
+        /// <summary>
+        /// 止まっています。
+        /// </summary>
+        Stop,
+        /// <summary>
+        /// 流れている最中です。
+        /// </summary>
+        Play,
+        /// <summary>
+        /// 一時停止中です。
+        /// </summary>
+        Pause,
+    }
 
     /// <summary>
     /// エンドロールを流すコントロールです。
@@ -46,36 +64,16 @@ namespace VoteSystem.Protocol.View
     /// </remarks>
     [TemplatePart(Type = typeof(Border), Name = "BackgroundPart")]
     [TemplatePart(Type = typeof(Canvas), Name = "TextPanelPart")]
-    public partial class EndRollControl : UserControl
+    public class EndRollControl : UserControl
     {
         /// <summary>
         /// 背景色表示用のコントロール名
         /// </summary>
         private const string ElementBackgroundName = "BackgroundPart";
-
         /// <summary>
         /// 文字表示用のコントロール名
         /// </summary>
         private const string ElementTextPanelName = "TextPanelPart";
-
-        /// <summary>
-        /// エンドロールの流れている状態です。
-        /// </summary>
-        private enum EndRollState
-        {
-            /// <summary>
-            /// 止まっています。
-            /// </summary>
-            Stop,
-            /// <summary>
-            /// 流れている最中です。
-            /// </summary>
-            Play,
-            /// <summary>
-            /// 一時停止中です。
-            /// </summary>
-            Pause,
-        }
 
         /// <summary>
         /// 各行に含まれる各テキストの情報を保持します。
@@ -231,47 +229,6 @@ namespace VoteSystem.Protocol.View
                 new FrameworkPropertyMetadata(@"Data/EndRoll/endroll_format.xml"));
 
         /// <summary>
-        /// 参加者一覧表を取得するためのメソッドを示す依存プロパティです。
-        /// </summary>
-        public static readonly DependencyProperty VoterListGetterProperty =
-            DependencyProperty.Register(
-                "VoterListGetter", typeof(Func<VoterList>), typeof(EndRollControl),
-                new FrameworkPropertyMetadata(null));
-
-        /// <summary>
-        /// １行ごとの高さを示す依存プロパティです。
-        /// </summary>
-        public static readonly DependencyProperty LineHeightProperty =
-            DependencyProperty.Register(
-                "LineHeight", typeof(double), typeof(EndRollControl),
-                new FrameworkPropertyMetadata(10.0));
-
-        /// <summary>
-        /// エンドロールの流れる時間（秒）を示す依存プロパティです。
-        /// </summary>
-        public static readonly DependencyProperty RollTimeSecondsProperty =
-            DependencyProperty.Register(
-                "RollTimeSeconds", typeof(int), typeof(EndRollControl),
-                new FrameworkPropertyMetadata(300));
-
-        /// <summary>
-        /// エンドロールの開始と終了の何行後/何行前から文字の不透明度を
-        /// １００％にするかを示す依存プロパティです。
-        /// </summary>
-        public static readonly DependencyProperty OpacityLineCountProperty =
-            DependencyProperty.Register(
-                "OpacityLineCount", typeof(int), typeof(EndRollControl),
-                new FrameworkPropertyMetadata(3));
-
-        /// <summary>
-        /// エンドロールの進み具合を示す依存プロパティです。
-        /// </summary>
-        public static readonly DependencyProperty CurrentPosProperty =
-            DependencyProperty.Register(
-                "CurrentPos", typeof(double), typeof(EndRollControl),
-                new FrameworkPropertyMetadata(0.0));
-
-        /// <summary>
         /// フォーマットファイルのパスを取得または設定します。
         /// </summary>
         [Bindable(true)]
@@ -282,14 +239,30 @@ namespace VoteSystem.Protocol.View
         }
 
         /// <summary>
-        /// 参加者一覧表を取得するためのメソッドを取得または設定します。
+        /// 参加者一覧のデータを取得するためのメソッドを示す依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty DataGetterProperty =
+            DependencyProperty.Register(
+                "DataGetter", typeof(Func<object>), typeof(EndRollControl),
+                new FrameworkPropertyMetadata(null));
+
+        /// <summary>
+        /// 参加者一覧のデータを取得するためのメソッドを取得または設定します。
         /// </summary>
         [Bindable(true)]
-        public Func<VoterList> VoterListGetter
+        public Func<object> DataGetter
         {
-            get { return (Func<VoterList>)GetValue(VoterListGetterProperty); }
-            set { SetValue(VoterListGetterProperty, value); }
+            get { return (Func<object>)GetValue(DataGetterProperty); }
+            set { SetValue(DataGetterProperty, value); }
         }
+
+        /// <summary>
+        /// １行ごとの高さを示す依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty LineHeightProperty =
+            DependencyProperty.Register(
+                "LineHeight", typeof(double), typeof(EndRollControl),
+                new FrameworkPropertyMetadata(10.0));
 
         /// <summary>
         /// １行の高さを取得または設定します。
@@ -300,6 +273,14 @@ namespace VoteSystem.Protocol.View
             get { return (double)GetValue(LineHeightProperty); }
             set { SetValue(LineHeightProperty, value); }
         }
+
+        /// <summary>
+        /// エンドロールの流れる時間（秒）を示す依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty RollTimeSecondsProperty =
+            DependencyProperty.Register(
+                "RollTimeSeconds", typeof(int), typeof(EndRollControl),
+                new FrameworkPropertyMetadata(300));
 
         /// <summary>
         /// エンドロールが流れる時間間隔を取得または設定します。
@@ -315,12 +296,89 @@ namespace VoteSystem.Protocol.View
         /// エンドロールの開始と終了の何行後/何行前から文字の不透明度を
         /// １００％にするかを示す依存プロパティです。
         /// </summary>
+        public static readonly DependencyProperty OpacityLineCountProperty =
+            DependencyProperty.Register(
+                "OpacityLineCount", typeof(int), typeof(EndRollControl),
+                new FrameworkPropertyMetadata(3));
+
+        /// <summary>
+        /// エンドロールの開始と終了の何行後/何行前から文字の不透明度を
+        /// １００％にするかを示す依存プロパティです。
+        /// </summary>
         [Bindable(true)]
         public int OpacityLineCount
         {
             get { return (int)GetValue(OpacityLineCountProperty); }
             set { SetValue(OpacityLineCountProperty, value); }
         }
+
+        /// <summary>
+        /// 背景を更新するかどうかを示す依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty IsUpdateBackgroundProperty =
+            DependencyProperty.Register(
+                "IsUpdateBackground", typeof(bool), typeof(EndRollControl),
+                new FrameworkPropertyMetadata(false));
+
+        /// <summary>
+        /// 背景を更新するかどうかを取得または設定します。
+        /// </summary>
+        public bool IsUpdateBackground
+        {
+            get { return (bool)GetValue(IsUpdateBackgroundProperty); }
+            set { SetValue(IsUpdateBackgroundProperty, value); }
+        }
+
+        /// <summary>
+        /// 自動で進み具合を更新するかを示す依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty AutoUpdateProperty =
+            DependencyProperty.Register(
+                "AutoUpdate", typeof(bool), typeof(EndRollControl),
+                new FrameworkPropertyMetadata(false,
+                    OnAutoUpdateChanged));
+
+        /// <summary>
+        /// 自動で進み具合を更新するかを取得または設定します。
+        /// </summary>
+        public bool AutoUpdate
+        {
+            get { return (bool)GetValue(AutoUpdateProperty); }
+            set { SetValue(AutoUpdateProperty, value); }
+        }
+
+        private static void OnAutoUpdateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var self = (EndRollControl)d;
+
+            self.UpdateAutoUpdate((bool)e.NewValue);
+        }
+
+        private void UpdateAutoUpdate(bool value)
+        {
+            // デザイン時は更新処理は行いません。
+            if (WpfUtil.IsInDesignMode)
+            {
+                return;
+            }
+
+            if (value)
+            {
+                CompositionTarget.Rendering += CompositionTarget_Rendering;
+            }
+            else
+            {
+                CompositionTarget.Rendering -= CompositionTarget_Rendering;
+            }
+        }
+
+        /// <summary>
+        /// エンドロールの進み具合を示す依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty CurrentPosProperty =
+            DependencyProperty.Register(
+                "CurrentPos", typeof(double), typeof(EndRollControl),
+                new FrameworkPropertyMetadata(0.0));
 
         /// <summary>
         /// エンドロールの進み具合を取得または設定します。
@@ -332,21 +390,30 @@ namespace VoteSystem.Protocol.View
         }
 
         /// <summary>
+        /// エンドロールの状態を示す依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty StateProperty =
+            DependencyProperty.Register(
+                "State", typeof(EndRollState), typeof(EndRollControl),
+                new FrameworkPropertyMetadata(EndRollState.Stop,
+                    OnStateChanged));
+
+        /// <summary>
         /// エンドロールの状態を取得します。
         /// </summary>
-        private EndRollState State
+        [Bindable(true)]
+        public EndRollState State
         {
-            get { return this.state; }
-            set
-            {
-                if (this.state != value)
-                {
-                    this.state = value;
+            get { return (EndRollState)GetValue(StateProperty); }
+            private set { SetValue(StateProperty, value); }
+        }
 
-                    WpfUtil.InvalidateCommand();
-                    RaiseStateEvent(value);
-                }
-            }
+        private static void OnStateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var self = (EndRollControl)d;
+
+            WpfUtil.InvalidateCommand();
+            self.RaiseStateEvent((EndRollState)e.NewValue);
         }
 
         /// <summary>
@@ -428,14 +495,14 @@ namespace VoteSystem.Protocol.View
         {
             try
             {
-                var voterList = VoterListGetter();
-                if (voterList == null)
+                var data = DataGetter();
+                if (data == null)
                 {
                     return new List<LineInfo>();
                 }
 
                 var stuffList = new EndRollList();
-                stuffList.Load(FormatFilePath, voterList);
+                stuffList.Load(FormatFilePath, data);
 
                 // TODO
                 this.columnList = stuffList.ColumnList;
@@ -525,39 +592,41 @@ namespace VoteSystem.Protocol.View
         /// <summary>
         /// エンドロールの更新を行います。
         /// </summary>
-        public void UpdateScreen()
+        public bool UpdateScreen(TimeSpan position)
         {
             if (this.background == null || this.textPanel == null)
             {
-                return;
-            }
-
-            // 更新時間を調整します。
-            var now = DateTime.Now;
-            var diff = now - this.prevUpdateTime;
-            if (diff < TimeSpan.FromMilliseconds(30))
-            {
-                return;
+                return false;
             }
 
             if (State == EndRollState.Play)
             {
                 // 再生ポジションが進みすぎないように気をつけます。
-                CurrentPos = Math.Min(CurrentPos + diff.TotalSeconds, RollTimeSeconds);
-                if (CurrentPos >= RollTimeSeconds)
+                var newPos = position.TotalSeconds;
+                if (newPos >= RollTimeSeconds)
                 {
+                    CurrentPos = RollTimeSeconds;
                     State = EndRollState.Stop;
                 }
-            }            
+                else
+                {
+                    CurrentPos = newPos;
+                }
+            }
 
-            // 各行の文字を更新します。
+            // テキストを消す処理なども行うため、
+            // 再生以外の状態でも更新処理を呼びます。
             for (var line = 0; line < LineCount; ++line)
             {
                 UpdateLineText(CurrentPos, line);
             }
 
-            this.background.Opacity = CalcBackgroundOpacity();
-            this.prevUpdateTime = now;
+            if (IsUpdateBackground)
+            {
+                this.background.Opacity = CalcBackgroundOpacity(CurrentPos);
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -602,7 +671,7 @@ namespace VoteSystem.Protocol.View
         /// <summary>
         /// 背景の不透明度を取得します。
         /// </summary>
-        private double CalcBackgroundOpacity()
+        private double CalcBackgroundOpacity(double currentPos)
         {
             if (State == EndRollState.Stop)
             {
@@ -612,20 +681,20 @@ namespace VoteSystem.Protocol.View
             // 不透明である長さを速度で割って、透明度があるような時間を取得します。
             var opacityTime = OpacityLineCount * LineHeight / TextSpeed;
 
-            if (CurrentPos >= opacityTime &&
-                CurrentPos <= RollTimeSeconds - opacityTime)
+            if (currentPos >= opacityTime &&
+                currentPos <= RollTimeSeconds - opacityTime)
             {
                 return 1.0;
             }
 
             double rate = 0.0;
-            if (CurrentPos < opacityTime)
+            if (currentPos < opacityTime)
             {
-                rate = (CurrentPos / opacityTime);
+                rate = (currentPos / opacityTime);
             }
             else
             {
-                rate = (RollTimeSeconds - CurrentPos) / opacityTime;
+                rate = (RollTimeSeconds - currentPos) / opacityTime;
             }
 
             return Math.Min(1.0, Math.Max(rate, 0.0));
@@ -804,7 +873,6 @@ namespace VoteSystem.Protocol.View
         private Canvas textPanel;
         private List<Column> columnList = new List<Column>();
         private List<LineInfo> lineList = new List<LineInfo>();
-        private EndRollState state = EndRollState.Stop;
         private DateTime prevUpdateTime = DateTime.Now;
 
         /// <summary>
@@ -858,14 +926,12 @@ namespace VoteSystem.Protocol.View
         {
             InitializeCommands(CommandBindings);
 
-            if (!WpfUtil.IsInDesignMode)
-            {
-                // Unloadedはアプリ終了時には呼ばれません。
-                Unloaded += (_, __) =>
-                    CompositionTarget.Rendering -= CompositionTarget_Rendering;
+            // Unloadedはアプリ終了時には呼ばれませんが
+            // この場合は問題ありません。
+            Unloaded += (_, __) =>
+                CompositionTarget.Rendering -= CompositionTarget_Rendering;
 
-                CompositionTarget.Rendering += CompositionTarget_Rendering;
-            }
+            UpdateAutoUpdate(AutoUpdate);
         }
 
         /// <summary>
@@ -873,7 +939,17 @@ namespace VoteSystem.Protocol.View
         /// </summary>
         private void CompositionTarget_Rendering(object sender, EventArgs e)
         {
-            UpdateScreen();
+            var now = DateTime.Now;
+            var diff = now - this.prevUpdateTime;
+            if (diff < TimeSpan.FromMilliseconds(30))
+            {
+                return;
+            }
+
+            if (UpdateScreen(TimeSpan.FromSeconds(CurrentPos) + diff))
+            {
+                this.prevUpdateTime = now;
+            }
         }
 
         /// <summary>

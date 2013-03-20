@@ -1,3 +1,22 @@
+2013-03-20  - Ver 1.2.7.6
+
+	* PluginShogi/View/ShogiControl.xaml.cs: 駒台の駒のForEach中に同じコレ
+	クションを変更してしまうバグを修正しました。
+	* VoteProtocol/Model/EndRollList.cs: Line要素にCount属性を付加しました。
+	これにより同じLine属性を複数追加できるようになります。また、VoterListへ
+	の依存をやめ、どんなオブジェクトでもデータとして扱えるようにしました。
+	* VoteProtocol/View/EndRollControl.cs: 自動更新を行うかどうかのフラグと、
+	背景を使うかどうかのフラグを追加しました。また、VoterListへの依存をやめ、
+	どんなオブジェクトでもデータとして扱えるようにしました。
+	* VoteProtocol/View/VoteResultControl.cs: コンストラクタで必要なプロパ
+	ティを更新するようにしました。
+	* PluginShogi/ShogiData/EndRoll/endroll_format.xml: 将棋のエンドロール
+	用フォーマットファイルを追加しました。
+	* PluginShogi/View/ShogiEndRollControl.xaml: 動画付きでエンディングを流
+	すためのコントロールを追加しました。
+	* VoteProtocol/Model/TestVoterList.cs: PluginShogiから使うため、
+	VoteClientから移動しました。
+
 2013-03-19  - Ver 1.2.7.5
 
 	* PluginShogi/View/Detail/ShogiBackgroundCore.xaml: 

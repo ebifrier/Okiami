@@ -85,8 +85,6 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         private void InitBackground()
         {
-            this.background.FadeElement = ShogiControl;
-
             if (ShogiGlobal.Settings.HasEffectFlag(EffectFlag.Background))
             {
                 AddEffectKey("SpringEffect");
