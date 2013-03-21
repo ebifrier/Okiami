@@ -108,10 +108,6 @@ namespace VoteSystem.Protocol.View
             {
                 return Convert.ToInt32(value);
             }
-            else if (type == typeof(decimal))
-            {
-                return Convert.ToDecimal(value);
-            }
             else if (type == typeof(bool))
             {
                 return Convert.ToBoolean(value);
@@ -164,11 +160,11 @@ namespace VoteSystem.Protocol.View
         {
             CommandBindings.Add(
                 new CommandBinding(
-                    DialogCommands.OK,
+                    RagnarokCommands.OK,
                     ExecuteYes));
             CommandBindings.Add(
                 new CommandBinding(
-                    DialogCommands.Cancel,
+                    RagnarokCommands.Cancel,
                     ExecuteNo));
 
             CommandBindings.Add(

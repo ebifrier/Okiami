@@ -11,12 +11,5 @@ namespace VoteSystem.Client.Model
     [DataContract()]
     public class SoundSetInfo : InfoBase
     {
-        /// <summary>
-        /// ＳＥ情報が書かれた情報ファイルを読み込みます。
-        /// </summary>
-        public static SoundSetInfo Read(string filepath)
-        {
-            return ReadInternal<SoundSetInfo>(filepath);
-        }
     }
 }

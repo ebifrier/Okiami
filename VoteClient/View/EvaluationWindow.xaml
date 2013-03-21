@@ -31,9 +31,6 @@
                           CommandTarget="{Binding PlacementTarget,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                 <Separator />
-                <MenuItem Header="評価値を表示"
-                          IsCheckable="True"
-                          IsChecked="{Binding IsShowEvaluationPoint}"/>
                 <MenuItem Header="設定ウィンドウを開く"
                           Command="{x:Static v:EvaluationWindow.OpenSettingDialog}"
                           CommandTarget="{Binding PlacementTarget,
@@ -91,25 +88,27 @@
 
         <Grid Grid.RowSpan="3" Grid.ColumnSpan="3">
             <Grid.RowDefinitions>
+                <RowDefinition Height="2*" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
 
             <!-- 評価値 -->
-            <rp:DecoratedText Grid.Row="1" Grid.Column="1"
-                              Visibility="{Binding IsShowEvaluationPoint,
-                                                   Converter={StaticResource visibilityConverterCollapsed}}"
-                              Text="{Binding EvaluationPoint, StringFormat={}{0:0}}"
-                              FontSize="50"
-                              Foreground="White"
-                              Stroke="Black"
-                              StrokeThickness="1.5"
-                              HorizontalAlignment="Right"
-                              VerticalAlignment="Bottom" />
+            <Viewbox Grid.Row="1" Grid.Column="1"
+                     Stretch="Uniform"
+                     HorizontalAlignment="Right"
+                     VerticalAlignment="Bottom">
+                <rp:DecoratedText Visibility="{Binding IsShowEvaluationPoint,
+                                                       Converter={StaticResource visibilityConverterCollapsed}}"
+                                  Text="{Binding EvaluationPoint, StringFormat={}{0:0}}"
+                                  FontSize="50"
+                                  Foreground="White"
+                                  Stroke="Black"
+                                  StrokeThickness="1.5" />
+            </Viewbox>
         </Grid>
 
         <Rectangle Grid.Row="0" Grid.RowSpan="1"

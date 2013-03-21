@@ -75,14 +75,6 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
-        /// 画像リストなどが書かれた情報ファイルを読み込みます。
-        /// </summary>
-        public static ImageSetInfo Read(string filepath)
-        {
-            return ReadInternal<ImageSetInfo>(filepath);
-        }
-
-        /// <summary>
         /// 評価値から該当する画像ファイルのパスを取得します。
         /// </summary>
         public string GetSelectedImagePath(double point)

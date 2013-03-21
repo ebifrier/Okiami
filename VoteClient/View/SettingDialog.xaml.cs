@@ -39,11 +39,11 @@ namespace VoteSystem.Client.View
 
             CommandBindings.Add(
                 new CommandBinding(
-                    DialogCommands.OK,
+                    RagnarokCommands.OK,
                     ExecuteOk));
             CommandBindings.Add(
                 new CommandBinding(
-                    DialogCommands.Cancel,
+                    RagnarokCommands.Cancel,
                     ExecuteCancel));
         }
 

@@ -278,42 +278,12 @@ namespace VoteSystem.Client.ViewModel
         }
 
         /// <summary>
-        /// 画像セットのリストを作成します。
-        /// </summary>
-        private List<ImageSetInfo> GetImageSetList()
-        {
-            try
-            {
-                var fullpath = Path.GetFullPath(@"Data\Image");
-                if (!Directory.Exists(fullpath))
-                {
-                    return new List<ImageSetInfo>();
-                }
-
-                // 画像ディレクトリのディレクトリ中にあるinfo.txtファイルを探し、
-                // もしあればそのファイルを解析します。
-                return Directory.EnumerateDirectories(fullpath)
-                    .Select(dir => Path.Combine(dir, "info.json"))
-                    .Where(File.Exists)
-                    .Select(ImageSetInfo.Read)
-                    .Where(imageSet => imageSet != null)
-                    .ToList();
-            }
-            catch (Exception ex)
-            {
-                Log.ErrorException(ex,
-                    "画像セット取得中にエラーが発生しました。");
-
-                return new List<ImageSetInfo>();
-            }
-        }
-
-        /// <summary>
         /// 画像リストを初期化します。
         /// </summary>
         private void InitImageSetList()
         {
-            this.imageSetList = GetImageSetList();
+            this.imageSetList =
+                InfoBase.ReadInfoDirectory<ImageSetInfo>(@"Data\Image");
 
             if (this.imageSetList.Any())
             {

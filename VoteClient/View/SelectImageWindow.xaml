@@ -49,9 +49,9 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="ＯＫ"
                     Margin="8,8,0,8" MinWidth="50"
-                    Command="{x:Static p:DialogCommands.OK}" />
+                    Command="{x:Static p:RagnarokCommands.OK}" />
             <Button Margin="8" Content="キャンセル"
-                    Command="{x:Static p:DialogCommands.Cancel}" />
+                    Command="{x:Static p:RagnarokCommands.Cancel}" />
         </StackPanel>
     </StackPanel>
 </Window>

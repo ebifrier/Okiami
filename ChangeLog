@@ -1,3 +1,12 @@
+2013-03-22  - Ver 1.2.7.8
+
+	* VoteClient/Model/InfoBase.cs: ディレクトリ中のデータをすべて読み込む
+	ようなメソッドを追加し、他の部分の重複処理を削除しました。
+	* VoteClient/View/Control/EvaluationWindowSettingDialog.xaml: 評価値設
+	定ダイアログに評価値を表示するかどうかのチェックボックスを追加しました。
+	* VoteClient/View/EvaluationWindow.xaml: 評価値の数字が全体の大きさに対
+	していい感じになるように調整しました。
+
 2013-03-21  - Ver 1.2.7.7
 
 	* PluginShogi/Effects/EffectManager.cs: VisualBackgroundを指定できるよ

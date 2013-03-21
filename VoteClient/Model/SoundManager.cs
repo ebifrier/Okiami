@@ -171,21 +171,10 @@ namespace VoteSystem.Client.Model
         {
             try
             {
-                var fullpath = Path.GetFullPath(@"Data\Sound");
-                if (!Directory.Exists(fullpath))
-                {
-                    this.soundInfoList = new List<SoundSetInfo>();
-                    return;
-                }
-
                 // Data\Soundのサブディレクトリを
                 // 音声ファイルの入ったディレクトリとして列挙します。
                 this.soundInfoList =
-                    Directory.EnumerateDirectories(fullpath)
-                    .Select(_ => Path.Combine(_, "info.json"))
-                    .Select(SoundSetInfo.Read)
-                    .Where(_ => _ != null)
-                    .ToList();
+                    InfoBase.ReadInfoDirectory<SoundSetInfo>(@"Data\Sound");
 
                 var dirName = Global.Settings.SoundSetDir;
                 var info = this.soundInfoList.FirstOrDefault(

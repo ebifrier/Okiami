@@ -177,38 +177,82 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
-        /// 情報が書かれた情報ファイルを読み込みます。
-        /// </summary>
-        protected static T ReadInternal<T>(string filepath)
-            where T : InfoBase
-        {
-            // パスをフルパスに直します。
-            var fullpath = Path.GetFullPath(filepath);
-
-            var obj = Json.DeserializeFromFile<T>(fullpath);
-            if (obj == null)
-            {
-                return null;
-            }
-
-            // 成功したらパスを設定します。
-            obj.BasePath = Path.GetDirectoryName(fullpath);
-            obj.DirectoryName = Path.GetFileName(obj.BasePath);
-
-            if (string.IsNullOrEmpty(obj.Title))
-            {
-                obj.Title = obj.DirectoryName;
-            }
-
-            return obj;
-        }
-
-        /// <summary>
         /// コンストラクタ
         /// </summary>
         public InfoBase()
         {
             PixivId = -1;
+        }
+
+        /// <summary>
+        /// 情報ファイルを読み込みます。
+        /// </summary>
+        public static T ReadInfo<T>(string filepath)
+            where T : InfoBase
+        {
+            try
+            {
+                // パスをフルパスに直します。
+                var fullpath = Path.GetFullPath(filepath);
+
+                var obj = Json.DeserializeFromFile<T>(fullpath);
+                if (obj == null)
+                {
+                    return null;
+                }
+
+                // 成功したらパスを設定します。
+                obj.BasePath = Path.GetDirectoryName(fullpath);
+                obj.DirectoryName = Path.GetFileName(obj.BasePath);
+
+                if (string.IsNullOrEmpty(obj.Title))
+                {
+                    obj.Title = obj.DirectoryName;
+                }
+
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                Util.ThrowIfFatal(ex);
+                Log.ErrorException(ex,
+                    "情報ファイル読み込み中にエラーが発生しました。");
+
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// ディレクトリ中のデータリストを読み込みます。
+        /// </summary>
+        public static List<T> ReadInfoDirectory<T>(string dirpath)
+            where T : InfoBase
+        {
+            try
+            {
+                var fullpath = Path.GetFullPath(@"Data\Image");
+                if (!Directory.Exists(fullpath))
+                {
+                    return new List<T>();
+                }
+
+                // 画像ディレクトリのディレクトリ中にあるinfo.jsonファイルを探し、
+                // もしあればそのファイルを解析します。
+                return Directory.EnumerateDirectories(fullpath)
+                    .Select(dir => Path.Combine(dir, "info.json"))
+                    .Where(File.Exists)
+                    .Select(ReadInfo<T>)
+                    .Where(_ => _ != null)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Util.ThrowIfFatal(ex);
+                Log.ErrorException(ex,
+                    "情報ファイルリスト取得中にエラーが発生しました。");
+
+                return new List<T>();
+            }
         }
     }
 }

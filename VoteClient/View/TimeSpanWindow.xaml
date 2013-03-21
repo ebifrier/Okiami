@@ -73,9 +73,9 @@
             <Button Content="OK" MinWidth="40"
                     Name="tabTopControl"
                     Margin="0,0,10,0"
-                    Command="{x:Static rp:DialogCommands.OK}" />
+                    Command="{x:Static rp:RagnarokCommands.OK}" />
             <Button Content="キャンセル" MinWidth="40"
-                    Command="{x:Static rp:DialogCommands.Cancel}" />
+                    Command="{x:Static rp:RagnarokCommands.Cancel}" />
         </StackPanel>
     </Grid>
 </Window>

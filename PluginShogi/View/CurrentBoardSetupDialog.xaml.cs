@@ -169,7 +169,7 @@ namespace VoteSystem.PluginShogi.View
 
             CommandBindings.Add(
                 new CommandBinding(
-                    DialogCommands.OK,
+                    RagnarokCommands.OK,
                     (sender, args) =>
                     {
                         this.settings.Save();
@@ -177,7 +177,7 @@ namespace VoteSystem.PluginShogi.View
                     }));
             CommandBindings.Add(
                 new CommandBinding(
-                    DialogCommands.Cancel,
+                    RagnarokCommands.Cancel,
                     (sender, args) =>
                     {
                         this.settings.Reload();
