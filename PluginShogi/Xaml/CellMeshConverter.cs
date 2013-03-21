@@ -47,7 +47,7 @@ namespace VoteSystem.PluginShogi.Xaml
                 positions = new[] { position };
             }
 
-            return Util3D_.CreateCellMesh(positions, Widen);
+            return Util3D.CreateCellMesh(positions, Widen);
         }
 
         /// <summary>

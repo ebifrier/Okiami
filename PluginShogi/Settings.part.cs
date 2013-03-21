@@ -21,7 +21,7 @@ namespace VoteSystem.PluginShogi
     using Protocol;
 
     [Serializable()]
-    public sealed partial class Settings : Ragnarok.Presentation.WpfSettingsBase
+    public sealed partial class Settings : Ragnarok.Presentation.WPFSettingsBase
     {
         #region Auto Save
         [DefaultValue("")]

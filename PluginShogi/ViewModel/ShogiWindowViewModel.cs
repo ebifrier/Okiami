@@ -266,7 +266,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 SetValue("VariationState", value);
 
                 // TODO: ウィンドウのボタン状態を変更するため。
-                WpfUtil.InvalidateCommand();
+                WPFUtil.InvalidateCommand();
             }
         }
 
@@ -443,7 +443,7 @@ namespace VoteSystem.PluginShogi.ViewModel
 
                 Board = board;
 
-                WpfUtil.InvalidateCommand();
+                WPFUtil.InvalidateCommand();
             }
         }
 
@@ -461,7 +461,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 {
                     CurrentBoard = currentBoard;
 
-                    WpfUtil.InvalidateCommand();
+                    WPFUtil.InvalidateCommand();
                 }
             }
         }
@@ -669,7 +669,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             this.autoPlayTimer.Stop();
 
             // 変化停止時の処理
-            WpfUtil.InvalidateCommand();
+            WPFUtil.InvalidateCommand();
 
             ShogiGlobal.EffectManager.IsAutoPlayEffect = false;
             ShogiGlobal.EffectManager.EffectMoveCount = 0;
@@ -745,7 +745,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 UpdateMoveTextFromCurrentBoard();
             }
 
-            WpfUtil.InvalidateCommand();
+            WPFUtil.InvalidateCommand();
         }
 
         void commentClient_PropertyChanged(object sender, PropertyChangedEventArgs e)

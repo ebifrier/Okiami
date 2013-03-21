@@ -1,3 +1,11 @@
+2013-03-21  - Ver 1.2.7.7
+
+	* PluginShogi/Effects/EffectManager.cs: VisualBackgroundを指定できるよ
+	うにし、任意のコントロールの背景を変えられるようにしました。今まではグ
+	ローバル変数のMainWindowを参照していました。
+	* PluginShogi/Util3D.cs: Ragnarok.Presentation.WPFUtilクラスと重複する
+	メソッドをすべて削除しました。
+
 2013-03-20  - Ver 1.2.7.6
 
 	* PluginShogi/View/ShogiControl.xaml.cs: 駒台の駒のForEach中に同じコレ

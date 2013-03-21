@@ -347,7 +347,7 @@ namespace VoteSystem.Client
         /// </summary>
         public static void Initialize()
         {
-            Ragnarok.Presentation.WpfUtil.InitWpf();
+            Ragnarok.Presentation.WPFUtil.Init();
 
             Settings = Settings.CreateSettings<Settings>();
             SoundManager = new Model.SoundManager();
@@ -381,7 +381,8 @@ namespace VoteSystem.Client
         {
             try
             {
-                return Global.VoteClient.GetVoterList();
+                return VoteClient.GetVoterList();
+                //return Protocol.Model.TestVoterList.GetTestVoterList();
             }
             catch (Exception ex)
             {

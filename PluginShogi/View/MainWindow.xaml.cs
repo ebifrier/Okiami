@@ -186,6 +186,12 @@ namespace VoteSystem.PluginShogi.View
                 ShogiControl.AddEffect(fpsCounter);
             }
 
+            var manager = ShogiGlobal.EffectManager;
+            if (manager != null)
+            {
+                manager.Background = this.background;
+            }
+
             this.model = model;
             DataContext = model;
 
@@ -205,6 +211,12 @@ namespace VoteSystem.PluginShogi.View
             {
                 this.timer.Dispose();
                 this.timer = null;
+            }
+
+            var manager = ShogiGlobal.EffectManager;
+            if (manager != null)
+            {
+                manager.Background = null;
             }
 
             if (Client.Global.IsNonPublished)

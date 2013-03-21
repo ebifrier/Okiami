@@ -17,7 +17,7 @@ namespace VoteSystem.Client
     using Protocol;
 
     [Serializable()]
-    public sealed partial class Settings : Ragnarok.Presentation.WpfSettingsBase
+    public sealed partial class Settings : Ragnarok.Presentation.WPFSettingsBase
     {
         #region TimeSpan
         [DefaultValue("00:05:00")]

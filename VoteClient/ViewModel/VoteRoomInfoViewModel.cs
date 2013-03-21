@@ -37,7 +37,7 @@ namespace VoteSystem.Client.ViewModel
         /// </summary>
         public override void NotifyPropertyChanged(PropertyChangedEventArgs e)
         {
-            Ragnarok.Presentation.WpfUtil.CallPropertyChanged(
+            Ragnarok.Presentation.WPFUtil.CallPropertyChanged(
                 PropertyChanged, this, e);
         }
 

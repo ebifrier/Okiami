@@ -365,19 +365,19 @@ namespace VoteSystem.Protocol.View
                     }
                     else if (leaveTime < TimeSpan.FromSeconds(120))
                     {
-                        color = WpfUtil.MakeColor(180, Colors.DarkOrange);
+                        color = WPFUtil.MakeColor(180, Colors.DarkOrange);
                     }
                     else
                     {
-                        color = WpfUtil.MakeColor(128, Colors.DarkGray);
+                        color = WPFUtil.MakeColor(128, Colors.DarkGray);
                     }
                     break;
                 case VoteState.End:
-                    color = WpfUtil.MakeColor(160, Colors.DarkViolet);
+                    color = WPFUtil.MakeColor(160, Colors.DarkViolet);
                     //color = Colors.Transparent;
                     break;
                 case VoteState.Pause:
-                    color = WpfUtil.MakeColor(127, Colors.Goldenrod);
+                    color = WPFUtil.MakeColor(127, Colors.Goldenrod);
                     break;
                 case VoteState.Stop:
                     color = Colors.Transparent;

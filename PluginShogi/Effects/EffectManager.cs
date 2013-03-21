@@ -12,6 +12,7 @@ using Ragnarok;
 using Ragnarok.Shogi;
 using Ragnarok.ObjectModel;
 using Ragnarok.Presentation;
+using Ragnarok.Presentation.VisualObject.Control;
 
 namespace VoteSystem.PluginShogi.Effects
 {
@@ -94,6 +95,15 @@ namespace VoteSystem.PluginShogi.Effects
         /// エフェクトを表示するオブジェクトを取得または設定します。
         /// </summary>
         public ShogiControl Container
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 背景エフェクトを表示するコントロールを取得または設定します。
+        /// </summary>
+        public VisualBackground Background
         {
             get;
             set;
@@ -431,9 +441,18 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 背景の設定を行います。(キーが変わっている場合のみ設定します)
         /// </summary>
-        private void TrySetBackgroundKey(MainWindow window, string key)
+        private void TrySetBackgroundKey(string key)
         {
-            window.AddEffectKey(key);
+            if (Background == null)
+            {
+                return;
+            }
+
+            // 背景エフェクトの作成。
+            var effectInfo = new EffectInfo(key, null);
+            var effect = effectInfo.LoadBackground();
+
+            Background.AddEntity(effect);
         }
 
         /// <summary>
@@ -446,38 +465,31 @@ namespace VoteSystem.PluginShogi.Effects
                 return;
             }
 
-            // ウィンドウの取得を行います。
-            var window = ShogiGlobal.MainWindow;
-            if (window == null)
-            {
-                return;
-            }
-
-            WpfUtil.UIProcess(() =>
+            WPFUtil.UIProcess(() =>
             {
                 // 必要なら背景エフェクトを無効にします。
                 if (!HasEffectFlag(EffectFlag.Background))
                 {
-                    TrySetBackgroundKey(window, null);
+                    TrySetBackgroundKey(null);
                     return;
                 }
 
                 var Unit = 30;
                 if (this.moveCount >= Unit * 3)
                 {
-                    TrySetBackgroundKey(window, "WinterEffect");
+                    TrySetBackgroundKey("WinterEffect");
                 }
                 else if (this.moveCount >= Unit * 2)
                 {
-                    TrySetBackgroundKey(window, "AutumnEffect");
+                    TrySetBackgroundKey("AutumnEffect");
                 }
                 else if (this.moveCount >= Unit)
                 {
-                    TrySetBackgroundKey(window, "SummerEffect");
+                    TrySetBackgroundKey("SummerEffect");
                 }
                 else
                 {
-                    TrySetBackgroundKey(window, "SpringEffect");
+                    TrySetBackgroundKey("SpringEffect");
                 }
             });
         }
@@ -533,7 +545,7 @@ namespace VoteSystem.PluginShogi.Effects
                 effect.StartSoundVolume *= MathEx.Between(0.0, 1.0, volume);
             }
 
-            WpfUtil.UIProcess(() =>
+            WPFUtil.UIProcess(() =>
             {
                 effect.DataContext = CreateContext(position);
                 Container.AddEffect(effect);
@@ -610,7 +622,7 @@ namespace VoteSystem.PluginShogi.Effects
                 effect.StartSoundVolume *= MathEx.Between(0, 100, percent) / 100.0;
             }
 
-            WpfUtil.UIProcess(() =>
+            WPFUtil.UIProcess(() =>
             {
                 effect.DataContext = CreateContext(position);
 

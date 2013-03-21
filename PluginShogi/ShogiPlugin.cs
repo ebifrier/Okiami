@@ -19,10 +19,9 @@ using Ragnarok.Presentation;
 
 namespace VoteSystem.PluginShogi
 {
-    using VoteSystem.Client;
-
-    using VoteSystem.Protocol;
-    using VoteSystem.Protocol.Vote;
+    using Client;
+    using Protocol;
+    using Protocol.Vote;
 
     using Model;
 
@@ -193,12 +192,13 @@ namespace VoteSystem.PluginShogi
             // 将棋ウィンドウを表示します。
             window = new View.MainWindow(ShogiGlobal.ShogiModel);
             window.Closed += (sender, e) =>
-            {
                 ShogiGlobal.MainWindow = null;
-            };
 
             ShogiGlobal.MainWindow = window;
             window.Show();
+
+            //var xx = new View.ShogiEndRollControl();
+            //xx.Show();
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace VoteSystem.PluginShogi
 
             var seconds = e.Command.RollTimeSeconds;
 
-            WpfUtil.UIProcess(() =>
+            WPFUtil.UIProcess(() =>
                 window.PlayEndRoll(TimeSpan.FromSeconds(seconds)));
         }
 
@@ -251,7 +251,7 @@ namespace VoteSystem.PluginShogi
                 return;
             }
 
-            WpfUtil.UIProcess(() =>
+            WPFUtil.UIProcess(() =>
                 window.StopEndRoll());
         }
         #endregion
@@ -325,7 +325,7 @@ namespace VoteSystem.PluginShogi
                 return;
             }
 
-            WpfUtil.UIProcess(() =>
+            WPFUtil.UIProcess(() =>
             {
                 var model = ShogiGlobal.ShogiModel;
                 var ret = model.AddVariation(variation, true, true);
@@ -456,7 +456,7 @@ namespace VoteSystem.PluginShogi
             model.SetCurrentBoard(board);
 
             // 表示局面と違う場合は更新するか確認します。
-            WpfUtil.UIProcess(() => UpdateBoard(board));
+            WPFUtil.UIProcess(() => UpdateBoard(board));
 
             // 重要メッセージとして差し手を表示します。
             var moveList = GetMoveListFrom(oldBoard, board);

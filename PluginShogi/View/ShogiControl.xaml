@@ -276,6 +276,21 @@
                     </Model3DGroup>
                 </ModelUIElement3D.Model>
             </ModelUIElement3D>
+
+            <!-- 変化自動再生時の色です。-->
+            <ModelUIElement3D IsHitTestVisible="False"
+                              Visibility="Collapsed">
+                <ModelUIElement3D.Model>
+                    <GeometryModel3D Geometry="{StaticResource squareMesh}">
+                        <GeometryModel3D.Transform>
+                            <ScaleTransform3D ScaleX="640" ScaleY="480" ScaleZ="1.0" />
+                        </GeometryModel3D.Transform>
+                        <GeometryModel3D.Material>
+                            <DiffuseMaterial Brush="{Binding VariationBrush}" />
+                        </GeometryModel3D.Material>
+                    </GeometryModel3D>
+                </ModelUIElement3D.Model>
+            </ModelUIElement3D>
         </Viewport3D>
     </Viewbox>
 </UserControl>

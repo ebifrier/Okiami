@@ -6,6 +6,8 @@ using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media.Media3D;
 
+using Ragnarok.Presentation;
+
 namespace VoteSystem.PluginShogi.Xaml
 {
     /// <summary>
@@ -48,7 +50,7 @@ namespace VoteSystem.PluginShogi.Xaml
         /// </summary>
         public override object ProvideValue(IServiceProvider service)
         {
-            return Util3D_.CreateDefaultMesh(Width, Height, 0, 0);
+            return WPFUtil.CreateDefaultMesh(Width, Height, 0, 0);
         }
     }
 }

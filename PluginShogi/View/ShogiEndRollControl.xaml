@@ -38,7 +38,6 @@
                 <p:VisualBackground x:Name="ShogiBackground" />
                 
                 <v:ShogiControl x:Name="ShogiControl"
-                                EffectManager="{x:Static t:ShogiGlobal.EffectManager}"
                                 PieceImage="{Binding KomaImage}"
                                 BanBrush="{StaticResource banBrush}"
                                 PieceBoxBrush="{StaticResource komadaiBrush}"/>

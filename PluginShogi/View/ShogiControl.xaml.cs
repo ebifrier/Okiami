@@ -162,7 +162,7 @@ namespace VoteSystem.PluginShogi.View
             DependencyProperty.Register(
                 "EditMode", typeof(EditMode), typeof(ShogiControl),
                 new FrameworkPropertyMetadata(EditMode.Normal,
-                    (_, __) => WpfUtil.InvalidateCommand()));
+                    (_, __) => WPFUtil.InvalidateCommand()));
 
         /// <summary>
         /// 将棋盤の状態を扱う依存プロパティです。
@@ -402,7 +402,7 @@ namespace VoteSystem.PluginShogi.View
         static void OnEffectManagerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var self = (ShogiControl)d;
-
+            
             if (self != null)
             {
                 var oldValue = e.OldValue as IEffectManager;
@@ -631,7 +631,7 @@ namespace VoteSystem.PluginShogi.View
             // 駒とマウスの位置の差を求めておきます。
             var mousePos = e.GetPosition(RootViewport);
 
-            this.movingPiece.Coord = Util3D_.MakeVector3D(mousePos, MovingPieceZ);
+            this.movingPiece.Coord = WPFUtil.MakeVector3D(mousePos, MovingPieceZ);
         }
 
         /// <summary>
@@ -728,7 +728,7 @@ namespace VoteSystem.PluginShogi.View
 
             dialog.Loaded += (sender, e) =>
             {
-                var p = WpfUtil.GetMousePosition(dialog);
+                var p = WPFUtil.GetMousePosition(dialog);
                 var screenPos = dialog.PointToScreen(p);
 
                 dialog.WindowStartupLocation = WindowStartupLocation.Manual;
@@ -1324,8 +1324,8 @@ namespace VoteSystem.PluginShogi.View
                 CellSize.Width * Board.BoardSize,
                 CellSize.Height * Board.BoardSize);
 
-            capturedPieceBoxBounds[0] = Util3D_.MakeRectXY(this.komadai0Geometry.Bounds);
-            capturedPieceBoxBounds[1] = Util3D_.MakeRectXY(this.komadai1Geometry.Bounds);
+            capturedPieceBoxBounds[0] = WPFUtil.MakeRectXY(this.komadai0Geometry.Bounds);
+            capturedPieceBoxBounds[1] = WPFUtil.MakeRectXY(this.komadai1Geometry.Bounds);
 
             // エフェクトなどを初期化します。
             this.banEffectObjectRoot.Duration = TimeSpan.MaxValue;

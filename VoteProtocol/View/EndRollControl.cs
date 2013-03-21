@@ -357,7 +357,7 @@ namespace VoteSystem.Protocol.View
         private void UpdateAutoUpdate(bool value)
         {
             // デザイン時は更新処理は行いません。
-            if (WpfUtil.IsInDesignMode)
+            if (WPFUtil.IsInDesignMode)
             {
                 return;
             }
@@ -412,7 +412,7 @@ namespace VoteSystem.Protocol.View
         {
             var self = (EndRollControl)d;
 
-            WpfUtil.InvalidateCommand();
+            WPFUtil.InvalidateCommand();
             self.RaiseStateEvent((EndRollState)e.NewValue);
         }
 

@@ -11,6 +11,7 @@ using System.Windows.Media.Media3D;
 
 using FlintSharp.Renderers;
 using Ragnarok;
+using Ragnarok.Presentation;
 using Ragnarok.Presentation.VisualObject;
 
 namespace VoteSystem.PluginShogi.Effects
@@ -60,7 +61,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// </summary>
         static EffectObject()
         {
-            if (!Ragnarok.Presentation.WpfUtil.IsInDesignMode)
+            if (!Ragnarok.Presentation.WPFUtil.IsInDesignMode)
             {
                 DefaultBasePath = new Uri(
                     new Uri(System.Reflection.Assembly.GetEntryAssembly().Location),
@@ -484,7 +485,7 @@ namespace VoteSystem.PluginShogi.Effects
                         oldImage.Width != newImage.Width ||
                         oldImage.Height != newImage.Height)
                     {
-                        Mesh = Util3D_.CreateDefaultMesh(
+                        Mesh = WPFUtil.CreateDefaultMesh(
                             1.0, 1.0, newImage.Width, newImage.Height);
                     }
                 }

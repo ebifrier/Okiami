@@ -19,6 +19,7 @@ using Ragnarok.Shogi;
 namespace VoteSystem.PluginShogi.View
 {
     using Protocol.View;
+    using Effects;
 
     /// <summary>
     /// エンドロールを流すウィンドウです。
@@ -96,6 +97,7 @@ namespace VoteSystem.PluginShogi.View
             }
         }
 
+        private EffectManager effectManager;
         private DispatcherTimer timer;
         private MediaPlayer player;
         private TimeSpan prevPosition = TimeSpan.Zero;
@@ -185,13 +187,17 @@ namespace VoteSystem.PluginShogi.View
             EndRoll.FormatFilePath = @"ShogiData/EndRoll/endroll_format.xml";
             EndRoll.DataGetter = Protocol.Model.TestVoterList.GetTestVoterList;
 
+            this.effectManager = new EffectManager
+            {
+                Background = ShogiBackground,
+                EffectEnabled = ShogiGlobal.Settings.SD_IsUseEffect,
+                EffectMoveCount = 0,
+            };
+            ShogiControl.EffectManager = this.effectManager;
             //ShogiControl.Board = new Board();
             //ShogiControl.Effect = new Ragnarok.Presentation.Effect.GrayscaleEffect();
 
-            // 背景エフェクトの作成。
-            var effectInfo = new Effects.EffectInfo("SpringEffect", null);
-            var effect = effectInfo.LoadBackground();
-            ShogiBackground.AddEntity(effect);
+            this.effectManager.ChangeMoveCount(1);
 
             DataContext = ShogiGlobal.ShogiModel;
 

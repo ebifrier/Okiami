@@ -11,6 +11,7 @@ using System.Windows.Media.Media3D;
 using Ragnarok;
 using Ragnarok.Shogi;
 using Ragnarok.ObjectModel;
+using Ragnarok.Presentation;
 using Ragnarok.Presentation.Control;
 using Ragnarok.Presentation.VisualObject;
 
@@ -140,7 +141,7 @@ namespace VoteSystem.PluginShogi.Effects
 
             return new GeometryModel3D
             {
-                Geometry = Util3D_.CreateDefaultMesh(
+                Geometry = WPFUtil.CreateDefaultMesh(
                     1.0, 1.0, image.Width, image.Height),
                 Material = new DiffuseMaterial(brush),
             }.Apply(_ => _.Freeze());
@@ -180,7 +181,7 @@ namespace VoteSystem.PluginShogi.Effects
                 // 駒数の表示用オブジェクトを追加します。
                 var numberModel = new GeometryModel3D()
                 {
-                    Geometry = Util3D_.CreateDefaultMesh(0.7, 0.4, 0, 0),
+                    Geometry = WPFUtil.CreateDefaultMesh(0.7, 0.4, 0, 0),
                     Material = new DiffuseMaterial(new VisualBrush(this.numberText)),
                     Transform = new TranslateTransform3D(0.4, -0.4, 0.0),
                 };

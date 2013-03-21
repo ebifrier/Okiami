@@ -31,14 +31,14 @@ namespace VoteSystem.PluginShogi
         /// </summary>
         public static void Initialize(ShogiPlugin plugin)
         {
-            WpfUtil.InitWpf();
+            WPFUtil.Init();
 
             FlintSharp.Utils.ScreenSize = new Size(640, 480);
 
             ShogiPlugin = plugin;
             Settings = Settings.CreateSettings<Settings>();
             SoundManager = new SoundManager();
-            ShogiModel = new ViewModel.ShogiWindowViewModel(new Board()); 
+            ShogiModel = new ShogiWindowViewModel(new Board()); 
 
             EffectManager = new Effects.EffectManager()
             {
@@ -166,7 +166,7 @@ namespace VoteSystem.PluginShogi
         /// <summary>
         /// 将棋用のビューモデルを取得または設定します。
         /// </summary>
-        public static ViewModel.ShogiWindowViewModel ShogiModel
+        public static ShogiWindowViewModel ShogiModel
         {
             get;
             private set;
@@ -209,7 +209,7 @@ namespace VoteSystem.PluginShogi
         /// </summary>
         public static void ErrorMessage(string format, params object[] args)
         {
-            WpfUtil.UIProcess(() =>
+            WPFUtil.UIProcess(() =>
                 DialogUtil.Show(
                     MainWindow,
                     string.Format(format, args),

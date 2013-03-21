@@ -186,14 +186,14 @@ namespace VoteSystem.Client.ViewModel
                         }
                         else if (voteLeaveTime < TimeSpan.FromMinutes(3))
                         {
-                            return WpfUtil.MakeColor(180, Colors.DarkOrange);
+                            return WPFUtil.MakeColor(180, Colors.DarkOrange);
                         }
-                        return WpfUtil.MakeColor(200, Colors.DarkGray);
+                        return WPFUtil.MakeColor(200, Colors.DarkGray);
                     case VoteState.End:
                         //return WpfUtil.MakeColor(160, Colors.DarkViolet);
                         return Colors.Transparent;
                     case VoteState.Pause:
-                        return WpfUtil.MakeColor(127, Colors.Goldenrod);
+                        return WPFUtil.MakeColor(127, Colors.Goldenrod);
                     case VoteState.Stop:
                         //return WpfUtil.MakeColor(200, Colors.DarkGray);
                         return Colors.Transparent;
