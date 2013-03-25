@@ -32,37 +32,12 @@ namespace VoteSystem.Client.Command
                 "PostComments",
                 typeof(Window));
         /// <summary>
-        /// エラーログを送信します。
-        /// </summary>
-        public readonly static ICommand SendErrorLog =
-            new RoutedUICommand(
-                "エラーログを送信します。",
-                "SendErrorLog",
-                typeof(Window));
-        /// <summary>
         /// 新バージョンの確認を行います。
         /// </summary>
         public readonly static ICommand CheckToUpdate =
             new RoutedUICommand(
                 "新バージョンの確認を行います。",
                 "CheckToUpdate",
-                typeof(Window));
-        /// <summary>
-        /// バージョンを表示します。
-        /// </summary>
-        public readonly static ICommand ShowVersion =
-            new RoutedUICommand(
-                "バージョンを表示します。",
-                "ShowVersion",
-                typeof(Window));
-
-        /// <summary>
-        /// 指定のURLを開きます。
-        /// </summary>
-        public readonly static ICommand NavigateUrl =
-            new RoutedUICommand(
-                "指定のURLを開きます。",
-                "NavigateUrl",
                 typeof(Window));
         /// <summary>
         /// 指定の音声を再生します。
@@ -135,21 +110,8 @@ namespace VoteSystem.Client.Command
                     ExecutePostComments));
             element.CommandBindings.Add(
                 new CommandBinding(
-                    Commands.SendErrorLog,
-                    ExecuteSendErrorLog));
-            element.CommandBindings.Add(
-                new CommandBinding(
                     Commands.CheckToUpdate,
                     ExecuteCheckToUpdate));
-            element.CommandBindings.Add(
-                new CommandBinding(
-                    Commands.ShowVersion,
-                    ExecuteShowVersion));
-
-            element.CommandBindings.Add(
-                new CommandBinding(
-                    Commands.NavigateUrl,
-                    ExecuteNavigateUrl));
             element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.PlaySound,
@@ -549,10 +511,8 @@ namespace VoteSystem.Client.Command
         private static void ExecuteOpenEvaluationWindow(object sender,
                                                         ExecutedRoutedEventArgs e)
         {
-            var model = new ViewModel.EvaluationWindowViewModel();
-            var window = new View.EvaluationWindow(model)
+            var window = new View.EvaluationWindow
             {
-                DataContext = model,
                 Owner = Global.MainWindow,
             };
 

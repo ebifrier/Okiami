@@ -5,6 +5,8 @@ using System.Runtime.Serialization;
 
 namespace VoteSystem.Client.Model
 {
+    using Protocol.Model;
+
     /// <summary>
     /// ＳＥ用の情報を保持します。
     /// </summary>

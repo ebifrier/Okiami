@@ -1,3 +1,14 @@
+2013-03-26  - Ver 1.2.7.12
+
+	* VoteClient/Command/UtilCommand.cs: RagnarokCommandsと重複するコマンド
+	を削除しました。
+	* VoteClient/View/EvaluationWindow.xaml: EvaluationControlを使った実装
+	に変更しました。
+	* VoteProtocol/View/EvaluationControl.cs: いくつかの依存プロパティをデ
+	フォルトでTwoWayのバインディングが行われるように修正しました。また、設
+	定変更時に呼ばれるイベントを追加しました。
+	* Client.EvaluationWindowに関わる幾つかのファイルを削除しました。
+
 2013-03-26  - Ver 1.2.7.11
 
 	* dist/readme.txt: yoshi様への謝辞を追加しました。

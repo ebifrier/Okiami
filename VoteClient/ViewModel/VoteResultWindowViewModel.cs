@@ -55,7 +55,7 @@ namespace VoteSystem.Client.ViewModel
                 {
                     this.movableBackgroundColor = value;
 
-                    this.RaisePropertyChanged("MovableBackgroundColor");
+                    this.RaisePropertyChanged("VR_MovableBackgroundColor");
                 }
             }
         }

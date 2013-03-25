@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:p="clr-namespace:VoteSystem.Protocol;assembly=VoteProtocol"
-                    xmlns:pv="clr-namespace:VoteSystem.Protocol.Vote;assembly=VoteProtocol"
+                    xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+                    xmlns:p="http://schemas.garnet-alice.net/votesystem/xaml/presentation"
                     xmlns:c="clr-namespace:VoteSystem.Client.Command"
                     xmlns:v="clr-namespace:VoteSystem.Client.View"
                     xmlns:vc="clr-namespace:VoteSystem.Client.View.Control">
@@ -24,7 +24,7 @@
         <TextBlock HorizontalAlignment="Center"
                    ToolTip="{Binding Explain}">
             <Hyperlink NavigateUri="{Binding Url}"
-                       Command="{x:Static c:Commands.NavigateUrl}"
+                       Command="{x:Static r:RagnarokCommands.NavigateUrl}"
                        CommandParameter="{Binding Url}">
                 <TextBlock Text="{Binding SiteName}" />
             </Hyperlink>
@@ -106,7 +106,7 @@
 
     <!-- 投票ルームのメンバー一覧を表示します。-->
     <DataTemplate x:Key="voteRoomInfoTemplate"
-                  DataType="{x:Type pv:VoteRoomInfo}">
+                  DataType="{x:Type p:VoteRoomInfo}">
         <ScrollViewer HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Hidden">
             <Grid>

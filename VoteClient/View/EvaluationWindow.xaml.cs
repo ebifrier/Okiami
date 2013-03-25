@@ -16,63 +16,31 @@ using Ragnarok.Presentation.Control;
 
 namespace VoteSystem.Client.View
 {
-    using VoteSystem.Client.ViewModel;
-
     /// <summary>
     /// 評価値ウィンドウです。
     /// </summary>
     public partial class EvaluationWindow : MovableWindow
     {
         /// <summary>
-        /// 設定ダイアログを開くコマンドです。
-        /// </summary>
-        public static readonly ICommand OpenSettingDialog =
-            new RoutedUICommand(
-                "設定ダイアログを開きます。",
-                "OpenSettingDialog",
-                typeof(EvaluationWindow));
-
-        /// <summary>
         /// 静的コンストラクタ
         /// </summary>
         static EvaluationWindow()
         {
-            MovableWindow.IsMovableProperty.OverrideMetadata(
+            IsMovableProperty.OverrideMetadata(
                 typeof(EvaluationWindow),
                 new FrameworkPropertyMetadata(true));
-
-            MovableWindow.EdgeLengthProperty.OverrideMetadata(
+            EdgeLengthProperty.OverrideMetadata(
                 typeof(EvaluationWindow),
                 new FrameworkPropertyMetadata(10.0));
         }
 
         /// <summary>
-        /// 設定ダイアログを開きます。
-        /// </summary>
-        private void ExecuteOpenSettingDialog(object sender, ExecutedRoutedEventArgs e)
-        {
-            var dialog = new Control.EvaluationWindowSettingDialog()
-            {
-                DataContext = this.layoutBase.DataContext,
-                Owner = this,
-            };
-
-            dialog.ShowDialog();
-        }
-
-        /// <summary>
         /// コンストラクタ
         /// </summary>
-        public EvaluationWindow(EvaluationWindowViewModel model)
+        public EvaluationWindow()
         {
             InitializeComponent();
-
-            CommandBindings.Add(
-                new CommandBinding(
-                    OpenSettingDialog,
-                    ExecuteOpenSettingDialog));
-
-            this.layoutBase.DataContext = model;
+            EvaluationControl.Bind(this);
         }
     }
 }

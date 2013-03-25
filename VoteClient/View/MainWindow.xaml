@@ -85,12 +85,13 @@
                           Visibility="{x:Static l:Global.IsNonPublishedVisibility}" />
 
                 <MenuItem Header="エラー報告・要望など(_R)"
-                          Command="{x:Static c:Commands.SendErrorLog}" />
+                          Command="{x:Static p:RagnarokCommands.SendErrorLog}"
+                          CommandParameter="logs/client.err" />
                 <MenuItem Header="新バージョンの確認(_C)"
                           Command="{x:Static c:Commands.CheckToUpdate}" />
                 <Separator />
                 <MenuItem Header="バージョン情報(_V)"
-                          Command="{x:Static c:Commands.ShowVersion}" />
+                          Command="{x:Static p:RagnarokCommands.ShowVersion}" />
             </MenuItem>
         </Menu>
 

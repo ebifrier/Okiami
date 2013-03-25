@@ -79,9 +79,6 @@
       <DependentUpon>EvaluationSettingDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\PointToStringConverter.cs" />
-    <Compile Include="View\UserWindow.xaml.cs">
-      <DependentUpon>UserWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\VoteResultControl.cs" />
     <Compile Include="View\VoteResultSettingDialog.xaml.cs">
       <DependentUpon>VoteResultSettingDialog.xaml</DependentUpon>
@@ -125,10 +122,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Resource Include="View\InfoView.xaml">
+    <Page Include="View\InfoView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Resource>
+    </Page>
     <Page Include="View\EvaluationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -136,10 +133,6 @@
     <Page Include="View\EvaluationSettingDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\UserWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\VoteResultControl.xaml">
       <Generator>MSBuild:Compile</Generator>

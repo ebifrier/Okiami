@@ -21,22 +21,44 @@ namespace VoteSystem.Protocol.View
     /// </summary>
     public partial class EvaluationSettingDialog : Window
     {
-        private sealed class InternalModel : CloneObject
-        {
-            public InternalModel(VoteResultControl control)
-                : base(control)
-            {
-            }
-        }
+        private CloneObject model;
+        private EvaluationControl control;
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public EvaluationSettingDialog()
+        public EvaluationSettingDialog(EvaluationControl control)
         {
             InitializeComponent();
+            InitCommands();
+            RagnarokCommands.Bind(this);            
 
-            RagnarokCommands.Bind(this);
+            this.model = new CloneObject(control);
+            this.control = control;
+
+            DataContext = model;
+        }
+
+        /// <summary>
+        /// コマンドバインディングを行います。
+        /// </summary>
+        private void InitCommands()
+        {
+            CommandBindings.Add(
+                new CommandBinding(
+                    RagnarokCommands.OK,
+                    ExecuteYes));
+        }
+
+        /// <summary>
+        /// OK/YES
+        /// </summary>
+        private void ExecuteYes(object sender, ExecutedRoutedEventArgs e)
+        {
+            // OKの場合は、プロパティ値をコントロールに設定します。
+            this.model.SetValuesToTarget(this.control);
+
+            DialogResult = true;
         }
     }
 }

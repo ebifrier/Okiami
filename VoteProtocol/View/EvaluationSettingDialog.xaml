@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
-        xmlns:l="clr-namespace:VoteSystem.Protocol"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:l="clr-namespace:VoteSystem.Protocol.View"
         xmlns:m="clr-namespace:VoteSystem.Protocol.Model"
         Title="評価値設定" MinWidth="250" SizeToContent="WidthAndHeight"
         ResizeMode="NoResize" Topmost="True">
@@ -12,6 +13,11 @@
                 <ResourceDictionary Source="/Ragnarok.Presentation;component/Themes/Common.xaml" />
                 <ResourceDictionary Source="InfoView.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <rp:EnumToBooleanConverter x:Key="enumToBooleanConverter"
+                                       EnumType="l:EvaluationPointType" />
+            <rp:ValueToDecimalConverter x:Key="decimalConverter"
+                                        SourceType="sys:Double" />
         </ResourceDictionary>
     </Window.Resources>
     
@@ -51,24 +57,24 @@
                                                  Converter={StaticResource enumToBooleanConverter},
                                                  ConverterParameter=User}"
                              Content="ユーザー" />
+                
+                <RadioButton IsChecked="{Binding PointType,
+                                                 Converter={StaticResource enumToBooleanConverter},
+                                                 ConverterParameter=ModeCustom}"
+                             Content="評価値" />
+
                 <RadioButton Name="useInputRadioButton"
                              IsChecked="{Binding PointType,
                                                  Converter={StaticResource enumToBooleanConverter},
                                                  ConverterParameter=Input}"
                              Content="手入力" />
-                <GroupBox Header="手入力設定"
-                          IsEnabled="{Binding IsChecked, ElementName=useInputRadioButton}">
-                    <DockPanel>
-                        <Label DockPanel.Dock="Left" Content="値入力: " />
-                        <rp:NumericUpDown DockPanel.Dock="Right"
-                                          Minimum="-10000" Maximum="10000"
-                                          Value="{Binding InputPoint}" />
-                    </DockPanel>
-                </GroupBox>
-                <RadioButton IsChecked="{Binding PointType,
-                                                 Converter={StaticResource enumToBooleanConverter},
-                                                 ConverterParameter=ModeCustom}"
-                             Content="評価値" />
+                <DockPanel IsEnabled="{Binding IsChecked, ElementName=useInputRadioButton}">
+                    <Label DockPanel.Dock="Left" Content="値入力: " />
+                    <rp:NumericUpDown DockPanel.Dock="Right"
+                                      Minimum="-10000" Maximum="10000"
+                                      Value="{Binding InputPoint,
+                                                      Converter={StaticResource decimalConverter}}" />
+                </DockPanel>
             </StackPanel>
         </GroupBox>
         

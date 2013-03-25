@@ -7,6 +7,7 @@ using Ragnarok;
 
 namespace VoteSystem.Client.Model
 {
+    using VoteSystem.Protocol.Model;
     using VoteSystem.Protocol.Vote;
 
     /// <summary>

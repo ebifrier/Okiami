@@ -119,8 +119,6 @@
     <Compile Include="Model\CommenterCommentClient.cs" />
     <Compile Include="Model\CommenterManager.cs" />
     <Compile Include="Model\ConnectionCounter.cs" />
-    <Compile Include="Model\ImageSetInfo.cs" />
-    <Compile Include="Model\InfoBase.cs" />
     <Compile Include="Model\Live\LiveClient.cs" />
     <Compile Include="Model\Live\LiveNicoClient.cs" />
     <Compile Include="Model\MainModel.cs" />
@@ -132,7 +130,6 @@
     <Compile Include="Global.cs" />
     <Compile Include="Settings.part.cs" />
     <Compile Include="ViewModel\EndRollWindowViewModel.cs" />
-    <Compile Include="ViewModel\EvaluateWindowViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\VoteResultWindowViewModel.cs" />
     <Compile Include="ViewModel\VoteRoomInfoViewModel.cs" />
@@ -141,9 +138,6 @@
       <DependentUpon>CommenterSettingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MessageUtil.cs" />
-    <Compile Include="View\Control\EvaluationWindowSettingDialog.xaml.cs">
-      <DependentUpon>EvaluationWindowSettingDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\Control\LiveOwnerControl.xaml.cs">
       <DependentUpon>LiveOwnerControl.xaml</DependentUpon>
     </Compile>
@@ -188,14 +182,6 @@
       <DependentUpon>VoteResultWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="VoteClientException.cs" />
-    <Page Include="View\Control\EvaluationWindowSettingDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Control\InfoView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\Control\LiveControlTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -53,6 +53,7 @@ namespace VoteSystem.Protocol.View
                 typeof(EvaluationPointType),
                 typeof(EvaluationControl),
                 new FrameworkPropertyMetadata(EvaluationPointType.User,
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
                     OnPointChanged));
 
         /// <summary>
@@ -72,7 +73,9 @@ namespace VoteSystem.Protocol.View
                 "InputPoint",
                 typeof(double),
                 typeof(EvaluationControl),
-                new FrameworkPropertyMetadata(0.0, OnPointChanged));
+                new FrameworkPropertyMetadata(0.0,
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                    OnPointChanged));
 
         /// <summary>
         /// 手入力による評価値を取得または設定します。
@@ -184,7 +187,9 @@ namespace VoteSystem.Protocol.View
                 "SelectedImageSet",
                 typeof(ImageSetInfo),
                 typeof(EvaluationControl),
-                new FrameworkPropertyMetadata(null, OnImageSetChanged));
+                new FrameworkPropertyMetadata(null,
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                    OnImageSetChanged));
 
         static void OnImageSetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -211,6 +216,7 @@ namespace VoteSystem.Protocol.View
                 typeof(string),
                 typeof(EvaluationControl),
                 new FrameworkPropertyMetadata(string.Empty,
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
                     OnImageSetTitleChanged));
 
         static void OnImageSetTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -256,7 +262,8 @@ namespace VoteSystem.Protocol.View
                 "IsShowEvaluationPoint",
                 typeof(bool),
                 typeof(EvaluationControl),
-                new FrameworkPropertyMetadata(true));
+                new FrameworkPropertyMetadata(true,
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         /// <summary>
         /// 評価値を表示するかどうかを取得または設定します。
@@ -264,9 +271,37 @@ namespace VoteSystem.Protocol.View
         public bool IsShowEvaluationPoint
         {
             get { return (bool)GetValue(IsShowEvaluationPointProperty); }
-            private set { SetValue(IsShowEvaluationPointProperty, value); }
+            set { SetValue(IsShowEvaluationPointProperty, value); }
         }
         #endregion
+
+        /// <summary>
+        /// 設定が更新されたときに呼ばれるイベントです。
+        /// </summary>
+        public static readonly RoutedEvent SettingUpdatedEvent =
+            EventManager.RegisterRoutedEvent(
+                "SettingUpdated",
+                RoutingStrategy.Bubble,
+                typeof(RoutedEventHandler),
+                typeof(VoteResultControl));
+
+        /// <summary>
+        /// 設定が更新されたときに呼ばれるイベントです。
+        /// </summary>
+        public event RoutedEventHandler SettingUpdated
+        {
+            add { AddHandler(SettingUpdatedEvent, value); }
+            remove { RemoveHandler(SettingUpdatedEvent, value); }
+        }
+
+        /// <summary>
+        /// 設定ダイアログを開きます。
+        /// </summary>
+        public static readonly ICommand OpenSettingDialog =
+            new RoutedUICommand(
+                "設定ダイアログを新たに開きます。",
+                "OpenSettingDialog",
+                typeof(Window));
 
         /// <summary>
         /// 設定ダイアログを開きます。
@@ -275,12 +310,12 @@ namespace VoteSystem.Protocol.View
         {
             try
             {
-                var dialog = new EvaluationSettingDialog
-                {
-                    DataContext = this,
-                };
+                var dialog = new EvaluationSettingDialog(this);
 
-                dialog.ShowDialog();
+                if (dialog.ShowDialog() == true)
+                {
+                    RaiseEvent(new RoutedEventArgs(SettingUpdatedEvent));
+                }
             }
             catch (Exception ex)
             {
@@ -415,14 +450,22 @@ namespace VoteSystem.Protocol.View
         }
 
         /// <summary>
+        /// コマンドのバインディングを行います。
+        /// </summary>
+        public void Bind(UIElement elem)
+        {
+            elem.CommandBindings.Add(
+                new CommandBinding(
+                    OpenSettingDialog,
+                    ExecuteOpenSettingDialog));
+        }
+
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         public EvaluationControl()
         {
-            CommandBindings.Add(
-                new CommandBinding(
-                    RagnarokCommands.OpenSettingDialog,
-                    ExecuteOpenSettingDialog));
+            Bind(this);
         }
     }
 }

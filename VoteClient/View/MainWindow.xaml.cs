@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using Ragnarok.Presentation;
+
 namespace VoteSystem.Client.View
 {
     /// <summary>
@@ -27,6 +29,7 @@ namespace VoteSystem.Client.View
             Command.UtilCommand.Bind(this);
             Command.LiveCommands.Bind(this);
             Command.VoteCommands.Bind(this);
+            RagnarokCommands.Bind(this);
 
             Closing += (sender, e) =>
             {
