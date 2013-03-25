@@ -1,13 +1,23 @@
 ﻿<Window x:Class="VoteSystem.Protocol.View.VoteResultSettingDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
         xmlns:l="clr-namespace:VoteSystem.Protocol.View"
-        Title="投票結果の表示設定ダイアログ"
-        SizeToContent="Height" ResizeMode="NoResize"
-        Height="408" Width="337">
+        mc:Ignorable="d"
+        Title="投票結果の表示設定ダイアログ" ResizeMode="NoResize"
+        SizeToContent="Height" Width="350" d:DesignHeight="479">
     <Window.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Ragnarok.Presentation;component/Themes/Common.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <rp:ValueToIntConverter
+                x:Key="valueToIntConverter" />
+            <rp:ColorToSolidColorBrushConverter
+                x:Key="brushConverter" />
             <rp:ValueCompareToBooleanConverter
                 x:Key="boldCompareConverter"
                 TrueObject="{x:Static FontWeights.Bold}"
@@ -36,16 +46,18 @@
             <!-- 選択された色を表示します。-->
             <ControlTemplate x:Key="colorTemplate">
                 <Border BorderBrush="{x:Static Brushes.Black}"
-                            BorderThickness="0.5">
+                        BorderThickness="0.5">
                     <Border Background="{StaticResource checkersBrush}"
                             Margin="3,3,3,3">
-                        <Border Background="{TemplateBinding Background}" />
+                        <Border Background="{Binding Background,
+                                                     RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                    AncestorType=Button}}" />
                     </Border>
                 </Border>
             </ControlTemplate>
 
-            <Style x:Key="colorGridStyle" TargetType="ContentControl">
-                <Setter Property="Margin" Value="3,3,3,3" />
+            <Style x:Key="colorGridStyle" TargetType="Control">
+                <Setter Property="Margin" Value="1,3,1,3" />
                 <Setter Property="Height" Value="24" />
                 <Setter Property="Template" Value="{StaticResource colorTemplate}" />
             </Style>
@@ -66,21 +78,34 @@
                     <ColumnDefinition Width="180" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                
+
+                <!--<Label Grid.Row="0" Grid.Column="0"
+                       Content="背景色設定："
+                       HorizontalAlignment="Right" />-->
                 <Button Grid.Row="0" Grid.Column="0"
                         Style="{StaticResource heightStyle}"
                         Command="{x:Static l:VoteResultSettingDialog.SelectBackgroundColor}"
                         Content="背景色設定"
                         HorizontalAlignment="Right" />
-                <ContentControl Grid.Row="0" Grid.Column="1"
-                                Style="{StaticResource colorGridStyle}"
-                                Background="{Binding Background}" />
+                <Control Grid.Row="0" Grid.Column="1"
+                         Style="{StaticResource colorGridStyle}"
+                         Background="{Binding Background}" />
+                
+                <!--<Button Grid.Row="0" Grid.Column="1"
+                        Margin="1,3,1,3"
+                        rp:CustomAdorner.Attached="{StaticResource colorTemplate}"
+                        Command="{x:Static l:VoteResultSettingDialog.SelectBackgroundColor}"
+                        Foreground="{Binding Background}" />
+                <rp:ColorButton Grid.Row="0" Grid.Column="1"
+                        Margin="1,3,1,3" />-->
+
                 <Label Grid.Row="2" Grid.Column="0"
                        Content="表示する結果の数："
                        HorizontalAlignment="Right" />
                 <rp:NumericUpDown Grid.Row="2" Grid.Column="1"
                                   Step="1" Minimum="1" Maximum="100"
-                                  Value="{Binding DisplayCandidateCount}" />
+                                  Value="{Binding DisplayCandidateCount,
+                                                  Converter={StaticResource valueToIntConverter}}" />
 
                 <Label Grid.Row="4" Grid.Column="0"
                        Content="数値が半角文字："
@@ -181,8 +206,11 @@
                 </DockPanel>
             </Grid>
         </GroupBox>
+
+        <Control HorizontalAlignment="Right"
+                 Template="{StaticResource ButtonsTemplate}" />
         
-        <StackPanel Orientation="Horizontal"
+        <!--<StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="0,10,0,0">
             <Button Content="OK"
@@ -191,6 +219,6 @@
             <Button Content="キャンセル"
                     Command="{x:Static rp:RagnarokCommands.Cancel}"
                     Margin="8,0,0,0" />
-        </StackPanel>
+        </StackPanel>-->
     </StackPanel>
 </Window>

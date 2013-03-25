@@ -62,6 +62,8 @@
     <Compile Include="LiveAttribute.cs" />
     <Compile Include="LiveInfoData.cs" />
     <Compile Include="Model\EndRollList.cs" />
+    <Compile Include="Model\ImageSetInfo.cs" />
+    <Compile Include="Model\InfoBase.cs" />
     <Compile Include="Model\TestVoterList.cs" />
     <Compile Include="SimpleTimeSpan.cs" />
     <Compile Include="Notification.cs" />
@@ -72,7 +74,14 @@
     <Compile Include="ProtocolUtil.cs" />
     <Compile Include="SystemNotificationType.cs" />
     <Compile Include="View\EndRollControl.cs" />
+    <Compile Include="View\EvaluationControl.cs" />
+    <Compile Include="View\EvaluationSettingDialog.xaml.cs">
+      <DependentUpon>EvaluationSettingDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\PointToStringConverter.cs" />
+    <Compile Include="View\UserWindow.xaml.cs">
+      <DependentUpon>UserWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\VoteResultControl.cs" />
     <Compile Include="View\VoteResultSettingDialog.xaml.cs">
       <DependentUpon>VoteResultSettingDialog.xaml</DependentUpon>
@@ -92,6 +101,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vote\VoteState.cs" />
     <Compile Include="Vote\VoteResult.cs" />
+    <Compile Include="Xaml\ImageSetListExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Presentation\Ragnarok.Presentation.csproj">
@@ -114,6 +124,22 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Resource Include="View\InfoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Page Include="View\EvaluationControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\EvaluationSettingDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\UserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\VoteResultControl.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -24,24 +24,23 @@ namespace VoteSystem.Protocol.View
     /// </summary>
     public partial class VoteResultSettingDialog : Window
     {
-        private sealed class InternalModel : DynamicDictionary
+        private sealed class InternalModel : CloneObject
         {
-            public int DisplayCandidateCount
-            {
-                get { return GetValue<int>("DisplayCandidateCount"); }
-                set { SetValue("DisplayCandidateCount", value); }
-            }
-
             [DependOnProperty("IsShowStroke")]
             [DependOnProperty("StrokeThicknessInternal")]
             public decimal StrokeThickness
             {
                 get
                 {
-                    return (GetValue<bool>("IsShowStroke") ?
-                        Convert.ToDecimal(GetValue<object>("StrokeThicknessInternal")) :
+                    return ((bool)this["IsShowStroke"] ?
+                        (decimal)this["StrokeThicknessInternal"] :
                         0.0m);
                 }
+            }
+
+            public InternalModel(VoteResultControl control)
+                : base(control)
+            {
             }
         }
 
@@ -70,62 +69,6 @@ namespace VoteSystem.Protocol.View
                 "SelectFontEdgeColor",
                 typeof(Window));
 
-        /// <summary>
-        /// 一時的に保存するプロパティ値のリストです。
-        /// </summary>
-        private static readonly Tuple<string, Type>[] SavePropertyList =
-        {
-            Tuple.Create("Background", typeof(Brush)),
-            Tuple.Create("Foreground", typeof(Brush)),            
-            Tuple.Create("FontFamily", typeof(FontFamily)),
-            Tuple.Create("FontWeight", typeof(FontWeight)),
-            Tuple.Create("FontStyle", typeof(FontStyle)),
-            Tuple.Create("IsShowStroke", typeof(bool)),
-            Tuple.Create("Stroke", typeof(Brush)),
-            Tuple.Create("StrokeThicknessInternal", typeof(decimal)),
-            Tuple.Create("DisplayCandidateCount", typeof(int)),
-            Tuple.Create("IsDisplayPointFullWidth", typeof(bool)),
-        };
-
-        private InternalModel SavePropertyValues(VoteResultControl control)
-        {
-            var model = new InternalModel();
-
-            SavePropertyList.ForEach(_ =>
-                model.SetValue(
-                    _.Item1,
-                    MethodUtil.GetPropertyValue(control, _.Item1)));
-
-            return model;
-        }
-
-        /// <summary>
-        /// doubleやintがdecimalとして扱われることがあるので、わざわざ変換します。
-        /// </summary>
-        private object CastValue(object value, Type type)
-        {
-            if (type == typeof(int))
-            {
-                return Convert.ToInt32(value);
-            }
-            else if (type == typeof(bool))
-            {
-                return Convert.ToBoolean(value);
-            }
-            else
-            {
-                return value;
-            }
-        }
-
-        private void RestorePropertyValues(VoteResultControl control, InternalModel model)
-        {
-            SavePropertyList.ForEach(_ =>
-                MethodUtil.SetPropertyValue(
-                    control, _.Item1,
-                    CastValue(model.GetValue<object>(_.Item1), _.Item2)));
-        }
-
         private readonly VoteResultControl control;
         private readonly InternalModel model;
 
@@ -146,7 +89,7 @@ namespace VoteSystem.Protocol.View
             InitializeComponent();
             InitCommands();
 
-            this.model = SavePropertyValues(control);
+            this.model = new InternalModel(control);
             this.control = control;
 
             DataContext = this.model;
@@ -187,7 +130,7 @@ namespace VoteSystem.Protocol.View
         private void ExecuteYes(object sender, ExecutedRoutedEventArgs e)
         {
             // OKの場合は、プロパティ値をコントロールに設定します。
-            RestorePropertyValues(this.control, this.model);
+            this.model.SetValuesToTarget(this.control);
 
             DialogResult = true;
         }
@@ -205,7 +148,7 @@ namespace VoteSystem.Protocol.View
         /// </summary>
         private void SelectColor(string name)
         {
-            var brush = this.model.GetValue<Brush>(name);
+            var brush = (Brush)this.model[name];
             var solidColorBrush = brush as SolidColorBrush;
             if (solidColorBrush == null)
             {
@@ -214,10 +157,10 @@ namespace VoteSystem.Protocol.View
 
             var result = DialogUtil.ShowColorDialog(
                 solidColorBrush.Color, this);
-            this.model.SetValue(name,
+            this.model[name] =
                 (result != null ?
                     new SolidColorBrush(result.Value) :
-                    brush));
+                    brush);
         }
     }
 }

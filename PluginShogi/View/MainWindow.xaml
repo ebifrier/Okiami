@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+        xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
         xmlns:s="http://schemas.garnet-alice.net/votesystem/xaml/presentation"
         xmlns:l="clr-namespace:VoteSystem.PluginShogi"
         xmlns:v="clr-namespace:VoteSystem.PluginShogi.View"
@@ -19,8 +19,8 @@
                 <ResourceDictionary Source="MainMenu.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <p:BooleanToVisibilityConverter x:Key="visibilityConverterHidden" />
-            <p:FontFamilyConverter x:Key="fontFamilyConverter" />
+            <r:BooleanToVisibilityConverter x:Key="visibilityConverterHidden" />
+            <r:FontFamilyConverter x:Key="fontFamilyConverter" />
             
             <ImageBrush x:Key="banBrush"
                         ImageSource="{Binding DataContext.BanImage, ElementName=window}"
@@ -141,10 +141,10 @@
         <Grid Grid.Row="4" Grid.RowSpan="2"
               ContextMenu="{DynamicResource contextMenu}">
             <!-- 背景 -->
-            <p:VisualBackground x:Name="background"
+            <r:VisualBackground x:Name="background"
                                 FadeElement="{Binding ElementName=ShogiControl}"/>
 
-            <!-- 投票結果 -->
+            <!-- 投票結果など -->
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0" />
@@ -169,19 +169,23 @@
                     TotalVoteLeaveTime="{Binding VoteClient.TotalVoteLeaveTime}"
                     VoteLeaveTime="{Binding VoteClient.VoteLeaveTime}"
                     Foreground="{Binding Settings.VR_FontColor,
-                                        Converter={StaticResource brushConverter}}"
+                                         Converter={StaticResource brushConverter}}"
                     Background="{Binding Settings.VR_BackgroundColor,
-                                        Converter={StaticResource brushConverter}}"
+                                         Converter={StaticResource brushConverter}}"
                     Stroke="{Binding Settings.VR_StrokeColor,
-                                    Converter={StaticResource brushConverter}}"
+                                     Converter={StaticResource brushConverter}}"
                     FontFamily="{Binding Settings.VR_FontFamilyName,
-                                        Converter={StaticResource fontFamilyConverter}}"
+                                         Converter={StaticResource fontFamilyConverter}}"
                     FontWeight="{Binding Settings.VR_FontWeight}"
                     FontStyle="{Binding Settings.VR_FontStyle}"
                     IsShowStroke="{Binding Settings.VR_IsShowStroke}"
                     StrokeThicknessInternal="{Binding Settings.VR_StrokeThicknessInternal}"
                     DisplayCandidateCount="{Binding Settings.VR_DisplayResultCount}"
                     IsDisplayPointFullWidth="{Binding Settings.VR_IsDisplayPointFullWidth}" />
+
+                <!--<s:EvaluationControl
+                    Grid.Row="1" Grid.Column="3"
+                    ImageSetList="{s:ImageSetList Data/Image}" />-->
             </Grid>
 
             <!-- 将棋盤 -->
@@ -212,7 +216,7 @@
         </Grid>
 
         <!-- ステータスバーです。-->
-        <p:MessageStatusBar Grid.Row="5"
+        <r:MessageStatusBar Grid.Row="5"
                             x:Name="MainStatusBar" x:FieldModifier="public"
                             Background="#60000000"
                             MessageBrush="{x:Static Brushes.Beige}"

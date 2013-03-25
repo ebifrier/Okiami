@@ -86,11 +86,16 @@ http://www.civillink.net/
 
 E”wŒi‰æ‘œ
 ŒŞ’·—l
+http://www.pixiv.net/member_illust.php?mode=medium&illust_id=13027594
 http://blog.livedoor.jp/gotyou6845/
 
 E”wŒi‰æ‘œ
 ‚Æ‚è‚Ì‚ ‚­‚ —l
+http://www.pixiv.net/member_illust.php?mode=medium&illust_id=24335045
 http://www.pixiv.net/member.php?id=1960050
+
+E”wŒi‰æ‘œ
+yoshi—l
 
 EŒø‰Ê‰¹‘fŞ
 Senses Circuit—l

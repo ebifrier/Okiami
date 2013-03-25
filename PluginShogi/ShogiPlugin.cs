@@ -197,7 +197,7 @@ namespace VoteSystem.PluginShogi
             ShogiGlobal.MainWindow = window;
             window.Show();
 
-            //var xx = new View.ShogiEndRollControl();
+            //var xx = new Protocol.View.UserWindow();
             //xx.Show();
         }
 

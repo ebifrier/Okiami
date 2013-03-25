@@ -1,3 +1,33 @@
+2013-03-26  - Ver 1.2.7.11
+
+	* dist/readme.txt: yoshi様への謝辞を追加しました。
+	* VoteProtocol/View/EvaluationControl.xaml: 評価値用のコントロールを
+	VoteClientからVoteProtocolに移動しました。それに加えて関連するファイル
+	もコピーしました。
+
+2013-03-24  - Ver 1.2.7.10
+
+	* Ragnarok/ObjectModel/DynamicDictionary.cs: プロパティを自由に拡張可能
+	かどうかのフラグを追加しました。拡張不可である場合は、最初に設定された
+	プロパティしか参照できません。
+	* Ragnarok/ObjectModel/CloneObject.cs: あるオブジェクトが持つプロパティ
+	とその値をすべてコピーするようなクラスです。Controlのモデルオブジェクト
+	などに使用できます。
+	* Ragnarok/Util.cs: Type変数からそのデフォルト値を取得するようなメソッ
+	ドを追加しました。
+	* Ragnarok.Presentation/VisualObject/Control/BackgroundCore.cs: クラス
+	自体をinternalにしました。
+	* Ragnarok.Presentation/Control/MessageStatusBar.xaml: 通常のコントロー
+	ルから、xamlを分離した継承可能なクラスにしました。
+
+2013-03-23  - Ver 1.2.7.9
+
+	* VoteProtocol/View/VoteResultSettingDialog.xaml: 画面に表示する投票候
+	補の数のバインディング時にint -> decimalコンバーターをかますようにしま
+	した。こうしないと型の整合性が取れません。
+	* VoteProtocol/View/VoteResultSettingDialog.xaml.cs: 内部モデルのキャス
+	ト操作を削除しました。
+
 2013-03-22  - Ver 1.2.7.8
 
 	* VoteClient/Model/InfoBase.cs: ディレクトリ中のデータをすべて読み込む

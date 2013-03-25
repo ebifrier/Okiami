@@ -46,6 +46,7 @@ using System.Windows.Markup;
 [assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Protocol.Model")]
 [assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Protocol.View")]
 [assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Protocol.Vote")]
+[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/presentation", "VoteSystem.Protocol.Xaml")]
 #endif
 
 // アセンブリのバージョン情報は、以下の 4 つの値で構成されています:

@@ -82,10 +82,13 @@
 	</Line>
 	<Line>
 		<Format Column="0" Text="背景画像" Alignment="Right" />
+		<Format Column="1" Text="とりのあくあ" Alignment="Left" />
+	</Line>
+	<Line>
 		<Format Column="1" Text="伍長" Alignment="Left" />
 	</Line>
 	<Line>
-		<Format Column="1" Text="とりのあくあ" Alignment="Left" />
+		<Format Column="1" Text="yoshi" Alignment="Left" />
 	</Line>
 
 	<Line>
