@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
-             xmlns:vp="clr-namespace:VoteSystem.Protocol.Vote;assembly=VoteProtocol"
+             xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+             xmlns:p="http://schemas.garnet-alice.net/votesystem/xaml/presentation"
              xmlns:l="clr-namespace:VoteSystem.Client"
              xmlns:c="clr-namespace:VoteSystem.Client.Command"
              mc:Ignorable="d" 
@@ -15,6 +15,10 @@
                 <ResourceDictionary Source="../CommonDictionary.xaml" />
                 <ResourceDictionary Source="./VoteRoomInfoTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <p:VoteStateConverter x:Key="voteStateConverter" />
+            <p:VoteBackgroundConverter x:Key="voteBackgroundConverter" />
+            <p:VoteLeaveTimeConverter x:Key="voteLeaveTimeConverter" />
 
             <Style x:Key="roomOwnerStyle" TargetType="FrameworkElement">
                 <Setter Property="IsEnabled" Value="False" />
@@ -48,7 +52,7 @@
             <ToolBar DockPanel.Dock="Top">
                 <Label Content="モード:" />
                 <ComboBox Style="{StaticResource voteModeComboStyle}"
-                          ItemsSource="{p:EnumList vp:VoteMode}"
+                          ItemsSource="{r:EnumList p:VoteMode}"
                           SelectedValue="{Binding CurrentVoteMode}"
                           SelectedValuePath="Value"
                           DisplayMemberPath="Label"
@@ -69,10 +73,12 @@
                        Margin="2,0,2,0"
                        VerticalAlignment="Center"
                        Source="{Binding VoteStateImageUri}"
-                       ToolTip="{Binding VoteStateText}" />
+                       ToolTip="{Binding VoteState,
+                                         Converter={StaticResource voteStateConverter}}" />
                 <TextBlock VerticalAlignment="Center"
                            Foreground="#FF2F2F2F">
-                    [<TextBlock Text="{Binding VoteStateText}" />]
+                    [<TextBlock Text="{Binding VoteState,
+                                               Converter={StaticResource voteStateConverter}}" />]
                 </TextBlock>
             </ToolBar>
 
@@ -139,10 +145,20 @@
             <StackPanel Orientation="Horizontal"
                         Margin="0,0,10,0">
                 <Label Content="残り時間:" />
-                <Label Content="{Binding VoteLeaveTimeString}"
-                       VerticalContentAlignment="Center"
-                       Background="{Binding VoteLeaveTimeBackgroundColor,
-                                            Converter={StaticResource brushConverter}}" />
+                <Label VerticalContentAlignment="Center">
+                    <Label.Content>
+                        <MultiBinding Converter="{StaticResource voteLeaveTimeConverter}">
+                            <Binding Path="VoteLeaveTime" Mode="OneWay" />
+                            <Binding Path="VoteState" Mode="OneWay" />
+                        </MultiBinding>
+                    </Label.Content>
+                    <Label.Background>
+                        <MultiBinding Converter="{StaticResource voteBackgroundConverter}">
+                            <Binding Path="VoteState" Mode="OneWay" />
+                            <Binding Path="VoteLeaveTime" Mode="OneWay" />                            
+                        </MultiBinding>
+                    </Label.Background>
+                </Label>
             </StackPanel>
             
             <Button Style="{StaticResource voteButtonStyle}"

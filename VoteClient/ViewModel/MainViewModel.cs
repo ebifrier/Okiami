@@ -40,10 +40,7 @@ namespace VoteSystem.Client.ViewModel
         /// </summary>
         public string LogName
         {
-            get
-            {
-                return "MainViewModel";
-            }
+            get { return "MainViewModel"; }
         }
 
         /// <summary>
@@ -60,25 +57,6 @@ namespace VoteSystem.Client.ViewModel
                 this.pluginMenuList = value;
 
                 this.RaisePropertyChanged("PluginMenuList");
-            }
-        }
-
-        /// <summary>
-        /// 投票状態を示すテキストを取得します。
-        /// </summary>
-        [DependOnProperty(typeof(VoteClient), "VoteState")]
-        public string VoteStateText
-        {
-            get
-            {
-                var voteClient = this.baseModel.VoteClient;
-                var label = EnumEx.GetEnumLabel(voteClient.VoteState);
-                if (label == null)
-                {
-                    return "不明な状態";
-                }
-
-                return label;
             }
         }
 
@@ -103,104 +81,6 @@ namespace VoteSystem.Client.ViewModel
                 }
 
                 return null;
-            }
-        }
-
-        /// <summary>
-        /// 投票の残り時間を表示する文字列を取得します。
-        /// </summary>
-        [DependOnProperty(typeof(VoteClient), "VoteState")]
-        [DependOnProperty(typeof(MainModel), "VoteLeaveTime")]
-        public string VoteLeaveTimeString
-        {
-            get
-            {
-                var leaveTime = this.baseModel.VoteLeaveTime;
-                if (this.baseModel.VoteClient.VoteState == VoteState.Stop)
-                {
-                    return "停止中";
-                }
-                else if (leaveTime == TimeSpan.MaxValue)
-                {
-                    return "無制限";
-                }
-                else
-                {
-                    var time = (
-                        leaveTime >= TimeSpan.Zero ?
-                        leaveTime :
-                        TimeSpan.Zero);
-
-                    return string.Format("{0:D2}:{1:D2}",
-                        (int)time.TotalMinutes,
-                        time.Seconds);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 投票の全残り時間を表示する文字列を取得します。
-        /// </summary>
-        [DependOnProperty(typeof(VoteClient), "VoteState")]
-        [DependOnProperty(typeof(MainModel), "TotalVoteLeaveTime")]
-        public string TotalVoteLeaveTimeString
-        {
-            get
-            {
-                var leaveTime = this.baseModel.TotalVoteLeaveTime;
-                if (leaveTime == TimeSpan.MaxValue)
-                {
-                    return "無制限";
-                }
-                else
-                {
-                    var time = (
-                        leaveTime >= TimeSpan.Zero ?
-                        leaveTime :
-                        TimeSpan.Zero);
-
-                    return string.Format("{0:D2}:{1:D2}",
-                        (int)time.TotalMinutes,
-                        time.Seconds);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 投票の残り時間を示すラベルの色を取得します。
-        /// </summary>
-        [DependOnProperty(typeof(VoteClient), "VoteState")]
-        [DependOnProperty(typeof(MainModel), "VoteLeaveTime")]
-        public Color VoteLeaveTimeBackgroundColor
-        {
-            get
-            {
-                var voteLeaveTime = this.baseModel.VoteLeaveTime;
-
-                switch (this.baseModel.VoteClient.VoteState)
-                {
-                    case VoteState.Voting:
-                        if (voteLeaveTime < TimeSpan.FromSeconds(60))
-                        {
-                            return Color.FromArgb(160, 230, 0, 0);
-                        }
-                        else if (voteLeaveTime < TimeSpan.FromMinutes(3))
-                        {
-                            return WPFUtil.MakeColor(180, Colors.DarkOrange);
-                        }
-                        return WPFUtil.MakeColor(200, Colors.DarkGray);
-                    case VoteState.End:
-                        //return WpfUtil.MakeColor(160, Colors.DarkViolet);
-                        return Colors.Transparent;
-                    case VoteState.Pause:
-                        return WPFUtil.MakeColor(127, Colors.Goldenrod);
-                    case VoteState.Stop:
-                        //return WpfUtil.MakeColor(200, Colors.DarkGray);
-                        return Colors.Transparent;
-                }
-
-                throw new InvalidOperationException(
-                    "VoteStateの値が正しくありません。");
             }
         }
 
@@ -267,17 +147,13 @@ namespace VoteSystem.Client.ViewModel
             }
         }
 
-        #region ニコニコ関連
         /// <summary>
         /// ニコニコへのログイン名を取得します。
         /// </summary>
         [DependOnProperty(typeof(NicoClient), "LoginName")]
         public string NicoLoginName
         {
-            get
-            {
-                return this.baseModel.NicoClient.LoginName;
-            }
+            get { return this.baseModel.NicoClient.LoginName; }
         }
 
         /// <summary>
@@ -297,7 +173,6 @@ namespace VoteSystem.Client.ViewModel
                 return NicoString.UserInfoUrl(id);
             }
         }
-        #endregion
 
         private void this_PropertyChanged(object sender,
                                           PropertyChangedEventArgs e)
@@ -325,6 +200,7 @@ namespace VoteSystem.Client.ViewModel
                 var time = Ragnarok.Net.NtpClient.GetTime();
                 var interval = TimeSpan.FromSeconds(1.5);
 
+                // 状態変更SEと秒読みSEが重ならないようにします。
                 if (info != null &&
                     time - info.BaseTimeNtp > interval &&
                     this.baseModel.VoteState == VoteState.Voting)

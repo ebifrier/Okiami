@@ -459,8 +459,9 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// 投票の残り時間を取得します。
         /// </summary>
-        [DependOnProperty("VoteState")]
-        [DependOnProperty("VoteSpan")]
+        [DependOnProperty(typeof(VoteRoomInfo), "State")]
+        [DependOnProperty(typeof(VoteRoomInfo), "BaseTimeNtp")]
+        [DependOnProperty(typeof(VoteRoomInfo), "VoteSpan")]
         public TimeSpan VoteLeaveTime
         {
             get
@@ -473,29 +474,10 @@ namespace VoteSystem.Client.Model
                         return TimeSpan.Zero;
                     }
 
-                    // 時間無制限
-                    if (VoteSpan == TimeSpan.MaxValue)
-                    {
-                        return TimeSpan.MaxValue;
-                    }
-
-                    // 残り時間を計算します。
-                    var baseTimeNtp = Ragnarok.Net.NtpClient.GetTime();
-                    switch (VoteState)
-                    {
-                        case VoteState.Voting:
-                            // 終了時刻から現在時刻を減算し、残り時間を出します。
-                            var endTimeNtp =
-                                VoteRoomInfo.BaseTimeNtp + VoteSpan;
-                            return (endTimeNtp - baseTimeNtp);
-                        case VoteState.Pause:
-                            return VoteSpan;
-                        case VoteState.Stop:
-                        case VoteState.End:
-                            return TimeSpan.Zero;
-                    }
-
-                    return TimeSpan.Zero;
+                    return ProtocolUtil.CalcVoteLeaveTime(
+                        VoteRoomInfo.State,
+                        VoteRoomInfo.BaseTimeNtp,
+                        VoteRoomInfo.VoteSpan);
                 }
             }
         }
@@ -503,8 +485,9 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// 投票の全残り時間を取得します。
         /// </summary>
-        [DependOnProperty("VoteState")]
-        [DependOnProperty("TotalVoteSpan")]
+        [DependOnProperty(typeof(VoteRoomInfo), "State")]
+        [DependOnProperty(typeof(VoteRoomInfo), "BaseTimeNtp")]
+        [DependOnProperty(typeof(VoteRoomInfo), "TotalVoteSpan")]
         public TimeSpan TotalVoteLeaveTime
         {
             get
@@ -517,28 +500,10 @@ namespace VoteSystem.Client.Model
                         return TimeSpan.Zero;
                     }
 
-                    // 時間無制限
-                    if (TotalVoteSpan == TimeSpan.MaxValue)
-                    {
-                        return TimeSpan.MaxValue;
-                    }
-
-                    // 残り時間を計算します。
-                    var baseTimeNtp = Ragnarok.Net.NtpClient.GetTime();
-                    switch (VoteState)
-                    {
-                        case VoteState.Voting:
-                            // 終了時刻から現在時刻を減算し、残り時間を出します。
-                            var endTimeNtp =
-                                VoteRoomInfo.BaseTimeNtp + TotalVoteSpan;
-                            return (endTimeNtp - baseTimeNtp);
-                        case VoteState.Pause:
-                        case VoteState.Stop:
-                        case VoteState.End:
-                            return TotalVoteSpan;
-                    }
-
-                    return TimeSpan.Zero;
+                    return ProtocolUtil.CalcTotalVoteLeaveTime(
+                        VoteRoomInfo.State,
+                        VoteRoomInfo.BaseTimeNtp,
+                        VoteRoomInfo.TotalVoteSpan);
                 }
             }
         }

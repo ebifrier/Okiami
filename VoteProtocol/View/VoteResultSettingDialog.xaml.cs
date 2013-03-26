@@ -16,6 +16,7 @@ using Ragnarok;
 using Ragnarok.Utility;
 using Ragnarok.ObjectModel;
 using Ragnarok.Presentation;
+using Ragnarok.Presentation.Utility;
 
 namespace VoteSystem.Protocol.View
 {
@@ -24,7 +25,7 @@ namespace VoteSystem.Protocol.View
     /// </summary>
     public partial class VoteResultSettingDialog : Window
     {
-        private sealed class InternalModel : CloneObject
+        private sealed class InternalModel : CloneModel
         {
             [DependOnProperty("IsShowStroke")]
             [DependOnProperty("StrokeThicknessInternal")]

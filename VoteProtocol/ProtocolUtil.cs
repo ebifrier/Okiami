@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Ragnarok;
+using Ragnarok.Net;
 
 namespace VoteSystem.Protocol
 {
+    using Vote;
+
     /// <summary>
     /// ユーティリティクラス。
     /// </summary>
@@ -122,6 +125,84 @@ namespace VoteSystem.Protocol
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// 現在残っている全投票時間を計算します。
+        /// </summary>
+        public static TimeSpan CalcTotalVoteLeaveTime(VoteState state,
+                                                      DateTime startTimeNtp,
+                                                      TimeSpan totalSpan)
+        {
+            // 時間無制限
+            if (totalSpan == TimeSpan.MaxValue)
+            {
+                return TimeSpan.MaxValue;
+            }
+
+            // 残り時間を計算します。
+            var nowTimeNtp = NtpClient.GetTime();
+            switch (state)
+            {
+                case VoteState.Voting:
+                    // 終了時刻から現在時刻を減算し、残り時間を出します。
+                    var endTimeNtp = startTimeNtp + totalSpan;
+                    return (endTimeNtp - nowTimeNtp);
+                case VoteState.Pause:
+                case VoteState.Stop:
+                case VoteState.End:
+                    // 投票が動いていないときは、とりあえず全部です。
+                    return totalSpan;
+            }
+
+            return TimeSpan.Zero;
+        }
+
+        /// <summary>
+        /// 投票の残り時間を取得します。
+        /// </summary>
+        public static TimeSpan CalcVoteLeaveTime(VoteState state,
+                                                 DateTime startTimeNtp,
+                                                 TimeSpan voteSpan)
+        {
+            // 時間無制限
+            if (voteSpan == TimeSpan.MaxValue)
+            {
+                return TimeSpan.MaxValue;
+            }
+
+            // 残り時間を計算します。
+            var nowTimeNtp = NtpClient.GetTime();
+            switch (state)
+            {
+                case VoteState.Voting:
+                    // 終了時刻から現在時刻を減算し、残り時間を出します。
+                    var endTimeNtp = startTimeNtp + voteSpan;
+                    return (endTimeNtp - nowTimeNtp);
+                case VoteState.Pause:
+                    // 一時停止中
+                    return voteSpan;
+                case VoteState.Stop:
+                case VoteState.End:
+                    // 投票していないときは残り時間０になります。
+                    return TimeSpan.Zero;
+            }
+
+            return TimeSpan.Zero;
+        }
+
+        /// <summary>
+        /// 投票状態を文字列に変換します。
+        /// </summary>
+        public static string GetVoteStateText(VoteState state)
+        {
+            var label = EnumEx.GetEnumLabel(state);
+            if (label == null)
+            {
+                return "不明な状態";
+            }
+
+            return label;
         }
 
         /// <summary>

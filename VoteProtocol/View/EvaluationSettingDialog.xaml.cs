@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 
 using Ragnarok.ObjectModel;
 using Ragnarok.Presentation;
+using Ragnarok.Presentation.Utility;
 
 namespace VoteSystem.Protocol.View
 {
@@ -21,7 +22,7 @@ namespace VoteSystem.Protocol.View
     /// </summary>
     public partial class EvaluationSettingDialog : Window
     {
-        private CloneObject model;
+        private CloneModel model;
         private EvaluationControl control;
 
         /// <summary>
@@ -30,24 +31,17 @@ namespace VoteSystem.Protocol.View
         public EvaluationSettingDialog(EvaluationControl control)
         {
             InitializeComponent();
-            InitCommands();
-            RagnarokCommands.Bind(this);            
 
-            this.model = new CloneObject(control);
-            this.control = control;
-
-            DataContext = model;
-        }
-
-        /// <summary>
-        /// コマンドバインディングを行います。
-        /// </summary>
-        private void InitCommands()
-        {
             CommandBindings.Add(
                 new CommandBinding(
                     RagnarokCommands.OK,
                     ExecuteYes));
+            RagnarokCommands.Bind(this);
+
+            this.model = new CloneModel(control);
+            this.control = control;
+
+            DataContext = model;
         }
 
         /// <summary>

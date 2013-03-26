@@ -1,3 +1,18 @@
+2013-03-26  - Ver 1.2.7.13
+
+	* VoteProtocol/Xaml: 投票時間や残り時間などを文字列に変えるコンバータを
+	複数追加しました。
+	* VoteClient/ViewModel/MainViewModel.cs: コンバータを使うようになったた
+	め、不要になったメソッドをいくつか削除しました。
+	* VoteProtocol/View/VoteResultControl.xaml: コンバータを使うようになっ
+	たため、不要になったメソッドをいくつか削除しました。
+	* VoteProtocol/ProtocolUtil.cs: 投票残り時間、全投票残り時間を計算する
+	ためのメソッドを追加しました。
+	* VoteServer/VoteTimeKeeper.cs: 投票残り時間を計算するとき、
+	ProtocolUtilを使うようにしました。
+	* VoteClient/Model/VoteClient.cs: 投票残り時間を計算するとき、
+	ProtocolUtilを使うようにしました。
+
 2013-03-26  - Ver 1.2.7.12
 
 	* VoteClient/Command/UtilCommand.cs: RagnarokCommandsと重複するコマンド

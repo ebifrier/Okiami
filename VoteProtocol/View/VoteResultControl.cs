@@ -140,16 +140,7 @@ namespace VoteSystem.Protocol.View
                 "VoteState",
                 typeof(VoteState),
                 typeof(VoteResultControl),
-                new FrameworkPropertyMetadata(VoteState.Stop, OnVoteStateChanged));
-
-        private static void OnVoteStateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var self = (VoteResultControl)d;
-
-            self.UpdateTotalVoteLeaveTimeText();
-            self.UpdateVoteLeaveTimeText();
-            self.UpdateVoteLeaveTimeBackground();
-        }
+                new FrameworkPropertyMetadata(VoteState.Stop));
         
         /// <summary>
         /// 投票状態を取得または設定します。
@@ -161,32 +152,6 @@ namespace VoteSystem.Protocol.View
         }
 
         /// <summary>
-        /// 投票状態を示すテキストを扱う依存プロパティです。
-        /// </summary>
-        public static readonly DependencyProperty VoteStateTextProperty =
-            DependencyProperty.Register(
-                "VoteStateText",
-                typeof(string),
-                typeof(VoteResultControl),
-                new FrameworkPropertyMetadata(string.Empty));
-
-        /// <summary>
-        /// 投票状態を示すテキストを取得または設定します。
-        /// </summary>
-        public string VoteStateText
-        {
-            get { return (string)GetValue(VoteStateTextProperty); }
-            private set { SetValue(VoteStateTextProperty, value); }
-        }
-
-        private void UpdateVoteStateText()
-        {
-            var label = EnumEx.GetEnumLabel(VoteState);
-
-            VoteStateText = label ?? "不明な状態";
-        }
-
-        /// <summary>
         /// 全投票時間を扱う依存プロパティです。
         /// </summary>
         public static readonly DependencyProperty TotalVoteLeaveTimeProperty =
@@ -194,16 +159,7 @@ namespace VoteSystem.Protocol.View
                 "TotalVoteLeaveTime",
                 typeof(TimeSpan),
                 typeof(VoteResultControl),
-                new FrameworkPropertyMetadata(TimeSpan.Zero,
-                    OnTotalVoteLeaveTimeChanged));
-
-        private static void OnTotalVoteLeaveTimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var self = (VoteResultControl)d;
-
-            self.UpdateVoteStateText();
-            self.UpdateTotalVoteLeaveTimeText();
-        }
+                new FrameworkPropertyMetadata(TimeSpan.Zero));
 
         /// <summary>
         /// 全投票時間を取得または設定します。
@@ -212,25 +168,6 @@ namespace VoteSystem.Protocol.View
         {
             get { return (TimeSpan)GetValue(TotalVoteLeaveTimeProperty); }
             set { SetValue(TotalVoteLeaveTimeProperty, value); }
-        }        
-
-        /// <summary>
-        /// 全投票時間の表示用文字列を扱う依存プロパティです。
-        /// </summary>
-        public static readonly DependencyProperty TotalVoteLeaveTimeTextProperty =
-            DependencyProperty.Register(
-                "TotalVoteLeaveTimeText",
-                typeof(string),
-                typeof(VoteResultControl),
-                new FrameworkPropertyMetadata(string.Empty));
-
-        /// <summary>
-        /// 全投票時間の表示用文字列を扱う依存プロパティです。
-        /// </summary>
-        public string TotalVoteLeaveTimeText
-        {
-            get { return (string)GetValue(TotalVoteLeaveTimeTextProperty); }
-            private set { SetValue(TotalVoteLeaveTimeTextProperty, value); }
         }
 
         /// <summary>
@@ -241,16 +178,7 @@ namespace VoteSystem.Protocol.View
                 "VoteLeaveTime",
                 typeof(TimeSpan),
                 typeof(VoteResultControl),
-                new FrameworkPropertyMetadata(TimeSpan.Zero,
-                    OnVoteLeaveTimeChanged));
-
-        private static void OnVoteLeaveTimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var self = (VoteResultControl)d;
-
-            self.UpdateVoteLeaveTimeText();
-            self.UpdateVoteLeaveTimeBackground();
-        }
+                new FrameworkPropertyMetadata(TimeSpan.Zero));
 
         /// <summary>
         /// 投票時間を取得または設定します。
@@ -259,132 +187,6 @@ namespace VoteSystem.Protocol.View
         {
             get { return (TimeSpan)GetValue(VoteLeaveTimeProperty); }
             set { SetValue(VoteLeaveTimeProperty, value); }
-        }
-
-        /// <summary>
-        /// 投票時間の表示用文字列を扱う依存プロパティです。
-        /// </summary>
-        public static readonly DependencyProperty VoteLeaveTimeTextProperty =
-            DependencyProperty.Register(
-                "VoteLeaveTimeText",
-                typeof(string),
-                typeof(VoteResultControl),
-                new FrameworkPropertyMetadata(string.Empty));
-
-        /// <summary>
-        /// 投票時間の表示用文字列を扱う依存プロパティです。
-        /// </summary>
-        public string VoteLeaveTimeText
-        {
-            get { return (string)GetValue(VoteLeaveTimeTextProperty); }
-            private set { SetValue(VoteLeaveTimeTextProperty, value); }
-        }
-
-        /// <summary>
-        /// 全投票時間の表示用文字列を更新します。
-        /// </summary>
-        private void UpdateTotalVoteLeaveTimeText()
-        {
-            var leaveTime = TotalVoteLeaveTime;
-
-            if (leaveTime == TimeSpan.MaxValue)
-            {
-                TotalVoteLeaveTimeText = "無制限";
-            }
-            else
-            {
-                var time = (
-                    leaveTime >= TimeSpan.Zero ?
-                    leaveTime :
-                    TimeSpan.Zero);
-
-                TotalVoteLeaveTimeText = string.Format("{0:D2}:{1:D2}",
-                    (int)time.TotalMinutes,
-                    time.Seconds);
-            }
-        }
-
-        /// <summary>
-        /// 投票時間の表示用文字列を更新します。
-        /// </summary>
-        private void UpdateVoteLeaveTimeText()
-        {
-            var leaveTime = VoteLeaveTime;
-
-            if (VoteState == VoteState.Stop)
-            {
-                VoteLeaveTimeText = "停止中";
-            }
-            else if (leaveTime == TimeSpan.MaxValue)
-            {
-                VoteLeaveTimeText = "無制限";
-            }
-            else
-            {
-                var time = (
-                    leaveTime >= TimeSpan.Zero ?
-                    leaveTime :
-                    TimeSpan.Zero);
-
-                VoteLeaveTimeText = string.Format("{0:D2}:{1:D2}",
-                    (int)time.TotalMinutes,
-                    time.Seconds);
-            }
-        }
-
-        /// <summary>
-        /// 投票状態によって変わる背景色を扱います。
-        /// </summary>
-        public static readonly DependencyProperty VoteLeaveTimeBackgroundProperty =
-            DependencyProperty.Register(
-                "VoteLeaveTimeBackground",
-                typeof(Brush),
-                typeof(VoteResultControl),
-                new FrameworkPropertyMetadata(Brushes.Transparent));
-
-        /// <summary>
-        /// 投票状態によって変わる背景色を取得または設定します。
-        /// </summary>
-        public Brush VoteLeaveTimeBackground
-        {
-            get { return (Brush)GetValue(VoteLeaveTimeBackgroundProperty); }
-            private set { SetValue(VoteLeaveTimeBackgroundProperty, value); }
-        }
-
-        private void UpdateVoteLeaveTimeBackground()
-        {
-            var leaveTime = VoteLeaveTime;
-            var color = Colors.Transparent;
-
-            switch (VoteState)
-            {
-                case VoteState.Voting:
-                    if (leaveTime < TimeSpan.FromSeconds(30))
-                    {
-                        color = Color.FromArgb(160, 230, 0, 0);
-                    }
-                    else if (leaveTime < TimeSpan.FromSeconds(120))
-                    {
-                        color = WPFUtil.MakeColor(180, Colors.DarkOrange);
-                    }
-                    else
-                    {
-                        color = WPFUtil.MakeColor(128, Colors.DarkGray);
-                    }
-                    break;
-                case VoteState.End:
-                    color = WPFUtil.MakeColor(160, Colors.DarkViolet);
-                    //color = Colors.Transparent;
-                    break;
-                case VoteState.Pause:
-                    color = WPFUtil.MakeColor(127, Colors.Goldenrod);
-                    break;
-                case VoteState.Stop:
-                    color = Colors.Transparent;
-                    break;
-            }
-
-            VoteLeaveTimeBackground = new SolidColorBrush(color);
         }
 
         /// <summary>
@@ -647,10 +449,6 @@ namespace VoteSystem.Protocol.View
             BindCommands(this);
 
             UpdateDisplayCandidateList();
-            UpdateVoteStateText();
-            UpdateVoteLeaveTimeText();
-            UpdateVoteLeaveTimeBackground();
-            UpdateTotalVoteLeaveTimeText();
         }
     }
 }

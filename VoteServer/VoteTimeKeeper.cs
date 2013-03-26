@@ -126,41 +126,10 @@ namespace VoteSystem.Server
         /// </summary>
         private TimeSpan CalcLeaveTime(TimeSpan allSpan)
         {
-            using (LazyLock())
-            {
-                if (allSpan == TimeSpan.MaxValue)
-                {
-                    return TimeSpan.MaxValue;
-                }
-
-                if (VoteState != VoteState.Voting)
-                {
-                    return allSpan;
-                }
-
-                // 投票終了時刻から現在時刻を減算し、残り時間を出します。
-                var baseTimeNtp = Ragnarok.Net.NtpClient.GetTime();
-                var endTimeNtp = VoteStartTimeNtp + allSpan;
-                return (endTimeNtp - baseTimeNtp);
-            }
-        }
-
-        /// <summary>
-        /// 投票開始からの経過時間を計算します。
-        /// </summary>
-        private TimeSpan CalcProgressTime()
-        {
-            using (LazyLock())
-            {
-                if (VoteState != VoteState.Voting)
-                {
-                    return TimeSpan.Zero;
-                }
-
-                // 経過時間 = 現在時刻 - 投票開始時刻
-                var baseTimeNtp = Ragnarok.Net.NtpClient.GetTime();
-                return (baseTimeNtp - VoteStartTimeNtp);
-            }
+            return ProtocolUtil.CalcTotalVoteLeaveTime(
+                VoteState,
+                VoteStartTimeNtp,
+                allSpan);
         }
 
         /// <summary>
