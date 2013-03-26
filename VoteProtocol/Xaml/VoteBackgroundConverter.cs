@@ -73,7 +73,7 @@ namespace VoteSystem.Protocol.Xaml
                 Util.ThrowIfFatal(ex);
 
                 Log.ErrorException(ex,
-                    "投票状態の変換に失敗しました。");
+                    "投票状態の背景変換に失敗しました。");
             }
 
             return null;

@@ -33,10 +33,7 @@ namespace VoteSystem.Protocol.Xaml
                 }
                 else
                 {
-                    var time = (
-                        leaveTime >= TimeSpan.Zero ?
-                        leaveTime :
-                        TimeSpan.Zero);
+                    var time = MathEx.Max(leaveTime, TimeSpan.Zero);
 
                     return string.Format("{0:D2}:{1:D2}",
                         (int)time.TotalMinutes,
