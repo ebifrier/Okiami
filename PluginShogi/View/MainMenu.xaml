@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
                     xmlns:sv="clr-namespace:VoteSystem.PluginShogi.View"
                     xmlns:svm="clr-namespace:VoteSystem.PluginShogi.ViewModel">
 
@@ -36,7 +37,9 @@
                    VerticalAlignment="Center"
                    Padding="4,2,2,2"
                    Content="変化:" />
-            <TextBox Grid.Column="3" IsReadOnly="True"
+            <TextBox Grid.Column="3"
+                     r:TextBoxUtil.AutoHorizontalScrollToEnd="True"
+                     IsReadOnly="True"
                      VerticalAlignment="Center"
                      IsReadOnlyCaretVisible="True"
                      Text="{Binding MoveTextFromCurrentBoard, Mode=OneWay}" />

@@ -19,7 +19,7 @@ namespace VoteSystem.PluginShogi.Effects
     /// <summary>
     /// エフェクトの各引数を管理します。
     /// </summary>
-    public class EffectArgument
+    public sealed class EffectArgument
     {
         /// <summary>
         /// 引数名を取得または設定します。
@@ -62,7 +62,7 @@ namespace VoteSystem.PluginShogi.Effects
     /// <summary>
     /// エフェクトを管理します。
     /// </summary>
-    public class EffectInfo
+    public sealed class EffectInfo
     {
         /// <summary>
         /// コンストラクタ

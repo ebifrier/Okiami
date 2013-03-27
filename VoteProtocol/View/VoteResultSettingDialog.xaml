@@ -3,65 +3,35 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+        xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:l="clr-namespace:VoteSystem.Protocol.View"
         mc:Ignorable="d"
         Title="投票結果の表示設定ダイアログ" ResizeMode="NoResize"
-        SizeToContent="Height" Width="350" d:DesignHeight="479">
+        SizeToContent="Height" Width="350" d:DesignHeight="434">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Ragnarok.Presentation;component/Themes/Common.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
-            <rp:ValueToDecimalConverter
+            <r:ValueToDecimalConverter
                 x:Key="valueToDecimalConverter"
                 SourceType="sys:Int32" />
-            <rp:ColorToSolidColorBrushConverter
+            <r:ColorToSolidColorBrushConverter
                 x:Key="brushConverter" />
-            <rp:ValueCompareToBooleanConverter
+            <r:ValueCompareToBooleanConverter
                 x:Key="boldCompareConverter"
                 TrueObject="{x:Static FontWeights.Bold}"
                 FalseObject="{x:Static FontWeights.Normal}" />
-            <rp:ValueCompareToBooleanConverter
+            <r:ValueCompareToBooleanConverter
                 x:Key="italicCompareConverter"
                 TrueObject="{x:Static FontStyles.Oblique}"
                 FalseObject="{x:Static FontStyles.Normal}" />
-            
-            <Style x:Key="heightStyle" TargetType="FrameworkElement">
-                <Setter Property="Height" Value="24" />
-            </Style>
 
-            <!-- 色の背景に表示する白黒の模様を再現します。-->
-            <DrawingBrush x:Key="checkersBrush" 
-                          Viewport="0,0,11,11" ViewportUnits="Absolute"
-                          TileMode="Tile">
-                <DrawingBrush.Drawing>
-                    <DrawingGroup>
-                        <GeometryDrawing Geometry="M0,0 L2,0 2,2, 0,2Z" Brush="White"/>
-                        <GeometryDrawing Geometry="M0,1 L2,1 2,2 1,2 1,0 0,0Z" Brush="LightGray"/>
-                    </DrawingGroup>
-                </DrawingBrush.Drawing>
-            </DrawingBrush>
-
-            <!-- 選択された色を表示します。-->
-            <ControlTemplate x:Key="colorTemplate">
-                <Border BorderBrush="{x:Static Brushes.Black}"
-                        BorderThickness="0.5">
-                    <Border Background="{StaticResource checkersBrush}"
-                            Margin="3,3,3,3">
-                        <Border Background="{Binding Background,
-                                                     RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                    AncestorType=Button}}" />
-                    </Border>
-                </Border>
-            </ControlTemplate>
-
-            <Style x:Key="colorGridStyle" TargetType="Control">
+            <Style x:Key="colorButtonStyle" TargetType="r:ColorButton">
                 <Setter Property="Margin" Value="1,3,1,3" />
                 <Setter Property="Height" Value="24" />
-                <Setter Property="Template" Value="{StaticResource colorTemplate}" />
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -81,33 +51,20 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <!--<Label Grid.Row="0" Grid.Column="0"
+                <Label Grid.Row="0" Grid.Column="0"
                        Content="背景色設定："
-                       HorizontalAlignment="Right" />-->
-                <Button Grid.Row="0" Grid.Column="0"
-                        Style="{StaticResource heightStyle}"
-                        Command="{x:Static l:VoteResultSettingDialog.SelectBackgroundColor}"
-                        Content="背景色設定"
-                        HorizontalAlignment="Right" />
-                <Control Grid.Row="0" Grid.Column="1"
-                         Style="{StaticResource colorGridStyle}"
-                         Background="{Binding Background}" />
-                
-                <!--<Button Grid.Row="0" Grid.Column="1"
-                        Margin="1,3,1,3"
-                        rp:CustomAdorner.Attached="{StaticResource colorTemplate}"
-                        Command="{x:Static l:VoteResultSettingDialog.SelectBackgroundColor}"
-                        Foreground="{Binding Background}" />
-                <rp:ColorButton Grid.Row="0" Grid.Column="1"
-                        Margin="1,3,1,3" />-->
+                       HorizontalAlignment="Right" />
+                <r:ColorButton Grid.Row="0" Grid.Column="1"
+                               Style="{StaticResource colorButtonStyle}"
+                               Color="{Binding BackgroundColor}" />
 
                 <Label Grid.Row="2" Grid.Column="0"
                        Content="表示する結果の数："
                        HorizontalAlignment="Right" />
-                <rp:NumericUpDown Grid.Row="2" Grid.Column="1"
-                                  Step="1" Minimum="1" Maximum="100"
-                                  Value="{Binding DisplayCandidateCount,
-                                                  Converter={StaticResource valueToDecimalConverter}}" />
+                <r:NumericUpDown Grid.Row="2" Grid.Column="1"
+                                 Step="1" Minimum="1" Maximum="100"
+                                 Value="{Binding DisplayCandidateCount,
+                                                 Converter={StaticResource valueToDecimalConverter}}" />
 
                 <Label Grid.Row="4" Grid.Column="0"
                        Content="数値が半角文字："
@@ -124,86 +81,93 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="8" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150" />
                     <ColumnDefinition Width="5" />
-                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.Column="0"
-                           Text="フォント"
-                           VerticalAlignment="Bottom" />
-                <ListBox Grid.Row="1" Grid.RowSpan="5" Grid.Column="0"
+                <Label Grid.Row="0" Grid.Column="0"
+                       Content="フォント"
+                       VerticalAlignment="Bottom" />
+                <ListBox Grid.Row="1" Grid.Column="0"
                          Name="fontFamilyListBox"
                          ScrollViewer.HorizontalScrollBarVisibility="Visible"
                          ScrollViewer.VerticalScrollBarVisibility="Visible"
-                         VerticalAlignment="Stretch"
-                         VerticalContentAlignment="Stretch"
+                         VerticalAlignment="Top"
                          IsSynchronizedWithCurrentItem="True"
                          MaxHeight="120" Margin="0" Padding="0"
-                         ItemsSource="{rp:FontFamilyList}"
+                         ItemsSource="{r:FontFamilyList}"
                          SelectedItem="{Binding FontFamily}"
                          DisplayMemberPath="Source" />
 
-                <Button Grid.Row="0" Grid.Column="2"
-                        Style="{StaticResource heightStyle}"
-                        Command="{x:Static l:VoteResultSettingDialog.SelectFontColor}"
-                        Content="文字色設定" />
-                <ContentControl Grid.Row="0" Grid.Column="3"
-                                Style="{StaticResource colorGridStyle}"
-                                Background="{Binding Foreground}" />
+                <!-- フォント設定用のコントロール -->
+                <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                <Button Grid.Row="1" Grid.Column="2"
-                        Style="{StaticResource heightStyle}"
-                        IsEnabled="{Binding IsShowStroke}"
-                        Command="{x:Static l:VoteResultSettingDialog.SelectFontEdgeColor}"
-                        Content="縁色設定" />
-                <ContentControl Grid.Row="1" Grid.Column="3"
-                                Style="{StaticResource colorGridStyle}"
-                                Background="{Binding Stroke}" />
-
-                <TextBlock Grid.Row="2" Grid.Column="2"
-                           Text="縁の太さ："
-                           VerticalAlignment="Center"
+                    <Label Grid.Row="0" Grid.Column="0"
+                           Content="文字色設定："
                            HorizontalAlignment="Right" />
-                <rp:NumericUpDown Grid.Row="2" Grid.Column="3"
-                                  IsEnabled="{Binding IsShowStroke}"
-                                  Value="{Binding StrokeThicknessInternal}"
-                                  TextFormat="{}{0:F2}"
-                                  Height="20" Step="0.01"
-                                  Minimum="0.0" Maximum="10.0" />
+                    <r:ColorButton Grid.Row="0" Grid.Column="1"
+                                   Style="{StaticResource colorButtonStyle}"
+                                   Color="{Binding ForegroundColor}" />
 
-                <CheckBox Grid.Row="3" Grid.Column="3" Content="太字"
-                          IsChecked="{Binding FontWeight,
-                                              Converter={StaticResource boldCompareConverter}}" />
-                <CheckBox Grid.Row="4" Grid.Column="3" Content="斜体"
-                          IsChecked="{Binding FontStyle,
-                                              Converter={StaticResource italicCompareConverter}}" />
-                <CheckBox Grid.Row="5" Grid.Column="3" Content="縁取り"
-                          IsChecked="{Binding IsShowStroke}" />
+                    <Label Grid.Row="1" Grid.Column="0"
+                           Content="縁色設定："
+                           HorizontalAlignment="Right" />
+                    <r:ColorButton Grid.Row="1" Grid.Column="1"
+                                   Style="{StaticResource colorButtonStyle}"
+                                   Color="{Binding StrokeColor}" />
 
-                <Separator Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" />
+                    <TextBlock Grid.Row="2" Grid.Column="0"
+                               Text="縁の太さ："
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right" />
+                    <r:NumericUpDown Grid.Row="2" Grid.Column="1"
+                                     IsEnabled="{Binding IsShowStroke}"
+                                     Value="{Binding StrokeThicknessInternal}"
+                                     TextFormat="{}{0:F2}"
+                                     Height="24" Step="0.01"
+                                     Minimum="0.0" Maximum="3.0" />
 
-                <DockPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4"
+                    <CheckBox Grid.Row="3" Grid.Column="1" Content="太字"
+                              IsChecked="{Binding FontWeight,
+                                                  Converter={StaticResource boldCompareConverter}}" />
+                    <CheckBox Grid.Row="4" Grid.Column="1" Content="斜体"
+                              IsChecked="{Binding FontStyle,
+                                                  Converter={StaticResource italicCompareConverter}}" />
+                    <CheckBox Grid.Row="5" Grid.Column="1" Content="縁取り"
+                              IsChecked="{Binding IsShowStroke}" />
+                </Grid>
+
+                <Separator Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" />
+
+                <DockPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
                            LastChildFill="True"
                            Height="40" Margin="3"
                            Background="{Binding Background}">
                     <Viewbox>
-                        <rp:DecoratedText Foreground="{Binding Foreground}"
-                                          Stroke="{Binding Stroke}"
-                                          StrokeThickness="{Binding StrokeThickness}"
-                                          FontFamily="{Binding FontFamily}"
-                                          FontStyle="{Binding FontStyle}"
-                                          FontWeight="{Binding FontWeight}"
-                                          Text="サンプル ３五龍 同歩成" />
+                        <r:DecoratedText Foreground="{Binding Foreground}"
+                                         Stroke="{Binding Stroke}"
+                                         StrokeThickness="{Binding StrokeThickness}"
+                                         FontFamily="{Binding FontFamily}"
+                                         FontStyle="{Binding FontStyle}"
+                                         FontWeight="{Binding FontWeight}"
+                                         Text="サンプル ３五龍 同歩成" />
                     </Viewbox>
                 </DockPanel>
             </Grid>
@@ -211,16 +175,5 @@
 
         <Control HorizontalAlignment="Right"
                  Template="{StaticResource ButtonsTemplate}" />
-        
-        <!--<StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Margin="0,10,0,0">
-            <Button Content="OK"
-                    Command="{x:Static rp:RagnarokCommands.OK}"
-                    Width="60" />
-            <Button Content="キャンセル"
-                    Command="{x:Static rp:RagnarokCommands.Cancel}"
-                    Margin="8,0,0,0" />
-        </StackPanel>-->
     </StackPanel>
 </Window>

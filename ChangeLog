@@ -1,3 +1,16 @@
+2013-03-28  - Ver 1.2.7.14
+
+	* VoteProtocol/View/VoteResultSettingDialog.xaml: 色の設定に関しては
+	ColorButtonを使うようにしました。
+	* PluginShogi/ShogiGlobal.cs: MainWindowからFrameTimerを移動しました。
+	* PluginShogi/View/Detail/SoundSettingControl.xaml: 設定ダイアログにサ
+	ウンド設定タブを追加しました。エフェクト設定タブが大きくなっていたため、
+	サウンド部分のみを移動しました。
+	* PluginShogi/View/Detail/GeneralSettingControl.xaml: 一般設定タブに描
+	画品質に関わる項目を追加しました。少し描画が重かったため、ＰＣ環境によ
+	って重さを選べるようにしました。
+	* PluginShogi/RenderingQuality.cs: 描画品質を示す列挙子を追加しました。
+
 2013-03-26  - Ver 1.2.7.13
 
 	* VoteProtocol/Xaml: 投票時間や残り時間などを文字列に変えるコンバータを

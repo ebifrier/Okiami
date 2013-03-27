@@ -20,6 +20,15 @@ namespace VoteSystem.PluginShogi.ViewModel
     public sealed class ShogiSettingDialogViewModel : NotifyObject
     {
         /// <summary>
+        /// 設定用オブジェクトを取得します。
+        /// </summary>
+        public Settings Settings
+        {
+            get { return ShogiGlobal.Settings; }
+        }
+
+        #region 一般
+        /// <summary>
         /// 先手番の対局者名を取得または設定します。
         /// </summary>
         [DependOnProperty(typeof(Settings), "SD_BlackPlayerName")]
@@ -50,6 +59,16 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// 描画品質を取得または設定します。
+        /// </summary>
+        [DependOnProperty(typeof(Settings), "SD_RenderingQuality")]
+        public RenderingQuality RenderingQuality
+        {
+            get { return ShogiGlobal.Settings.SD_RenderingQuality; }
+            set { ShogiGlobal.Settings.SD_RenderingQuality = value; }
+        }
+
+        /// <summary>
         /// 現局面を自動的に更新するかを取得または設定します。
         /// </summary>
         [DependOnProperty(typeof(Settings), "SD_IsAutoUpdateCurrentBoard")]
@@ -58,7 +77,9 @@ namespace VoteSystem.PluginShogi.ViewModel
             get { return ShogiGlobal.Settings.SD_IsAutoUpdateCurrentBoard; }
             set { ShogiGlobal.Settings.SD_IsAutoUpdateCurrentBoard = value; }
         }
+        #endregion
 
+        #region 盤駒画像
         /// <summary>
         /// 選択されている駒画像を取得または設定します。
         /// </summary>
@@ -108,7 +129,9 @@ namespace VoteSystem.PluginShogi.ViewModel
             get { return ShogiGlobal.Settings.SD_BanOpacity; }
             set { ShogiGlobal.Settings.SD_BanOpacity = value; }
         }
+        #endregion
 
+        #region エフェクト
         /// <summary>
         /// エフェクトを使用するかどうかを取得または設定します。
         /// </summary>
@@ -117,26 +140,6 @@ namespace VoteSystem.PluginShogi.ViewModel
         {
             get { return ShogiGlobal.Settings.SD_IsUseEffect; }
             set { ShogiGlobal.Settings.SD_IsUseEffect = value; }
-        }
-
-        /// <summary>
-        /// エフェクト効果音を使用するかどうかを取得または設定します。
-        /// </summary>
-        [DependOnProperty(typeof(Settings), "SD_IsUseEffectSound")]
-        public bool IsUseEffectSound
-        {
-            get { return ShogiGlobal.Settings.SD_IsUseEffectSound; }
-            set { ShogiGlobal.Settings.SD_IsUseEffectSound = value; }
-        }
-
-        /// <summary>
-        /// エフェクトの音量を取得または設定します。(0～100)
-        /// </summary>
-        [DependOnProperty(typeof(Settings), "SD_EffectVolume")]
-        public int EffectVolume
-        {
-            get { return ShogiGlobal.Settings.SD_EffectVolume; }
-            set { ShogiGlobal.Settings.SD_EffectVolume = MathEx.Between(0, 100, value); }
         }
 
         /// <summary>
@@ -247,6 +250,29 @@ namespace VoteSystem.PluginShogi.ViewModel
             get { return HasEffectFlag(EffectFlag.AutoPlayCutIn); }
             set { SetEffectFlag(EffectFlag.AutoPlayCutIn, value); }
         }
+        #endregion
+
+        #region サウンド
+        /// <summary>
+        /// エフェクト効果音を使用するかどうかを取得または設定します。
+        /// </summary>
+        [DependOnProperty(typeof(Settings), "SD_IsUseEffectSound")]
+        public bool IsUseEffectSound
+        {
+            get { return ShogiGlobal.Settings.SD_IsUseEffectSound; }
+            set { ShogiGlobal.Settings.SD_IsUseEffectSound = value; }
+        }
+
+        /// <summary>
+        /// エフェクトの音量を取得または設定します。(0～100)
+        /// </summary>
+        [DependOnProperty(typeof(Settings), "SD_EffectVolume")]
+        public int EffectVolume
+        {
+            get { return ShogiGlobal.Settings.SD_EffectVolume; }
+            set { ShogiGlobal.Settings.SD_EffectVolume = MathEx.Between(0, 100, value); }
+        }
+        #endregion
 
         /// <summary>
         /// コンストラクタ

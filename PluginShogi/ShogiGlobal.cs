@@ -8,6 +8,7 @@ using Ragnarok;
 using Ragnarok.Shogi;
 using Ragnarok.ObjectModel;
 using Ragnarok.Presentation;
+using Ragnarok.Presentation.Utility;
 
 namespace VoteSystem.PluginShogi
 {
@@ -36,9 +37,15 @@ namespace VoteSystem.PluginShogi
             FlintSharp.Utils.ScreenSize = new Size(640, 480);
 
             ShogiPlugin = plugin;
+            FrameTimer = new FrameTimer()
+            {
+                TargetFPS = 30.0,
+            };
+
+            // FrameTimerはSettingsの前に初期化します。
             Settings = Settings.CreateSettings<Settings>();
             SoundManager = new SoundManager();
-            ShogiModel = new ShogiWindowViewModel(new Board()); 
+            ShogiModel = new ShogiWindowViewModel(new Board());
 
             EffectManager = new Effects.EffectManager()
             {
@@ -176,6 +183,15 @@ namespace VoteSystem.PluginShogi
         /// 将棋盤のエフェクト管理オブジェクトを取得します。
         /// </summary>
         public static Effects.EffectManager EffectManager
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// FPSタイマーを取得します。
+        /// </summary>
+        public static FrameTimer FrameTimer
         {
             get;
             private set;

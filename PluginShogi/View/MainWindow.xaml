@@ -142,7 +142,7 @@
               ContextMenu="{DynamicResource contextMenu}">
             <!-- 背景 -->
             <r:VisualBackground x:Name="background"
-                                FadeElement="{Binding ElementName=ShogiControl}"/>
+                                FadeElement="{Binding ElementName=ShogiControl}" />
 
             <!-- 投票結果など -->
             <Grid>

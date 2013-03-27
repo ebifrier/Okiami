@@ -27,6 +27,61 @@ namespace VoteSystem.Protocol.View
     {
         private sealed class InternalModel : CloneModel
         {
+            private Color backgroundColor;
+            private Color foregroundColor;
+            private Color strokeColor;
+
+            public Color BackgroundColor
+            {
+                get { return this.backgroundColor; }
+                set
+                {
+                    if (this.backgroundColor != value)
+                    {
+                        this.backgroundColor = value;
+                        this["Background"] = new SolidColorBrush(this.backgroundColor);
+
+                        this.RaisePropertyChanged("BackgroundColor");
+                    }
+                }
+            }
+
+            public Color ForegroundColor
+            {
+                get { return this.foregroundColor; }
+                set
+                {
+                    if (this.foregroundColor != value)
+                    {
+                        this.foregroundColor = value;
+                        this["Foreground"] = new SolidColorBrush(this.foregroundColor);
+
+                        this.RaisePropertyChanged("ForegroundColor");
+                    }
+                }
+            }
+
+            public Color StrokeColor
+            {
+                get { return this.strokeColor; }
+                set
+                {
+                    if (this.strokeColor != value)
+                    {
+                        this.strokeColor = value;
+                        this["Stroke"] = new SolidColorBrush(this.strokeColor);
+
+                        this.RaisePropertyChanged("StrokeColor");
+                    }
+                }
+            }
+
+            public decimal StrokeThicknessInternal
+            {
+                get { return (decimal)this["StrokeThicknessInternal"]; }
+                set { this["StrokeThicknessInternal"] = value; }
+            }
+
             [DependOnProperty("IsShowStroke")]
             [DependOnProperty("StrokeThicknessInternal")]
             public decimal StrokeThickness
@@ -42,33 +97,25 @@ namespace VoteSystem.Protocol.View
             public InternalModel(VoteResultControl control)
                 : base(control)
             {
+                var brush = this["Background"] as SolidColorBrush;
+                if (brush != null)
+                {
+                    this.backgroundColor = brush.Color;
+                }
+
+                brush = this["Foreground"] as SolidColorBrush;
+                if (brush != null)
+                {
+                    this.foregroundColor = brush.Color;
+                }
+
+                brush = this["Stroke"] as SolidColorBrush;
+                if (brush != null)
+                {
+                    this.strokeColor = brush.Color;
+                }
             }
         }
-
-        /// <summary>
-        /// 背景の色選択コマンドです。
-        /// </summary>
-        public readonly static ICommand SelectBackgroundColor =
-            new RoutedUICommand(
-                "背景色を選択します。",
-                "SelectBackgroundColor",
-                typeof(Window));
-        /// <summary>
-        /// 文字色の選択コマンドです。
-        /// </summary>
-        public readonly static ICommand SelectFontColor =
-            new RoutedUICommand(
-                "文字色を選択します。",
-                "SelectFontColor",
-                typeof(Window));
-        /// <summary>
-        /// 文字の縁色の選択コマンドです。
-        /// </summary>
-        public readonly static ICommand SelectFontEdgeColor =
-            new RoutedUICommand(
-                "文字の縁色を選択します。",
-                "SelectFontEdgeColor",
-                typeof(Window));
 
         private readonly VoteResultControl control;
         private readonly InternalModel model;
@@ -110,19 +157,6 @@ namespace VoteSystem.Protocol.View
                 new CommandBinding(
                     RagnarokCommands.Cancel,
                     ExecuteNo));
-
-            CommandBindings.Add(
-                new CommandBinding(
-                    SelectBackgroundColor,
-                    (_, __) => SelectColor("Background")));
-            CommandBindings.Add(
-                new CommandBinding(
-                    SelectFontColor,
-                    (_, __) => SelectColor("Foreground")));
-            CommandBindings.Add(
-                new CommandBinding(
-                    SelectFontEdgeColor,
-                    (_, __) => SelectColor("Stroke")));
         }
 
         /// <summary>
@@ -142,26 +176,6 @@ namespace VoteSystem.Protocol.View
         private void ExecuteNo(object sender, ExecutedRoutedEventArgs e)
         {
             DialogResult = false;
-        }
-
-        /// <summary>
-        /// 色を選択します。
-        /// </summary>
-        private void SelectColor(string name)
-        {
-            var brush = (Brush)this.model[name];
-            var solidColorBrush = brush as SolidColorBrush;
-            if (solidColorBrush == null)
-            {
-                return;
-            }
-
-            var result = DialogUtil.ShowColorDialog(
-                solidColorBrush.Color, this);
-            this.model[name] =
-                (result != null ?
-                    new SolidColorBrush(result.Value) :
-                    brush);
         }
     }
 }

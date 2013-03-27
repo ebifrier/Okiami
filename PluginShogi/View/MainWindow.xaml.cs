@@ -31,7 +31,6 @@ namespace VoteSystem.PluginShogi.View
     public partial class MainWindow : Window
     {
         private readonly ShogiWindowViewModel model;
-        private FrameTimer timer;
 
         /// <summary>
         /// 静敵コンストラクタ
@@ -161,6 +160,11 @@ namespace VoteSystem.PluginShogi.View
             this.endRoll.Stop();
         }
 
+        private void FrameTimer_EnterFrame(object sender, FrameEventArgs e)
+        {
+            Render(e.ElapsedTime);
+        }
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -192,25 +196,27 @@ namespace VoteSystem.PluginShogi.View
                 manager.Background = this.background;
             }
 
+            var timer = ShogiGlobal.FrameTimer;
+            if (timer != null)
+            {
+                timer.EnterFrame += FrameTimer_EnterFrame;
+            }
+
             this.model = model;
             DataContext = model;
 
             // 背景のトランジションが始まります。
             InitBackground();
-
-            this.timer = new FrameTimer();
-            //this.timer.FrameTime = TimeSpan.FromMilliseconds(1000.0 / 20.0);
-            this.timer.EnterFrame += (_, e) => Render(e.ElapsedTime);
         }
 
         void MainWindow_Closed(object sender, EventArgs e)
         {
             ShogiGlobal.ShogiModel.StopAutoPlay();
 
-            if (this.timer != null)
+            var timer = ShogiGlobal.FrameTimer;
+            if (timer != null)
             {
-                this.timer.Dispose();
-                this.timer = null;
+                timer.EnterFrame -= FrameTimer_EnterFrame;
             }
 
             var manager = ShogiGlobal.EffectManager;

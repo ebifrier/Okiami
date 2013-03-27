@@ -22,7 +22,7 @@ namespace VoteSystem.PluginShogi.Effects
     /// <summary>
     /// 各駒を表示します。
     /// </summary>
-    public class PieceObject : EntityObject
+    public sealed class PieceObject : EntityObject
     {
         public static readonly DependencyProperty IsAlwaysVisibleProperty =
             DependencyProperty.Register(

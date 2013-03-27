@@ -283,7 +283,7 @@ namespace VoteSystem.Protocol.View
                 "SettingUpdated",
                 RoutingStrategy.Bubble,
                 typeof(RoutedEventHandler),
-                typeof(VoteResultControl));
+                typeof(EvaluationControl));
 
         /// <summary>
         /// 設定が更新されたときに呼ばれるイベントです。
@@ -301,7 +301,7 @@ namespace VoteSystem.Protocol.View
             new RoutedUICommand(
                 "設定ダイアログを新たに開きます。",
                 "OpenSettingDialog",
-                typeof(Window));
+                typeof(EvaluationControl));
 
         /// <summary>
         /// 設定ダイアログを開きます。

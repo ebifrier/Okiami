@@ -40,18 +40,21 @@ namespace VoteSystem.PluginShogi
         #endregion
 
         #region 現局面設定ダイアログ
+        [DefaultValue(true)]
         public bool CBS_IsClearVoteResult
         {
             get { return GetValue<bool>("CBS_IsClearVoteResult"); }
             set { SetValue("CBS_IsClearVoteResult", value); }
         }
 
+        [DefaultValue(true)]
         public bool CBS_IsStartVote
         {
             get { return GetValue<bool>("CBS_IsStartVote"); }
             set { SetValue("CBS_IsStartVote", value); }
         }
 
+        [DefaultValue(true)]
         public bool CBS_IsStopVote
         {
             get { return GetValue<bool>("CBS_IsStopVote"); }
@@ -72,6 +75,7 @@ namespace VoteSystem.PluginShogi
         #endregion
 
         #region 設定ダイアログ
+        #region 一般
         [DefaultValue("てんて～")]
         public string SD_BlackPlayerName
         {
@@ -84,6 +88,13 @@ namespace VoteSystem.PluginShogi
         {
             get { return GetValue<string>("SD_WhitePlayerName"); }
             set { SetValue("SD_WhitePlayerName", value); }
+        }
+
+        [DefaultValue(RenderingQuality.Normal)]
+        public RenderingQuality SD_RenderingQuality
+        {
+            get { return GetValue<RenderingQuality>("SD_RenderingQuality"); }
+            set { SetValue("SD_RenderingQuality", value); }
         }
 
         [DefaultValue(BWType.None)]
@@ -99,7 +110,9 @@ namespace VoteSystem.PluginShogi
             get { return GetValue<bool>("SD_IsAutoUpdateCurrentBoard"); }
             set { SetValue("SD_IsAutoUpdateCurrentBoard", value); }
         }
-        
+        #endregion
+
+        #region 盤駒画像
         public KomaImageType SD_KomaImage
         {
             get { return GetValue<KomaImageType>("SD_KomaImage"); }
@@ -130,7 +143,9 @@ namespace VoteSystem.PluginShogi
             get { return GetValue<double>("SD_BanOpacity"); }
             set { SetValue("SD_BanOpacity", value); }
         }
+        #endregion
 
+        #region エフェクト
         [DefaultValue(true)]
         public bool SD_IsUseEffect
         {
@@ -144,7 +159,9 @@ namespace VoteSystem.PluginShogi
             get { return GetValue<EffectFlag>("SD_EffectFlag"); }
             set { SetValue("SD_EffectFlag", value); }
         }
+        #endregion
 
+        #region サウンド
         [DefaultValue(true)]
         public bool SD_IsUseEffectSound
         {
@@ -158,6 +175,7 @@ namespace VoteSystem.PluginShogi
             get { return GetValue<int>("SD_EffectVolume"); }
             set { SetValue("SD_EffectVolume", value); }
         }
+        #endregion
         #endregion
 
         #region VoteResultWindow
@@ -287,6 +305,22 @@ namespace VoteSystem.PluginShogi
                 {
                     Minutes = 3,
                 };
+            }
+        }
+
+        protected override void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(sender, e);
+
+            if (e.PropertyName == "SD_RenderingQuality")
+            {
+                // ここでFPSを変更します。
+                var timer = ShogiGlobal.FrameTimer;
+                if (timer != null)
+                {
+                    timer.TargetFPS = RenderingQualityUtil.GetFPS(
+                        SD_RenderingQuality);
+                }
             }
         }
     }

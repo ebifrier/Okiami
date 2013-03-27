@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Effects\IEffectManager.cs" />
+    <Compile Include="RenderingQuality.cs" />
     <Compile Include="View\ShogiEndRollControl.xaml.cs">
       <DependentUpon>ShogiEndRollControl.xaml</DependentUpon>
     </Compile>
@@ -474,6 +475,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Detail\GeneralSettingControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Detail\SoundSettingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
