@@ -131,7 +131,6 @@
     <Compile Include="Settings.part.cs" />
     <Compile Include="ViewModel\EndRollWindowViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\VoteResultWindowViewModel.cs" />
     <Compile Include="ViewModel\VoteRoomInfoViewModel.cs" />
     <Compile Include="View\Control\BoolToSignConverter.cs" />
     <Compile Include="View\Control\CommenterSettingControl.xaml.cs">

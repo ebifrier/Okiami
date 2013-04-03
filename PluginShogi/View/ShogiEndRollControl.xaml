@@ -6,7 +6,6 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:t="clr-namespace:VoteSystem.PluginShogi"
              xmlns:v="clr-namespace:VoteSystem.PluginShogi.View"
-             Background="Gray"
         Title="test" Width="640" Height="480" Name="control">
     <Window.Resources>
         <ResourceDictionary>
@@ -19,6 +18,10 @@
         </ResourceDictionary>
     </Window.Resources>
 
+    <Window.Background>
+        <ImageBrush ImageSource="pack://application:,,,/PluginShogi;component/Resources/Image/shogiban_image.png" />
+    </Window.Background>
+
     <!-- 動画は16:9で作り、必要なら左右を切り捨てて再生する。-->
     <Viewbox Stretch="UniformToFill"
              HorizontalAlignment="Center"
@@ -27,8 +30,21 @@
         <Canvas Width="640" Height="360">
             <Border Width="640" Height="360">
                 <Border.Background>
-                    <DrawingBrush x:Name="MovieBrush"
-                                  Opacity="0.0" />
+                    <!--<DrawingBrush x:Name="MovieBrush"
+                                  Opacity="0.0" />-->
+                    <SolidColorBrush x:Name="MovieBrush"
+                                     Color="Black"
+                                     Opacity="0.0" />
+                </Border.Background>
+            </Border>
+
+            <Border Canvas.Left="80"
+                    Width="360" Height="360">
+                <Border.Background>
+                    <ImageBrush x:Name="ImageBrush"
+                                Stretch="UniformToFill"
+                                ImageSource="pack://application:,,,/PluginShogi;component/Resources/Image/ending_image.png"
+                                Opacity="0.0" />
                 </Border.Background>
             </Border>
 
@@ -43,7 +59,8 @@
                                 PieceBoxBrush="{StaticResource komadaiBrush}"/>
             </Grid>
 
-            <s:EndRollControl Width="640" Height="360"
+            <s:EndRollControl Canvas.Left="120"
+                              Width="480" Height="360"
                               x:Name="EndRoll"
                               LineHeight="23"
                               OpacityLineCount="2"

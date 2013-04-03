@@ -88,7 +88,8 @@
                           Command="{x:Static p:RagnarokCommands.SendErrorLog}"
                           CommandParameter="logs/client.err" />
                 <MenuItem Header="新バージョンの確認(_C)"
-                          Command="{x:Static c:Commands.CheckToUpdate}" />
+                          Command="{x:Static p:RagnarokCommands.CheckToUpdate}"
+                          CommandParameter="{x:Static l:Global.Updater}" />
                 <Separator />
                 <MenuItem Header="バージョン情報(_V)"
                           Command="{x:Static p:RagnarokCommands.ShowVersion}" />

@@ -201,8 +201,8 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public static readonly DependencyProperty EffectManagerProperty =
             DependencyProperty.Register(
-                "EffectManager", typeof(IEffectManager), typeof(ShogiControl),
-                new FrameworkPropertyMetadata(default(IEffectManager),
+                "EffectManager", typeof(EffectManager), typeof(ShogiControl),
+                new FrameworkPropertyMetadata(default(EffectManager),
                                               OnEffectManagerChanged));
 
         /// <summary>
@@ -314,9 +314,9 @@ namespace VoteSystem.PluginShogi.View
         /// <summary>
         /// エフェクト管理オブジェクトを取得または設定します。
         /// </summary>
-        public IEffectManager EffectManager
+        public EffectManager EffectManager
         {
-            get { return (IEffectManager)GetValue(EffectManagerProperty); }
+            get { return (EffectManager)GetValue(EffectManagerProperty); }
             set { SetValue(EffectManagerProperty, value); }
         }
 
@@ -587,7 +587,7 @@ namespace VoteSystem.PluginShogi.View
 
             if (EffectManager != null)
             {
-                EffectManager.BeginMove(pieceObject.Position, pieceObject.Piece);
+                ((IEffectManager)EffectManager).BeginMove(pieceObject.Position, pieceObject.Piece);
             }
         }
 
@@ -614,7 +614,7 @@ namespace VoteSystem.PluginShogi.View
 
             if (EffectManager != null)
             {
-                EffectManager.BeginMove(null, boardPiece);
+                ((IEffectManager)EffectManager).BeginMove(null, boardPiece);
             }
         }
 
@@ -803,7 +803,7 @@ namespace VoteSystem.PluginShogi.View
 
             if (EffectManager != null)
             {
-                EffectManager.EndMove();
+                ((IEffectManager)EffectManager).EndMove();
             }
 
             //ReleaseMouseCapture();
@@ -1090,7 +1090,7 @@ namespace VoteSystem.PluginShogi.View
             // 指し手が進んだときのエフェクトを追加します。
             if (EffectManager != null)
             {
-                EffectManager.Moved(move, e.IsUndo);
+                ((IEffectManager)EffectManager).Moved(move, e.IsUndo);
             }
         }
 
@@ -1108,7 +1108,7 @@ namespace VoteSystem.PluginShogi.View
                 var board = Board;
                 var bwType = (board != null ? board.MovePriority : BWType.Black);
 
-                EffectManager.InitEffect(bwType);
+                ((IEffectManager)EffectManager).InitEffect(bwType);
             }
 
             // 駒などをとりあえず表示させます。

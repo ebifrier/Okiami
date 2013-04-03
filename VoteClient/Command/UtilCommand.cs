@@ -32,14 +32,6 @@ namespace VoteSystem.Client.Command
                 "PostComments",
                 typeof(Window));
         /// <summary>
-        /// 新バージョンの確認を行います。
-        /// </summary>
-        public readonly static ICommand CheckToUpdate =
-            new RoutedUICommand(
-                "新バージョンの確認を行います。",
-                "CheckToUpdate",
-                typeof(Window));
-        /// <summary>
         /// 指定の音声を再生します。
         /// </summary>
         public readonly static ICommand PlaySound =
@@ -108,10 +100,6 @@ namespace VoteSystem.Client.Command
                 new CommandBinding(
                     Commands.PostComments,
                     ExecutePostComments));
-            element.CommandBindings.Add(
-                new CommandBinding(
-                    Commands.CheckToUpdate,
-                    ExecuteCheckToUpdate));
             element.CommandBindings.Add(
                 new CommandBinding(
                     Commands.PlaySound,
@@ -318,100 +306,6 @@ namespace VoteSystem.Client.Command
         }
 
         /// <summary>
-        /// エラーログを送信します。
-        /// </summary>
-        private static void ExecuteSendErrorLog(object sender,
-                                                ExecutedRoutedEventArgs e)
-        {
-            try
-            {
-                var model = new Ragnarok.Presentation.Debug.ReportDialogModel();
-                model.OpenErrorLog("logs/client.err");
-
-                var dialog = new Ragnarok.Presentation.Debug.SendLogDialog(model)
-                {
-                    Owner = Global.MainWindow,
-                };
-                dialog.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                Log.ErrorException(ex,
-                    "ダイアログの表示に失敗しました。");
-            }
-        }
-
-        /// <summary>
-        /// 新バージョンの確認を行います。
-        /// </summary>
-        private static void ExecuteCheckToUpdate(object sender,
-                                                 ExecutedRoutedEventArgs e)
-        {
-            try
-            {
-                var timeout = TimeSpan.FromSeconds(20);
-
-                Global.Updater.CheckToUpdate(timeout);
-            }
-            catch (Exception ex)
-            {
-                Log.ErrorException(ex,
-                    "新バージョンの確認に失敗しました。");
-            }
-        }
-
-        /// <summary>
-        /// バージョンを表示します。
-        /// </summary>
-        private static void ExecuteShowVersion(object sender,
-                                               ExecutedRoutedEventArgs e)
-        {
-            try
-            {
-                var dialog = new VersionWindow(null)
-                {
-                    Owner = Global.MainWindow,
-                };
-                dialog.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                Log.ErrorException(ex,
-                    "バージョン情報の表示に失敗しました。");
-            }
-        }
-
-        /// <summary>
-        /// 指定のURLをブラウザで開きます。
-        /// </summary>
-        private static void ExecuteNavigateUrl(object sender,
-                                               ExecutedRoutedEventArgs e)
-        {
-            if (e.Parameter == null)
-            {
-                return;
-            }
-
-            var uri = e.Parameter.ToString();
-            if (string.IsNullOrEmpty(uri))
-            {
-                return;
-            }
-
-            try
-            {
-                // 与えられたURLを開きます。
-                System.Diagnostics.Process.Start(uri);
-            }
-            catch (Exception ex)
-            {
-                MessageUtil.ErrorMessage(ex,
-                    string.Format(
-                        "'{0}'の実行に失敗しました。", uri));
-            }
-        }
-
-        /// <summary>
         /// 指定の音声ファイルを再生します。
         /// </summary>
         private static void ExecutePlaySound(object sender,
@@ -495,10 +389,8 @@ namespace VoteSystem.Client.Command
         private static void ExecuteOpenVoteResultWindow(object sender,
                                                         ExecutedRoutedEventArgs e)
         {
-            var model = new ViewModel.VoteResultWindowViewModel(Global.VoteClient);
             var window = new View.VoteResultWindow()
             {
-                DataContext = model,
                 Owner = Global.MainWindow,
             };
 

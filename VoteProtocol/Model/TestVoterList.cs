@@ -37,8 +37,8 @@ namespace VoteSystem.Protocol.Model
         {
             var list = new List<VoterInfo>
             {
-                CreateInfo("ーーーー", "----"),
-                CreateInfo("^'''''", "____"),
+                //CreateInfo("ーーーー", "----"),
+                //CreateInfo("^'''''", "____"),
                 CreateInfo("(｀・ω・´)", "永世15級"),
                 CreateInfo("12きう"),
                 CreateInfo("sc", "1級"),

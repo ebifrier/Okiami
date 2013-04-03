@@ -9,96 +9,15 @@ using Ragnarok.Shogi;
 namespace VoteSystem.PluginShogi.ViewModel
 {
     using Model;
+    using View;
 
-    /// <summary>
-    /// 自動再生の種別です。
-    /// </summary>
-    public enum AutoPlayType
-    {
-        /// <summary>
-        /// 指し手を動かしません。
-        /// </summary>
-        None,
-        /// <summary>
-        /// 与えられた指し手を自動再生します。
-        /// </summary>
-        Normal,
-        /// <summary>
-        /// 局面を元に戻しながら自動再生します。
-        /// </summary>
-        Undo,
-        /// <summary>
-        /// 局面を次に進めながら自動再生します。
-        /// </summary>
-        Redo,
-    }
-
-    /// <summary>
-    /// 駒の自動再生時に使います。
-    /// </summary>
-    /// <remarks>
-    /// 次タイミングの駒の再生情報や背景の不透明度を保持します。
-    /// </remarks>
-    internal sealed class NextPlayInfo
-    {
-        /// <summary>
-        /// 自動再生の種類を取得または設定します。
-        /// </summary>
-        public AutoPlayType AutoPlayType
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 次に指す指し手を取得または設定します。
-        /// </summary>
-        public BoardMove Move
-        {
-            get;
-            set;
-        }
-      
-        /// <summary>
-        /// 自動再生の最後の指し手であるかどうかを取得または設定します。
-        /// </summary>
-        public bool IsLastMove
-        {
-            get;
-            set;
-        }
-      
-        /// <summary>
-        /// 背景の不透明度を取得または設定します。
-        /// </summary>
-        public double Opacity
-        {
-            get;
-            set;
-        }
-      
-        /// <summary>
-        /// コンストラクタ
-        /// </summary>
-        public NextPlayInfo()
-        {
-            AutoPlayType = AutoPlayType.None;
-            Opacity = 1.0;
-        }
-    }
-  
     /// <summary>
     /// 指し手の自動再生時に使われます。再生用の変化を保存します。
     /// </summary>
-    public sealed class AutoPlay
+    public sealed class AutoPlay_
     {
-        /// <summary>
-        /// カットイン画像の表示時間です。
-        /// </summary>
-        public static readonly TimeSpan CutInInterval = TimeSpan.FromSeconds(2.0);
-
         private List<BoardMove> moveList;
-        private IEnumerator<NextPlayInfo> enumerator;
+        private IEnumerator<bool> enumerator;
         private int moveIndex;
         private int maxMoveCount;
 
@@ -111,19 +30,16 @@ namespace VoteSystem.PluginShogi.ViewModel
             private set;
         }
 
+        public ShogiControl Control
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// 指し手の再生間隔を取得または設定します。
         /// </summary>
         public TimeSpan Interval
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 背景がフェードイン／アウトする時間を取得または設定します。
-        /// </summary>
-        public TimeSpan FadeInterval
         {
             get;
             set;
@@ -139,48 +55,15 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
         
         /// <summary>
-        /// 背景を変化させるかどうかを取得または設定します。
-        /// </summary>
-        public bool IsChangeBackground
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// カットインを使用するかどうかを取得または設定します。
-        /// </summary>
-        public bool IsUseCutIn
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 自動再生前に再生の確認を行うかどうかを取得または設定します。
-        /// </summary>
-        public bool IsConfirmPlay
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 自動再生前の確認メッセージを取得または設定します。
-        /// </summary>
-        public string ConfirmMessage
-        {
-            get;
-            set;
-        }
-        
-        /// <summary>
         /// まだ指し手が残っているか取得します。
         /// </summary>
         private bool HasMove
         {
             get { return (this.moveIndex < this.maxMoveCount); }
         }
+
+        private TimeSpan position;
+        private TimeSpan elapsed;
 
         /// <summary>
         /// 自動再生の次の手を取得します。
@@ -201,131 +84,96 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             return this.moveList[this.moveIndex++];
         }
-        
-        /// <summary>
-        /// 背景色変更中の情報を取得します。
-        /// </summary>
-        private NextPlayInfo GetFadingNextPlay(DateTime baseTime, bool isReverse)
+
+        private void DoMove()
         {
-            var progress = DateTime.Now - baseTime;
-            if (progress >= FadeInterval)
+            if (Board == null)
             {
-                return null;
+                return;
             }
 
-            // 背景の不透明度を更新します。
-            var progressRate = (progress.TotalSeconds / FadeInterval.TotalSeconds);
-            return new NextPlayInfo
+            switch (AutoPlayType)
             {
-                Opacity = (isReverse ? 1.0 - progressRate : progressRate),
-            };
+                case AutoPlayType.Normal:
+                    var move = NextMove();
+                    if (move != null)
+                    {
+                        Board.DoMove(move);
+                    }
+                    break;
+                case AutoPlayType.Undo:
+                    Board.Undo();
+                    break;
+                case AutoPlayType.Redo:
+                    Board.Redo();
+                    break;
+            }
         }
 
         /// <summary>
         /// コルーチン用のオブジェクトを返します。
         /// </summary>
-        private IEnumerable<NextPlayInfo> GetUpdateEnumerator()
+        private IEnumerable<bool> GetUpdateEnumerator()
         {
-            var baseTime = DateTime.Now;
-            
-            // 最初に背景色のみを更新します。
-            if (IsChangeBackground)
+            Effects.EffectManager manager = null;
+            if (Control != null && Control.EffectManager != null)
             {
-                while (true)
-                {
-                    var nextPlay = GetFadingNextPlay(baseTime, false);
-                    if (nextPlay == null)
-                    {
-                        baseTime += FadeInterval;
-                        break;
-                    }
+                manager = Control.EffectManager;
 
-                    yield return nextPlay;
-                }
+                manager.EffectEnabled = false;
+                //manager.IsAutoPlayEffect = true;
+                manager.EffectMoveCount = 0;
             }
 
-            if (IsUseCutIn)
-            {
-                // カットインが表示できたら、指定の時間だけ待ちます。
-                if (ShogiGlobal.EffectManager.VariationCutIn())
-                {
-                    while (DateTime.Now - baseTime < CutInInterval)
-                    {
-                        yield return new NextPlayInfo
-                        {
-                            Opacity = (IsChangeBackground ? 1.0 : 0.0),
-                        };
-                    }
-
-                    baseTime += CutInInterval;
-                }
-            }
-
-            // 最初の一手はすぐに表示します。
-            baseTime -= Interval;
+            Control.Board = Board;
 
             // 最後の指し手を動かした後に一手分だけ待ちます。
             // エフェクトを表示するためです。
             var didLastInterval = false;
             while (HasMove || !didLastInterval)
             {
-                var progress = DateTime.Now - baseTime;
-                if (progress > Interval)
+                this.position += this.elapsed;
+                if (this.position > Interval)
                 {
-                    baseTime += Interval;
+                    this.position -= Interval;
                     didLastInterval = !HasMove; // NextMoveの前に呼ぶ
                     
-                    yield return new NextPlayInfo
+                    if (manager != null)
                     {
-                        AutoPlayType = AutoPlayType,
-                        Move = NextMove(),
-                        IsLastMove = !HasMove,
-                        Opacity = (IsChangeBackground ? 1.0 : 0.0),
-                    };
+                        manager.ChangeMoveCount(Board.MoveCount);
+                    }
+                    DoMove();
                 }
-                else
-                {
-                    yield return new NextPlayInfo
-                    {
-                        Opacity = (IsChangeBackground ? 1.0 : 0.0),
-                    };
-                }
+
+                yield return true;
             }
 
-            // 背景色をもとに戻します。
-            if (IsChangeBackground)
+            if (manager != null)
             {
-                while (true)
-                {
-                    var nextPlay = GetFadingNextPlay(baseTime, true);
-                    if (nextPlay == null)
-                    {
-                        baseTime += FadeInterval;
-                        break;
-                    }
-
-                    yield return nextPlay;
-                }
+                manager.EffectEnabled = true;
+                //manager.IsAutoPlayEffect = false;
+                manager.EffectMoveCount = 0;
             }
         }
 
         /// <summary>
         /// 更新します。
         /// </summary>
-        internal NextPlayInfo Update()
+        public bool Update(TimeSpan elapsed)
         {
             if (this.enumerator == null)
             {
-                return null;
+                return false;
             }
 
             // コルーチンを進めます。
             if (!this.enumerator.MoveNext())
             {
                 this.enumerator = null;
-                return null;
+                return false;
             }
             
+            this.elapsed = elapsed;
             return this.enumerator.Current;
         }
 
@@ -353,37 +201,24 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
-        /// コンストラクタ
-        /// </summary>
-        public AutoPlay(Variation variation)
-            : this(variation.Board, variation.BoardMoveList)
-        {
-            ConfirmMessage = string.Format(
-                "{1}{0}{0}コメント: {2}{0}{0}を再生しますか？",
-                Environment.NewLine,
-                variation.Label,
-                variation.Comment);
-        }
-
-        /// <summary>
         /// 共通コンストラクタ
         /// </summary>
-        private AutoPlay(Board board)
+        private AutoPlay_(ShogiControl control, Board board)
         {
             Board = board;
+            Control = control;
             Interval = TimeSpan.FromSeconds(1.0);
-            FadeInterval = TimeSpan.FromSeconds(0.2); //Interval.TotalSeconds / 2);
-            IsConfirmPlay = true;
-            IsUseCutIn = true;
 
+            this.position = TimeSpan.Zero;
+            this.elapsed = TimeSpan.Zero;
             this.enumerator = GetUpdateEnumerator().GetEnumerator();
         }
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public AutoPlay(Board board, IEnumerable<BoardMove> moveList)
-            : this(board)
+        public AutoPlay_(ShogiControl control, Board board, IEnumerable<BoardMove> moveList)
+            : this(control, board)
         {
             if (moveList == null)
             {
@@ -399,8 +234,8 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public AutoPlay(Board board, AutoPlayType autoPlayType)
-            : this(board)
+        public AutoPlay_(ShogiControl control, Board board, AutoPlayType autoPlayType)
+            : this(control, board)
         {
             if (autoPlayType != AutoPlayType.Undo &&
                 autoPlayType != AutoPlayType.Redo)

@@ -120,7 +120,7 @@
 		<Format Column="1" Text="Marc Gravell" Alignment="Left" />
 	</Line>
 	<Line>
-		<Format Column="1" Text="CookieGetterSharpの製作者" Alignment="Left" />
+		<Format Column="1" Text="CookieGetterSharpの作者" Alignment="Left" />
 	</Line>
 	<Line>
 		<Format Column="1" Text="Ambiera" Alignment="Left" />
@@ -144,18 +144,18 @@
 		<Format Column="1" Text="Ury Jamshy" Alignment="Left" />
 	</Line>
 
-	<Line Count="2" />
+	<Line Count="4" />
 
 	<!-- 動画製作者 -->
 	<Line>
 		<Format ColumnSpan="2" Text="エンディング動画" />
 	</Line>
 	<Line>
-		<Format ColumnSpan="2" Text="『―――』" FontWeight="Bold" />
+		<Format ColumnSpan="2" Text="『アリスに花束』" FontWeight="Bold" />
 	</Line>
 	<Line>
 		<Format Column="0" Text="作詞・作曲" Alignment="Right" />
-		<Format Column="1" Text="―――" Alignment="Left" />
+		<Format Column="1" Text="スマイルＰ" Alignment="Left" />
 	</Line>
 	<Line>
 		<Format Column="0" Text="イラスト・動画" Alignment="Right" />
@@ -166,7 +166,7 @@
 		<Format Column="1" Text="―――" Alignment="Left" />
 	</Line>
 
-	<Line Count="2" />
+	<Line Count="4" />
 
 	<!-- 将棋連盟協力者一覧 -->
 	<Line>
@@ -176,7 +176,7 @@
 		<Format ColumnSpan="2" Text="将棋兄さん" />
 	</Line>
 
-	<Line Count="2" />
+	<Line Count="4" />
 
 	<!-- 企画スタッフ一覧 -->
 	<Line>
@@ -244,7 +244,7 @@
 		<Format ColumnSpan="2" Text="企画統括" FontWeight="Bold" />
 	</Line>
 	<Line>
-		<Format ColumnSpan="2" Text="えびふらい" FontWeight="Bold" />
+		<Format ColumnSpan="2" Text="えびふらい" />
 	</Line>
 
 	<Line Count="2" />
@@ -277,7 +277,7 @@
 		<Format ColumnSpan="2" Text="記録係" FontWeight="Bold" />
 	</Line>
 	<Line>
-		<Format ColumnSpan="2" Text="中村桃子" FontWeight="Bold" />
+		<Format ColumnSpan="2" Text="中村桃子女流初段" />
 	</Line>
 
 	<Line />
@@ -287,7 +287,7 @@
 		<Format ColumnSpan="2" Text="盤代理操作人" FontWeight="Bold" />
 	</Line>
 	<Line>
-		<Format ColumnSpan="2" Text="―――" FontWeight="Bold" />
+		<Format ColumnSpan="2" Text="―――" />
 	</Line>
 
 	<Line />
@@ -297,7 +297,7 @@
 		<Format ColumnSpan="2" Text="対局者" FontWeight="Bold" />
 	</Line>
 	<Line>
-		<Format ColumnSpan="2" Text="西尾明" FontWeight="Bold" />
+		<Format ColumnSpan="2" Text="西尾明六段" />
 	</Line>
 
 	<Line Count="6" />

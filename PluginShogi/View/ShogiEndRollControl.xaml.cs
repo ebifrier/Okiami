@@ -20,6 +20,7 @@ namespace VoteSystem.PluginShogi.View
 {
     using Protocol.View;
     using Effects;
+    using ViewModel;
 
     /// <summary>
     /// エンドロールを流すウィンドウです。
@@ -100,6 +101,7 @@ namespace VoteSystem.PluginShogi.View
         private EffectManager effectManager;
         private DispatcherTimer timer;
         private MediaPlayer player;
+        private AutoPlay_ autoPlay;
         private TimeSpan prevPosition = TimeSpan.Zero;
 
         public TimelineData MovieTimeline
@@ -154,7 +156,7 @@ namespace VoteSystem.PluginShogi.View
 
             MovieTimeline = new TimelineData
             {
-                FadeInStartTime = TimeSpanFrom(0, 10),
+                FadeInStartTime = TimeSpanFrom(0, 13),
                 FadeInSpan = TimeSpanFrom(10),
                 FadeOutStartTime = TimeSpanFrom(5, 30),
                 FadeOutSpan = TimeSpanFrom(10),
@@ -168,7 +170,7 @@ namespace VoteSystem.PluginShogi.View
                 FadeInStartTime = TimeSpanFrom(0, 20),
                 FadeInSpan = TimeSpanFrom(5),
                 FadeOutStartTime = TimeSpanFrom(5, 0),
-                FadeOutSpan = TimeSpanFrom(5),
+                FadeOutSpan = TimeSpanFrom(10),
             };
 
             this.player = new MediaPlayer
@@ -176,13 +178,14 @@ namespace VoteSystem.PluginShogi.View
                 Volume = 0.1,
             };
             this.player.MediaOpened += MediaOpened;
-            this.player.Open(new Uri(@"E:\movies\ending\alice2.avi"));
+            //this.player.Open(new Uri(@"E:\movies\ending\alice2.avi"));
+            this.player.Open(new Uri(@"E:\movies\ending\アリスに花束.mp4"));
 
-            MovieBrush.Drawing = new VideoDrawing
+            /*MovieBrush.Drawing = new VideoDrawing
             {
                 Player = this.player,
                 Rect = new Rect(0, 0, 100, 100),
-            };
+            };*/
 
             EndRoll.FormatFilePath = @"ShogiData/EndRoll/endroll_format.xml";
             EndRoll.DataGetter = Protocol.Model.TestVoterList.GetTestVoterList;
@@ -228,15 +231,45 @@ namespace VoteSystem.PluginShogi.View
             base.OnClosed(e);
         }
 
+        private System.Threading.Timer oneTimer;
+
         private void MediaOpened(object sender, EventArgs e)
         {
+            /*this.oneTimer = new System.Threading.Timer(
+                _ => Ragnarok.Presentation.WPFUtil.UIProcess(Play),
+                null,
+                20 * 1000, -1);*/
             Play();
         }
 
         public void Play()
         {
             this.player.Play();
-            //this.player.Position = TimeSpan.FromSeconds(200);
+            //this.player.Position = TimeSpan.FromSeconds(280);
+
+            // エンディングの前に現局面を設定します。
+            var board = new Board();
+            var moveList = BoardExtension.MakeMoveList(SampleMove.Tsume);
+            var bmList = board.ConvertMove(moveList);
+
+            // 音は消します。
+            var oldUseSound = ShogiGlobal.Settings.SD_IsUseEffectSound;
+            ShogiGlobal.Settings.SD_IsUseEffectSound = false;
+
+            // エンドロール後は音の設定を元に戻します。
+            RoutedEventHandler handler = null;
+            handler = (_, __) =>
+            {
+                ShogiGlobal.Settings.SD_IsUseEffectSound = oldUseSound;
+                EndRoll.Stopped -= handler;
+            };
+            EndRoll.Stopped += handler;
+
+            var interval = ShogiTimeline.FadeOutStartTime - ShogiTimeline.FadeInEndTime;
+            this.autoPlay = new ViewModel.AutoPlay_(ShogiControl, board, bmList)
+            {
+                Interval = TimeSpan.FromSeconds(interval.TotalSeconds / (bmList.Count() + 2)),
+            };
         }
 
         private void UpdatePosition(TimeSpan position)
@@ -254,11 +287,34 @@ namespace VoteSystem.PluginShogi.View
                 EndRoll.UpdateScreen(position - EndRollStartTime);
             }
 
+            if (this.autoPlay != null &&
+                position > ShogiTimeline.FadeInEndTime)
+            {
+                if (!this.autoPlay.Update(elapsed))
+                {
+                    this.autoPlay = null;
+                }
+            }
+
             ShogiControl.Render(elapsed);
             ShogiBackground.Render(elapsed);
             
-            ShogiGrid.Opacity = ShogiTimeline.GetRatio(position) * 0.37;
+            ShogiGrid.Opacity = ShogiTimeline.GetRatio(position) * 0.40;
             MovieBrush.Opacity = MovieTimeline.GetRatio(position);
+
+            if (position > MovieTimeline.FadeInEndTime)
+            {
+                var total = MovieTimeline.FadeOutStartTime - MovieTimeline.FadeInEndTime - TimeSpan.FromSeconds(20);
+                var basePos = position - MovieTimeline.FadeInEndTime;
+                var ratio = basePos.TotalSeconds / total.TotalSeconds;
+
+                // 800x4800 = 1:8
+                //ImageBrush.ViewportUnits = BrushMappingMode.RelativeToBoundingBox;
+                //ImageBrush.Viewport = new Rect(0, 1.0 - ratio, 1.0, 1.0);
+                ImageBrush.ViewboxUnits = BrushMappingMode.RelativeToBoundingBox;
+                ImageBrush.Viewbox = new Rect(0, 1.0 - ratio*(1.0 + 1.0/6), 1.0, 1.0/6);
+                ImageBrush.Opacity = 0.4;
+            }
 
             this.prevPosition = position;
         }

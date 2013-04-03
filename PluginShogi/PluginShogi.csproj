@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Effects\IEffectManager.cs" />
     <Compile Include="RenderingQuality.cs" />
+    <Compile Include="ViewModel\AutoPlay_.cs" />
     <Compile Include="View\ShogiEndRollControl.xaml.cs">
       <DependentUpon>ShogiEndRollControl.xaml</DependentUpon>
     </Compile>
@@ -104,6 +105,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Image\shogiban_image.png" />
+    <Resource Include="Resources\Image\ending_image.png" />
     <Content Include="ShogiData\EndRoll\endroll_format.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

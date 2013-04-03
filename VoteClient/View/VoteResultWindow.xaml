@@ -1,14 +1,12 @@
-﻿<rp:MovableWindow x:Class="VoteSystem.Client.View.VoteResultWindow"
-                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
-                  xmlns:s="http://schemas.garnet-alice.net/votesystem/xaml/presentation"
-                  xmlns:v="clr-namespace:VoteSystem.Client.View"
-                  xmlns:vc="clr-namespace:VoteSystem.Client.View.Control"
-                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                  Name="window" Title="投票結果ウィンドウ"
-                  Background="Transparent"
-                  Height="216" Width="309" ShowInTaskbar="False">
+﻿<r:MovableWindow x:Class="VoteSystem.Client.View.VoteResultWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+                 xmlns:s="http://schemas.garnet-alice.net/votesystem/xaml/presentation"
+                 xmlns:v="clr-namespace:VoteSystem.Client.View"
+                 Name="window" Title="投票結果ウィンドウ"
+                 Background="Transparent"
+                 Height="216" Width="309" ShowInTaskbar="False">
     
     <Window.Resources>
         <ResourceDictionary>
@@ -16,7 +14,7 @@
                 <ResourceDictionary Source="CommonDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <rp:FontFamilyConverter x:Key="fontFamilyConverter" />
+            <r:FontFamilyConverter x:Key="fontFamilyConverter" />
 
             <!-- コンテキストメニュー -->
             <ContextMenu x:Key="contextMenu">
@@ -25,16 +23,16 @@
                 <MenuItem Header="常に手前に表示する"
                           IsCheckable="True"
                           IsChecked="{Binding Topmost,
-                                              RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}"
+                                              RelativeSource={RelativeSource AncestorType=r:MovableWindow}}"
                           CommandTarget="{Binding PlacementTarget,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                 <Separator />
                 <MenuItem Header="ウィンドウを移動する"
-                          Command="{x:Static rp:MovableWindow.MakeMoveWindow}"
+                          Command="{x:Static r:MovableWindow.MakeMoveWindow}"
                           CommandTarget="{Binding PlacementTarget,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                 <MenuItem Header="ウィンドウを固定する"
-                          Command="{x:Static rp:MovableWindow.MakeFixWindow}"
+                          Command="{x:Static r:MovableWindow.MakeFixWindow}"
                           CommandTarget="{Binding PlacementTarget,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                 <Separator />
@@ -51,8 +49,7 @@
 
             <!-- 移動時の表示コントロール -->
             <ControlTemplate x:Key="movableControlTemplate">
-                <Grid Background="{Binding VR_MovableBackgroundColor,
-                                           Converter={StaticResource brushConverter}}">
+                <Grid Background="#80000850">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
@@ -67,7 +64,7 @@
                     <Button Grid.Row="1" Grid.Column="1"
                             Content="決定" FontSize="28"
                             Opacity="0.4"
-                            Command="{x:Static rp:MovableWindow.MakeFixWindow}" />
+                            Command="{x:Static r:MovableWindow.MakeFixWindow}" />
                 </Grid>
             </ControlTemplate>
         </ResourceDictionary>
@@ -105,7 +102,7 @@
         <ContentControl
             Template="{StaticResource movableControlTemplate}"
             Visibility="{Binding IsMovable,
-                                 RelativeSource={RelativeSource AncestorType=rp:MovableWindow},
+                                 RelativeSource={RelativeSource AncestorType=r:MovableWindow},
                                  Converter={StaticResource visibilityConverterCollapsed}}" />
     </Grid>
-</rp:MovableWindow>
+</r:MovableWindow>

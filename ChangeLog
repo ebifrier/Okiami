@@ -1,3 +1,17 @@
+2013-04-04  - Ver 1.2.7.15
+
+	* PluginShogi/View/ShogiEndRollControl.xaml.cs: エンドロール用のコント
+	ロールに棋譜の自動再生機能や画像のスクロール機能を追加しました。
+	* PluginShogi/ViewModel/AutoPlay.cs: 棋譜自動再生をこのクラス内で行うよ
+	うにしました。以前は自動再生用の情報を外部に渡し、そこで駒を動かしてい
+	ました。面倒なので今の状態に変更しました。
+	* VoteClient/Command/UtilCommand.cs: バージョン確認コマンドは汎用性が高
+	いため、Ragnarokに移動しました。
+	* VoteClient/View/VoteResultWindow.xaml.cs: 以前のモデルクラスを破棄し、
+	簡潔なクラスで代用するようにしました。
+	* PluginShogi/Resources/Image/shogiban_image.png: エンディング再生に使
+	う画像（サンプル）をいくつか追加しました。
+
 2013-03-28  - Ver 1.2.7.14
 
 	* VoteProtocol/View/VoteResultSettingDialog.xaml: 色の設定に関しては

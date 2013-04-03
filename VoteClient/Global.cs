@@ -381,8 +381,8 @@ namespace VoteSystem.Client
         {
             try
             {
-                return VoteClient.GetVoterList();
-                //return Protocol.Model.TestVoterList.GetTestVoterList();
+                //return VoteClient.GetVoterList();
+                return Protocol.Model.TestVoterList.GetTestVoterList();
             }
             catch (Exception ex)
             {

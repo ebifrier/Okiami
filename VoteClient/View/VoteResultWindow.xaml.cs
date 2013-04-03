@@ -26,6 +26,28 @@ namespace VoteSystem.Client.View
     public partial class VoteResultWindow : MovableWindow
     {
         /// <summary>
+        /// モデルデータです。
+        /// </summary>
+        private class InternalModel
+        {
+            /// <summary>
+            /// 投票用オブジェクトを取得します。
+            /// </summary>
+            public Model.VoteClient VoteClient
+            {
+                get { return Global.VoteClient; }
+            }
+
+            /// <summary>
+            /// 設定オブジェクトを取得します。
+            /// </summary>
+            public Settings Settings
+            {
+                get { return Global.Settings; }
+            }
+        }
+
+        /// <summary>
         /// 静的コンストラクタ
         /// </summary>
         static VoteResultWindow()
@@ -44,6 +66,8 @@ namespace VoteSystem.Client.View
         public VoteResultWindow()
         {
             InitializeComponent();
+
+            DataContext = new InternalModel();
 
             this.voteResultControl.BindCommands(this);
             this.voteResultControl.SettingUpdated += VoteResultControl_SettingUpdated;
