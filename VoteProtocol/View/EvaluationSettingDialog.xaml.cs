@@ -31,12 +31,10 @@ namespace VoteSystem.Protocol.View
         public EvaluationSettingDialog(EvaluationControl control)
         {
             InitializeComponent();
-
             CommandBindings.Add(
                 new CommandBinding(
                     RagnarokCommands.OK,
                     ExecuteYes));
-            RagnarokCommands.Bind(this);
 
             this.model = new CloneModel(control);
             this.control = control;

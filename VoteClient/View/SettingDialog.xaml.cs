@@ -28,7 +28,6 @@ namespace VoteSystem.Client.View
         {
             InitializeComponent();
             InitializeCommands();
-            RagnarokCommands.Bind(this);
         }
 
         /// <summary>

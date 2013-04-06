@@ -94,7 +94,7 @@ namespace VoteSystem.PluginShogi
         /// </summary>
         public static Uri GetImageUri<T>(T value)
         {
-            var leaf = EnumEx.GetEnumDescription(value);
+            var leaf = EnumEx.GetDescription(value);
             if (string.IsNullOrEmpty(leaf))
             {
                 throw new InvalidOperationException(

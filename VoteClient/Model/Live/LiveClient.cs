@@ -333,7 +333,7 @@ namespace VoteSystem.Client.Model.Live
         {
             this.participant = participant;
             LiveSite = liveSite;
-            LiveSiteTitle = EnumEx.GetEnumLabel(liveSite);
+            LiveSiteTitle = EnumEx.GetLabel(liveSite);
             Attribute = new LiveAttribute();
 
             this.PropertyChanged +=

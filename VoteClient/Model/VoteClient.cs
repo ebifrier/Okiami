@@ -1516,7 +1516,7 @@ namespace VoteSystem.Client.Model
                             "アプリを最新版にしてみてください (T◇To){0}{0}" +
                             "理由：{1}",
                             Environment.NewLine,
-                            EnumEx.GetEnumDescription(result)));
+                            EnumEx.GetDescription(result)));
                 }
 
                 // 既存の接続を切断し、新たな接続を設定します。

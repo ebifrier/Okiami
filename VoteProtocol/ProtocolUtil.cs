@@ -196,7 +196,7 @@ namespace VoteSystem.Protocol
         /// </summary>
         public static string GetVoteStateText(VoteState state)
         {
-            var label = EnumEx.GetEnumLabel(state);
+            var label = EnumEx.GetLabel(state);
             if (label == null)
             {
                 return "不明な状態";

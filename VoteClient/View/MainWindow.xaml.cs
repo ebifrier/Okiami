@@ -29,7 +29,6 @@ namespace VoteSystem.Client.View
             Command.UtilCommand.Bind(this);
             Command.LiveCommands.Bind(this);
             Command.VoteCommands.Bind(this);
-            RagnarokCommands.Bind(this);
 
             Closing += (sender, e) =>
             {

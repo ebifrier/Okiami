@@ -1,14 +1,14 @@
-﻿<rp:MovableWindow x:Class="VoteSystem.Client.View.EvaluationWindow"
-                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
-                  xmlns:p="http://schemas.garnet-alice.net/votesystem/xaml/presentation"
-                  xmlns:t="clr-namespace:VoteSystem.Client"
-                  xmlns:v="clr-namespace:VoteSystem.Client.View"
-                  xmlns:vc="clr-namespace:VoteSystem.Client.View.Control"
-                  Title="評価値" Height="300" Width="300"
-                  Background="Transparent" EdgeLength="10" Topmost="True"
-                  ShowInTaskbar="False">
+﻿<r:MovableWindow x:Class="VoteSystem.Client.View.EvaluationWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+                 xmlns:p="http://schemas.garnet-alice.net/votesystem/xaml/presentation"
+                 xmlns:t="clr-namespace:VoteSystem.Client"
+                 xmlns:v="clr-namespace:VoteSystem.Client.View"
+                 xmlns:vc="clr-namespace:VoteSystem.Client.View.Control"
+                 Title="評価値" Height="300" Width="300"
+                 Background="Transparent" EdgeLength="10" Topmost="True"
+                 ShowInTaskbar="False">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -22,14 +22,14 @@
                 <MenuItem Header="常に手前に表示する"
                           IsCheckable="True"
                           IsChecked="{Binding Topmost,
-                                              RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}" />
+                                              RelativeSource={RelativeSource AncestorType=r:MovableWindow}}" />
                 <Separator />
                 <MenuItem Header="ウィンドウを移動する"
-                          Command="{x:Static rp:MovableWindow.MakeMoveWindow}"
+                          Command="{x:Static r:MovableWindow.MakeMoveWindow}"
                           CommandTarget="{Binding PlacementTarget,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                 <MenuItem Header="ウィンドウを固定する"
-                          Command="{x:Static rp:MovableWindow.MakeFixWindow}"
+                          Command="{x:Static r:MovableWindow.MakeFixWindow}"
                           CommandTarget="{Binding PlacementTarget,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                 <Separator />
@@ -51,7 +51,7 @@
 
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsMovable,
-                                                   RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}"
+                                                   RelativeSource={RelativeSource AncestorType=r:MovableWindow}}"
                                  Value="False">
                         <Setter Property="Visibility" Value="Collapsed" />
                         <Setter Property="IsHitTestVisible" Value="False" />
@@ -71,29 +71,31 @@
     <Grid Name="layoutBase">
         <Grid.RowDefinitions>
             <RowDefinition Height="{Binding EdgeLength,
-                                            RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}" />
+                                            RelativeSource={RelativeSource AncestorType=r:MovableWindow}}" />
             <RowDefinition Height="*" />
             <RowDefinition Height="{Binding EdgeLength,
-                                            RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}" />
+                                            RelativeSource={RelativeSource AncestorType=r:MovableWindow}}" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{Binding EdgeLength,
-                                              RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}" />
+                                              RelativeSource={RelativeSource AncestorType=r:MovableWindow}}" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="{Binding EdgeLength,
-                                              RelativeSource={RelativeSource AncestorType=rp:MovableWindow}}" />
+                                              RelativeSource={RelativeSource AncestorType=r:MovableWindow}}" />
         </Grid.ColumnDefinitions>
 
         <!-- 評価値画像と評価値 -->
-        <p:EvaluationControl Grid.RowSpan="3" Grid.ColumnSpan="3"
-                             x:Name="EvaluationControl"
-                             ImageSetList="{p:ImageSetList Data/Image}"
-                             SelectedImageSetTitle="{Binding AS_ImageSetDirName,
-                                                             Source={x:Static t:Global.Settings}}"
-                             UserPoint="{Binding VoteResult.EvaluationPoint,
-                                                 Source={x:Static t:Global.VoteClient}}"
-                             ModeCustomPoint="{Binding ModeCustomPoint,
-                                                       Source={x:Static t:Global.MainModel}}" />
+        <Viewbox Grid.RowSpan="3" Grid.ColumnSpan="3"
+                 Stretch="Fill">
+            <p:EvaluationControl x:Name="EvaluationControl"
+                                 ImageSetList="{p:ImageSetList Data/Image}"
+                                 SelectedImageSetTitle="{Binding AS_ImageSetDirName,
+                                                                 Source={x:Static t:Global.Settings}}"
+                                 UserPoint="{Binding VoteResult.EvaluationPoint,
+                                                     Source={x:Static t:Global.VoteClient}}"
+                                 ModeCustomPoint="{Binding ModeCustomPoint,
+                                                           Source={x:Static t:Global.MainModel}}" />
+        </Viewbox>
 
         <!-- 上下左右の枠 -->
         <Rectangle Grid.Row="0" Grid.RowSpan="1"
@@ -128,4 +130,4 @@
                    Stroke="Black" StrokeThickness="1.5"
                    Fill="Transparent" />
     </Grid>
-</rp:MovableWindow>
+</r:MovableWindow>

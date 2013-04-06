@@ -86,7 +86,7 @@ namespace VoteSystem.Protocol.Vote
         {
             return string.Format(
                 "{0}:{1}",
-                EnumEx.GetEnumLabel(LiveSite),
+                EnumEx.GetLabel(LiveSite),
                 Id);
         }
 

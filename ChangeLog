@@ -1,3 +1,11 @@
+2013-04-07  - Ver 1.2.7.16
+
+	* VoteClient/View/EvaluationWindow.xaml: 評価値画像を内部で拡大縮小する
+	ようにしました。
+	* VoteProtocol/Xaml/VoteBackgroundConverter.cs,
+	  VoteProtocol/Xaml/VoteLeaveTimeConverter.cs: 与えられたパラメータが正
+	しくないときのエラー処理を追加しました。
+
 2013-04-04  - Ver 1.2.7.15
 
 	* PluginShogi/View/ShogiEndRollControl.xaml.cs: エンドロール用のコント

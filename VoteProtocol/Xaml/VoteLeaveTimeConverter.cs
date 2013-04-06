@@ -25,6 +25,12 @@ namespace VoteSystem.Protocol.Xaml
         {
             try
             {
+                if (value[0] == DependencyProperty.UnsetValue ||
+                    value[1] == DependencyProperty.UnsetValue)
+                {
+                    return "停止中";
+                }
+
                 var leaveTime = (TimeSpan)value[0];
                 var state = (VoteState)value[1];
 

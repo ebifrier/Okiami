@@ -111,7 +111,6 @@ namespace VoteSystem.Client.View
         public SelectImageWindow()
         {
             InitializeComponent();
-            RagnarokCommands.Bind(this);
         }
     }
 }
