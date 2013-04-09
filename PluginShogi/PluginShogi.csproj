@@ -58,17 +58,17 @@
   <ItemGroup>
     <Compile Include="Effects\IEffectManager.cs" />
     <Compile Include="RenderingQuality.cs" />
+    <Compile Include="ViewModel\AutoPlay.cs" />
     <Compile Include="ViewModel\AutoPlay_.cs" />
+    <Compile Include="ViewModel\Commands.cs" />
+    <Compile Include="ViewModel\ShogiSettingDialogViewModel.cs" />
+    <Compile Include="ViewModel\ShogiWindowViewModel.cs" />
     <Compile Include="View\ShogiEndRollControl.xaml.cs">
       <DependentUpon>ShogiEndRollControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Xaml\CellMeshConverter.cs" />
-    <Compile Include="Xaml\MakeMeshExtension.cs" />
     <Compile Include="Effects\PieceObject.cs" />
-    <Compile Include="Xaml\BoardText.cs" />
     <Compile Include="Util3D.cs" />
     <Compile Include="Model\VariationCommentManager.cs" />
-    <Compile Include="ViewModel\AutoPlay.cs" />
     <Compile Include="Model\EachStateManager.cs" />
     <Compile Include="ImageType.cs" />
     <Compile Include="SoundManager.cs" />
@@ -82,12 +82,8 @@
     <Compile Include="Settings.part.cs" />
     <Compile Include="ShogiGlobal.cs" />
     <Compile Include="ShogiPlugin.cs" />
-    <Compile Include="ViewModel\Commands.cs" />
     <Compile Include="Effects\Effect.cs" />
     <Compile Include="Effects\Model3DRenderer.cs" />
-    <Compile Include="ViewModel\ShogiSettingDialogViewModel.cs" />
-    <Compile Include="ViewModel\ShogiWindowViewModel.cs" />
-    <Compile Include="Xaml\TebanMeshConverter.cs" />
     <Compile Include="View\CurrentBoardSetupDialog.xaml.cs">
       <DependentUpon>CurrentBoardSetupDialog.xaml</DependentUpon>
     </Compile>
@@ -103,6 +99,10 @@
     <Compile Include="View\ShogiSettingDialog.xaml.cs">
       <DependentUpon>ShogiSettingDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Xaml\BoardText.cs" />
+    <Compile Include="Xaml\CellMeshConverter.cs" />
+    <Compile Include="Xaml\MakeMeshExtension.cs" />
+    <Compile Include="Xaml\TebanMeshConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Image\shogiban_image.png" />
@@ -547,10 +547,6 @@
     <ProjectReference Include="..\VoteClient\VoteClient.csproj">
       <Project>{A1036139-2DAE-4C31-9684-C5A0C5FDFC69}</Project>
       <Name>VoteClient</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FlintSharp\twoD\FlintSharp.csproj">
-      <Project>{CAF419D7-50B7-49F6-9B1A-8E6448339074}</Project>
-      <Name>FlintSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\VoteProtocol\VoteProtocol.csproj">
       <Project>{06216C89-D40E-417D-847B-A4D982472D8C}</Project>

@@ -10,6 +10,7 @@ namespace VoteSystem.PluginShogi
     /// <summary>
     /// 音声ファイルを再生します。
     /// </summary>
+    [CLSCompliant(false)]
     public class SoundManager : Ragnarok.Extra.Sound.SoundManager
     {
         /// <summary>

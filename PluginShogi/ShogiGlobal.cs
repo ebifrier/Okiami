@@ -41,6 +41,7 @@ namespace VoteSystem.PluginShogi
             {
                 TargetFPS = 30.0,
             };
+            FrameTimer.Start();
 
             // FrameTimerはSettingsの前に初期化します。
             Settings = Settings.CreateSettings<Settings>();
@@ -112,6 +113,7 @@ namespace VoteSystem.PluginShogi
         /// <summary>
         /// サウンド管理オブジェクトを取得または設定します。
         /// </summary>
+        [CLSCompliant(false)]
         public static SoundManager SoundManager
         {
             get;
