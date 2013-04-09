@@ -101,7 +101,7 @@ namespace VoteSystem.PluginShogi.View
         private EffectManager effectManager;
         private DispatcherTimer timer;
         private MediaPlayer player;
-        private AutoPlay_ autoPlay;
+        private AutoPlayEx autoPlay;
         private TimeSpan prevPosition = TimeSpan.Zero;
 
         public TimelineData MovieTimeline
@@ -152,7 +152,8 @@ namespace VoteSystem.PluginShogi.View
         public ShogiEndRollControl()
         {
             InitializeComponent();
-            EndRoll.InitializeCommands(CommandBindings);
+            EndRoll.InitializeBindings(this);
+            ShogiControl.InitializeBindings(this);
 
             MovieTimeline = new TimelineData
             {
@@ -266,7 +267,7 @@ namespace VoteSystem.PluginShogi.View
             EndRoll.Stopped += handler;
 
             var interval = ShogiTimeline.FadeOutStartTime - ShogiTimeline.FadeInEndTime;
-            this.autoPlay = new ViewModel.AutoPlay_(ShogiControl, board, bmList)
+            this.autoPlay = new ViewModel.AutoPlayEx(board, bmList)
             {
                 Interval = TimeSpan.FromSeconds(interval.TotalSeconds / (bmList.Count() + 2)),
             };
@@ -290,10 +291,8 @@ namespace VoteSystem.PluginShogi.View
             if (this.autoPlay != null &&
                 position > ShogiTimeline.FadeInEndTime)
             {
-                if (!this.autoPlay.Update(elapsed))
-                {
-                    this.autoPlay = null;
-                }
+                ShogiControl.StartAutoPlay(this.autoPlay);
+                this.autoPlay = null;
             }
 
             ShogiControl.Render(elapsed);

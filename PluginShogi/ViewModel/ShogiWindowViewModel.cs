@@ -15,6 +15,7 @@ using Ragnarok.Shogi;
 using Ragnarok.NicoNico.Live;
 using Ragnarok.ObjectModel;
 using Ragnarok.Presentation;
+using Ragnarok.Presentation.Shogi;
 
 namespace VoteSystem.PluginShogi.ViewModel
 {
@@ -45,10 +46,9 @@ namespace VoteSystem.PluginShogi.ViewModel
         private Board currentBoard;
         private Board board;
 
-        private readonly DispatcherTimer autoPlayTimer;
         private bool isCheckingAutoPlay = false;
-        private readonly Queue<AutoPlay> autoPlayList =
-            new Queue<AutoPlay>();
+        private readonly Queue<AutoPlayEx> autoPlayList =
+            new Queue<AutoPlayEx>();
         private AutoPlay currentAutoPlay;
         private readonly VariationManager moveManager = new VariationManager();
         private readonly NotifyCollection<string> commentCandidates;
@@ -537,7 +537,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             // 自動再生用に変化を追加します。
             if (isAutoPlay)
             {
-                var autoPlay = new AutoPlay(variation)
+                var autoPlay = new AutoPlayEx(variation)
                 {
                     IsChangeBackground = true,
                     IsUseCutIn = true,
@@ -552,7 +552,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// 変化の自動再生を開始します。
         /// </summary>
-        public void StartAutoPlay(AutoPlay autoPlay)
+        public void StartAutoPlay(AutoPlayEx autoPlay)
         {
             if (autoPlay == null || !autoPlay.Validate())
             {
@@ -572,7 +572,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// 変化を再生するか確かめ、再生する場合はそれを返します。
         /// </summary>
-        private AutoPlay GetNextAutoPlay()
+        private AutoPlayEx GetNextAutoPlay()
         {
             // 再生中なら再生しません。
             if (VariationState == VariationState.Playing ||
@@ -636,19 +636,11 @@ namespace VoteSystem.PluginShogi.ViewModel
                 return;
             }
 
-            // ここで変化の再生フラグを立てます。
-            VariationState = VariationState.Playing;
-            VariationBorderOpacity = 0.0;
-            EditMode = EditMode.NoEdit;
-
-            //EndMovePiece();
-            Board = autoPlay.Board.Clone();
-
             ShogiGlobal.EffectManager.IsAutoPlayEffect = true;
             ShogiGlobal.EffectManager.EffectMoveCount = 0;
 
             this.currentAutoPlay = autoPlay;
-            this.autoPlayTimer.Start();
+            ShogiGlobal.MainWindow.ShogiControl.StartAutoPlay(this.currentAutoPlay);
         }
 
         /// <summary>
@@ -656,25 +648,18 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// </summary>
         public void StopAutoPlay()
         {
-            if (VariationState != VariationState.Playing)
+            if (this.currentAutoPlay == null)
             {
                 return;
             }
 
-            VariationState = VariationState.None;
-            VariationBorderOpacity = 0.0;
-            EditMode = EditMode.Normal;
-
             this.currentAutoPlay = null;
-            this.autoPlayTimer.Stop();
 
             // 変化停止時の処理
             WPFUtil.InvalidateCommand();
 
             ShogiGlobal.EffectManager.IsAutoPlayEffect = false;
             ShogiGlobal.EffectManager.EffectMoveCount = 0;
-
-            //Board = this.currentBoard;
 
             // もし次の変化があればそれも表示します。
             BeginAutoPlay();
@@ -688,49 +673,6 @@ namespace VoteSystem.PluginShogi.ViewModel
             this.autoPlayList.Clear();
 
             StopAutoPlay();
-        }
-
-        /// <summary>
-        /// 指し手の自動更新を行います。
-        /// </summary>
-        void autoPlayTimer_Tick(object sender, EventArgs e)
-        {
-            if (this.currentAutoPlay == null)
-            {
-                StopAutoPlay();
-                return;
-            }
-
-            var nextPlay = this.currentAutoPlay.Update();
-            if (nextPlay == null)
-            {
-                StopAutoPlay();
-                return;
-            }
-
-            // 最終手には特別なエフェクトを表示します。
-            if (nextPlay.IsLastMove)
-            {
-                ShogiGlobal.EffectManager.SetLastEffect();
-            }
-
-            switch (nextPlay.AutoPlayType)
-            {
-                case AutoPlayType.Normal:
-                    if (nextPlay.Move != null)
-                    {
-                        this.board.DoMove(nextPlay.Move);
-                    }
-                    break;
-                case AutoPlayType.Undo:
-                    this.board.Undo();
-                    break;
-                case AutoPlayType.Redo:
-                    this.board.Redo();
-                    break;
-            }
-
-            VariationBorderOpacity = nextPlay.Opacity;
         }
 
         void board_BoardChanged(object sender, BoardChangedEventArgs e)
@@ -761,12 +703,6 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// </summary>
         public ShogiWindowViewModel(Board board)
         {
-            this.autoPlayTimer = new DispatcherTimer()
-            {
-                Interval = TimeSpan.FromMilliseconds(20),
-            };
-            this.autoPlayTimer.Tick += autoPlayTimer_Tick;
-
             this.commentCandidates = new NotifyCollection<string>(
                 new []
                 {

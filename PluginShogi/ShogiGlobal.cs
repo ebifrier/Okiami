@@ -45,7 +45,6 @@ namespace VoteSystem.PluginShogi
 
             // FrameTimerはSettingsの前に初期化します。
             Settings = Settings.CreateSettings<Settings>();
-            SoundManager = new SoundManager();
             ShogiModel = new ShogiWindowViewModel(new Board());
 
             EffectManager = new Effects.EffectManager()
@@ -108,16 +107,6 @@ namespace VoteSystem.PluginShogi
         {
             get;
             set;
-        }
-
-        /// <summary>
-        /// サウンド管理オブジェクトを取得または設定します。
-        /// </summary>
-        [CLSCompliant(false)]
-        public static SoundManager SoundManager
-        {
-            get;
-            private set;
         }
 
         /// <summary>

@@ -1,8 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:f="http://schemas.flint-sharp/xaml"
-                    xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
-                    xmlns:l="http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi">
+                    xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation">
     
     <f:LineZone x:Key="positionZone"
                 Point1="660, -60"
@@ -18,15 +17,15 @@
                       InnerRadius="200" OuterRadius="300"
                       MinAngle="180" MaxAngle="180" />
 
-    <l:EffectObject x:Key="Effect">
-        <l:EffectObject ImageUri="Back.jpg"
+    <r:EffectObject x:Key="Effect">
+        <r:EffectObject ImageUri="Back.jpg"
                         MaterialType="Diffuse"
                         Opacity="0.9"
                         Duration="Forever"
                         Coord="320,240,0"
                         BaseScale="640,480,1" />
 
-        <l:EffectObject.Emitters>
+        <r:EffectObject.Emitters>
             <f:Emitter>
                 <f:Emitter.Counter>
                     <f:Steady RateMin="5" RateMax="10" />
@@ -62,6 +61,6 @@
                     <f:DeathOffScreen Padding="200" />
                 </f:Emitter.Behaviours>
             </f:Emitter>
-        </l:EffectObject.Emitters>
-    </l:EffectObject>
+        </r:EffectObject.Emitters>
+    </r:EffectObject>
 </ResourceDictionary>

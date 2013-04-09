@@ -43,22 +43,6 @@
                                  FillBehavior="HoldEnd" />
             </Storyboard>
 
-            <!-- 変化再生中は全体の色を変えます。-->
-            <Style x:Key="variationStyle" TargetType="Border">
-                <Setter Property="Visibility" Value="Collapsed" />
-                
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding VariationState}"
-                                 Value="Playing">
-                        <Setter Property="Visibility" Value="Visible" />
-                    </DataTrigger>
-                    
-                    <!--<EventTrigger RoutedEvent="Loaded">
-                        <BeginStoryboard Storyboard="{StaticResource closeStoryboard}" />
-                    </EventTrigger>-->
-                </Style.Triggers>
-            </Style>
-
             <!-- 投票結果コンテキストメニュー -->
             <ContextMenu x:Key="contextMenu">
                 <!-- CommandTargetの指定はwpfのバグを避けるために必要。
@@ -111,7 +95,7 @@
             <MenuItem Header="表示(_V)">
                 <MenuItem Header="盤面反転(_T)"
                           IsCheckable="True" x:Name="boardReverse"
-                          Command="{x:Static svm:Commands.SetReverseBoard}"
+                          Command="{x:Static r:ShogiCommands.SetReverseBoard}"
                           CommandParameter="{Binding IsChecked, ElementName=boardReverse}" />
                 <MenuItem Header="投票結果を表示(_E)"
                           IsCheckable="True"
@@ -189,19 +173,13 @@
             </Grid>
 
             <!-- 将棋盤 -->
-            <v:ShogiControl x:Name="ShogiControl"
+            <r:ShogiControl x:Name="ShogiControl"
                             Board="{Binding Board}"
                             EditMode="{Binding EditMode}"
                             EffectManager="{x:Static l:ShogiGlobal.EffectManager}"
                             PieceImage="{Binding KomaImage}"
                             BanBrush="{StaticResource banBrush}"
                             PieceBoxBrush="{StaticResource komadaiBrush}" />
-
-            <!-- 変化自動再生時の色です。-->
-            <Border Style="{StaticResource variationStyle}"
-                    Opacity="{Binding VariationBorderOpacity}"
-                    Background="#60001856"
-                    IsHitTestVisible="False" />
 
             <!-- エンドロールです。-->
             <s:EndRollControl x:Name="endRoll"

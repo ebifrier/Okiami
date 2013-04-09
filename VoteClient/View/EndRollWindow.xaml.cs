@@ -29,7 +29,7 @@ namespace VoteSystem.Client.View
         public EndRollWindow()
         {
             InitializeComponent();
-            this.endRoll.InitializeCommands(CommandBindings);
+            this.endRoll.InitializeBindings(this);
         }
     }
 }

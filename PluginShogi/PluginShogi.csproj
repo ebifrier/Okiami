@@ -56,25 +56,22 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Effects\IEffectManager.cs" />
     <Compile Include="RenderingQuality.cs" />
-    <Compile Include="ViewModel\AutoPlay.cs" />
-    <Compile Include="ViewModel\AutoPlay_.cs" />
+    <Compile Include="ViewModel\AutoPlayEx.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ViewModel\Commands.cs" />
     <Compile Include="ViewModel\ShogiSettingDialogViewModel.cs" />
     <Compile Include="ViewModel\ShogiWindowViewModel.cs" />
     <Compile Include="View\ShogiEndRollControl.xaml.cs">
       <DependentUpon>ShogiEndRollControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Effects\PieceObject.cs" />
     <Compile Include="Util3D.cs" />
     <Compile Include="Model\VariationCommentManager.cs" />
     <Compile Include="Model\EachStateManager.cs" />
     <Compile Include="ImageType.cs" />
-    <Compile Include="SoundManager.cs" />
     <Compile Include="Effects\EffectContext.cs" />
     <Compile Include="Effects\EffectManager.cs" />
-    <Compile Include="Effects\EffectObject.cs" />
     <Compile Include="Model\Variation.cs" />
     <Compile Include="Model\VariationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,7 +80,6 @@
     <Compile Include="ShogiGlobal.cs" />
     <Compile Include="ShogiPlugin.cs" />
     <Compile Include="Effects\Effect.cs" />
-    <Compile Include="Effects\Model3DRenderer.cs" />
     <Compile Include="View\CurrentBoardSetupDialog.xaml.cs">
       <DependentUpon>CurrentBoardSetupDialog.xaml</DependentUpon>
     </Compile>
@@ -93,16 +89,9 @@
     <Compile Include="View\MoveManageView.xaml.cs">
       <DependentUpon>MoveManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ShogiControl.xaml.cs">
-      <DependentUpon>ShogiControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\ShogiSettingDialog.xaml.cs">
       <DependentUpon>ShogiSettingDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Xaml\BoardText.cs" />
-    <Compile Include="Xaml\CellMeshConverter.cs" />
-    <Compile Include="Xaml\MakeMeshExtension.cs" />
-    <Compile Include="Xaml\TebanMeshConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Image\shogiban_image.png" />
@@ -501,10 +490,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\ShogiControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="View\ShogiSettingDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -531,6 +516,10 @@
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Extra\Ragnarok.Extra.csproj">
       <Project>{8EBDC79A-607B-4B56-A298-1471CD6753DB}</Project>
       <Name>Ragnarok.Extra</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Ragnarok\Ragnarok.Presentation.Shogi\Ragnarok.Presentation.Shogi.csproj">
+      <Project>{DDF48C77-8221-4469-8A4C-8865096AAB06}</Project>
+      <Name>Ragnarok.Presentation.Shogi</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Presentation\Ragnarok.Presentation.csproj">
       <Project>{2E5515A8-7B34-44A2-9C50-F423C5F87798}</Project>
@@ -590,7 +579,7 @@ mkdir "%25OUTDIR%25"
 
 :skip
 copy "$(TargetPath)" "%25OUTDIR%25\$(TargetFileName)"
-copy "$(TargetDir)FlintSharp.dll" "%25OUTDIR%25\"
+copy "$(TargetDir)Ragnarok.Presentation.Shogi.dll" "%25OUTDIR%25\"
 xcopy /s /i /y "$(TargetDir)ShogiData" "%25OUTDIR%25\..\ShogiData"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

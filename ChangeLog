@@ -1,3 +1,16 @@
+2013-04-10  - Ver 1.2.7.17
+
+	* FlintSharp: ファイルをRagnarok.Extra内に移動しました。
+	* PluginShogi/ShogiData: ファイルの大移動に対応し、記述を修正しました。
+	* PluginShogi/View/MainWindow.xaml: 変化再生時の色変化を将棋コントロー
+	ル内で行うようにしました。
+	* PluginShogi/ViewModel/Commands.cs: 将棋コントロールのコマンドを
+	Ragnarok.Presentation.Shogiに移動しました。
+	* PluginShogi/ViewModel/ShogiWindowViewModel.cs: 自動再生システムを修正
+	し、多くの処理を将棋コントロール内で行うようにしました。
+	* PluginShogi/ViewModel/AutoPlayEx.cs: 新しい自動再生システムに対応した
+	自動再生用オブジェクトを追加しました。
+
 2013-04-07  - Ver 1.2.7.16
 
 	* VoteClient/View/EvaluationWindow.xaml: 評価値画像を内部で拡大縮小する

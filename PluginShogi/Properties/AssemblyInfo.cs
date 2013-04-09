@@ -30,7 +30,6 @@ using System.Windows.Markup;
 [assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi", "VoteSystem.PluginShogi.Model")]
 [assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi", "VoteSystem.PluginShogi.View")]
 [assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi", "VoteSystem.PluginShogi.ViewModel")]
-[assembly: XmlnsDefinition("http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi", "VoteSystem.PluginShogi.Xaml")]
 
 // アセンブリのバージョン情報は、以下の 4 つの値で構成されています:
 //

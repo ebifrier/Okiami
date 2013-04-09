@@ -53,7 +53,7 @@
                   x:Name="ShogiGrid">
                 <p:VisualBackground x:Name="ShogiBackground" />
                 
-                <v:ShogiControl x:Name="ShogiControl"
+                <p:ShogiControl x:Name="ShogiControl"
                                 PieceImage="{Binding KomaImage}"
                                 BanBrush="{StaticResource banBrush}"
                                 PieceBoxBrush="{StaticResource komadaiBrush}"/>

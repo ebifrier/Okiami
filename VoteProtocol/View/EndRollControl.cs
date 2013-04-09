@@ -924,7 +924,7 @@ namespace VoteSystem.Protocol.View
         /// </summary>
         public EndRollControl()
         {
-            InitializeCommands(CommandBindings);
+            InitializeBindings(this);
 
             // Unloadedはアプリ終了時には呼ばれませんが
             // この場合は問題ありません。
@@ -955,19 +955,19 @@ namespace VoteSystem.Protocol.View
         /// <summary>
         /// コマンドをバインドします。
         /// </summary>
-        public void InitializeCommands(CommandBindingCollection commandBindings)
+        public void InitializeBindings(UIElement element)
         {
-            commandBindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     PlayCommand,
                     (sender, e) => Play(),
                     (sender, e) => e.CanExecute = (State != EndRollState.Play)));
-            commandBindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     PauseCommand,
                     (sender, e) => Pause(),
                     (sender, e) => e.CanExecute = (State == EndRollState.Play)));
-            commandBindings.Add(
+            element.CommandBindings.Add(
                 new CommandBinding(
                     StopCommand,
                     (sender, e) => Stop(),

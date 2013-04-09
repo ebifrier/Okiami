@@ -1,16 +1,15 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:f="http://schemas.flint-sharp/xaml"
-                    xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
-                    xmlns:l="http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi">
+                    xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation">
     <f:DiscZone x:Key="speedZone" InnerRadius="300.0" OuterRadius="350.0" />
 
-    <l:EffectObject x:Key="Effect"
+    <r:EffectObject x:Key="Effect"
                     Duration="0:0:0.3"
-                    Coord="{p:Binding Coord}"
+                    Coord="{r:Binding Coord}"
                     StartSoundPath="komaoto.wav"
                     StartSoundVolume="0.7">
-        <l:EffectObject.Emitters>
+        <r:EffectObject.Emitters>
             <f:Emitter>
                 <f:Emitter.Counter>
                     <f:TimePeriod NumParticles="40" Duration="0.2" />
@@ -29,6 +28,6 @@
                     <f:LinearDrag Drag="3" />
                 </f:Emitter.Behaviours>
             </f:Emitter>
-        </l:EffectObject.Emitters>
-    </l:EffectObject>
+        </r:EffectObject.Emitters>
+    </r:EffectObject>
 </ResourceDictionary>

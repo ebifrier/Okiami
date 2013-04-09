@@ -1,19 +1,18 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
-                    xmlns:l="http://schemas.garnet-alice.net/votesystem/xaml/plugin-shogi">
+                    xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation">
 
-    <l:EffectObject x:Key="Effect"
+    <r:EffectObject x:Key="Effect"
                     Duration="0:0:0.5"
                     AnimationImageCount="10"
                     ImageUri="TimeMagic.png"
-                    Coord="{p:Binding Coord}"
-                    BaseScale="{p:Binding BaseScale}"
+                    Coord="{r:Binding Coord}"
+                    BaseScale="{r:Binding BaseScale}"
                     StartSoundPath="Second.wav">
-        <l:EffectObject.Scale>
-            <Vector3D X="{p:Calc 'leap(4, 6, ${Rate})'}"
-                      Y="{p:Calc 'leap(4, 6, ${Rate})'}"
+        <r:EffectObject.Scale>
+            <Vector3D X="{r:Calc 'leap(4, 6, ${Rate})'}"
+                      Y="{r:Calc 'leap(4, 6, ${Rate})'}"
                       Z="1.0" />
-        </l:EffectObject.Scale>
-    </l:EffectObject>
+        </r:EffectObject.Scale>
+    </r:EffectObject>
 </ResourceDictionary>

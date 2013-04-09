@@ -15,7 +15,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
+using Ragnarok;
 using Ragnarok.Shogi;
+using Ragnarok.Presentation.Shogi;
 using Ragnarok.Presentation.Utility;
 using Ragnarok.Presentation.VisualObject;
 using Ragnarok.Presentation.VisualObject.Control;
@@ -123,7 +125,7 @@ namespace VoteSystem.PluginShogi.View
             var oldUseSound = ShogiGlobal.Settings.SD_IsUseEffectSound;
             ShogiGlobal.Settings.SD_IsUseEffectSound = false;
 
-            var autoPlay = new AutoPlay(model.Board, AutoPlayType.Redo)
+            var autoPlay = new AutoPlayEx(model.Board, AutoPlayType.Redo)
             {
                 IsChangeBackground = false,
                 IsUseCutIn = false,
@@ -176,11 +178,11 @@ namespace VoteSystem.PluginShogi.View
         public MainWindow(ShogiWindowViewModel model)
         {
             InitializeComponent();
-
             Commands.Binding(CommandBindings);
             Commands.Binding(InputBindings);
+            ShogiControl.InitializeBindings(this);
 
-            this.voteResultControl.BindCommands(this);
+            this.voteResultControl.InitializeBindings(this);
             this.voteResultControl.SettingUpdated +=
                 (_, __) => ShogiGlobal.Settings.Save();
 

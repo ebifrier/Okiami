@@ -13,6 +13,8 @@ using System.Xml;
 
 using Ragnarok;
 using Ragnarok.Shogi;
+using Ragnarok.Presentation.Shogi;
+using Ragnarok.Presentation.Shogi.Effects;
 
 namespace VoteSystem.PluginShogi.Effects
 {

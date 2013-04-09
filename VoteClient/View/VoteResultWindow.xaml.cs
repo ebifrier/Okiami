@@ -69,7 +69,7 @@ namespace VoteSystem.Client.View
 
             DataContext = new InternalModel();
 
-            this.voteResultControl.BindCommands(this);
+            this.voteResultControl.InitializeBindings(this);
             this.voteResultControl.SettingUpdated += VoteResultControl_SettingUpdated;
         }
 

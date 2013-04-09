@@ -90,71 +90,6 @@ namespace VoteSystem.PluginShogi.ViewModel
                 "棋譜ファイルのコピーを行います。",
                 "CopyKifFile",
                 typeof(Window));
-        /// <summary>
-        /// 盤面を反転します。
-        /// </summary>
-        public static readonly ICommand SetReverseBoard =
-            new RoutedUICommand(
-                "盤面を反転します。",
-                "SetReverseBoard",
-                typeof(Window));
-
-        /// <summary>
-        /// 開始局面へ。
-        /// </summary>
-        public static readonly ICommand GotoFirstState =
-            new RoutedUICommand(
-                "開始局面へ。",
-                "GotoFirstState",
-                typeof(Window));
-        /// <summary>
-        /// 最終局面へ。
-        /// </summary>
-        public static readonly ICommand GotoLastState =
-            new RoutedUICommand(
-                "最終局面へ。",
-                "GotoLastState",
-                typeof(Window));
-        /// <summary>
-        /// 手を一つ戻します。
-        /// </summary>
-        public static readonly ICommand MoveUndo =
-            new RoutedUICommand(
-                "手を一つ戻します。",
-                "MoveUndo",
-                typeof(Window));
-        /// <summary>
-        /// 手を一つ進めます。
-        /// </summary>
-        public static readonly ICommand MoveRedo =
-            new RoutedUICommand(
-                "手を一つ進めます。",
-                "MoveRedo",
-                typeof(Window));
-        /// <summary>
-        /// 連続して手を戻します。
-        /// </summary>
-        public static readonly ICommand MoveUndoContinue =
-            new RoutedUICommand(
-                "連続して手を戻します。",
-                "MoveUndoContinue",
-                typeof(Window));
-        /// <summary>
-        /// 連続して手を進めます。
-        /// </summary>
-        public static readonly ICommand MoveRedoContinue =
-            new RoutedUICommand(
-                "連続して手を進めます。",
-                "MoveRedoContinue",
-                typeof(Window));
-        /// <summary>
-        /// 再生中の手を停止します。
-        /// </summary>
-        public static readonly ICommand MoveStop =
-            new RoutedUICommand(
-                "再生中の手を停止します。",
-                "MoveStop",
-                typeof(Window));
 
         /// <summary>
         /// エンドロールを開始します。
@@ -299,39 +234,6 @@ namespace VoteSystem.PluginShogi.ViewModel
                 new CommandBinding(
                     CopyKifFile,
                     ExecuteCopyKifFile, CanExecute));
-            bindings.Add(
-                new CommandBinding(
-                    SetReverseBoard,
-                    ExecuteSetReverseBoard, CanExecute));
-
-            bindings.Add(
-                new CommandBinding(
-                    GotoFirstState,
-                    ExecuteGotoFirstState, CanExecute));
-            bindings.Add(
-                new CommandBinding(
-                    GotoLastState,
-                    ExecuteGotoLastState, CanExecute));
-            bindings.Add(
-                new CommandBinding(
-                    MoveUndo,
-                    ExecuteMoveUndo, CanExecute));
-            bindings.Add(
-                new CommandBinding(
-                    MoveRedo,
-                    ExecuteMoveRedo, CanExecute));
-            bindings.Add(
-                new CommandBinding(
-                    MoveUndoContinue,
-                    ExecuteMoveUndoContinue, CanExecute));
-            bindings.Add(
-                new CommandBinding(
-                    MoveRedoContinue,
-                    ExecuteMoveRedoContinue, CanExecute));
-            bindings.Add(
-                new CommandBinding(
-                    MoveStop,
-                    ExecuteMoveStop, CanExecute));
 
             bindings.Add(
                 new CommandBinding(
@@ -395,13 +297,6 @@ namespace VoteSystem.PluginShogi.ViewModel
         public static void Binding(InputBindingCollection inputs)
         {
             inputs.Add(
-                new KeyBinding(MoveUndo,
-                    new KeyGesture(Key.Left)));
-            inputs.Add(
-                new KeyBinding(MoveRedo,
-                    new KeyGesture(Key.Right)));
-
-            inputs.Add(
                 new KeyBinding(LoadKifFile,
                     new KeyGesture(Key.O, ModifierKeys.Control)));
             inputs.Add(
@@ -423,37 +318,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         {
             var model = ShogiGlobal.ShogiModel;
 
-            if (e.Command == GotoFirstState)
-            {
-                e.CanExecute = model.CanUndo;
-            }
-            else if (e.Command == GotoLastState)
-            {
-                e.CanExecute = model.CanRedo;
-            }
-
-            else if (e.Command == MoveUndo)
-            {
-                e.CanExecute = model.CanUndo;
-            }
-            else if (e.Command == MoveRedo)
-            {
-                e.CanExecute = model.CanRedo;
-            }
-            else if (e.Command == MoveUndoContinue)
-            {
-                e.CanExecute = model.CanUndo;
-            }
-            else if (e.Command == MoveRedoContinue)
-            {
-                e.CanExecute = model.CanRedo;
-            }
-            else if (e.Command == MoveStop)
-            {
-                e.CanExecute = (model.VariationState == VariationState.Playing);
-            }
-
-            else if (e.Command == PlayEndRoll || e.Command == StopEndRoll)
+            if (e.Command == PlayEndRoll || e.Command == StopEndRoll)
             {
                 e.CanExecute = ShogiGlobal.VoteClient.IsVoteRoomOwner;
             }
@@ -810,114 +675,6 @@ namespace VoteSystem.PluginShogi.ViewModel
                 ShogiGlobal.ErrorMessage(ex,
                     "棋譜ファイルの出力に失敗しました(￣ω￣;)");
             }
-        }
-
-        /// <summary>
-        /// 盤面を反転します。
-        /// </summary>
-        private static void ExecuteSetReverseBoard(object sender, ExecutedRoutedEventArgs e)
-        {
-            try
-            {
-                var shogi = ShogiGlobal.MainWindow;
-                var isWhite = (bool)e.Parameter;
-                var side = (isWhite ? BWType.White : BWType.Black);
-
-                shogi.ShogiControl.ViewSide = side;
-            }
-            catch (Exception ex)
-            {
-                ShogiGlobal.ErrorMessage(ex,
-                    "盤面の反転に失敗しました(￣ω￣;)");
-            }
-        }
-
-        /// <summary>
-        /// 開始局面へ。
-        /// </summary>
-        private static void ExecuteGotoFirstState(object sender, ExecutedRoutedEventArgs e)
-        {
-            var model = ShogiGlobal.ShogiModel;
-
-            // 局面をUndoします。
-            var cloned = model.Board.Clone();
-            cloned.UndoAll();
-            model.SetBoard(cloned);
-        }
-
-        /// <summary>
-        /// 最終局面へ。
-        /// </summary>
-        private static void ExecuteGotoLastState(object sender, ExecutedRoutedEventArgs e)
-        {
-            var model = ShogiGlobal.ShogiModel;
-
-            // 局面をRedoします。
-            var cloned = model.Board.Clone();
-            cloned.RedoAll();
-            model.SetBoard(cloned);
-        }
-
-        /// <summary>
-        /// １手戻します。
-        /// </summary>
-        private static void ExecuteMoveUndo(object sender, ExecutedRoutedEventArgs e)
-        {
-            var model = ShogiGlobal.ShogiModel;
-
-            model.Undo();
-        }
-
-        /// <summary>
-        /// １手進めます。
-        /// </summary>
-        private static void ExecuteMoveRedo(object sender, ExecutedRoutedEventArgs e)
-        {
-            var model = ShogiGlobal.ShogiModel;
-
-            model.Redo();
-        }
-
-        /// <summary>
-        /// 連続して手を戻します。
-        /// </summary>
-        private static void ExecuteMoveUndoContinue(object sender, ExecutedRoutedEventArgs e)
-        {
-            var model = ShogiGlobal.ShogiModel;
-            var autoPlay = new AutoPlay(model.Board, AutoPlayType.Undo)
-            {
-                IsChangeBackground = false,
-                IsUseCutIn = false,
-                IsConfirmPlay = false,
-            };
-
-            model.StartAutoPlay(autoPlay);
-        }
-
-        /// <summary>
-        /// 連続して手を進めます。
-        /// </summary>
-        private static void ExecuteMoveRedoContinue(object sender, ExecutedRoutedEventArgs e)
-        {
-            var model = ShogiGlobal.ShogiModel;
-            var autoPlay = new AutoPlay(model.Board, AutoPlayType.Redo)
-            {
-                IsChangeBackground = false,
-                IsUseCutIn = false,
-                IsConfirmPlay = false,
-            };
-
-            model.StartAutoPlay(autoPlay);
-        }
-
-        /// <summary>
-        /// 再生中の手を停止します。
-        /// </summary>
-        private static void ExecuteMoveStop(object sender, ExecutedRoutedEventArgs e)
-        {
-            var model = ShogiGlobal.ShogiModel;
-
-            model.StopAutoPlay();
         }
 
         /// <summary>
@@ -1356,7 +1113,7 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             if (variation != null)
             {
-                var autoPlay = new AutoPlay(variation)
+                var autoPlay = new AutoPlayEx(variation)
                 {
                     IsChangeBackground = true,
                     IsUseCutIn = true,

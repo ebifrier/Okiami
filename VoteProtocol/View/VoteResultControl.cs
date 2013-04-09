@@ -433,7 +433,7 @@ namespace VoteSystem.Protocol.View
         /// <summary>
         /// このコントロール専用のコマンドを登録します。
         /// </summary>
-        public void BindCommands(UIElement element)
+        public void InitializeBindings(UIElement element)
         {
             element.CommandBindings.Add(
                 new CommandBinding(
@@ -446,7 +446,7 @@ namespace VoteSystem.Protocol.View
         /// </summary>
         public VoteResultControl()
         {
-            BindCommands(this);
+            InitializeBindings(this);
 
             UpdateDisplayCandidateList();
         }
