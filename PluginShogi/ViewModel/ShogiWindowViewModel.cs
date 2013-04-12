@@ -354,20 +354,6 @@ namespace VoteSystem.PluginShogi.ViewModel
         #endregion
 
         /// <summary>
-        /// 盤面が変更される前に必要なら局面のコピーを行います。
-        /// </summary>
-        private void CloneOnWriteBoard()
-        {
-            // 現局面と表示されている局面が同一オブジェクトなら、
-            // 表示用の盤面をコピーし、現局面に表示局面の
-            // 変更の影響がでないようにします。
-            if (ReferenceEquals(Board, CurrentBoard))
-            {
-                Board = CurrentBoard.Clone();
-            }
-        }
-
-        /// <summary>
         /// 現局面からの指し手を取得します。
         /// </summary>
         private List<Move> BuildMoveListFromCurrentBoard()
@@ -423,6 +409,20 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// 盤面が変更される前に必要なら局面のコピーを行います。
+        /// </summary>
+        private void CloneOnWriteBoard()
+        {
+            // 現局面と表示されている局面が同一オブジェクトなら、
+            // 表示用の盤面をコピーし、現局面に表示局面の
+            // 変更の影響がでないようにします。
+            if (ReferenceEquals(Board, CurrentBoard))
+            {
+                Board = CurrentBoard.Clone();
+            }
+        }
+
+        /// <summary>
         /// 局面の更新を行います。
         /// </summary>
         /// <remarks>
@@ -442,9 +442,10 @@ namespace VoteSystem.PluginShogi.ViewModel
                 ClearAutoPlay();
 
                 Board = board;
-
-                WPFUtil.InvalidateCommand();
+                CloneOnWriteBoard();
             }
+
+            WPFUtil.InvalidateCommand();
         }
 
         /// <summary>
@@ -461,37 +462,11 @@ namespace VoteSystem.PluginShogi.ViewModel
                 {
                     CurrentBoard = currentBoard;
 
-                    WPFUtil.InvalidateCommand();
+                    CloneOnWriteBoard();
                 }
             }
-        }
 
-        /// <summary>
-        /// １手戻します。
-        /// </summary>
-        public void Undo()
-        {
-            if (!CanUndo)
-            {
-                return;
-            }
-
-            CloneOnWriteBoard();
-            Board.Undo();
-        }
-
-        /// <summary>
-        /// １手進めます。
-        /// </summary>
-        public void Redo()
-        {
-            if (!CanRedo)
-            {
-                return;
-            }
-
-            CloneOnWriteBoard();
-            Board.Redo();
+            WPFUtil.InvalidateCommand();
         }
 
         /// <summary>

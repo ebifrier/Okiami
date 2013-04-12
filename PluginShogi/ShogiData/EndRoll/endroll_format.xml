@@ -77,6 +77,10 @@
 		<Format Column="1" Text="MAXみちこFEVER" Alignment="Left" />
 	</Line>
 	<Line>
+		<Format Column="0" Text="囲い画像" Alignment="Right" />
+		<Format Column="1" Text="さまんさNEO" Alignment="Left" />
+	</Line>
+	<Line>
 		<Format Column="0" Text="エフェクト素材" Alignment="Right" />
 		<Format Column="1" Text="ぴぽや" Alignment="Left" />
 	</Line>

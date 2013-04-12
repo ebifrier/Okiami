@@ -18,6 +18,7 @@ using System.Windows.Threading;
 using Ragnarok;
 using Ragnarok.Shogi;
 using Ragnarok.Presentation.Shogi;
+using Ragnarok.Presentation.Shogi.Effects;
 using Ragnarok.Presentation.Utility;
 using Ragnarok.Presentation.VisualObject;
 using Ragnarok.Presentation.VisualObject.Control;

@@ -194,7 +194,7 @@ namespace VoteSystem.PluginShogi.View
             this.effectManager = new EffectManager
             {
                 Background = ShogiBackground,
-                EffectEnabled = ShogiGlobal.Settings.SD_IsUseEffect,
+                EffectEnabled = false,
                 EffectMoveCount = 0,
             };
             ShogiControl.EffectManager = this.effectManager;
@@ -253,20 +253,8 @@ namespace VoteSystem.PluginShogi.View
             var moveList = BoardExtension.MakeMoveList(SampleMove.Tsume);
             var bmList = board.ConvertMove(moveList);
 
-            // 音は消します。
-            var oldUseSound = ShogiGlobal.Settings.SD_IsUseEffectSound;
-            ShogiGlobal.Settings.SD_IsUseEffectSound = false;
-
-            // エンドロール後は音の設定を元に戻します。
-            RoutedEventHandler handler = null;
-            handler = (_, __) =>
-            {
-                ShogiGlobal.Settings.SD_IsUseEffectSound = oldUseSound;
-                EndRoll.Stopped -= handler;
-            };
-            EndRoll.Stopped += handler;
-
-            var interval = ShogiTimeline.FadeOutStartTime - ShogiTimeline.FadeInEndTime;
+            var interval = ShogiTimeline.FadeOutStartTime - ShogiTimeline.FadeInEndTime
+                - TimeSpan.FromSeconds(3);
             this.autoPlay = new ViewModel.AutoPlayEx(board, bmList)
             {
                 Interval = TimeSpan.FromSeconds(interval.TotalSeconds / (bmList.Count() + 2)),
@@ -289,7 +277,7 @@ namespace VoteSystem.PluginShogi.View
             }
 
             if (this.autoPlay != null &&
-                position > ShogiTimeline.FadeInEndTime)
+                position > ShogiTimeline.FadeInEndTime + TimeSpan.FromSeconds(3))
             {
                 ShogiControl.StartAutoPlay(this.autoPlay);
                 this.autoPlay = null;

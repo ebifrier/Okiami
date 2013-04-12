@@ -692,7 +692,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 初期化時・オブジェクトの破棄時などに呼ばれます。
         /// </summary>
-        void IEffectManager.Clear()
+        public void Clear()
         {
             if (Container == null)
             {
@@ -710,18 +710,14 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 局面更新時に呼ばれます。
         /// </summary>
-        void IEffectManager.InitEffect(BWType bwType)
+        public void InitEffect(BWType bwType)
         {
             if (Container == null)
             {
                 return;
             }
 
-            if (EffectEnabled)
-            {
-                UpdateTeban(bwType);
-            }
-
+            UpdateTeban(bwType);
             UpdatePrevMovedCell();
             ((IEffectManager)this).EndMove();
         }

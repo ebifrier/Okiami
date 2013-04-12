@@ -664,8 +664,8 @@ namespace VoteSystem.PluginShogi.ViewModel
                 var root = manager.CreateVariationNode(model.Board);
 
                 var headers = new Dictionary<string, string>();
-                headers["先手"] = "あなた";
-                headers["後手"] = "あなた２";
+                headers["先手"] = model.Settings.SD_BlackPlayerName;
+                headers["後手"] = model.Settings.SD_WhitePlayerName;
 
                 var kifu = new KifuObject(headers, root);
                 KifuWriter.Save(writer, kifu);

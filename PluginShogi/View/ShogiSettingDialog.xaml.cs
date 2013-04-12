@@ -75,7 +75,13 @@ namespace VoteSystem.PluginShogi.View
 
         private void ExecuteOK(object sender, ExecutedRoutedEventArgs e)
         {
+            var model = ShogiGlobal.ShogiModel;
+
             ShogiGlobal.Settings.Save();
+
+            // ここでエフェクト設定を更新しないと、
+            // 一部のエフェクトに設定が反映されません。
+            ShogiGlobal.EffectManager.InitEffect(model.Board.MovePriority);
             ShogiGlobal.EffectManager.UpdateBackground();
 
             DialogResult = true;

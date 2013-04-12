@@ -79,7 +79,6 @@
     <Compile Include="Settings.part.cs" />
     <Compile Include="ShogiGlobal.cs" />
     <Compile Include="ShogiPlugin.cs" />
-    <Compile Include="Effects\Effect.cs" />
     <Compile Include="View\CurrentBoardSetupDialog.xaml.cs">
       <DependentUpon>CurrentBoardSetupDialog.xaml</DependentUpon>
     </Compile>
@@ -96,6 +95,15 @@
   <ItemGroup>
     <Resource Include="Resources\Image\shogiban_image.png" />
     <Resource Include="Resources\Image\ending_image.png" />
+    <Content Include="ShogiData\Effect\Other\CastleEffect\Voice\IbisyaAnaguma3.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ShogiData\Effect\Other\CastleEffect\yagura.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ShogiData\Effect\Other\CastleEffect\yagura.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ShogiData\EndRoll\endroll_format.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

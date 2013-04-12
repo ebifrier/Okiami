@@ -8,6 +8,7 @@ using Ragnarok;
 using Ragnarok.Shogi;
 using Ragnarok.ObjectModel;
 using Ragnarok.Presentation;
+using Ragnarok.Presentation.Shogi.Effects;
 using Ragnarok.Presentation.Utility;
 
 namespace VoteSystem.PluginShogi
