@@ -195,10 +195,10 @@ namespace VoteSystem.PluginShogi
                 ShogiGlobal.MainWindow = null;
 
             ShogiGlobal.MainWindow = window;
-            //window.Show();
+            window.Show();
 
-            var xx = new View.ShogiEndRollControl();
-            xx.Show();
+            //var xx = new View.ShogiEndRollControl();
+            //xx.Show();
         }
 
         /// <summary>
@@ -406,7 +406,7 @@ namespace VoteSystem.PluginShogi
         }
 
         /// <summary>
-        /// 現局面を必要なら更新します。
+        /// サーバーの現局面更新時に、自分の現局を必要なら更新します。
         /// </summary>
         private void UpdateBoard(Board board)
         {
