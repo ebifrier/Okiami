@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+        xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
         xmlns:t="clr-namespace:VoteSystem.Client"
         xmlns:l="clr-namespace:VoteSystem.Client.View"
         mc:Ignorable="d"
@@ -18,7 +18,7 @@
     
     <Window.Resources>
         <ResourceDictionary>
-            <Style TargetType="rp:NumericUpDown" x:Key="timeSpanStyle">
+            <Style TargetType="r:NumericUpDown" x:Key="timeSpanStyle">
                 <Style.Triggers>
                     <Trigger Property="Validation.HasError" Value="true">
                         <Setter Property="ToolTip" Value="Error "/>
@@ -49,23 +49,23 @@
         <Label Grid.Row="0" Grid.Column="2"
                Content=" 秒" />
 
-        <rp:NumericUpDown Grid.Row="2" Grid.Column="0"
-                          Width="60" Minimum="0" Maximum="600"
-                          Style="{StaticResource timeSpanStyle}" IsTabStop="True">
-            <rp:NumericUpDown.Value>
+        <r:NumericUpDown Grid.Row="2" Grid.Column="0"
+                         Width="60" Minimum="0" Maximum="600"
+                         Style="{StaticResource timeSpanStyle}" IsTabStop="True">
+            <r:NumericUpDown.Value>
                 <Binding Path="Minutes" Mode="TwoWay" ValidatesOnExceptions="True">
                     <Binding.ValidationRules>
                         <ExceptionValidationRule />
                     </Binding.ValidationRules>
                 </Binding>
-            </rp:NumericUpDown.Value>
-        </rp:NumericUpDown>
+            </r:NumericUpDown.Value>
+        </r:NumericUpDown>
         <Label Grid.Row="2" Grid.Column="1"
                Content=" : " />
-        <rp:NumericUpDown Grid.Row="2" Grid.Column="2"
-                          Width="50" Minimum="0" Maximum="59"
-                          Value="{Binding Seconds, Mode=TwoWay}"
-                          Style="{StaticResource timeSpanStyle}" IsTabStop="True" />
+        <r:NumericUpDown Grid.Row="2" Grid.Column="2"
+                         Width="50" Minimum="0" Maximum="59"
+                         Value="{Binding Seconds, Mode=TwoWay}"
+                         Style="{StaticResource timeSpanStyle}" IsTabStop="True" />
         
         <StackPanel Grid.Row="4" Grid.ColumnSpan="3"
                     Orientation="Horizontal"
@@ -73,9 +73,9 @@
             <Button Content="OK" MinWidth="40"
                     Name="tabTopControl"
                     Margin="0,0,10,0"
-                    Command="{x:Static rp:RagnarokCommands.OK}" />
+                    Command="{x:Static r:RagnarokCommands.OK}" />
             <Button Content="キャンセル" MinWidth="40"
-                    Command="{x:Static rp:RagnarokCommands.Cancel}" />
+                    Command="{x:Static r:RagnarokCommands.Cancel}" />
         </StackPanel>
     </Grid>
 </Window>

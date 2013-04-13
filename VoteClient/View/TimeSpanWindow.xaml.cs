@@ -18,12 +18,14 @@ using Ragnarok.ObjectModel;
 
 namespace VoteSystem.Client.View
 {
+    using Protocol;
+
     /// <summary>
     /// TimeSpanWindow.xaml の相互作用ロジック
     /// </summary>
     public partial class TimeSpanWindow : Window
     {
-        private readonly TimeSpanWindowModel model;
+        private readonly SimpleTimeSpan stimeSpan;
 
         /// <summary>
         /// 時間間隔を取得または設定します。
@@ -32,12 +34,12 @@ namespace VoteSystem.Client.View
         {
             get
             {
-                return this.model.TimeSpan;
+                return this.stimeSpan.TimeSpan;
             }
             set
             {
-                this.model.Minutes = (int)value.TotalMinutes;
-                this.model.Seconds = value.Seconds;
+                this.stimeSpan.Minutes = (int)value.TotalMinutes;
+                this.stimeSpan.Seconds = value.Seconds;
             }
         }
 
@@ -49,8 +51,8 @@ namespace VoteSystem.Client.View
             InitializeComponent();
             InitializeCommands();
 
-            this.model = new TimeSpanWindowModel();
-            this.DataContext = this.model;
+            this.stimeSpan = new SimpleTimeSpan();
+            this.DataContext = this.stimeSpan;
 
             Activated += delegate { this.tabTopControl.Focus(); };
             Closed += delegate { Global.Settings.Reload(); };
@@ -93,88 +95,6 @@ namespace VoteSystem.Client.View
             Global.Settings.Reload();
 
             DialogResult = false;
-        }
-    }
-
-    /// <summary>
-    /// <see cref="TimeSpanWindow"/>用のモデルオブジェクトです。
-    /// </summary>
-    public class TimeSpanWindowModel : IModel
-    {
-        private int minutes = 0;
-        private int seconds = 0;
-
-        /// <summary>
-        /// プロパティ値の変更イベントです。
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// プロパティ値の変更を通知します。
-        /// </summary>
-        public void NotifyPropertyChanged(PropertyChangedEventArgs e)
-        {
-            var handler = this.PropertyChanged;
-
-            if (handler != null)
-            {
-                Util.SafeCall(() =>
-                    handler(this, e));
-            }
-        }
-
-        /// <summary>
-        /// 分間隔を取得または設定します。
-        /// </summary>
-        public int Minutes
-        {
-            get
-            {
-                return this.minutes;
-            }
-            set
-            {
-                if (this.minutes != value)
-                {
-                    this.minutes = value;
-
-                    this.RaisePropertyChanged("Minutes");
-                }
-            }
-        }
-
-        /// <summary>
-        /// 秒間隔を取得または設定します。
-        /// </summary>
-        public int Seconds
-        {
-            get
-            {
-                return this.seconds;
-            }
-            set
-            {
-                if (this.seconds != value)
-                {
-                    this.seconds = value;
-
-                    this.RaisePropertyChanged("Seconds");
-                }
-            }
-        }
-
-        /// <summary>
-        /// 時間間隔を取得します。
-        /// </summary>
-        [DependOnProperty("Minutes")]
-        [DependOnProperty("Seconds")]
-        public TimeSpan TimeSpan
-        {
-            get
-            {
-                return TimeSpan.FromSeconds(
-                    60 * this.minutes + this.seconds);
-            }
         }
     }
 }

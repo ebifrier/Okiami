@@ -230,7 +230,7 @@ namespace VoteSystem.Protocol.Model
         {
             try
             {
-                var fullpath = Path.GetFullPath(@"Data\Image");
+                var fullpath = Path.GetFullPath(dirpath);
                 if (!Directory.Exists(fullpath))
                 {
                     return new List<T>();

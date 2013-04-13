@@ -16,6 +16,9 @@ namespace VoteSystem.Client.Command
 {
     using Model.Live;
 
+    /// <summary>
+    /// コマンドを定義しています。
+    /// </summary>
     public static partial class Commands
     {
         /// <summary>

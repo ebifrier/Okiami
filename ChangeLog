@@ -1,3 +1,12 @@
+2013-04-13  - Ver 1.2.7.19
+
+	* VoteClient/Model/SoundManager.cs: 初期選択ＳＥセットが無かった場合の
+	バグを修正しました。
+	* VoteProtocol/Model/InfoBase.cs: 情報セットを読み込むパスが固定になる
+	バグを修正しました。
+	* VoteProtocol/SimpleTimeSpan.cs: ToString, Equalsなどのメソッドを追加
+	しました。
+
 2013-04-13  - Ver 1.2.7.18
 
 	* PluginShogi/View/ShogiEndRollControl.xaml.cs: テスト用のエンドロール

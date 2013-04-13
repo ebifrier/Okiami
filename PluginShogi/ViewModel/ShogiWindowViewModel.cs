@@ -63,7 +63,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             {
                 return this.board;
             }
-            private set
+            set
             {
                 using (LazyLock())
                 {

@@ -8,11 +8,11 @@
                       MaxAngle="{r:Calc '${StartAngle} + 20'}" />
     <f:TextZone x:Key="targetZone" FontFamily="ＭＳ 明朝"
                 Text="${CastleName}" FontSize="10"
-                ScaleX="{r:Calc '50.0 / ${CastleNameLen}'}"
-                ScaleY="{r:Calc '14 + 30.0 / ${CastleNameLen}'}"
+                ScaleX="{r:Calc '36.0 / ${CastleNameLen}'}"
+                ScaleY="{r:Calc '10 + 20.0 / ${CastleNameLen}'}"
                 DivideX="{r:IntCalc 'min(3, 1.0 + 6.0 / ${CastleNameLen})', Mode=Floor}"
                 DivideY="{r:IntCalc '2.0 + 3.0 / ${CastleNameLen}', Mode=Floor}"
-                OffsetX="320" OffsetY="240" />
+                OffsetX="320" OffsetY="320" />
     
     <Vector3D x:Key="backgroundCoord"
               X="320" Y="240" Z="{x:Static r:ShogiControl.PreEffectZ}" />
@@ -121,12 +121,12 @@
 
             <!-- 囲い背景 -->
             <r:EffectObject Duration="0:0:4"
-                            ImageUri="CastleBack.png"
+                            ImageUri="yagura.png"
                             MaterialType="Diffuse"
                             Coord="{StaticResource backgroundCoord}"
                             Scale="480,480,1"
-			    StartSoundVolume="0.5"
-			    StartSoundPath="Bom.wav">
+                            StartSoundVolume="0.5"
+                            StartSoundPath="Bom.wav">
                 <r:EffectObject.Scenario>
                     <r:Scenario>
                         <DoubleAnimationUsingKeyFrames r:Scenario.TargetProperty="Opacity">

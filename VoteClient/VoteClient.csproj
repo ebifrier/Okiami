@@ -110,7 +110,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Command\Commands.cs" />
     <Compile Include="Command\LiveCommands.cs" />
     <Compile Include="Command\UtilCommand.cs" />
     <Compile Include="Command\VoteCommands.cs" />

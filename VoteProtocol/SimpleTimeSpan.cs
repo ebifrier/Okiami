@@ -14,8 +14,16 @@ namespace VoteSystem.Protocol
     /// </summary>
     [Serializable()]
     [DataContract()]
-    public sealed class SimpleTimeSpan : NotifyObject
+    public sealed class SimpleTimeSpan : NotifyObject, IEquatable<SimpleTimeSpan>
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public SimpleTimeSpan()
+        {
+            IsUse = true;
+        }
+
         /// <summary>
         /// 時間を使用するかどうかを取得または設定します。
         /// </summary>
@@ -71,11 +79,54 @@ namespace VoteSystem.Protocol
         }
 
         /// <summary>
-        /// コンストラクタ
+        /// 文字列化します。
         /// </summary>
-        public SimpleTimeSpan()
+        public override string ToString()
         {
-            IsUse = true;
+            return string.Format(
+                "{0}分{1}秒",
+                Minutes, Seconds);
+        }
+
+        /// <summary>
+        /// オブジェクトを比較します。
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            var result = this.PreEquals(obj);
+            if (result != null)
+            {
+                return result.Value;
+            }
+
+            return Equals(obj as SimpleTimeSpan);
+        }
+
+        /// <summary>
+        /// オブジェクトを比較します。
+        /// </summary>
+        public bool Equals(SimpleTimeSpan other)
+        {
+            if ((object)other == null)
+            {
+                return false;
+            }
+
+            return (
+                IsUse == other.IsUse &&
+                Minutes == other.Minutes &&
+                Seconds == other.Seconds);
+        }
+
+        /// <summary>
+        /// ハッシュ値を計算します。
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return (
+                IsUse.GetHashCode() ^
+                Minutes.GetHashCode() ^
+                Seconds.GetHashCode());
         }
     }
 }

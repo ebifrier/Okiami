@@ -138,6 +138,33 @@ namespace VoteSystem.PluginShogi.Effects
         }
 
         /// <summary>
+        /// エフェクトフラグを取得または設定します。
+        /// </summary>
+        public EffectFlag EffectFlag
+        {
+            get { return GetValue<EffectFlag>("EffectFlag"); }
+            set { SetValue("EffectFlag", value); }
+        }
+
+        /// <summary>
+        /// エフェクトＳＥを使用するかどうかを取得または設定します。
+        /// </summary>
+        public bool IsUseEffectSound
+        {
+            get { return GetValue<bool>("IsUseEffectSound"); }
+            set { SetValue("IsUseEffectSound", value); }
+        }
+
+        /// <summary>
+        /// エフェクト音量を取得または設定します。
+        /// </summary>
+        public int EffectVolume
+        {
+            get { return GetValue<int>("EffectVolume"); }
+            set { SetValue("EffectVolume", value); }
+        }
+
+        /// <summary>
         /// 自動再生エフェクトを有効にするかどうかを取得または設定します。
         /// </summary>
         public bool IsAutoPlayEffect
@@ -160,6 +187,13 @@ namespace VoteSystem.PluginShogi.Effects
         /// </summary>
         private bool HasEffectFlag(EffectFlag flag)
         {
+            /*if (!SD_IsUseEffect)
+            {
+                return false;
+            }
+
+            return ((SD_EffectFlag & flag) != 0);*/
+
             return Settings.HasEffectFlag(flag);
         }
 

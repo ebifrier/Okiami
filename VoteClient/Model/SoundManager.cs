@@ -183,7 +183,8 @@ namespace VoteSystem.Client.Model
 
                 if (this.soundInfoList.Any() && info == null)
                 {
-                    Global.Settings.SoundSetDir = this.soundInfoList[0].DirectoryName;
+                    info = this.soundInfoList[0];
+                    Global.Settings.SoundSetDir = info.DirectoryName;                    
 
                     // 設定は保存します。
                     Global.Settings.Save();
