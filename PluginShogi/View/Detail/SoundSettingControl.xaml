@@ -33,7 +33,6 @@
         </GroupBox>
 
         <TextBlock Grid.Row="3"
-                   Foreground="Gray"
                    Text="（音はエフェクトと一緒に鳴るため&#xa;　エフェクトを切ると音も無くなります）" />
     </Grid>
 </ResourceDictionary>
