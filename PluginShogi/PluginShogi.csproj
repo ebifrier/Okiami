@@ -104,6 +104,9 @@
     <Content Include="ShogiData\Effect\Other\CastleEffect\yagura.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ShogiData\Effect\Other\CastleEffect\yagura2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ShogiData\EndRoll\endroll_format.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
