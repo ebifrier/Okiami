@@ -23,6 +23,8 @@ def setup_dist(appdata)
       deleteall(name)
     elsif /Plugin\w*\.dll$/i =~ name
       FileUtils.mv(name, File.join(outdir, "Plugin", File.basename(name)))
+    elsif /Ragnarok\.Presentation\.Shogi\.dll$/i =~ name
+      FileUtils.mv(name, File.join(outdir, "Plugin", File.basename(name)))
     elsif /(\.dll)|(bg|de|es|fr|it|ja|lt|nl|pt|ru|zh)([-]\w+)?$/i =~ name
       FileUtils.mv(name, File.join(outdir, "Dll", File.basename(name)))
     elsif File::ftype(name) == "directory" and
