@@ -25,7 +25,7 @@ namespace VoteSystem.Protocol.View
             try
             {
                 var ivalue = (int)values[0];
-                var isFullWidth = (bool)values[1];
+                var isFullWidth = (bool)(values[1] is bool ? values[1] : false);
 
                 // 半角/全角の指定つきです。
                 return StringConverter.ConvertInt(
@@ -35,11 +35,6 @@ namespace VoteSystem.Protocol.View
             catch (Exception ex)
             {
                 Log.ErrorException(ex, "変換エラー");
-
-                if (values.Length > 0 && values[0] is int)
-                {
-                    return ((int)values[0]).ToString(CultureInfo.InvariantCulture);
-                }
 
                 return "0";
             }
