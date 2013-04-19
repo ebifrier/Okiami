@@ -8,7 +8,9 @@ using Ragnarok;
 using Ragnarok.Shogi;
 using Ragnarok.ObjectModel;
 using Ragnarok.Presentation;
+using Ragnarok.Presentation.Control;
 using Ragnarok.Presentation.Shogi.Effects;
+using Ragnarok.Presentation.Shogi.View;
 using Ragnarok.Presentation.Utility;
 
 namespace VoteSystem.PluginShogi
@@ -131,7 +133,7 @@ namespace VoteSystem.PluginShogi
         /// <summary>
         /// メッセージ表示用のステータスバーを取得または設定します。
         /// </summary>
-        public static Ragnarok.Presentation.Control.MessageStatusBar MainStatusBar
+        public static MessageStatusBar MainStatusBar
         {
             get
             {
@@ -141,6 +143,22 @@ namespace VoteSystem.PluginShogi
                 }
 
                 return MainWindow.MainStatusBar;
+            }
+        }
+
+        /// <summary>
+        /// 将棋コントロールを取得または設定します。
+        /// </summary>
+        public static ShogiControl ShogiControl
+        {
+            get
+            {
+                if (MainWindow == null)
+                {
+                    return null;
+                }
+
+                return MainWindow.ShogiControl;
             }
         }
 

@@ -605,6 +605,12 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// </summary>
         private void BeginAutoPlay()
         {
+            var shogi = ShogiGlobal.ShogiControl;
+            if (shogi == null)
+            {
+                return;
+            }
+
             var autoPlay = GetNextAutoPlay();
             if (autoPlay == null)
             {
@@ -613,9 +619,10 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             ShogiGlobal.EffectManager.IsAutoPlayEffect = true;
             ShogiGlobal.EffectManager.EffectMoveCount = 0;
+            autoPlay.Stopped += (_, __) => StopAutoPlay();
 
             this.currentAutoPlay = autoPlay;
-            ShogiGlobal.MainWindow.ShogiControl.StartAutoPlay(this.currentAutoPlay);
+            shogi.StartAutoPlay(autoPlay);
         }
 
         /// <summary>
@@ -688,9 +695,8 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             VariationState = VariationState.None;
 
-            this.currentBoard = board.Clone();
-            this.board = board.Clone();
-            this.board.BoardChanged += board_BoardChanged;
+            CurrentBoard = board.Clone();
+            Board = board.Clone();
 
             this.commentClient = VoteSystem.Client.Global.CreateCommentClient();
             this.commentClient.IsSupressLog = true;
