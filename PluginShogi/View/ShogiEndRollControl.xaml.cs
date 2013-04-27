@@ -180,7 +180,7 @@ namespace VoteSystem.PluginShogi.View
             };
             this.player.MediaOpened += MediaOpened;
             //this.player.Open(new Uri(@"E:\movies\ending\alice2.avi"));
-            this.player.Open(new Uri(@"E:\movies\ending\アリスに花束.mp4"));
+            this.player.Open(new Uri(@"E:\movies\ending\ending2\alice_demo.mp3"));
 
             /*MovieBrush.Drawing = new VideoDrawing
             {
@@ -236,11 +236,11 @@ namespace VoteSystem.PluginShogi.View
 
         private void MediaOpened(object sender, EventArgs e)
         {
-            /*this.oneTimer = new System.Threading.Timer(
+            this.oneTimer = new System.Threading.Timer(
                 _ => Ragnarok.Presentation.WPFUtil.UIProcess(Play),
                 null,
-                20 * 1000, -1);*/
-            Play();
+                20 * 1000, -1);
+            //Play();
         }
 
         public void Play()
@@ -298,9 +298,9 @@ namespace VoteSystem.PluginShogi.View
                 // 800x4800 = 1:8
                 //ImageBrush.ViewportUnits = BrushMappingMode.RelativeToBoundingBox;
                 //ImageBrush.Viewport = new Rect(0, 1.0 - ratio, 1.0, 1.0);
-                ImageBrush.ViewboxUnits = BrushMappingMode.RelativeToBoundingBox;
+                /*ImageBrush.ViewboxUnits = BrushMappingMode.RelativeToBoundingBox;
                 ImageBrush.Viewbox = new Rect(0, 1.0 - ratio*(1.0 + 1.0/6), 1.0, 1.0/6);
-                ImageBrush.Opacity = 0.4;
+                ImageBrush.Opacity = 0.4;*/
             }
 
             this.prevPosition = position;

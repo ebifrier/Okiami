@@ -6,7 +6,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:t="clr-namespace:VoteSystem.PluginShogi"
              xmlns:v="clr-namespace:VoteSystem.PluginShogi.View"
-        Title="test" Width="640" Height="480" Name="control">
+        Title="test" Name="control" Width="554" Height="424">
     <Window.Resources>
         <ResourceDictionary>
             <ImageBrush x:Key="banBrush"
