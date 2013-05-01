@@ -129,7 +129,7 @@ namespace VoteSystem.PluginShogi.Model
             var moveListEx = moveList.ToList();
 
             // 先後をきっちりと設定します。
-            var bwType = board.MovePriority;
+            var bwType = board.Turn;
             foreach (var move in moveListEx)
             {
                 move.BWType = bwType;

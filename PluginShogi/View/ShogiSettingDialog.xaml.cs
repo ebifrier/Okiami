@@ -81,7 +81,7 @@ namespace VoteSystem.PluginShogi.View
 
             // ここでエフェクト設定を更新しないと、
             // 一部のエフェクトに設定が反映されません。
-            ShogiGlobal.EffectManager.InitEffect(model.Board.MovePriority);
+            ShogiGlobal.EffectManager.InitEffect(model.Board.Turn);
             ShogiGlobal.EffectManager.UpdateBackground();
 
             DialogResult = true;

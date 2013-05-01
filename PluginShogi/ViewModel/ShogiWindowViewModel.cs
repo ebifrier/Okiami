@@ -209,11 +209,11 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// 手番を取得または設定します。
         /// </summary>
-        [DependOnProperty(typeof(Board), "MovePriority")]
-        public BWType MovePriority
+        [DependOnProperty(typeof(Board), "Turn")]
+        public BWType Turn
         {
-            get { return this.board.MovePriority; }
-            set { this.board.MovePriority = value; }
+            get { return this.board.Turn; }
+            set { this.board.Turn = value; }
         }
 
         /// <summary>

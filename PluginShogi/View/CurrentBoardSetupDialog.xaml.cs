@@ -148,7 +148,7 @@ namespace VoteSystem.PluginShogi.View
             var board = ShogiGlobal.ShogiModel.Board;
             if (board != null)
             {
-                if (board.MovePriority == BWType.None ||
+                if (board.Turn == BWType.None ||
                     settings.SD_Teban == BWType.None)
                 {
                     SelectedRadioButton = CBS_SelectedRadioButton.Default;
@@ -158,7 +158,7 @@ namespace VoteSystem.PluginShogi.View
                     // "次の手番"が自分の手番ならば、
                     // 前に指したのは相手の手です。
                     SelectedRadioButton =
-                        (board.MovePriority == settings.SD_Teban ?
+                        (board.Turn == settings.SD_Teban ?
                         CBS_SelectedRadioButton.YourTurn :
                         CBS_SelectedRadioButton.MyTurn);
                 }
