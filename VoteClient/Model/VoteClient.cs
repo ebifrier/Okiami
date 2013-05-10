@@ -1189,6 +1189,8 @@ namespace VoteSystem.Client.Model
             {
                 CheckEnteringVoteRoom(true);
 
+                notification.VoterId = Guid.NewGuid().ToString();
+
                 this.conn.SendCommand(new NotificationCommand()
                 {
                     Notification = notification,

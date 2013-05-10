@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 
 using Ragnarok;
+using Ragnarok.Presentation.Utility;
 
 namespace VoteSystem.Client.Model
 {
-    using VoteSystem.Protocol.Model;
     using VoteSystem.Protocol.Vote;
 
     /// <summary>

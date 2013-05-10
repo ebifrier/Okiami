@@ -195,10 +195,10 @@ namespace VoteSystem.PluginShogi
                 ShogiGlobal.MainWindow = null;
 
             ShogiGlobal.MainWindow = window;
-            window.Show();
+            //window.Show();
 
-            //var xx = new View.ShogiEndRollControl();
-            //xx.Show();
+            var xx = new View.ShogiEndRollControl();
+            xx.Show();
         }
 
         /// <summary>
@@ -281,7 +281,7 @@ namespace VoteSystem.PluginShogi
 
             var line = 1;
             var count = 0;
-            var bwType = model.CurrentBoard.MovePriority;
+            var bwType = model.CurrentBoard.Turn;
             foreach (var move in moveList)
             {
                 move.BWType = bwType;

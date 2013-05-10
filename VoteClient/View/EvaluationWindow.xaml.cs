@@ -40,7 +40,7 @@ namespace VoteSystem.Client.View
         public EvaluationWindow()
         {
             InitializeComponent();
-            EvaluationControl.Bind(this);
+            EvaluationControl.InitializeBindings(this);
         }
     }
 }

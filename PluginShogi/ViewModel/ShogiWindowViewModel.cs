@@ -622,6 +622,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             autoPlay.Stopped += (_, __) => StopAutoPlay();
 
             this.currentAutoPlay = autoPlay;
+            Board = autoPlay.Board;
             shogi.StartAutoPlay(autoPlay);
         }
 

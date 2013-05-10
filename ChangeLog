@@ -1,3 +1,11 @@
+2013-05-10  - Ver 1.3.0.4
+
+	* PluginShogi/Model/Variation.cs: 自動再生させると現局面が変わるバグを
+	修正しました。
+	* VoteClient/View/EvaluationWindow.xaml: 評価値表示用のコントロールが
+	VoteProtocolからRagnarok.Presentationに移動したのに合わせて修正しました。
+	* TimeController: 時間管理用のソフトを追加しました。
+
 2013-04-25  - Ver 1.3.0.3
 
 	* PluginShogi/View/ShogiEndRollControl.xaml: 動画撮影用に少し変更しまし

@@ -2,7 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/VoteProtocol;component/View/EndRollControl.xaml" />
-        <ResourceDictionary Source="/VoteProtocol;component/View/EvaluationControl.xaml" />
         <ResourceDictionary Source="/VoteProtocol;component/View/SimpleTimeSpanView.xaml" />
         <ResourceDictionary Source="/VoteProtocol;component/View/VoteResultControl.xaml" />
     </ResourceDictionary.MergedDictionaries>

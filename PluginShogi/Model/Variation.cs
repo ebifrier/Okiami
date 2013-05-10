@@ -110,7 +110,7 @@ namespace VoteSystem.PluginShogi.Model
         public Variation(Board board, IEnumerable<Move> moveList,
                          IEnumerable<BoardMove> boardMoveList)
         {
-            Board = board;
+            Board = board.Clone();
             BoardMoveList = boardMoveList.ToList();
             MoveList = moveList.ToList();
             IsOriginal = true;

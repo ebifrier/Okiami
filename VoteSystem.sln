@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ragnarok.Shogi", "..\Ragnar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ragnarok.Presentation.Shogi", "..\Ragnarok\Ragnarok.Presentation.Shogi\Ragnarok.Presentation.Shogi.csproj", "{DDF48C77-8221-4469-8A4C-8865096AAB06}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeController", "TimeController\TimeController.csproj", "{BCA2B1FD-6E66-401E-A8C0-5AB432897C2F}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = VoteSystem.vsmdi
@@ -126,6 +128,16 @@ Global
 		{DDF48C77-8221-4469-8A4C-8865096AAB06}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{DDF48C77-8221-4469-8A4C-8865096AAB06}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DDF48C77-8221-4469-8A4C-8865096AAB06}.Release|x86.ActiveCfg = Release|Any CPU
+		{BCA2B1FD-6E66-401E-A8C0-5AB432897C2F}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{BCA2B1FD-6E66-401E-A8C0-5AB432897C2F}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{BCA2B1FD-6E66-401E-A8C0-5AB432897C2F}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{BCA2B1FD-6E66-401E-A8C0-5AB432897C2F}.Debug|x86.ActiveCfg = Debug|x86
+		{BCA2B1FD-6E66-401E-A8C0-5AB432897C2F}.Debug|x86.Build.0 = Debug|x86
+		{BCA2B1FD-6E66-401E-A8C0-5AB432897C2F}.Release|Any CPU.ActiveCfg = Release|x86
+		{BCA2B1FD-6E66-401E-A8C0-5AB432897C2F}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{BCA2B1FD-6E66-401E-A8C0-5AB432897C2F}.Release|Mixed Platforms.Build.0 = Release|x86
+		{BCA2B1FD-6E66-401E-A8C0-5AB432897C2F}.Release|x86.ActiveCfg = Release|x86
+		{BCA2B1FD-6E66-401E-A8C0-5AB432897C2F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

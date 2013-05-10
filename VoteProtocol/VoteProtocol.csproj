@@ -62,8 +62,6 @@
     <Compile Include="LiveAttribute.cs" />
     <Compile Include="LiveInfoData.cs" />
     <Compile Include="Model\EndRollList.cs" />
-    <Compile Include="Model\ImageSetInfo.cs" />
-    <Compile Include="Model\InfoBase.cs" />
     <Compile Include="Model\TestVoterList.cs" />
     <Compile Include="SimpleTimeSpan.cs" />
     <Compile Include="Notification.cs" />
@@ -74,10 +72,6 @@
     <Compile Include="ProtocolUtil.cs" />
     <Compile Include="SystemNotificationType.cs" />
     <Compile Include="View\EndRollControl.cs" />
-    <Compile Include="View\EvaluationControl.cs" />
-    <Compile Include="View\EvaluationSettingDialog.xaml.cs">
-      <DependentUpon>EvaluationSettingDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\PointToStringConverter.cs" />
     <Compile Include="View\VoteResultControl.cs" />
     <Compile Include="View\VoteResultSettingDialog.xaml.cs">
@@ -99,7 +93,6 @@
     <Compile Include="Vote\VoteState.cs" />
     <Compile Include="Vote\VoteResult.cs" />
     <Compile Include="Xaml\VoteLeaveTimeConverter.cs" />
-    <Compile Include="Xaml\ImageSetListExtension.cs" />
     <Compile Include="Xaml\TotalVoteLeaveTimeConverter.cs" />
     <Compile Include="Xaml\VoteStateConverter.cs" />
     <Compile Include="Xaml\VoteBackgroundConverter.cs" />
@@ -123,18 +116,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\InfoView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\EvaluationControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\EvaluationSettingDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
