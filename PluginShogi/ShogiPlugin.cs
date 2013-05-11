@@ -195,10 +195,10 @@ namespace VoteSystem.PluginShogi
                 ShogiGlobal.MainWindow = null;
 
             ShogiGlobal.MainWindow = window;
-            //window.Show();
+            window.Show();
 
-            var xx = new View.ShogiEndRollControl();
-            xx.Show();
+            //var xx = new View.ShogiEndRollControl();
+            //xx.Show();
         }
 
         /// <summary>
