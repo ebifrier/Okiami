@@ -55,21 +55,35 @@ namespace VoteSystem.PluginShogi
         }
 
         [DefaultValue(true)]
-        public bool CBS_IsStopVote
+        public bool CBS_IsVoteStop
         {
-            get { return GetValue<bool>("CBS_IsStopVote"); }
-            set { SetValue("CBS_IsStopVote", value); }
+            get { return GetValue<bool>("CBS_IsVoteStop"); }
+            set { SetValue("CBS_IsVoteStop", value); }
         }
 
-        public SimpleTimeSpan CBS_AddLimitTime
+        public bool CBS_IsUseAddLimitTime
         {
-            get { return GetValue<SimpleTimeSpan>("CBS_AddLimitTime"); }
+            get { return GetValue<bool>("CBS_IsUseAddLimitTime"); }
+            set { SetValue("CBS_IsUseAddLimitTime", value); }
+        }
+
+        [DefaultValue("00:02:00")]
+        public TimeSpan CBS_AddLimitTime
+        {
+            get { return GetValue<TimeSpan>("CBS_AddLimitTime"); }
             set { SetValue("CBS_AddLimitTime", value); }
         }
 
-        public SimpleTimeSpan CBS_VoteSpan
+        public bool CBS_IsUseVoteSpan
         {
-            get { return GetValue<SimpleTimeSpan>("CBS_VoteSpan"); }
+            get { return GetValue<bool>("CBS_IsUseVoteSpan"); }
+            set { SetValue("CBS_IsUseVoteSpan", value); }
+        }
+
+        [DefaultValue("00:05:00")]
+        public TimeSpan CBS_VoteSpan
+        {
+            get { return GetValue<TimeSpan>("CBS_VoteSpan"); }
             set { SetValue("CBS_VoteSpan", value); }
         }
         #endregion
@@ -182,7 +196,7 @@ namespace VoteSystem.PluginShogi
         /// <summary>
         /// ウィンドウ色を取得または設定します。
         /// </summary>
-        [DefaultValue("#B4FFFFFF")]
+        [DefaultValue("#5D000000")]
         public Color VR_BackgroundColor
         {
             get { return (Color)this["VR_BackgroundColor"]; }
@@ -249,7 +263,7 @@ namespace VoteSystem.PluginShogi
         /// <summary>
         /// フォントの色を取得または設定します。
         /// </summary>
-        [DefaultValue("#FF000000")]
+        [DefaultValue("#FFFFFFFF")]
         public Color VR_FontColor
         {
             get { return (Color)this["VR_FontColor"]; }
@@ -269,7 +283,7 @@ namespace VoteSystem.PluginShogi
         /// <summary>
         /// フォントの縁色を取得または設定します。
         /// </summary>
-        [DefaultValue("#FF00FFFF")]
+        [DefaultValue("#FF00FF7E")]
         public Color VR_StrokeColor
         {
             get { return (Color)this["VR_StrokeColor"]; }
@@ -279,7 +293,7 @@ namespace VoteSystem.PluginShogi
         /// <summary>
         /// フォントの縁の太さを取得または設定します。
         /// </summary>
-        [DefaultValue("0.5")]
+        [DefaultValue("0.30")]
         public decimal VR_StrokeThicknessInternal
         {
             get { return (decimal)this["VR_StrokeThicknessInternal"]; }
@@ -290,22 +304,6 @@ namespace VoteSystem.PluginShogi
         protected override void OnSettingsLoaded(object sender, SettingsLoadedEventArgs e)
         {
             base.OnSettingsLoaded(sender, e);
-
-            if (CBS_AddLimitTime == null)
-            {
-                CBS_AddLimitTime = new SimpleTimeSpan
-                {
-                    Minutes = 3,
-                };
-            }
-
-            if (CBS_VoteSpan == null)
-            {
-                CBS_VoteSpan = new SimpleTimeSpan
-                {
-                    Minutes = 3,
-                };
-            }
         }
 
         protected override void OnPropertyChanged(object sender, PropertyChangedEventArgs e)

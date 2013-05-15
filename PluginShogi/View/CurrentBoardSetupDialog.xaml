@@ -3,22 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+        xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
         xmlns:top="clr-namespace:VoteSystem.PluginShogi"
         mc:Ignorable="d" 
         Title="確認" ResizeMode="NoResize"
         SizeToContent="WidthAndHeight" MinWidth="300"
-        d:DesignHeight="416" d:DesignWidth="250">
+        d:DesignHeight="496" d:DesignWidth="300">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Ragnarok.Presentation;component/Themes/Common.xaml" />
-                <ResourceDictionary Source="/VoteProtocol;component/View/SimpleTimeSpanView.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <r:EnumToBooleanConverter x:Key="enumToBooleanConverter" />
             
-            <p:EnumToBooleanConverter x:Key="enumToBooleanConverter" />
-            
-            <Style x:Key="timeSpanStyle" TargetType="p:NumericUpDown">
+            <Style x:Key="timeSpanStyle" TargetType="r:NumericUpDown">
                 <Setter Property="IsTabStop" Value="True" />
                 
                 <Style.Triggers>
@@ -32,13 +31,13 @@
             <StackPanel x:Key="myTurnStackPanel"
                         Orientation="Vertical">
                 <CheckBox Content="投票を停止する"
-                          IsChecked="{Binding CBS_IsStopVote}" />
+                          IsChecked="{Binding CBS_IsVoteStop}" />
 
                 <CheckBox Content="持ち時間を追加"
-                          IsChecked="{Binding CBS_AddLimitTime.IsUse}" />
-                <ContentControl Content="{Binding CBS_AddLimitTime}"
-                                ContentTemplate="{StaticResource SimpleTimeSpanView}"
-                                HorizontalAlignment="Right" />
+                          IsChecked="{Binding CBS_IsUseAddLimitTime}" />
+                <r:TimeSpanEditControl IsEnabled="{Binding CBS_IsUseAddLimitTime}"
+                                       Value="{Binding CBS_AddLimitTime}"
+                                       HorizontalAlignment="Right" />
             </StackPanel>
 
             <!-- 自分の手番の時の更新用操作 -->
@@ -48,10 +47,10 @@
                           IsChecked="{Binding CBS_IsStartVote}" />
 
                 <CheckBox Content="投票時間を設定"
-                          IsChecked="{Binding CBS_VoteSpan.IsUse}" />
-                <ContentControl Content="{Binding CBS_VoteSpan}"
-                                ContentTemplate="{StaticResource SimpleTimeSpanView}"
-                                HorizontalAlignment="Right" />
+                          IsChecked="{Binding CBS_IsUseVoteSpan}" />
+                <r:TimeSpanEditControl IsEnabled="{Binding CBS_IsUseVoteSpan}"
+                                       Value="{Binding CBS_VoteSpan}"
+                                       HorizontalAlignment="Right" />
             </StackPanel>
         </ResourceDictionary>
     </Window.Resources>
@@ -89,7 +88,7 @@
                                                  ConverterParameter=Default}" />
 
                 <RadioButton x:Name="myTurnButton"
-                             Margin="0,3,0,0"
+                             Margin="0,10,0,0"
                              Content="こちらの手番" 
                              IsChecked="{Binding SelectedRadioButton,
                                                  RelativeSource={RelativeSource AncestorType=Window},
@@ -101,7 +100,7 @@
                 </GroupBox>
 
                 <RadioButton x:Name="yourTurnButton"
-                             Margin="0,3,0,0"
+                             Margin="0,15,0,0"
                              Content="相手の手番"
                              IsChecked="{Binding SelectedRadioButton,
                                                  RelativeSource={RelativeSource AncestorType=Window},
@@ -113,11 +112,11 @@
                 </GroupBox>
             </StackPanel>
         </GroupBox>
-        
-        <Border Grid.Row="4"
-                Background="LightGray" />
 
-        <ContentControl Grid.Row="4"
-                        Template="{StaticResource ButtonsTemplate}" />
+        <Border Grid.Row="4" Margin="0,10,0,0"
+                Background="LightGray">
+            <ContentControl Grid.Row="4"
+                            Template="{StaticResource ButtonsTemplate}" />
+        </Border>
     </Grid>
 </Window>

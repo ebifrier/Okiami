@@ -10,18 +10,13 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/VoteProtocol;component/View/InfoView.xaml" />
+                <ResourceDictionary Source="/Ragnarok.Presentation;component/Control/InfoView.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <StackPanel Orientation="Vertical">
-        <CheckBox Content="音声を再生する"
-                  IsChecked="{Binding IsUseSE}"
-                  Name="useSECheckBox" />
-        
-        <GroupBox Header="音声設定"
-                  IsEnabled="{Binding IsChecked, ElementName=useSECheckBox}">
+    <StackPanel Orientation="Vertical">        
+        <GroupBox Header="音声設定">
             <StackPanel Orientation="Vertical">
                 <GroupBox Header="声質設定"
                           DataContext="{x:Static l:Global.SoundManager}">

@@ -30,14 +30,14 @@
                              VerticalAlignment="Center"
                              Text="△" />
 
-            <r:TimeControl Grid.Row="0" Grid.Column="4"
-                           VerticalAlignment="Center"
-                           TimeSpan="{Binding BlackLeaveTime}" />
-            <r:TimeControl Grid.Row="1" Grid.Column="4"
-                           TimeSpan="{Binding WhiteLeaveTime}" />
-            <r:TimeControl Grid.Row="2" Grid.Column="4"
-                           Foreground="Gray"
-                           TimeSpan="{Binding WhiteUsedTime}" />
+            <r:TimeSpanView Grid.Row="0" Grid.Column="4"
+                            VerticalAlignment="Center"
+                            Value="{Binding BlackLeaveTime}" />
+            <r:TimeSpanView Grid.Row="1" Grid.Column="4"
+                            Value="{Binding WhiteLeaveTime}" />
+            <r:TimeSpanView Grid.Row="2" Grid.Column="4"
+                            Foreground="Gray"
+                            Value="{Binding WhiteUsedTime}" />
         </Grid>
     </Viewbox>
 </Window>

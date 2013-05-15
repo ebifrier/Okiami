@@ -722,6 +722,18 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// <paramref name="value"/>がMinValue or MaxValueであれば
+        /// <paramref name="dValue"/>を返します。
+        /// そうでない場合は<paramref name="value"/>をそのまま返します。
+        /// </summary>
+        private static TimeSpan Normalize(TimeSpan value, TimeSpan dValue)
+        {
+            var flag = (value != TimeSpan.MinValue && value != TimeSpan.MaxValue);
+
+            return (flag ? value : dValue);
+        }
+
+        /// <summary>
         /// 局面を現局面に設定します。
         /// </summary>
         private static void ExecuteSetCurrentBoard(object sender, ExecutedRoutedEventArgs e)
@@ -750,24 +762,17 @@ namespace VoteSystem.PluginShogi.ViewModel
                         voteClient.ClearVote();
                     }
 
-                    var addTime = dialog.AddLimitTime;
-                    var addTimeSpan =
-                        (addTime != null && addTime.IsUse ?
-                         addTime.TimeSpan :
-                         TimeSpan.Zero);
-                    
-                    if (dialog.IsStopVote)
+                    var addTime = Normalize(
+                        dialog.AddLimitTime, TimeSpan.Zero);                    
+                    if (dialog.IsVoteStop)
                     {
                         // 現局面更新前に投票を停止する場合
-                        voteClient.StopVote(addTimeSpan);
+                        voteClient.StopVote();
                     }
-                    else
+                    if (addTime != TimeSpan.Zero)
                     {
                         // 時間変更のみの場合
-                        if (addTimeSpan != TimeSpan.Zero)
-                        {
-                            voteClient.AddTotalVoteSpan(addTime.TimeSpan);
-                        }
+                        voteClient.AddTotalVoteSpan(addTime);
                     }
 
                     // 現局面更新
@@ -776,12 +781,10 @@ namespace VoteSystem.PluginShogi.ViewModel
                     // 現局面更新後に投票を開始します。
                     if (dialog.IsStartVote)
                     {
-                        var span = dialog.VoteSpan;
-                        var voteSpan = (span != null && span.IsUse ?
-                            span.TimeSpan :
-                            TimeSpan.FromSeconds(-1));
+                        var span = Normalize(
+                            dialog.VoteSpan, TimeSpan.FromSeconds(-1));
 
-                        voteClient.StartVote(voteSpan);
+                        voteClient.StartVote(span);
                     }
                 }
             }

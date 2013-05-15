@@ -63,7 +63,6 @@
     <Compile Include="LiveInfoData.cs" />
     <Compile Include="Model\EndRollList.cs" />
     <Compile Include="Model\TestVoterList.cs" />
-    <Compile Include="SimpleTimeSpan.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="NotificationColor.cs" />
     <Compile Include="NotificationEventArgs.cs" />
@@ -96,6 +95,8 @@
     <Compile Include="Xaml\TotalVoteLeaveTimeConverter.cs" />
     <Compile Include="Xaml\VoteStateConverter.cs" />
     <Compile Include="Xaml\VoteBackgroundConverter.cs" />
+    <Compile Include="Xaml\VoteLeaveTimeConverter2.cs" />
+    <Compile Include="Xaml\TotalVoteLeaveTimeConverter2.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Presentation\Ragnarok.Presentation.csproj">
@@ -127,10 +128,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Resource Include="View\SimpleTimeSpanView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Resource>
     <Page Include="View\EndRollControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

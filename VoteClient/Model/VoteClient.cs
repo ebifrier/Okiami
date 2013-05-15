@@ -994,22 +994,11 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public void StopVote()
         {
-            StopVote(TimeSpan.Zero);
-        }
-
-        /// <summary>
-        /// 全投票時間の再設定と、投票の停止を行います。
-        /// </summary>
-        public void StopVote(TimeSpan addTotalTimeSeconds)
-        {
             using (LazyLock())
             {
                 CheckEnteringVoteRoom(true);
 
-                this.conn.SendCommand(new StopVoteCommand
-                {
-                    AddTotalTimeSeconds = addTotalTimeSeconds.TotalSeconds,
-                });
+                this.conn.SendCommand(new StopVoteCommand());
             }
         }
 
@@ -1081,7 +1070,7 @@ namespace VoteSystem.Client.Model
         /// 時間延長・短縮に関する設定を行います。
         /// </summary>
         public void SetTimeExtendSetting(int? voteEndCount,
-                                         SimpleTimeSpan voteExtendTimeSpan)
+                                         TimeSpan voteExtendTimeSpan)
         {
             using (LazyLock())
             {
@@ -1096,8 +1085,9 @@ namespace VoteSystem.Client.Model
                 {
                     VoteEndCount = (voteEndCount ?? -1),
                     VoteExtendTimeSeconds =
-                        (SimpleTimeSpan.NotNullAndUse(voteExtendTimeSpan) ?
-                         voteExtendTimeSpan.TotalSeconds : -1),
+                        (voteExtendTimeSpan != TimeSpan.MinValue &&
+                         voteExtendTimeSpan != TimeSpan.MaxValue ?
+                         (int)voteExtendTimeSpan.TotalSeconds : -1),
                 });
             }
         }
@@ -1189,7 +1179,8 @@ namespace VoteSystem.Client.Model
             {
                 CheckEnteringVoteRoom(true);
 
-                notification.VoterId = Guid.NewGuid().ToString();
+                // テスト用
+                //notification.VoterId = Guid.NewGuid().ToString();
 
                 this.conn.SendCommand(new NotificationCommand()
                 {

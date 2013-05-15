@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vc="clr-namespace:VoteSystem.Client.View.Control"
         xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
-        Title="設定ダイアログ" Height="380" Width="340"
+        Title="設定ダイアログ" Height="380" Width="360"
         Topmost="True">
     
     <!-- 投票結果ウィンドウとバッティングする可能性があるため、

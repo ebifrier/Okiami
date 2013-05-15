@@ -424,7 +424,7 @@ namespace VoteSystem.Client.Command
                 return null;
             }
 
-            return window.TimeSpan;
+            return window.Value;
         }
 
         /// <summary>

@@ -79,26 +79,19 @@ namespace VoteSystem.Client
             set { this["VoteEndCount"] = value; }
         }
 
-        [DefaultValue(null)]
-        public SimpleTimeSpan VoteExtendTime
+        [DefaultValue("00:01:00")]
+        public TimeSpan VoteExtendTime
         {
-            get { return (SimpleTimeSpan)this["VoteExtendTime"]; }
+            get { return (TimeSpan)this["VoteExtendTime"]; }
             set { this["VoteExtendTime"] = value; }
         }
         #endregion
 
         #region Sound Setting
-        [DefaultValue(true)]
-        public bool IsUseSE
-        {
-            get { return (bool)this["IsUseSE"]; }
-            set { this["IsUseSE"] = value; }
-        }
-
         [DefaultValue(50)]
         public int SEVolume
         {
-            get { return ((int)(this["SEVolume"])); }
+            get { return (int)(this["SEVolume"]); }
             set { this["SEVolume"] = value; }
         }
 

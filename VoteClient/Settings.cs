@@ -17,16 +17,6 @@ namespace VoteSystem.Client
         /// </summary>
         private void ValidateAndChangeProperty()
         {
-            if (VoteExtendTime == null)
-            {
-                VoteExtendTime = new SimpleTimeSpan()
-                {
-                    IsUse = true,
-                    Minutes = 1,
-                    Seconds = 0,
-                };
-            }
-
             if (VoteStartSystemMessage == null)
             {
                 VoteStartSystemMessage = new SystemMessage()

@@ -15,6 +15,7 @@ using System.ComponentModel;
 using Ragnarok;
 using Ragnarok.Presentation;
 using Ragnarok.ObjectModel;
+using Ragnarok.Utility;
 
 namespace VoteSystem.Client.View
 {
@@ -25,22 +26,22 @@ namespace VoteSystem.Client.View
     /// </summary>
     public partial class TimeSpanWindow : Window
     {
-        private readonly SimpleTimeSpan stimeSpan;
+        /// <summary>
+        /// TimeSpanを扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty ValueProperty =
+            DependencyProperty.Register(
+                "Value", typeof(TimeSpan), typeof(TimeSpanWindow),
+                new FrameworkPropertyMetadata(TimeSpan.Zero,
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         /// <summary>
-        /// 時間間隔を取得または設定します。
+        /// TimeSpanを取得または設定します。
         /// </summary>
-        public TimeSpan TimeSpan
+        public TimeSpan Value
         {
-            get
-            {
-                return this.stimeSpan.TimeSpan;
-            }
-            set
-            {
-                this.stimeSpan.Minutes = (int)value.TotalMinutes;
-                this.stimeSpan.Seconds = value.Seconds;
-            }
+            get { return (TimeSpan)GetValue(ValueProperty); }
+            set { SetValue(ValueProperty, value); }
         }
 
         /// <summary>
@@ -51,13 +52,11 @@ namespace VoteSystem.Client.View
             InitializeComponent();
             InitializeCommands();
 
-            this.stimeSpan = new SimpleTimeSpan();
-            this.DataContext = this.stimeSpan;
-
             Activated += delegate { this.tabTopControl.Focus(); };
             Closed += delegate { Global.Settings.Reload(); };
+            DataContext = this;
 
-            TimeSpan = timeSpan;
+            Value = timeSpan;
         }
 
         /// <summary>

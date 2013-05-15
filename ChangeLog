@@ -1,3 +1,27 @@
+2013-05-13  - Ver 1.3.1.1
+
+	* PluginShogi/ShogiData/Effect/Other/CastleEffect: 囲いエフェクトの背景
+	を修正し、また文字表示のタイミングなども変更しました。
+	* PluginShogi/View/MainWindow.xaml.cs: フレームタイムの最長時間調整をな
+	くしなしました。今まではあまりに長いフレーム時間だと表示がバグるエフェ
+	クトがあったため、最長時間を設定していました。
+	* PluginShogi/View/CurrentBoardSetupDialog.xaml: SImpleTimeSpan型ではな
+	く、TimeSpan型を直接コントロールで変更するようにしました。
+	* PluginShogi/View/Detail/GeneralSettingControl.xaml: デザイン上の変更
+	やツールチップによる説明を追加しました。
+	* PluginShogi/View/MainWindow.xaml: メインメニューに設定メニューを追加
+	しました。
+	* PluginShogi/ViewModel/Commands.cs: 今まで投票停止と時間延長を同時に行
+	っていましたが、投票停止時にその操作を行うと時間延長が行われないため、
+	停止と延長操作を分けるようにしました。
+	* TimeController/Commands.cs: 時間の再設定コマンドなどを追加しました。
+	* VoteClient/Settings.part.cs: IsUseSEプロパティを削除し、無音用のＳＥ
+	セットを新たに追加しました。
+	* VoteClient/View/Control/SystemMessageSettingControl.xaml: 各メッセー
+	ジのExtenderをデフォルトで閉じるようにしました。
+	* VoteProtocol/View/VoteResultControl.xaml: 時間の表示を分秒だけではな
+	くて時間も表示するようにしました。
+
 2013-05-11  - Ver 1.3.1.0
 
 	* dist/history.yaml: 更新履歴を更新しました。

@@ -6,12 +6,12 @@
     <f:DiscSectorZone x:Key="speedZone" InnerRadius="400.0" OuterRadius="450.0"
                       MinAngle="{r:Calc '${StartAngle} - 20'}"
                       MaxAngle="{r:Calc '${StartAngle} + 20'}" />
-    <f:TextZone x:Key="targetZone" FontFamily="ＭＳ 明朝"
-                Text="${CastleName}" FontSize="10"
-                ScaleX="{r:Calc '36.0 / ${CastleNameLen}'}"
-                ScaleY="{r:Calc '10 + 20.0 / ${CastleNameLen}'}"
-                DivideX="{r:IntCalc 'min(3, 1.0 + 6.0 / ${CastleNameLen})', Mode=Floor}"
-                DivideY="{r:IntCalc '2.0 + 3.0 / ${CastleNameLen}', Mode=Floor}"
+    <f:TextZone x:Key="targetZone" Text="${CastleName}"
+                FontSize="10" FontFamily="ＭＳ 明朝"
+                ScaleX="{r:Calc '40.0 / ${CastleNameLen}'}"
+                ScaleY="{r:Calc '10 + 27.0 / ${CastleNameLen}'}"
+                DivideX="{r:IntCalc 'min(2.0, 2.0 + 4.0 / ${CastleNameLen})', Mode=Floor}"
+                DivideY="{r:IntCalc '2.0 + 1.0 / ${CastleNameLen}', Mode=Floor}"
                 OffsetX="320" OffsetY="320" />
     
     <Vector3D x:Key="backgroundCoord"
@@ -82,7 +82,7 @@
 
         <r:EffectObject WaitTime="0:0:0.8">
             <!-- 衝撃波 -->
-            <r:EffectObject Duration="0:0:4"
+            <r:EffectObject Duration="0:0:4.0"
                             ImageUri="../../Image/ShockWave.png"
                             Coord="{StaticResource backgroundCoord}">
                 <r:EffectObject.Scenario>
@@ -97,9 +97,9 @@
                             <LinearVector3DKeyFrame KeyTime="0:0:2.0" Value="1040,960,1" />
                             <DiscreteVector3DKeyFrame KeyTime="0:0:2.0" Value="0,0,1" />
                             <!-- ３回目 -->
-                            <LinearVector3DKeyFrame KeyTime="0:0:2.5" Value="0,0,1" />
-                            <LinearVector3DKeyFrame KeyTime="0:0:3.5" Value="1040,960,1" />
-                            <DiscreteVector3DKeyFrame KeyTime="0:0:3.5" Value="0,0,1" />
+                            <LinearVector3DKeyFrame KeyTime="0:0:3.0" Value="0,0,1" />
+                            <LinearVector3DKeyFrame KeyTime="0:0:4.0" Value="1040,960,1" />
+                            <DiscreteVector3DKeyFrame KeyTime="0:0:4.0" Value="0,0,1" />
                         </Vector3DAnimationUsingKeyFrames>
                         <DoubleAnimationUsingKeyFrames r:Scenario.TargetProperty="Opacity">
                             <!-- １回目 -->
@@ -111,9 +111,9 @@
                             <LinearDoubleKeyFrame KeyTime="0:0:2.0" Value="0.3" />
                             <DiscreteDoubleKeyFrame KeyTime="0:0:2.0" Value="0.0" />
                             <!-- ３回目 -->
-                            <LinearDoubleKeyFrame KeyTime="0:0:2.5" Value="0.7" />
-                            <LinearDoubleKeyFrame KeyTime="0:0:3.5" Value="0.0" />
-                            <DiscreteDoubleKeyFrame KeyTime="0:0:3.5" Value="0.0" />
+                            <LinearDoubleKeyFrame KeyTime="0:0:3.0" Value="0.7" />
+                            <LinearDoubleKeyFrame KeyTime="0:0:4.0" Value="0.0" />
+                            <DiscreteDoubleKeyFrame KeyTime="0:0:4.0" Value="0.0" />
                         </DoubleAnimationUsingKeyFrames>
                     </r:Scenario>
                 </r:EffectObject.Scenario>
@@ -121,7 +121,7 @@
 
             <!-- 囲い背景 -->
             <r:EffectObject Duration="0:0:4"
-                            ImageUri="yagura.png"
+                            ImageUri="CastleBack.png"
                             MaterialType="Diffuse"
                             Coord="{StaticResource backgroundCoord}"
                             Scale="480,480,1"
@@ -132,7 +132,7 @@
                         <DoubleAnimationUsingKeyFrames r:Scenario.TargetProperty="Opacity">
                             <LinearDoubleKeyFrame KeyTime="0:0:0.0" Value="0.0" />
                             <LinearDoubleKeyFrame KeyTime="0:0:0.5" Value="1.0" />
-                            <LinearDoubleKeyFrame KeyTime="0:0:3.0" Value="1.0" />
+                            <LinearDoubleKeyFrame KeyTime="0:0:3.5" Value="1.0" />
                             <LinearDoubleKeyFrame KeyTime="0:0:4.0" Value="0.0" />
                         </DoubleAnimationUsingKeyFrames>
                     </r:Scenario>
@@ -156,7 +156,7 @@
             </r:EffectObject>
 
             <!-- 字形をパーティクルで描画 -->
-            <r:EffectObject Duration="0:0:4.0">
+            <r:EffectObject Duration="0:0:4.5">
                 <r:EffectObject.Emitters>
                     <f:Emitter>
                         <f:Emitter.Counter>
@@ -170,7 +170,7 @@
                             <f:ColorInit Color="0xff00ffff" />
                             <f:Velocity Zone="{StaticResource speedZone}" />
                             <f:ScaleInit Scale="15.0" />
-                            <f:Lifetime Value="3.2" />
+                            <f:Lifetime Value="3.8" />
                             <f:TextTargetInit Zone="{StaticResource targetZone}" />
                         </f:Emitter.Initializers>
                         <f:Emitter.Behaviours>

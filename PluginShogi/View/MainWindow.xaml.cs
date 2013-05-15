@@ -165,12 +165,7 @@ namespace VoteSystem.PluginShogi.View
 
         private void FrameTimer_EnterFrame(object sender, FrameEventArgs e)
         {
-            // フレーム時間が長すぎると、バグるエフェクトがあるため、
-            // 時間を適度な短さに調整しています。
-            var MaxFrameTime = TimeSpan.FromMilliseconds(1000.0 / 20);
-            var elapsed = MathEx.Min(e.ElapsedTime, MaxFrameTime);
-
-            Render(elapsed);
+            Render(e.ElapsedTime);
         }
 
         /// <summary>

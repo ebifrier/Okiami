@@ -35,8 +35,9 @@ namespace VoteSystem.Protocol.Xaml
                 {
                     var time = MathEx.Max(leaveTime, TimeSpan.Zero);
 
-                    return string.Format("{0:D2}:{1:D2}",
-                        (int)time.TotalMinutes,
+                    return string.Format("{0:D2}:{1:D2}:{2:D2}",
+                        (int)time.TotalHours,
+                        time.Minutes,
                         time.Seconds);
                 }
             }

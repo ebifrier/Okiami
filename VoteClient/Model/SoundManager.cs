@@ -100,7 +100,7 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public void PlayVoteSE(VoteState voteState)
         {
-            if (!CanUseSound || !Global.Settings.IsUseSE)
+            if (!CanUseSound)
             {
                 return;
             }
@@ -127,7 +127,7 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public void PlayCountdownSE(int seconds)
         {
-            if (!CanUseSound || !Global.Settings.IsUseSE)
+            if (!CanUseSound)
             {
                 return;
             }

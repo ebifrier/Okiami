@@ -26,21 +26,23 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Row="0" Grid.Column="1"
+                       HorizontalAlignment="Right"
                        Content="先手：" />
                 <TextBox Grid.Row="0" Grid.Column="2"
-                         VerticalContentAlignment="Center"
+                         VerticalAlignment="Center"
                          Text="{Binding BlackPlayerName}" />
 
                 <Label Grid.Row="2" Grid.Column="1"
+                       HorizontalAlignment="Right"
                        Content="後手：" />
                 <TextBox Grid.Row="2" Grid.Column="2"
-                         VerticalContentAlignment="Center"
+                         VerticalAlignment="Center"
                          Text="{Binding WhitePlayerName}" />
 
                 <Label Grid.Row="4" Grid.Column="1"
-                       Content="手番：" />
+                       Content="自分の手番：" />
                 <ComboBox Grid.Row="4" Grid.Column="2"
-                          VerticalContentAlignment="Center"
+                          VerticalAlignment="Center"
                           DisplayMemberPath="Label"
                           SelectedValuePath="Value"
                           SelectedValue="{Binding Teban}"
@@ -60,16 +62,21 @@
                            Content="描画品質"
                            ToolTip="エフェクトなどの品質を調整します。ソフトが重い場合などに変更してください。" />
                     <ComboBox Grid.Column="1"
-                              VerticalContentAlignment="Center"
+                              VerticalAlignment="Center"
                               DisplayMemberPath="Label"
                               SelectedValuePath="Value"
                               SelectedValue="{Binding Settings.SD_RenderingQuality}"
                               ItemsSource="{r:EnumList t:RenderingQuality}" />
                 </Grid>
-                
+
                 <CheckBox Margin="0,10,0,0"
                           Content="現局面を自動的に更新する"
-                          IsChecked="{Binding IsAutoUpdateCurrentBoard}" />
+                          IsChecked="{Binding IsAutoUpdateCurrentBoard}">
+                    <CheckBox.ToolTip>
+                        現局面が更新されたとき、自分の局面を自動的に更新するかどうかです。
+                        チェックを外した場合は更新時に確認用のダイアログが表示されます。
+                    </CheckBox.ToolTip>
+                </CheckBox>
             </StackPanel>
         </GroupBox>
     </Grid>

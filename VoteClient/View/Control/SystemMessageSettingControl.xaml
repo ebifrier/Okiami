@@ -7,7 +7,7 @@
              xmlns:m="clr-namespace:VoteSystem.Client.Model"
              xmlns:c="clr-namespace:VoteSystem.Client.Command"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="292">
+             d:DesignHeight="300" d:DesignWidth="273">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -53,7 +53,7 @@
                   HorizontalScrollBarVisibility="Disabled">
         <StackPanel Orientation="Vertical">
             <Expander Header="投票開始メッセージ"
-                      IsExpanded="True">
+                      IsExpanded="False">
                 <GroupBox Header="設定">
                     <ContentControl
                         Content="{Binding VoteStartSystemMessage, Source={x:Static l:Global.Settings}}"
@@ -62,7 +62,7 @@
             </Expander>
 
             <Expander Header="投票停止メッセージ"
-                      IsExpanded="True">
+                      IsExpanded="False">
                 <GroupBox Header="設定">
                     <ContentControl
                         Content="{Binding VoteStopSystemMessage, Source={x:Static l:Global.Settings}}"
@@ -71,7 +71,7 @@
             </Expander>
 
             <Expander Header="投票一時停止メッセージ"
-                      IsExpanded="True">
+                      IsExpanded="False">
                 <GroupBox Header="設定">
                     <ContentControl
                         Content="{Binding VotePauseSystemMessage, Source={x:Static l:Global.Settings}}"
@@ -80,7 +80,7 @@
             </Expander>
 
             <Expander Header="投票終了メッセージ"
-                      IsExpanded="True">
+                      IsExpanded="False">
                 <GroupBox Header="設定">
                     <ContentControl
                         Content="{Binding VoteEndSystemMessage, Source={x:Static l:Global.Settings}}"
@@ -89,7 +89,7 @@
             </Expander>
 
             <Expander Header="投票時間変更メッセージ"
-                      IsExpanded="True">
+                      IsExpanded="False">
                 <GroupBox Header="設定">
                     <ContentControl
                         Content="{Binding ChangeVoteSpanSystemMessage, Source={x:Static l:Global.Settings}}"

@@ -17,20 +17,11 @@
 
     <px:VoteStateConverter x:Key="voteStateConverter" />
     <px:VoteBackgroundConverter x:Key="voteBackgroundConverter" />
-    <px:VoteLeaveTimeConverter x:Key="voteLeaveTimeConverter" />
-    <px:TotalVoteLeaveTimeConverter x:Key="totalVoteLeaveTimeConverter" />
+    <px:VoteLeaveTimeConverter2 x:Key="voteLeaveTimeConverter" />
+    <px:TotalVoteLeaveTimeConverter2 x:Key="totalVoteLeaveTimeConverter" />
 
     <!-- 縁取り付き文字 -->
-    <Style x:Key="decoratedTextStyle" TargetType="r:DecoratedText">
-        <!--<Setter Property="FontFamily" Value="{TemplateBinding FontFamily}" />
-        <Setter Property="FontStyle"
-                Value="{Binding DataContext.VR_FontStyle, ElementName=window}" />-->
-        <Setter Property="FontWeight"
-                Value="{Binding FontWeight,
-                                RelativeSource={RelativeSource AncestorType=l:VoteResultControl}}" />
-        <!--<Setter Property="Foreground"
-                Value="{Binding DataContext.VR_FontColor, ElementName=window,
-                                Converter={StaticResource brushConverter}}" />-->
+    <Style x:Key="decoratedTextStyle" TargetType="r:DecoratedTextBase">
         <Setter Property="Stroke"
                 Value="{Binding Stroke,
                                 RelativeSource={RelativeSource AncestorType=l:VoteResultControl}}" />
@@ -42,7 +33,7 @@
     <DataTemplate x:Key="decoratedText" DataType="sys:String">
         <Viewbox>
             <r:DecoratedText Style="{StaticResource decoratedTextStyle}"
-                              Text="{Binding}" />
+                             Text="{Binding}" />
         </Viewbox>
     </DataTemplate>
 
@@ -119,8 +110,8 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5" />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition MinWidth="5" />
                     <ColumnDefinition Width="Auto" MinWidth="40" />
                 </Grid.ColumnDefinitions>
 
@@ -145,14 +136,28 @@
                 </Grid>
 
                 <!-- 持ち時間 -->
-                <ContentControl Grid.Row="1" Grid.ColumnSpan="2"
+                <ContentControl Grid.Row="1" Grid.Column="0"
                                 Visibility="{Binding IsShowTotalVoteTime,
                                                      RelativeSource={RelativeSource TemplatedParent},
                                                      Converter={StaticResource visibilityConverterCollapsed}}"
                                 ContentTemplate="{StaticResource decoratedText}"
                                 Content="持ち時間"
                                 HorizontalAlignment="Left" />
-                <ContentControl Grid.Row="1" Grid.Column="2"
+                <r:TimeSpanView Grid.Row="1" Grid.Column="2"
+                                Style="{StaticResource decoratedTextStyle}"
+                                MaxValueText="無制限"
+                                HorizontalAlignment="Right">
+                    <r:TimeSpanView.Value>
+                        <MultiBinding Converter="{StaticResource totalVoteLeaveTimeConverter}"
+                                      Mode="OneWay">
+                            <Binding Path="TotalVoteLeaveTime"
+                                     RelativeSource="{RelativeSource TemplatedParent}" />
+                            <Binding Path="VoteState"
+                                     RelativeSource="{RelativeSource TemplatedParent}" />
+                        </MultiBinding>
+                    </r:TimeSpanView.Value>
+                </r:TimeSpanView>
+                <!--<ContentControl Grid.Row="1" Grid.Column="2"
                                 Visibility="{Binding IsShowTotalVoteTime,
                                                      RelativeSource={RelativeSource TemplatedParent},
                                                      Converter={StaticResource visibilityConverterCollapsed}}"
@@ -167,17 +172,19 @@
                                      RelativeSource="{RelativeSource TemplatedParent}" />
                         </MultiBinding>
                     </ContentControl.Content>
-                </ContentControl>
+                </ContentControl>-->
 
                 <!-- 投票時間 -->
-                <ContentControl Grid.Row="2" Grid.ColumnSpan="2"
+                <ContentControl Grid.Row="2" Grid.Column="0"
                                 ContentTemplate="{StaticResource decoratedText}"
                                 Content="投票時間"
                                 HorizontalAlignment="Left" />
-                <ContentControl Grid.Row="2" Grid.Column="2"
-                                ContentTemplate="{StaticResource decoratedText}"
+                <r:TimeSpanView Grid.Row="2" Grid.Column="2"
+                                Style="{StaticResource decoratedTextStyle}"
+                                MinValueText="停止中"
+                                MaxValueText="無制限"
                                 HorizontalAlignment="Right">
-                    <ContentControl.Content>
+                    <r:TimeSpanView.Value>
                         <MultiBinding Converter="{StaticResource voteLeaveTimeConverter}"
                                       Mode="OneWay">
                             <Binding Path="VoteLeaveTime"
@@ -185,11 +192,11 @@
                             <Binding Path="VoteState"
                                      RelativeSource="{RelativeSource TemplatedParent}" />
                         </MultiBinding>
-                    </ContentControl.Content>
-                </ContentControl>
+                    </r:TimeSpanView.Value>
+                </r:TimeSpanView>
 
                 <!-- 時間延長に関して -->
-                <ContentControl Grid.Row="4" Grid.ColumnSpan="2"
+                <ContentControl Grid.Row="4" Grid.Column="0"
                                 ContentTemplate="{StaticResource decoratedText}"
                                 Content="延長拒否" />
                 <ContentControl Grid.Row="4" Grid.Column="2"
@@ -210,7 +217,8 @@
                                 ContentTemplate="{StaticResource decoratedText}"
                                 Content="投票結果"
                                 HorizontalAlignment="Left" />
-                <ItemsControl Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2"
+                <ItemsControl Grid.Row="7" Grid.ColumnSpan="3"
+                              Margin="10,0,0,0"
                               ItemsSource="{TemplateBinding DisplayCandidateList}"
                               ItemTemplate="{StaticResource voteResultTemplate}" />
             </Grid>

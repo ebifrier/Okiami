@@ -13,12 +13,12 @@ namespace VoteSystem.Protocol.Xaml
     using Vote;
 
     /// <summary>
-    /// 投票時間を表示用の文字列に変換します。
+    /// 投票時間を表示用の値を変換します。
     /// </summary>
-    public sealed class VoteLeaveTimeConverter : IMultiValueConverter
+    public sealed class VoteLeaveTimeConverter2 : IMultiValueConverter
     {
         /// <summary>
-        /// 投票時間を表示用の文字列に変換します。
+        /// 投票時間を表示用の値に変換します。
         /// </summary>
         public object Convert(object[] value, Type targetType,
                               object parameter, CultureInfo culture)
@@ -28,28 +28,24 @@ namespace VoteSystem.Protocol.Xaml
                 if (value[0] == DependencyProperty.UnsetValue ||
                     value[1] == DependencyProperty.UnsetValue)
                 {
-                    return "停止中";
+                    // 停止中とします。
+                    return TimeSpan.MinValue;
                 }
 
                 var leaveTime = (TimeSpan)value[0];
                 var state = (VoteState)value[1];
 
-                if (state == VoteState.Stop)
+                if (state == VoteState.Stop || leaveTime == TimeSpan.MinValue)
                 {
-                    return "停止中";
+                    return TimeSpan.MinValue;
                 }
                 else if (leaveTime == TimeSpan.MaxValue)
                 {
-                    return "無制限";
+                    return TimeSpan.MaxValue;
                 }
                 else
                 {
-                    var time = MathEx.Max(leaveTime, TimeSpan.Zero);
-
-                    return string.Format("{0:D2}:{1:D2}:{2:D2}",
-                        (int)time.TotalHours,
-                        time.Minutes,
-                        time.Seconds);
+                    return MathEx.Max(leaveTime, TimeSpan.Zero);
                 }
             }
             catch (Exception ex)
