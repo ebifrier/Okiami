@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -11,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
+using Ragnarok;
+using Ragnarok.Shogi;
 
 namespace TimeController
 {
@@ -24,6 +28,18 @@ namespace TimeController
             InitializeComponent();
 
             DataContext = Global.MainViewModel;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+
+            var result = MessageBox.Show(
+                "本当に終了しますか？", "終了確認",
+                MessageBoxButton.OKCancel,
+                MessageBoxImage.Question,
+                MessageBoxResult.Cancel);
+            e.Cancel = (result != MessageBoxResult.OK);
         }
     }
 }

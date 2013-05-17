@@ -29,23 +29,36 @@ namespace TimeController
         }
         #endregion
 
+        #region Play
+        /// <summary>
+        /// 先手番の残り時間を再設定します。
+        /// </summary>
+        public static readonly RelayCommand Play =
+            new RelayCommand(ExecutePlay);
+
+        private static void ExecutePlay()
+        {
+            var model = Global.MainViewModel;
+
+            model.IsPlaying = (model.IsPlaying == null || model.IsPlaying == false);
+        }
+        #endregion
+
         #region Set BlackLeaveTime
         /// <summary>
         /// 先手番の残り時間を再設定します。
         /// </summary>
-        public static readonly RelayCommand<SimpleTimeSpan> SetBlackLeaveTime =
-            new RelayCommand<SimpleTimeSpan>(ExecuteSetBlackLeaveTime);
+        public static readonly RelayCommand<TimeSpan> SetBlackLeaveTime =
+            new RelayCommand<TimeSpan>(ExecuteSetBlackLeaveTime);
 
-        private static void ExecuteSetBlackLeaveTime(SimpleTimeSpan span)
+        private static void ExecuteSetBlackLeaveTime(TimeSpan span)
         {
-            if (span == null || !span.IsUse)
+            if (span == TimeSpan.MinValue)
             {
                 return;
             }
 
-            var model = Global.MainViewModel;
-
-            model.BlackLeaveTime = span.TimeSpan;
+            Global.MainViewModel.BlackLeaveTime = span;
         }
         #endregion
 
@@ -53,19 +66,17 @@ namespace TimeController
         /// <summary>
         /// 後手番の残り時間を再設定します。
         /// </summary>
-        public static readonly RelayCommand<SimpleTimeSpan> SetWhiteLeaveTime =
-            new RelayCommand<SimpleTimeSpan>(ExecuteSetWhiteLeaveTime);
+        public static readonly RelayCommand<TimeSpan> SetWhiteLeaveTime =
+            new RelayCommand<TimeSpan>(ExecuteSetWhiteLeaveTime);
 
-        private static void ExecuteSetWhiteLeaveTime(SimpleTimeSpan span)
+        private static void ExecuteSetWhiteLeaveTime(TimeSpan span)
         {
-            if (span == null || !span.IsUse)
+            if (span == TimeSpan.MinValue)
             {
                 return;
             }
 
-            var model = Global.MainViewModel;
-
-            model.WhiteLeaveTime = span.TimeSpan;
+            Global.MainViewModel.WhiteLeaveTime = span;
         }
         #endregion
 

@@ -1,4 +1,13 @@
-2013-05-13  - Ver 1.3.1.1
+2013-05-17  - Ver 1.3.1.2
+
+	* TimeController/Commands.cs: SimpleTimeSpanの代わりに直接TimeSpanを扱
+	うようにしました。
+	* TimeController/MainWindow.xaml: 画面構成を一新し、手数や手番側を強調
+	表示するなどしました。
+	* TimeController/MainWindow.xaml.cs: 間違ってアプリを終了してしまわない
+	よう、アプリ終了時に確認ダイアログを出すようにしました。
+
+2013-05-15  - Ver 1.3.1.1
 
 	* PluginShogi/ShogiData/Effect/Other/CastleEffect: 囲いエフェクトの背景
 	を修正し、また文字表示のタイミングなども変更しました。

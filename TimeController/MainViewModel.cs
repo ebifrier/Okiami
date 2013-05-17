@@ -27,12 +27,39 @@ namespace TimeController
         }
 
         /// <summary>
+        /// 現在の手数を取得または設定します。
+        /// </summary>
+        public int MoveCount
+        {
+            get { return GetValue<int>("MoveCount"); }
+            set { SetValue("MoveCount", value); }
+        }
+
+        /// <summary>
+        /// 対局中かどうかを取得または設定します。
+        /// </summary>
+        public bool? IsPlaying
+        {
+            get { return GetValue<bool?>("IsPlaying"); }
+            set { SetValue("IsPlaying", value); }
+        }
+
+        /// <summary>
         /// 先手の残り時間を取得または設定します。
         /// </summary>
         public TimeSpan BlackLeaveTime
         {
             get { return GetValue<TimeSpan>("BlackLeaveTime"); }
             set { SetValue("BlackLeaveTime", value); }
+        }
+
+        /// <summary>
+        /// 先手の残り時間を自動的に同期しているかを取得または設定します。
+        /// </summary>
+        public bool IsBlackAutoSync
+        {
+            get { return GetValue<bool>("IsBlackAutoSync"); }
+            set { SetValue("IsBlackAutoSync", value); }
         }
 
         /// <summary>
@@ -73,20 +100,43 @@ namespace TimeController
             }
         }
 
+        private void OnMoveCountChanged()
+        {
+            // 後手番の加算時間は
+            // 0手目開始時 0分
+            // 1手目開始時 0分
+            // 2手目開始時 1分
+            // 3手目開始時 1分
+            // 4手目開始時 2分
+            // となります。
+            var newAddTimeCount = (int)Math.Floor(MoveCount / 2.0);
+
+            var newAddTime = new TimeSpan(0, newAddTimeCount, 0);
+            WhiteLeaveTime += newAddTime - WhiteAddTime;
+            WhiteUsedTime = TimeSpan.FromMilliseconds(1000 - WhiteLeaveTime.Milliseconds);
+            WhiteAddTime = newAddTime;
+
+            Turn = ((MoveCount & 1) == 0 ? BWType.Black : BWType.White);
+        }
+
         private void OnTimer(object sender, EventArgs e)
         {
             var now = DateTime.Now;
             var elapsed = now - this.prevFrameTime;
             this.prevFrameTime = now;
 
-            if (Turn == BWType.Black)
+            // 対局中なら時間を変動させます。
+            if (IsPlaying == true)
             {
-                BlackLeaveTime = MathEx.Max(BlackLeaveTime - elapsed, TimeSpan.Zero);
-            }
-            else
-            {
-                WhiteLeaveTime = MathEx.Max(WhiteLeaveTime - elapsed, TimeSpan.Zero);
-                WhiteUsedTime = MathEx.Max(WhiteUsedTime + elapsed, TimeSpan.Zero);
+                if (Turn == BWType.Black)
+                {
+                    BlackLeaveTime = MathEx.Max(BlackLeaveTime - elapsed, TimeSpan.Zero);
+                }
+                else
+                {
+                    WhiteLeaveTime = MathEx.Max(WhiteLeaveTime - elapsed, TimeSpan.Zero);
+                    WhiteUsedTime = MathEx.Max(WhiteUsedTime + elapsed, TimeSpan.Zero);
+                }
             }
         }
 
@@ -95,11 +145,16 @@ namespace TimeController
         /// </summary>
         public MainViewModel()
         {
-            Turn = BWType.White;
-            BlackLeaveTime = TimeSpan.FromMinutes(10);
-            WhiteLeaveTime = TimeSpan.FromMinutes(10);
+            Turn = BWType.Black;
+            BlackLeaveTime = new TimeSpan(2, 0, 0);
+            IsBlackAutoSync = true;
+            WhiteLeaveTime = new TimeSpan(2, 0, 0);
             WhiteUsedTime = TimeSpan.Zero;
-            WhiteAddTime = TimeSpan.FromSeconds(60);
+            WhiteAddTime = TimeSpan.Zero;
+
+            AddPropertyChangedHandler(
+                "MoveCount",
+                (_, __) => OnMoveCountChanged());
 
             this.timer = new DispatcherTimer(
                 TimeSpan.FromMilliseconds(1000.0 / 60),
