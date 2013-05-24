@@ -417,6 +417,24 @@ namespace VoteSystem.Client.Model
             }
         }
 
+        /// <summary>
+        /// 他ツールと連携するために必要です。
+        /// </summary>
+        private void UpdateTotalVoteSpan()
+        {
+            if (!this.voteClient.IsLogined)
+            {
+                ProtocolUtil.RemoveTotalVoteSpan();
+            }
+            else
+            {
+                ProtocolUtil.WriteTotalVoteSpan(
+                    this.voteClient.VoteState,
+                    this.voteClient.BaseTimeNtp,
+                    this.voteClient.TotalVoteSpan);
+            }
+        }
+
         void voteClient_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // 接続したら投票ルームに入っていなくてもログイン状態を送信します。
@@ -434,6 +452,14 @@ namespace VoteSystem.Client.Model
                 UpdateLiveRoomAttribute();
             }
 
+            if (e.PropertyName == "IsLogined" ||
+                e.PropertyName == "VoteState" ||
+                e.PropertyName == "TotalVoteSpan" ||
+                e.PropertyName == "BaseTimeNtp")
+            {
+                UpdateTotalVoteSpan();
+            }
+
             if (e.PropertyName == "VoteMode")
             {
                 CurrentVoteMode = this.voteClient.VoteMode;
@@ -445,20 +471,13 @@ namespace VoteSystem.Client.Model
             }
         }
 
-        void nicoClient_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            // ニコニコにログインしたら、状態を通知します。
-            if (e.PropertyName == "IsLogined")
-            {
-                UpdateNicoLoginStatus();
-            }
-        }
-
         /// <summary>
         /// コンストラクタ
         /// </summary>
         public MainModel()
         {
+            ProtocolUtil.RemoveTotalVoteSpan();
+
             AddPropertyChangedHandler(
                 "CurrentVoteMode",
                 (_, __) => UpdateVoteMode());
@@ -478,7 +497,9 @@ namespace VoteSystem.Client.Model
                 Global.Settings.AS_OwnerNicoLoginData = this.nicoClient.LoginData;
                 UpdateNicoLoginStatus();
             };
-            this.nicoClient.PropertyChanged += nicoClient_PropertyChanged;
+            this.nicoClient.AddPropertyChangedHandler(
+                "IsLogined",
+                (_, __) => UpdateNicoLoginStatus());
 
             var loginData = Global.Settings.AS_OwnerNicoLoginData;
             if (loginData != null)

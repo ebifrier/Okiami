@@ -28,26 +28,12 @@
             <ImageBrush x:Key="komadaiBrush"
                         ImageSource="{Binding DataContext.KomadaiImage, ElementName=window}"
                         Opacity="{Binding DataContext.BanOpacity, ElementName=window}" />
-            
-            <Storyboard x:Key="openStoryboard">
-                <DoubleAnimation From="0.0" To="1.0"
-                                 Duration="0:0:0.2"
-                                 FillBehavior="HoldEnd" />
-            </Storyboard>
-
-            <Storyboard x:Key="closeStoryboard"
-                        Storyboard.TargetName="variationBorder"
-                        Storyboard.TargetProperty="Opacity">
-                <DoubleAnimation From="1.0" To="0.0"
-                                 Duration="0:0:0.2"
-                                 FillBehavior="HoldEnd" />
-            </Storyboard>
 
             <!-- 投票結果コンテキストメニュー -->
             <ContextMenu x:Key="contextMenu">
                 <!-- CommandTargetの指定はwpfのバグを避けるために必要。
                      http://social.msdn.microsoft.com/forums/en-US/wpf/thread/7bd75a7c-eab4-4f3a-967b-94a9534a7455/ -->
-                <MenuItem Header="投票結果の表示設定(_R)"
+                <MenuItem Header="投票結果の設定(_R)"
                           Command="{x:Static s:VoteResultControl.OpenSettingDialog}"
                           CommandTarget="{Binding PlacementTarget,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
@@ -92,25 +78,25 @@
                           Command="Close" />
             </MenuItem>
 
+            <MenuItem Header="設定(_S)">
+                <MenuItem Header="各種設定(_S)"
+                          Command="{x:Static svm:Commands.ShowSettingDialog}" />
+                <Separator />
+                <MenuItem Header="投票結果の設定(_R)"
+                          Command="{x:Static s:VoteResultControl.OpenSettingDialog}" />
+            </MenuItem>
+
             <MenuItem Header="表示(_V)">
                 <MenuItem Header="盤面反転(_T)"
                           IsCheckable="True" x:Name="boardReverse"
                           Command="{x:Static r:ShogiCommands.SetReverseBoard}"
                           CommandParameter="{Binding IsChecked, ElementName=boardReverse}" />
-                <MenuItem Header="投票結果の表示切り替え(_E)"
+                <MenuItem Header="投票結果の表示(_E)"
                           IsCheckable="True"
                           IsChecked="{Binding Settings.AS_IsShowVoteResult}" />
                 <Separator />
-                <MenuItem Header="変化ウィンドウを表示(_V)"
+                <MenuItem Header="変化ウィンドウ(_V)"
                           Command="{x:Static svm:Commands.ShowMoveManageView}" />
-            </MenuItem>
-
-            <MenuItem Header="設定(_S)">
-                <MenuItem Header="各種設定(_S)"
-                          Command="{x:Static svm:Commands.ShowSettingDialog}" />
-                <Separator />
-                <MenuItem Header="投票結果の表示設定(_R)"
-                          Command="{x:Static s:VoteResultControl.OpenSettingDialog}" />
             </MenuItem>
         </Menu>
 

@@ -81,11 +81,11 @@ namespace VoteSystem.Server
         /// <summary>
         /// 確認コメントの印（可視）です。
         /// </summary>
-        public const string ComfirmCommentPrefix = "! ";
+        public const string ComfirmCommentPrefix = "!! ";
         /// <summary>
         /// ミラーコメントの印（可視）です。
         /// </summary>
-        public const string MirrorCommentPrefix = "!! ";
+        public const string MirrorCommentPrefix = "! ";
 
         private readonly object SyncRoot = new object();
         private readonly LiveData liveData;

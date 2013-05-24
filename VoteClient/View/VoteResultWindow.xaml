@@ -99,10 +99,9 @@
                              IsDisplayPointFullWidth="{Binding Settings.VR_IsDisplayPointFullWidth}" />
 
         <!-- 移動用のボタンなどを表示します。-->
-        <ContentControl
-            Template="{StaticResource movableControlTemplate}"
-            Visibility="{Binding IsMovable,
-                                 RelativeSource={RelativeSource AncestorType=r:MovableWindow},
-                                 Converter={StaticResource visibilityConverterCollapsed}}" />
+        <Control Template="{StaticResource movableControlTemplate}"
+                 Visibility="{Binding IsMovable,
+                                      RelativeSource={RelativeSource AncestorType=r:MovableWindow},
+                                      Converter={StaticResource visibilityConverterCollapsed}}" />
     </Grid>
 </r:MovableWindow>

@@ -233,8 +233,11 @@
                 <StackPanel Orientation="Vertical"
                             Margin="{StaticResource timeSpanLength}">
                     <Label Content="後手の残り時間を新たに設定します" />
-                    <r:TimeSpanEditControl HorizontalAlignment="Right" />
+                    <r:TimeSpanEditControl x:Name="whiteTimeSpan"
+                                           HorizontalAlignment="Right" />
                     <Button Style="{StaticResource buttonStyle}"
+                            Command="{x:Static l:Commands.SetWhiteLeaveTime}"
+                            CommandParameter="{Binding Value, ElementName=whiteTimeSpan}"
                             Width="60" Content="再設定" />
                 </StackPanel>
 
@@ -257,11 +260,14 @@
                 <StackPanel Orientation="Vertical"
                             Margin="{StaticResource timeSpanLength}">
                     <Label Content="後手の思考時間を新たに設定します" />
-                    <r:TimeSpanEditControl HorizontalAlignment="Right" />
+                    <r:TimeSpanEditControl x:Name="whiteUsedTimeSpan"
+                                           HorizontalAlignment="Right" />
                     <Button Style="{StaticResource buttonStyle}"
-                            Width="60"
-                            Content="再設定" />
+                            Command="{x:Static l:Commands.SetWhiteUsedTime}"
+                            CommandParameter="{Binding Value, ElementName=whiteUsedTimeSpan}"
+                            Width="60" Content="再設定" />
                     <Button Style="{StaticResource buttonStyle}"
+                            Command="{x:Static l:Commands.ClearWhiteUsedTime}"
                             Content="思考時間をクリア" />
                 </StackPanel>
             </StackPanel>

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.IO;
 
 using Ragnarok;
 using Ragnarok.Net;
@@ -14,6 +16,137 @@ namespace VoteSystem.Protocol
     /// </summary>
     public static class ProtocolUtil
     {
+        /// <summary>
+        /// 全投票時間を出力するためのファイル名です。
+        /// </summary>
+        public static readonly string TotalVoteSpanFilePath =
+            Path.Combine(
+                Environment.GetFolderPath(
+                    Environment.SpecialFolder.LocalApplicationData),
+                "co516151/VoteClient/voteleavetime.tmp");
+
+        /// <summary>
+        /// 全投票時間をファイルに出力します。
+        /// </summary>
+        /// <remarks>
+        /// 他ツールとの連携のために使います。
+        /// </remarks>
+        public static void WriteTotalVoteSpan(VoteState state,
+                                              DateTime startTimeNtp,
+                                              TimeSpan totalSpan)
+        {
+            try
+            {
+                var path = ProtocolUtil.TotalVoteSpanFilePath;
+                var c = CultureInfo.InvariantCulture;
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                using (var writer = new StreamWriter(stream))
+                {
+                    writer.WriteLine((int)state);
+                    writer.WriteLine(startTimeNtp.ToString("o", c));
+                    writer.WriteLine(totalSpan);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.ErrorException(ex,
+                    "全投票期間出力ファイルの保存に失敗しました。");
+            }
+        }
+
+        /// <summary>
+        /// 全投票時間などをファイルから読み込みます。
+        /// </summary>
+        /// <remarks>
+        /// 他ツールとの連携のために使います。
+        /// </remarks>
+        public static bool ReadTotalVoteSpan(out VoteState state,
+                                             out DateTime startTimeNtp,
+                                             out TimeSpan totalSpan)
+        {
+            try
+            {
+                var path = ProtocolUtil.TotalVoteSpanFilePath;
+                var c = CultureInfo.InvariantCulture;
+
+                if (!File.Exists(path))
+                {
+                    state = VoteState.Stop;
+                    startTimeNtp = DateTime.MinValue;
+                    totalSpan = TimeSpan.Zero;
+                    return false;
+                }
+
+                using (var stream = new FileStream(path, FileMode.Open))
+                using (var reader = new StreamReader(stream))
+                {
+                    state = (VoteState)int.Parse(reader.ReadLine());
+                    startTimeNtp = DateTime.ParseExact(reader.ReadLine(), "o", c);
+                    totalSpan = TimeSpan.Parse(reader.ReadLine());
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.ErrorException(ex,
+                    "全投票期間出力ファイルの読み込みに失敗しました。");
+
+                state = VoteState.Stop;
+                startTimeNtp = DateTime.MinValue;
+                totalSpan = TimeSpan.Zero;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 全投票時間をファイルから読み込みます。
+        /// </summary>
+        /// <remarks>
+        /// 他ツールとの連携のために使います。
+        /// </remarks>
+        public static TimeSpan ReadTotalVoteSpan()
+        {
+            try
+            {
+                VoteState state;
+                DateTime startTimeNtp;
+                TimeSpan totalSpan;
+
+                if (ReadTotalVoteSpan(out state, out startTimeNtp, out totalSpan))
+                {
+                    return CalcTotalVoteLeaveTime(state, startTimeNtp, totalSpan);
+                }
+                else
+                {
+                    return TimeSpan.MinValue;
+                }
+            }
+            catch
+            {
+                return TimeSpan.MinValue;
+            }
+        }
+
+        /// <summary>
+        /// 全投票時間を出力したファイルを削除します。
+        /// </summary>
+        public static void RemoveTotalVoteSpan()
+        {
+            try
+            {
+                var path = ProtocolUtil.TotalVoteSpanFilePath;
+
+                File.Delete(path);
+            }
+            catch (Exception ex)
+            {
+                Log.ErrorException(ex,
+                    "全投票期間出力ファイルの削除に失敗しました。");
+            }
+        }
+
         /// <summary>
         /// bool?から<see cref="BoolObject"/>に変換します。
         /// </summary>
@@ -147,7 +280,7 @@ namespace VoteSystem.Protocol
                 case VoteState.Voting:
                     // 終了時刻から現在時刻を減算し、残り時間を出します。
                     var endTimeNtp = startTimeNtp + totalSpan;
-                    return (endTimeNtp - nowTimeNtp);
+                    return MathEx.Max(endTimeNtp - nowTimeNtp, TimeSpan.Zero);
                 case VoteState.Pause:
                 case VoteState.Stop:
                 case VoteState.End:
@@ -178,7 +311,7 @@ namespace VoteSystem.Protocol
                 case VoteState.Voting:
                     // 終了時刻から現在時刻を減算し、残り時間を出します。
                     var endTimeNtp = startTimeNtp + voteSpan;
-                    return (endTimeNtp - nowTimeNtp);
+                    return MathEx.Max(endTimeNtp - nowTimeNtp, TimeSpan.Zero);
                 case VoteState.Pause:
                     // 一時停止中
                     return voteSpan;

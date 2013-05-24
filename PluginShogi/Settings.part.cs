@@ -90,14 +90,14 @@ namespace VoteSystem.PluginShogi
 
         #region 設定ダイアログ
         #region 一般
-        [DefaultValue("てんて～")]
+        [DefaultValue("リスナー")]
         public string SD_BlackPlayerName
         {
             get { return GetValue<string>("SD_BlackPlayerName"); }
             set { SetValue("SD_BlackPlayerName", value); }
         }
 
-        [DefaultValue("ひふみん")]
+        [DefaultValue("西尾明六段")]
         public string SD_WhitePlayerName
         {
             get { return GetValue<string>("SD_WhitePlayerName"); }

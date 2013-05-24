@@ -12,9 +12,12 @@ using Ragnarok.Shogi;
 
 namespace TimeController
 {
+    using VoteSystem.Protocol;
+
     public sealed class MainViewModel : NotifyObject
     {
-        private DispatcherTimer timer;
+        private DispatcherTimer leaveTimeTimer;
+        private DispatcherTimer syncTimeTimer;
         private DateTime prevFrameTime = DateTime.Now;
 
         /// <summary>
@@ -86,7 +89,21 @@ namespace TimeController
         public TimeSpan WhiteUsedTime
         {
             get { return GetValue<TimeSpan>("WhiteUsedTime"); }
-            set { SetValue("WhiteUsedTime", value); }
+            set
+            {
+                if (value != TimeSpan.MinValue && value != TimeSpan.MaxValue)
+                {
+                    // 時間表示を同期させるため、
+                    // 後手残り時間の(1000 - ミリ秒)を思考時間に加えます。
+                    // 残り時間は減っていきますが、思考時間は増えるため、
+                    // このような操作を行います。
+                    value = TimeSpan.FromSeconds(
+                        (int)value.TotalSeconds +
+                        (1000 - WhiteLeaveTime.Milliseconds) / 1000.0);
+                }
+
+                SetValue("WhiteUsedTime", value);
+            }
         }
 
         /// <summary>
@@ -94,9 +111,9 @@ namespace TimeController
         /// </summary>
         public void StartTimer()
         {
-            if (this.timer != null)
+            if (this.leaveTimeTimer != null)
             {
-                this.timer.Start();
+                this.leaveTimeTimer.Start();
             }
         }
 
@@ -113,13 +130,16 @@ namespace TimeController
 
             var newAddTime = new TimeSpan(0, newAddTimeCount, 0);
             WhiteLeaveTime += newAddTime - WhiteAddTime;
-            WhiteUsedTime = TimeSpan.FromMilliseconds(1000 - WhiteLeaveTime.Milliseconds);
+            WhiteUsedTime = TimeSpan.Zero;
             WhiteAddTime = newAddTime;
 
             Turn = ((MoveCount & 1) == 0 ? BWType.Black : BWType.White);
         }
 
-        private void OnTimer(object sender, EventArgs e)
+        /// <summary>
+        /// 残り時間表示の更新用コールバックです。
+        /// </summary>
+        private void OnLeaveTimeTimer(object sender, EventArgs e)
         {
             var now = DateTime.Now;
             var elapsed = now - this.prevFrameTime;
@@ -141,13 +161,36 @@ namespace TimeController
         }
 
         /// <summary>
+        /// VoteClientとの時刻同期のためのコールバックです。
+        /// </summary>
+        private void OnSyncTimeTimer(object sender, EventArgs e)
+        {
+            var span = ProtocolUtil.ReadTotalVoteSpan();
+            if (span == TimeSpan.MinValue)
+            {
+                IsBlackAutoSync = false;
+                return;
+            }
+
+            // 表示と１秒以上違っていたら、時刻を更新します。
+            var diff = BlackLeaveTime - span;
+            if (diff < TimeSpan.Zero) diff = -diff;
+            if (IsPlaying != null && diff > TimeSpan.FromSeconds(1))
+            {
+                BlackLeaveTime = span;
+            }
+
+            IsBlackAutoSync = true;
+        }
+
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         public MainViewModel()
         {
             Turn = BWType.Black;
             BlackLeaveTime = new TimeSpan(2, 0, 0);
-            IsBlackAutoSync = true;
+            IsBlackAutoSync = false;
             WhiteLeaveTime = new TimeSpan(2, 0, 0);
             WhiteUsedTime = TimeSpan.Zero;
             WhiteAddTime = TimeSpan.Zero;
@@ -156,10 +199,15 @@ namespace TimeController
                 "MoveCount",
                 (_, __) => OnMoveCountChanged());
 
-            this.timer = new DispatcherTimer(
+            this.leaveTimeTimer = new DispatcherTimer(
                 TimeSpan.FromMilliseconds(1000.0 / 60),
                 DispatcherPriority.Normal,
-                OnTimer,
+                OnLeaveTimeTimer,
+                WPFUtil.UIDispatcher);
+            this.syncTimeTimer = new DispatcherTimer(
+                TimeSpan.FromSeconds(3.0),
+                DispatcherPriority.Normal,
+                OnSyncTimeTimer,
                 WPFUtil.UIDispatcher);
         }
     }

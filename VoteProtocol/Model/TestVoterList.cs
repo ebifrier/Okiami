@@ -256,7 +256,7 @@ namespace VoteSystem.Protocol.Model
 
             voterList.DonorList.AddRange(
                 list.OrderBy(_ => Guid.NewGuid())
-                    .Take(50).Select(_ => _.Name));
+                    .Take(30).Select(_ => _.Name));
 
             voterList.LiveOwnerList.AddRange(
                 from name in liveOwnerList

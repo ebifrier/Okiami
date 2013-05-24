@@ -1,43 +1,143 @@
-﻿<Window x:Class="TimeController.TimeWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
-        Title="TimeWindow" Height="200" Width="300">
-    <Viewbox>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="2" />
-                <ColumnDefinition />
-                <ColumnDefinition Width="2" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
+﻿<r:MovableWindow x:Class="TimeController.TimeWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+                 ResizeMode="NoResize" Background="White"
+                 AllowsTransparency="True"
+                 Title="TimeWindow" Height="200" Width="300">
+    <Window.Resources>
+        <ResourceDictionary>
+            <r:BooleanToVisibilityConverter x:Key="visibilityConverter"
+                                            DefaultHiddenValue="Collapsed" />
+            
+            <!-- コンテキストメニュー -->
+            <ContextMenu x:Key="contextMenu">
+                <!-- CommandTargetの指定はwpfのバグを避けるために必要。
+                     http://social.msdn.microsoft.com/forums/en-US/wpf/thread/7bd75a7c-eab4-4f3a-967b-94a9534a7455/ -->
+                <MenuItem Header="常に手前に表示する"
+                          IsCheckable="True"
+                          IsChecked="{Binding Topmost,
+                                              RelativeSource={RelativeSource AncestorType=r:MovableWindow}}"
+                          CommandTarget="{Binding PlacementTarget,
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                <Separator />
+                <MenuItem Header="ウィンドウを移動する"
+                          Command="{x:Static r:MovableWindow.MakeMoveWindow}"
+                          CommandTarget="{Binding PlacementTarget,
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                <MenuItem Header="ウィンドウを固定する"
+                          Command="{x:Static r:MovableWindow.MakeFixWindow}"
+                          CommandTarget="{Binding PlacementTarget,
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                <Separator />
+                <MenuItem Header="閉じる"
+                          Command="Close"
+                          CommandTarget="{Binding PlacementTarget,
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+            </ContextMenu>
 
-            <r:DecoratedText Grid.Row="0" Grid.Column="0"
-                             Text="○" />
-            <r:DecoratedText Grid.Row="1" Grid.RowSpan="2" Grid.Column="0"
-                             VerticalAlignment="Center"
-                             Text="○" />
+            <!-- 移動時の表示コントロール -->
+            <ControlTemplate x:Key="movableControlTemplate">
+                <Grid Background="#80000850">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
 
-            <r:DecoratedText Grid.Row="0" Grid.Column="2"
-                             Text="▲" />
-            <r:DecoratedText Grid.Row="1" Grid.RowSpan="2" Grid.Column="2"
-                             VerticalAlignment="Center"
-                             Text="△" />
+                    <Button Grid.Row="1" Grid.Column="1"
+                            Content="決定" FontSize="28"
+                            Opacity="0.4"
+                            Command="{x:Static r:MovableWindow.MakeFixWindow}" />
+                </Grid>
+            </ControlTemplate>
+            
+            <!-- 先手番用の表示スタイル -->
+            <Style x:Key="blackTurnStyle" TargetType="FrameworkElement">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Visibility" Value="Collapsed" />
+                
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Turn}" Value="Black">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
 
-            <r:TimeSpanView Grid.Row="0" Grid.Column="4"
-                            VerticalAlignment="Center"
-                            Value="{Binding BlackLeaveTime}" />
-            <r:TimeSpanView Grid.Row="1" Grid.Column="4"
-                            Value="{Binding WhiteLeaveTime}" />
-            <r:TimeSpanView Grid.Row="2" Grid.Column="4"
-                            Foreground="Gray"
-                            Value="{Binding WhiteUsedTime}" />
-        </Grid>
-    </Viewbox>
-</Window>
+            <!-- 後手番用の表示スタイル -->
+            <Style x:Key="whiteTurnStyle" TargetType="FrameworkElement">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Visibility" Value="Collapsed" />
+
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Turn}" Value="White">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.Style>
+        <Style TargetType="Window">
+            <Setter Property="ContextMenu"
+                    Value="{StaticResource contextMenu}" />
+        </Style>
+    </Window.Style>
+
+    <Grid>
+        <Viewbox>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="2" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <r:DecoratedText Grid.Row="0" Grid.Column="0"
+                                 Style="{StaticResource blackTurnStyle}"
+                                 Text="○" />
+                <r:DecoratedText Grid.Row="1" Grid.RowSpan="2" Grid.Column="0"
+                                 Style="{StaticResource whiteTurnStyle}"
+                                 Text="○" />
+
+                <r:DecoratedText Grid.Row="0" Grid.Column="2"
+                                 VerticalAlignment="Center"
+                                 Text="▲" />
+                <r:DecoratedText Grid.Row="1" Grid.RowSpan="2" Grid.Column="2"
+                                 VerticalAlignment="Center"
+                                 Text="△" />
+
+                <r:TimeSpanView Grid.Row="0" Grid.Column="4"
+                                VerticalAlignment="Center"
+                                Value="{Binding BlackLeaveTime}"
+                                MaxValueText="無制限" />
+                <r:TimeSpanView Grid.Row="1" Grid.Column="4"
+                                Value="{Binding WhiteLeaveTime}"
+                                MaxValueText="無制限" />
+                <r:TimeSpanView Grid.Row="2" Grid.Column="4"
+                                Foreground="Gray"
+                                Value="{Binding WhiteUsedTime}"
+                                MaxValueText="無制限" />
+            </Grid>
+        </Viewbox>
+
+        <!-- 移動用のボタンなどを表示します。-->
+        <Control Template="{StaticResource movableControlTemplate}"
+                    Visibility="{Binding IsMovable,
+                                        RelativeSource={RelativeSource AncestorType=r:MovableWindow},
+                                        Converter={StaticResource visibilityConverter}}" />
+    </Grid>
+</r:MovableWindow>

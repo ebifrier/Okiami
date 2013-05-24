@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 using Ragnarok;
 using Ragnarok.Utility;
@@ -23,6 +24,7 @@ namespace TimeController
         {
             var window = new TimeWindow
             {
+                Owner = Application.Current.MainWindow,
             };
 
             window.Show();
@@ -76,7 +78,29 @@ namespace TimeController
                 return;
             }
 
-            Global.MainViewModel.WhiteLeaveTime = span;
+            var model = Global.MainViewModel;
+            model.WhiteLeaveTime = span;
+
+            // ミリ秒以下を残り時間に合わせるためこうします。
+            model.WhiteUsedTime = model.WhiteUsedTime;
+        }
+        #endregion
+
+        #region SetWhiteUsedTime
+        /// <summary>
+        /// 後手番の思考時間を再設定します。
+        /// </summary>
+        public static readonly RelayCommand<TimeSpan> SetWhiteUsedTime =
+            new RelayCommand<TimeSpan>(ExecuteSetWhiteUsedTime);
+
+        private static void ExecuteSetWhiteUsedTime(TimeSpan span)
+        {
+            if (span == TimeSpan.MinValue)
+            {
+                return;
+            }
+
+            Global.MainViewModel.WhiteUsedTime = span;
         }
         #endregion
 

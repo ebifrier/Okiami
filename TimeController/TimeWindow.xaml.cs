@@ -11,12 +11,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using Ragnarok.Presentation;
+using Ragnarok.Presentation.Control;
+
 namespace TimeController
 {
     /// <summary>
     /// TimeWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class TimeWindow : Window
+    public partial class TimeWindow : MovableWindow
     {
         public TimeWindow()
         {

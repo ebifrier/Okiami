@@ -101,6 +101,7 @@
     </Content>
     <Content Include="ShogiData\EndRoll\endroll_format.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Resource Include="Resources\Image\ban\ban.jpg" />
     <Resource Include="Resources\Image\ban\ban_dirty.jpg" />

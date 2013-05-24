@@ -92,7 +92,7 @@ namespace VoteSystem.PluginShogi.View
         {
             get
             {
-                return (FadeOutStartTime + FadeInEndTime);
+                return (FadeOutStartTime - FadeInEndTime);
             }
         }
 
@@ -103,7 +103,7 @@ namespace VoteSystem.PluginShogi.View
         {
             get
             {
-                return (FadeOutEndTime + FadeInStartTime);
+                return (FadeOutEndTime - FadeInStartTime);
             }
         }
 
@@ -255,6 +255,8 @@ namespace VoteSystem.PluginShogi.View
 
         protected override void OnClosed(EventArgs e)
         {
+            EndRoll.Stop();
+
             if (this.timer != null)
             {
                 this.timer.Stop();
@@ -273,8 +275,6 @@ namespace VoteSystem.PluginShogi.View
                 this.player = null;
             }
 
-            EndRoll.Stop();
-
             base.OnClosed(e);
         }
 
@@ -282,10 +282,10 @@ namespace VoteSystem.PluginShogi.View
 
         private void MediaOpened(object sender, EventArgs e)
         {
-            this.oneTimer = new System.Threading.Timer(
+            /*this.oneTimer = new System.Threading.Timer(
                 _ => Ragnarok.Presentation.WPFUtil.UIProcess(Play),
                 null,
-                20 * 1000, -1);
+                20 * 1000, -1);*/
             //Play();
         }
 

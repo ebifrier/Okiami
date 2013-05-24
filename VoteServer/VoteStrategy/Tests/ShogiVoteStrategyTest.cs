@@ -41,8 +41,8 @@ namespace VoteSystem.Server.VoteStrategy.Tests
         }
 
         /// <summary>
-        ///ParseVariation のテスト
-        ///</summary>
+        /// ParseVariation のテスト
+        /// </summary>
         [Test()]
         public void ParseVariationTest()
         {

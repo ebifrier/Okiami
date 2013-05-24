@@ -60,7 +60,7 @@
             <r:EffectObject.Emitters>
                 <f:Emitter>
                     <f:Emitter.Counter>
-                        <f:TimePeriod Duration="2.0" NumParticles="800"
+                        <f:TimePeriod Duration="2.0" NumParticles="300"
                                       EaseType="In" Category="Quadratic" />
                     </f:Emitter.Counter>
                     <f:Emitter.Initializers>
@@ -68,11 +68,11 @@
                         <f:Position Zone="{StaticResource particlePositionZone}" />
                         <f:ColorInit Color="#00fbec35" />
                         <f:Lifetime MinLifetime="0.5" MaxLifetime="1.0" />
-                        <f:ScaleInit MinScale="0.2" MaxScale="0.5" />
+                        <f:ScaleInit MinScale="0.3" MaxScale="0.7" />
                     </f:Emitter.Initializers>
                     <f:Emitter.Behaviours>
                         <f:Age IsAutoDead="False" />
-                        <f:Fade StartAlpha="0.2" EndAlpha="1.0" />
+                        <f:Fade StartAlpha="0.1" EndAlpha="1.0" />
                         <!--<f:Move />-->
                         <f:TweenTargetPosition VelocityLength="0.13" />
                     </f:Emitter.Behaviours>

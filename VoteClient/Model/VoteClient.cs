@@ -313,8 +313,12 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
-        /// 全投票期間を取得します。
+        /// 全投票時間の全期間を取得します。
         /// </summary>
+        /// <remarks>
+        /// 投票中であれば、現在の残り時間ではなく、
+        /// 投票開始時の全投票時間を返します。
+        /// </remarks>
         [DependOnProperty(typeof(VoteRoomInfo), "TotalVoteSpan")]
         public TimeSpan TotalVoteSpan
         {
@@ -335,6 +339,10 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// 投票期間を取得します。
         /// </summary>
+        /// <remarks>
+        /// 投票中であれば、現在の残り時間ではなく、
+        /// 投票開始時に設定された投票時間を返します。
+        /// </remarks>
         [DependOnProperty(typeof(VoteRoomInfo), "VoteSpan")]
         public TimeSpan VoteSpan
         {
@@ -348,6 +356,26 @@ namespace VoteSystem.Client.Model
                     }
 
                     return this.voteRoomInfo.VoteSpan;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 投票開始時刻（NTP）を取得します。
+        /// </summary>
+        [DependOnProperty(typeof(VoteRoomInfo), "BaseTimeNtp")]
+        public DateTime BaseTimeNtp
+        {
+            get
+            {
+                using (LazyLock())
+                {
+                    if (this.voteRoomInfo == null)
+                    {
+                        return DateTime.MinValue;
+                    }
+
+                    return this.voteRoomInfo.BaseTimeNtp;
                 }
             }
         }
