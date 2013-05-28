@@ -170,7 +170,7 @@ namespace VoteSystem.Client.ViewModel
                     return "";
                 }
 
-                return NicoString.UserInfoUrl(id);
+                return NicoString.GetUserInfoUrl(id);
             }
         }
 

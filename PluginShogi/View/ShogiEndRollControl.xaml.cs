@@ -208,7 +208,7 @@ namespace VoteSystem.PluginShogi.View
 
             ShogiTimeline = new TimelineData
             {
-                FadeInStartTime = TimeSpanFrom(0, 20),
+                FadeInStartTime = MovieTimeline.FadeInEndTime,
                 FadeInSpan = TimeSpanFrom(5),
                 FadeOutStartTime = TimeSpanFrom(5, 0),
                 FadeOutSpan = TimeSpanFrom(10),
@@ -282,15 +282,20 @@ namespace VoteSystem.PluginShogi.View
 
         private void MediaOpened(object sender, EventArgs e)
         {
-            /*this.oneTimer = new System.Threading.Timer(
+            this.oneTimer = new System.Threading.Timer(
                 _ => Ragnarok.Presentation.WPFUtil.UIProcess(Play),
                 null,
-                20 * 1000, -1);*/
+                20 * 1000, -1);
             //Play();
         }
 
         public void Play()
         {
+            if (this.player == null)
+            {
+                return;
+            }
+
             this.player.Play();
             //this.player.Position = TimeSpan.FromSeconds(280);
 

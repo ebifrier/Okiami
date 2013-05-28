@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Net;
 using System.Threading;
 using System.Windows;
@@ -22,25 +23,24 @@ namespace VoteSystem.Client.Model.Live
     /// <summary>
     /// 放送主用のモデルオブジェクトです。
     /// </summary>
-    public class LiveNicoClient : LiveClient
+    public sealed class LiveNicoClient : LiveClient
     {
+        private readonly object SyncObject = new object();
         private readonly NicoClient nicoClient;
         private readonly CommentClient commentClient;
+        private readonly Timer timer;
 
         /// <summary>
-        /// ニコニコ用のクライアントオブジェクトを取得します。
+        /// 放送への自動接続機能があるため、
+        /// それを使用するかどうかを取得または設定します。
         /// </summary>
-        public NicoClient NicoClient
+        /// <remarks>
+        /// 人為的な接続／切断ボタンによりスイッチされます。
+        /// </remarks>
+        public bool IsWantToConnect
         {
-            get { return this.nicoClient; }
-        }
-
-        /// <summary>
-        /// ニコニコ用のコメントクライアントを取得します。
-        /// </summary>
-        public CommentClient NicoCommentClient
-        {
-            get { return this.commentClient; }
+            get { return GetValue<bool>("IsWantToConnect"); }
+            private set { SetValue("IsWantToConnect", value); }
         }
 
         /// <summary>
@@ -48,17 +48,74 @@ namespace VoteSystem.Client.Model.Live
         /// </summary>
         public override void ConnectCommand()
         {
-            if (!this.nicoClient.IsLogin)
+            IsWantToConnect = true;
+
+            Connect(LiveUrlText);
+        }
+
+        /// <summary>
+        /// 放送URLにコミュニティURLが指定された場合は、
+        /// それを放送URLに変換します。
+        /// </summary>
+        private string ConvertUrl(string url)
+        {
+            try
             {
-                throw new InvalidOperationException(
-                    "ログインしていません (-ω-｡)");
+                if (string.IsNullOrEmpty(url) ||
+                    !this.nicoClient.IsLogin)
+                {
+                    return null;
+                }
+
+                var communityId = LiveUtil.GetCommunityId(LiveUrlText);
+                if (communityId < 0)
+                {
+                    // URLにコミュニティが指定されていない。
+                    return null;
+                }
+
+                var liveUrl = LiveUtil.GetCurrentLiveUrl(
+                    communityId,
+                    this.nicoClient.CookieContainer);
+                if (string.IsNullOrEmpty(liveUrl))
+                {
+                    // 放送中じゃない
+                    return null;
+                }
+
+                return liveUrl;
+            }
+            catch (Exception ex)
+            {
+                Util.ThrowIfFatal(ex);
+                Log.ErrorException(ex,
+                    "放送URL変換中にエラーが発生しました。");
             }
 
-            // コメントサーバーに接続する前に、それが自分の放送か確認し、
-            // もしそうならサーバーに接続します。
-            var playerStatus = PlayerStatus.Create(
-                this.LiveUrlText,
-                this.nicoClient.CookieContainer);
+            return null;
+        }
+
+        /// <summary>
+        /// ニコ生に接続します。
+        /// </summary>
+        private void Connect(string liveUrl)
+        {
+            lock (SyncObject)
+            {
+                if (!this.nicoClient.IsLogin)
+                {
+                    throw new InvalidOperationException(
+                        "ログインしていません (-ω-｡)");
+                }
+
+                // コミュニティのURLの可能性があります。
+                liveUrl = ConvertUrl(liveUrl) ?? liveUrl;
+
+                // コメントサーバーに接続する前に、それが自分の放送か確認し、
+                // もしそうならサーバーに接続します。
+                var playerStatus = PlayerStatus.Create(
+                    liveUrl,
+                    this.nicoClient.CookieContainer);
 
 #if PUBLISHED
             if (playerStatus == null || !playerStatus.Stream.IsOwner)
@@ -68,13 +125,14 @@ namespace VoteSystem.Client.Model.Live
             }
 #endif
 
-            this.commentClient.Connect(
-                playerStatus,
-                this.nicoClient.CookieContainer,
-                TimeSpan.FromSeconds(10));
+                this.commentClient.Connect(
+                    playerStatus,
+                    this.nicoClient.CookieContainer,
+                    TimeSpan.FromSeconds(30));
 
-            // メッセージの受信を開始します。
-            this.commentClient.StartReceiveMessage(1);
+                // メッセージの受信を開始します。
+                this.commentClient.StartReceiveMessage(1);
+            }
         }
 
         /// <summary>
@@ -82,13 +140,17 @@ namespace VoteSystem.Client.Model.Live
         /// </summary>
         public override void DisconnectCommand()
         {
-            if (!this.commentClient.IsConnected)
+            lock (SyncObject)
             {
-                // 接続してません(^^;
-                return;
-            }
+                if (!this.commentClient.IsConnected)
+                {
+                    // 接続してません(^^;
+                    return;
+                }
 
-            this.commentClient.Disconnect();
+                IsWantToConnect = false;
+                this.commentClient.Disconnect();
+            }
         }
 
         /// <summary>
@@ -198,11 +260,35 @@ namespace VoteSystem.Client.Model.Live
         }
 
         /// <summary>
+        /// 放送URLにコミュニティURLが指定された場合は、
+        /// 放送開始後に自動的に再接続に行きます。
+        /// </summary>
+        private void OnTimerCallback(object state)
+        {
+            lock (SyncObject)
+            {
+                if (this.commentClient.IsConnected ||
+                    !IsWantToConnect)
+                {
+                    return;
+                }
+
+                var liveUrl = ConvertUrl(LiveUrlText);
+                if (liveUrl != null)
+                {
+                    Connect(liveUrl);
+                }
+            }
+        }
+
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         public LiveNicoClient(MainModel participant, NicoClient nicoClient)
             : base(participant, LiveSite.NicoNama)
         {
+            this.nicoClient = nicoClient;
+
             this.commentClient = Global.CreateCommentClient();
             this.commentClient.Connected += (sender, e) =>
             {
@@ -229,7 +315,11 @@ namespace VoteSystem.Client.Model.Live
             this.commentClient.CommentReceived +=
                 (sender, e) => HandleComment(e.RoomIndex, e.Comment);
 
-            this.nicoClient = nicoClient;
+            this.timer = new Timer(
+                OnTimerCallback,
+                null,
+                TimeSpan.FromSeconds(10),
+                TimeSpan.FromSeconds(10));
         }
     }
 }

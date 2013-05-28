@@ -78,7 +78,7 @@ namespace VoteSystem.Protocol.View
         /// <summary>
         /// 各行に含まれる各テキストの情報を保持します。
         /// </summary>
-        private class TextInfo
+        private sealed class TextInfo
         {
             /// <summary>
             /// 表示位置などの情報を取得します。
@@ -102,12 +102,21 @@ namespace VoteSystem.Protocol.View
         /// <summary>
         /// 各行文字列の情報を保持します。
         /// </summary>
-        private class LineInfo
+        private sealed class LineInfo
         {
             /// <summary>
             /// 1行にある文字列のリストを取得します。
             /// </summary>
             public List<TextInfo> Texts
+            {
+                get;
+                set;
+            }
+
+            /// <summary>
+            /// １行目を０としたＹ方向の文字表示位置を取得または設定します。
+            /// </summary>
+            public double TotalHeight
             {
                 get;
                 set;

@@ -469,7 +469,7 @@ namespace VoteSystem.Server
                 cloned.Text = string.Format(
                     "{0}{1}{2}",
                     MirrorCommentMark,
-                    ComfirmCommentPrefix,
+                    (IsMirrorMode ? "" : ComfirmCommentPrefix),
                     text);
                 return cloned;
             }
