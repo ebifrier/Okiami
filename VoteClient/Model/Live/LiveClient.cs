@@ -109,6 +109,11 @@ namespace VoteSystem.Client.Model.Live
             set { SetValue("LiveUrlText", value); }
         }
 
+        private void AttributeChanged(object sender, PropertyChangedEventArgs e)
+        {
+            LiveAttributeChanged();
+        }
+
         /// <summary>
         /// 放送の属性値を取得します。
         /// </summary>
@@ -118,18 +123,30 @@ namespace VoteSystem.Client.Model.Live
             {
                 return this.attribute;
             }
-            private set
+            protected set
             {
                 using (LazyLock())
                 {
-                    if (value != null)
+                    if (value == null)
                     {
-                        this.RemoveDependModel(this.attribute);
-                        this.attribute = value;
-                        this.AddDependModel(this.attribute);
-
-                        this.RaisePropertyChanged("Attribute");
+                        return;
                     }
+
+                    if (this.attribute != null)
+                    {
+                        this.attribute.PropertyChanged -= AttributeChanged;
+                        this.RemoveDependModel(this.attribute);
+                    }
+
+                    this.attribute = value;
+
+                    if (this.attribute != null)
+                    {
+                        this.attribute.PropertyChanged += AttributeChanged;
+                        this.AddDependModel(this.attribute);
+                    }
+
+                    this.RaisePropertyChanged("Attribute");
                 }
             }
         }
@@ -337,8 +354,6 @@ namespace VoteSystem.Client.Model.Live
             Attribute = new LiveAttribute();
 
             this.PropertyChanged +=
-                (sender, e) => LiveAttributeChanged();
-            this.Attribute.PropertyChanged +=
                 (sender, e) => LiveAttributeChanged();
         }
     }

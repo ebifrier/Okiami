@@ -172,6 +172,13 @@ namespace VoteSystem.Client
             set { this["AS_LoginImageUrl"] = value; }
         }
 
+        [DefaultValue("")]
+        public string AS_ImageSetDirName
+        {
+            get { return (string)this["AS_ImageSetDirName"]; }
+            set { this["AS_ImageSetDirName"] = value; }
+        }
+
         [DefaultValue(true)]
         public bool AS_IsUseAsNicoCommenter
         {
@@ -192,11 +199,16 @@ namespace VoteSystem.Client
             set { this["AS_OwnerNicoLoginData"] = value; }
         }
 
-        [DefaultValue("")]
-        public string AS_ImageSetDirName
+        public string AS_NicoLiveUrl
         {
-            get { return (string)this["AS_ImageSetDirName"]; }
-            set { this["AS_ImageSetDirName"] = value; }
+            get { return (string)this["AS_NicoLiveUrl"]; }
+            set { this["AS_NicoLiveUrl"] = value; }
+        }
+
+        public LiveAttribute AS_NicoLiveAttribute
+        {
+            get { return (LiveAttribute)this["AS_NicoLiveAttribute"]; }
+            set { this["AS_NicoLiveAttribute"] = value; }
         }
         #endregion
 

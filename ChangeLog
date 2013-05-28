@@ -2,6 +2,12 @@
 
 	* VoteClient/Model/Live/LiveNicoClient.cs: URLにコミュ番号を設定すると、
 	次枠に自動で再接続に行くようにしました。
+	* VoteClient/Model/Live/LiveNicoClient.cs: 設定された放送URLと放送属性
+	を設定ファイルに保存するようにしました。
+	* VoteClient/Model/Live/LiveNicoClient.cs: コミュニティURLを設定した場
+	合、放送中の放送が無ければそれをエラーとして通知するようにしました。今
+	までは「放送ＩＤが正しくありません」というエラーを出していたため、意味
+	が分かりにくくなっていました。
 
 2013-05-24  - Ver 1.3.1.3
 

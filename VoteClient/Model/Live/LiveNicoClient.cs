@@ -44,23 +44,15 @@ namespace VoteSystem.Client.Model.Live
         }
 
         /// <summary>
-        /// ニコ生に接続します。
-        /// </summary>
-        public override void ConnectCommand()
-        {
-            IsWantToConnect = true;
-
-            Connect(LiveUrlText);
-        }
-
-        /// <summary>
         /// 放送URLにコミュニティURLが指定された場合は、
         /// それを放送URLに変換します。
         /// </summary>
-        private string ConvertUrl(string url)
+        private string ConvertUrl(string url, out bool isCommunityUrl)
         {
             try
             {
+                isCommunityUrl = false;
+
                 if (string.IsNullOrEmpty(url) ||
                     !this.nicoClient.IsLogin)
                 {
@@ -73,6 +65,8 @@ namespace VoteSystem.Client.Model.Live
                     // URLにコミュニティが指定されていない。
                     return null;
                 }
+
+                isCommunityUrl = true;
 
                 var liveUrl = LiveUtil.GetCurrentLiveUrl(
                     communityId,
@@ -92,7 +86,29 @@ namespace VoteSystem.Client.Model.Live
                     "放送URL変換中にエラーが発生しました。");
             }
 
+            isCommunityUrl = false;
             return null;
+        }
+
+        /// <summary>
+        /// ニコ生に接続します。
+        /// </summary>
+        public override void ConnectCommand()
+        {
+            bool isCommunityUrl;
+
+            // コミュニティのURLの可能性があります。
+            var liveUrl = ConvertUrl(LiveUrlText, out isCommunityUrl);
+            if (isCommunityUrl && string.IsNullOrEmpty(liveUrl))
+            {
+                throw new VoteClientException(
+                    "コミュニティの放送が確認できませんでした。");
+            }
+
+            liveUrl = liveUrl ?? LiveUrlText;
+            Connect(liveUrl);
+
+            IsWantToConnect = true;
         }
 
         /// <summary>
@@ -107,9 +123,6 @@ namespace VoteSystem.Client.Model.Live
                     throw new InvalidOperationException(
                         "ログインしていません (-ω-｡)");
                 }
-
-                // コミュニティのURLの可能性があります。
-                liveUrl = ConvertUrl(liveUrl) ?? liveUrl;
 
                 // コメントサーバーに接続する前に、それが自分の放送か確認し、
                 // もしそうならサーバーに接続します。
@@ -273,7 +286,8 @@ namespace VoteSystem.Client.Model.Live
                     return;
                 }
 
-                var liveUrl = ConvertUrl(LiveUrlText);
+                bool isCommunityUrl;
+                var liveUrl = ConvertUrl(LiveUrlText, out isCommunityUrl);
                 if (liveUrl != null)
                 {
                     Connect(liveUrl);
@@ -288,6 +302,21 @@ namespace VoteSystem.Client.Model.Live
             : base(participant, LiveSite.NicoNama)
         {
             this.nicoClient = nicoClient;
+
+            // このコンストラクタはアプリ起動時に一度しか呼ばれないため、
+            // グローバル変数にハンドラを設定しています。
+            // 本来はDisposeなどでハンドラを外す必要があります。
+            Attribute =
+                Global.Settings.AS_NicoLiveAttribute ??
+                new LiveAttribute();
+            Attribute.PropertyChanged +=
+                (_, __) => Global.Settings.Save();
+            Global.Settings.AS_NicoLiveAttribute = Attribute;
+
+            LiveUrlText = Global.Settings.AS_NicoLiveUrl;
+            AddPropertyChangedHandler(
+                "LiveUrlText",
+                (_, __) => Global.Settings.AS_NicoLiveUrl = LiveUrlText);
 
             this.commentClient = Global.CreateCommentClient();
             this.commentClient.Connected += (sender, e) =>
