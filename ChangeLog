@@ -1,3 +1,12 @@
+2013-05-29  - Ver 1.3.1.5
+
+	* PluginShogi/View/MainWindow.xaml: 将棋盤に評価値を表示するようにしま
+	した。
+	* VoteClient/Data/Image: 画像のdpiを96に統一しました。WPFはdpiを使って
+	画像の表示サイズを決めるため、ピクセルが同じでも見た目に大きな違いが出
+	ることがありました。
+	* TimeController/MainWindow.xaml: 画面の説明を修正しました。
+
 2013-05-28  - Ver 1.3.1.4
 
 	* VoteClient/Model/Live/LiveNicoClient.cs: URLにコミュ番号を設定すると、

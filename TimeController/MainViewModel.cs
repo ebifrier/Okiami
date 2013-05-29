@@ -13,6 +13,7 @@ using Ragnarok.Shogi;
 namespace TimeController
 {
     using VoteSystem.Protocol;
+    using VoteSystem.Protocol.Vote;
 
     public sealed class MainViewModel : NotifyObject
     {
@@ -66,6 +67,15 @@ namespace TimeController
         }
 
         /// <summary>
+        /// 先手側の投票状態を取得します。
+        /// </summary>
+        public VoteState BlackVoteState
+        {
+            get { return GetValue<VoteState>("BlackVoteState"); }
+            private set { SetValue("BlackVoteState", value); }
+        }
+
+        /// <summary>
         /// 一手ごとに追加する時間（後手側）を取得または設定します。
         /// </summary>
         public TimeSpan WhiteAddTime
@@ -99,7 +109,7 @@ namespace TimeController
                     // このような操作を行います。
                     value = TimeSpan.FromSeconds(
                         (int)value.TotalSeconds +
-                        (1000 - WhiteLeaveTime.Milliseconds) / 1000.0);
+                        Math.Min(999, 1000 - WhiteLeaveTime.Milliseconds) / 1000.0);
                 }
 
                 SetValue("WhiteUsedTime", value);
@@ -150,7 +160,10 @@ namespace TimeController
             {
                 if (Turn == BWType.Black)
                 {
-                    BlackLeaveTime = MathEx.Max(BlackLeaveTime - elapsed, TimeSpan.Zero);
+                    if (!IsBlackAutoSync || BlackVoteState == VoteState.Voting)
+                    {
+                        BlackLeaveTime = MathEx.Max(BlackLeaveTime - elapsed, TimeSpan.Zero);
+                    }
                 }
                 else
                 {
@@ -165,12 +178,20 @@ namespace TimeController
         /// </summary>
         private void OnSyncTimeTimer(object sender, EventArgs e)
         {
-            var span = ProtocolUtil.ReadTotalVoteSpan();
-            if (span == TimeSpan.MinValue)
+            VoteState state;
+            DateTime startTime;
+            TimeSpan totalSpan;
+
+            if (!ProtocolUtil.ReadTotalVoteSpan(
+                    out state, out startTime, out totalSpan))
             {
                 IsBlackAutoSync = false;
+                BlackVoteState = VoteState.Stop;
                 return;
             }
+
+            var span = ProtocolUtil.CalcTotalVoteLeaveTime(
+                state, startTime, totalSpan);
 
             // 表示と１秒以上違っていたら、時刻を更新します。
             var diff = BlackLeaveTime - span;
@@ -181,6 +202,7 @@ namespace TimeController
             }
 
             IsBlackAutoSync = true;
+            BlackVoteState = state;
         }
 
         /// <summary>
@@ -191,6 +213,7 @@ namespace TimeController
             Turn = BWType.Black;
             BlackLeaveTime = new TimeSpan(2, 0, 0);
             IsBlackAutoSync = false;
+            BlackVoteState = VoteState.Stop;
             WhiteLeaveTime = new TimeSpan(2, 0, 0);
             WhiteUsedTime = TimeSpan.Zero;
             WhiteAddTime = TimeSpan.Zero;

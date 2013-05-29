@@ -37,6 +37,11 @@
                           Command="{x:Static s:VoteResultControl.OpenSettingDialog}"
                           CommandTarget="{Binding PlacementTarget,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                <Separator />
+                <MenuItem Header="評価値表示の設定(_E)"
+                          Command="{x:Static r:EvaluationControl.OpenSettingDialog}"
+                          CommandTarget="{Binding PlacementTarget,
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
             </ContextMenu>
         </ResourceDictionary>
     </Window.Resources>
@@ -84,6 +89,8 @@
                 <Separator />
                 <MenuItem Header="投票結果の設定(_R)"
                           Command="{x:Static s:VoteResultControl.OpenSettingDialog}" />
+                <MenuItem Header="評価値の設定(_R)"
+                          Command="{x:Static r:EvaluationControl.OpenSettingDialog}" />
             </MenuItem>
 
             <MenuItem Header="表示(_V)">
@@ -94,6 +101,9 @@
                 <MenuItem Header="投票結果の表示(_E)"
                           IsCheckable="True"
                           IsChecked="{Binding Settings.AS_IsShowVoteResult}" />
+                <MenuItem Header="評価値の表示(_E)"
+                          IsCheckable="True"
+                          IsChecked="{Binding Settings.AS_IsShowEvaluationValue}" />
                 <Separator />
                 <MenuItem Header="変化ウィンドウ(_V)"
                           Command="{x:Static svm:Commands.ShowMoveManageView}" />
@@ -121,7 +131,7 @@
             <!-- 投票結果など -->
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0" />
+                    <RowDefinition Height="2*" />
                     <RowDefinition Height="101*" />
                     <RowDefinition Height="100*" />
                     <RowDefinition Height="2*" />
@@ -130,7 +140,8 @@
                     <ColumnDefinition Width="4*" />
                     <ColumnDefinition Width="95*" />
                     <ColumnDefinition Width="300*" />
-                    <ColumnDefinition Width="100*" />
+                    <ColumnDefinition Width="95*" />
+                    <ColumnDefinition Width="4*" />
                 </Grid.ColumnDefinitions>
 
                 <s:VoteResultControl
@@ -157,9 +168,18 @@
                     DisplayCandidateCount="{Binding Settings.VR_DisplayResultCount}"
                     IsDisplayPointFullWidth="{Binding Settings.VR_IsDisplayPointFullWidth}" />
 
-                <!--<s:EvaluationControl
-                    Grid.Row="1" Grid.Column="3"
-                    ImageSetList="{s:ImageSetList Data/Image}" />-->
+                <Viewbox Grid.Row="1" Grid.Column="3"
+                         Stretch="Uniform"
+                         VerticalAlignment="Top">
+                    <r:EvaluationControl x:Name="evaluationControl"
+                                         ImageSetList="{r:ImageSetList Data/Image}"
+                                         Visibility="{Binding Settings.AS_IsShowEvaluationValue,
+                                                              Converter={StaticResource visibilityConverterHidden}}"
+                                         SelectedImageSetTitle="{Binding AS_EvaluationImageSetTitle,
+                                                                         Source={x:Static l:ShogiGlobal.Settings}}"
+                                         UserPoint="{Binding VoteResult.EvaluationPoint,
+                                                             Source={x:Static l:ShogiGlobal.VoteClient}}" />
+                </Viewbox>
             </Grid>
 
             <!-- 将棋盤 -->

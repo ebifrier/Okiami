@@ -37,6 +37,20 @@ namespace VoteSystem.PluginShogi
             get { return GetValue<bool>("AS_IsShowVoteResult"); }
             set { SetValue("AS_IsShowVoteResult", value); }
         }
+
+        [DefaultValue(true)]
+        public bool AS_IsShowEvaluationValue
+        {
+            get { return GetValue<bool>("AS_IsShowEvaluationValue"); }
+            set { SetValue("AS_IsShowEvaluationValue", value); }
+        }
+
+        [DefaultValue("伊吹萃香")]
+        public string AS_EvaluationImageSetTitle
+        {
+            get { return GetValue<string>("AS_EvaluationImageSetTitle"); }
+            set { SetValue("AS_EvaluationImageSetTitle", value); }
+        }
         #endregion
 
         #region 現局面設定ダイアログ

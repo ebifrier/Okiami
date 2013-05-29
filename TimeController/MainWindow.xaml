@@ -141,7 +141,7 @@
 
         <Menu Grid.ColumnSpan="2">
             <MenuItem Header="表示(_V)">
-                <MenuItem Header="時間ウィンドウを表示(_T)"
+                <MenuItem Header="時間ウィンドウ(_T)"
                           Command="{x:Static l:Commands.ShowTimeWindow}" />
             </MenuItem>
         </Menu>
@@ -156,7 +156,7 @@
         </GroupBox>
 
         <GroupBox Grid.Row="1" Grid.Column="0"
-                  Header="中断・再開など"
+                  Header="対局の中断・再開など"
                   Margin="10,0,0,0">
             <StackPanel Orientation="Horizontal">                
                 <Label VerticalAlignment="Center"
@@ -168,7 +168,7 @@
         </GroupBox>
 
         <GroupBox Grid.Row="3" Grid.ColumnSpan="2"
-                  Header="先手側の設定"
+                  Header="先手側の残り時間"
                   Margin="{StaticResource gridLength}">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">                    
@@ -202,7 +202,7 @@
         </GroupBox>
 
         <GroupBox Grid.Row="5" Grid.ColumnSpan="2"
-                  Header="後手側の設定"
+                  Header="後手側の残り時間"
                   Margin="{StaticResource gridLengthLast}">
             <StackPanel Orientation="Vertical">
                 <Grid>

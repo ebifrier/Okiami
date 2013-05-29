@@ -88,7 +88,7 @@
                  Stretch="Fill">
             <r:EvaluationControl x:Name="EvaluationControl"
                                  ImageSetList="{r:ImageSetList Data/Image}"
-                                 SelectedImageSetTitle="{Binding AS_ImageSetDirName,
+                                 SelectedImageSetTitle="{Binding AS_EvaluationImageSetTitle,
                                                                  Source={x:Static t:Global.Settings}}"
                                  UserPoint="{Binding VoteResult.EvaluationPoint,
                                                      Source={x:Static t:Global.VoteClient}}"

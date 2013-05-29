@@ -182,6 +182,10 @@ namespace VoteSystem.PluginShogi.View
             this.voteResultControl.SettingUpdated +=
                 (_, __) => ShogiGlobal.Settings.Save();
 
+            this.evaluationControl.InitializeBindings(this);
+            this.evaluationControl.SettingUpdated +=
+                (_, __) => ShogiGlobal.Settings.Save();
+
             Closed += MainWindow_Closed;
 
             // FPSを表示
