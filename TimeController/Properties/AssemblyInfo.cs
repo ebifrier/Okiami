@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -10,9 +11,9 @@ using System.Windows;
 [assembly: AssemblyTitle("TimeController")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("co516151")]
 [assembly: AssemblyProduct("TimeController")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCopyright("Copyright © えびふらい 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,6 +21,7 @@ using System.Windows;
 // 参照不可能になります。COM からこのアセンブリ内の型にアクセスする場合は、
 // その型の ComVisible 属性を true に設定してください。
 [assembly: ComVisible(false)]
+[assembly: CLSCompliant(true)]
 
 //ローカライズ可能なアプリケーションのビルドを開始するには、
 //.csproj ファイルの <UICulture>CultureYouAreCodingWith</UICulture> を
@@ -51,5 +53,5 @@ using System.Windows;
 // すべての値を指定するか、下のように '*' を使ってビルドおよびリビジョン番号を 
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.0")]
+//[assembly: AssemblyFileVersion("1.0.0.0")]
