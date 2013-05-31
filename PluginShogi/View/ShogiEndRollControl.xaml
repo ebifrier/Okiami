@@ -56,7 +56,8 @@
                 <p:ShogiControl x:Name="ShogiControl"
                                 PieceImage="{Binding KomaImage}"
                                 BanBrush="{StaticResource banBrush}"
-                                PieceBoxBrush="{StaticResource komadaiBrush}"/>
+                                PieceBoxBrush="{StaticResource komadaiBrush}"
+                                IsLeaveTimeVisible="False" />
             </Grid>
 
             <s:EndRollControl Canvas.Left="120"

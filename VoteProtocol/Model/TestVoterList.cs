@@ -252,14 +252,15 @@ namespace VoteSystem.Protocol.Model
                 UnjoinedVoterCount = 236,
             };
             voterList.JoinedVoterList.AddRange(
-                list.OrderBy(_ => Guid.NewGuid()));
+                list.OrderBy(_ => Guid.NewGuid())
+                    .Take(150));
 
             voterList.DonorList.AddRange(
                 list.OrderBy(_ => Guid.NewGuid())
                     .Take(30).Select(_ => _.Name));
 
             voterList.LiveOwnerList.AddRange(
-                from name in liveOwnerList
+                from name in liveOwnerList.Take(20)
                 orderby Guid.NewGuid()
                 select new VoterInfo
                 {

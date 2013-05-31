@@ -152,7 +152,7 @@ namespace VoteSystem.Protocol.Model
         public Element()
         {
             Color = Colors.White;
-            FontSize = 14.0;
+            FontSize = 13.0;
             FontStyle = FontStyles.Normal;
             FontWeight = FontWeights.Normal;
             Column = 0;

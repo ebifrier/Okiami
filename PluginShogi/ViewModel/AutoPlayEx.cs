@@ -18,12 +18,19 @@ namespace VoteSystem.PluginShogi.ViewModel
     /// </summary>
     public class AutoPlayEx : AutoPlay
     {
-        private IEnumerator<bool> enumerator;
-
         /// <summary>
         /// エフェクト管理用のオブジェクトを取得または設定します。
         /// </summary>
         public EffectManager EffectManager
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 指し手に合わせて背景画像を変えるかどうかを取得または設定します。
+        /// </summary>
+        public bool IsChangeMoveCount
         {
             get;
             set;
@@ -90,10 +97,37 @@ namespace VoteSystem.PluginShogi.ViewModel
                 BasePosition += CutInInternal;
             }
 
-            // コルーチンを進めます。
-            while (this.enumerator.MoveNext())
+            foreach (var result in WaitExecutor(BeginningInterval))
             {
-                yield return this.enumerator.Current;
+                yield return result;
+            }
+
+            // 最初に背景色のみを更新します。
+            foreach (var result in BackgroundFadeInExecutor())
+            {
+                yield return result;
+            }
+
+            // 指し手を進めます。
+            foreach (var result in DoMoveExecutor())
+            {
+                if (IsChangeMoveCount && EffectManager != null)
+                {
+                    EffectManager.ChangeMoveCount(Board.MoveCount);
+                }
+
+                yield return result;
+            }
+
+            // 背景色をもとに戻します。
+            foreach (var result in BackgroundFadeOutExecutor())
+            {
+                yield return result;
+            }
+
+            foreach (var result in WaitExecutor(EndingInterval))
+            {
+                yield return result;
             }
 
             if (EffectManager != null)
@@ -119,7 +153,6 @@ namespace VoteSystem.PluginShogi.ViewModel
             CutInInternal = TimeSpan.FromSeconds(2.0);
 
             UpdateEnumerator = MakeUpdateEnumerator().GetEnumerator();
-            this.enumerator = base.GetUpdateEnumerator().GetEnumerator();
         }
 
         /// <summary>
@@ -131,7 +164,6 @@ namespace VoteSystem.PluginShogi.ViewModel
             CutInInternal = TimeSpan.FromSeconds(2.0);
 
             UpdateEnumerator = MakeUpdateEnumerator().GetEnumerator();
-            this.enumerator = base.GetUpdateEnumerator().GetEnumerator();
         }
 
         /// <summary>
@@ -143,7 +175,6 @@ namespace VoteSystem.PluginShogi.ViewModel
             CutInInternal = TimeSpan.FromSeconds(2.0);
 
             UpdateEnumerator = MakeUpdateEnumerator().GetEnumerator();
-            this.enumerator = base.GetUpdateEnumerator().GetEnumerator();
         }
     }
 }

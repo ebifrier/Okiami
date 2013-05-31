@@ -96,6 +96,46 @@ namespace VoteSystem.Protocol.Vote
         }
 
         /// <summary>
+        /// 放送数合計を取得または設定します。
+        /// </summary>
+        [DataMember(Order = 10, IsRequired = true)]
+        public int LiveCount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 来場者数合計を取得または設定します。
+        /// </summary>
+        [DataMember(Order = 11, IsRequired = true)]
+        public int LiveVisitorCount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// コメント数合計を取得または設定します。
+        /// </summary>
+        [DataMember(Order = 12, IsRequired = true)]
+        public int LiveCommentCount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 寄付金額合計を取得または設定します。
+        /// </summary>
+        [DataMember(Order = 13, IsRequired = true)]
+        public int DonorAmount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// デシリアライズ後に呼ばれます。
         /// </summary>
         [OnDeserialized()]

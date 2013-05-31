@@ -1,3 +1,12 @@
+2013-06-01  - Ver 1.3.1.6
+
+	* PluginShogi/View/ShogiEndRollControl.xaml.cs: 自動再生時に背景も一緒
+	に変えるようにしました。
+	* PluginShogi/ViewModel/AutoPlayEx.cs: 自動再生時に背景も一緒に変えるよ
+	うにしました。
+	* VoteProtocol/Vote/VoterList.cs: 全放送数などのプロパティを追加しまし
+	た。
+
 2013-05-29  - Ver 1.3.1.5
 
 	* PluginShogi/View/MainWindow.xaml: 将棋盤に評価値を表示するようにしま

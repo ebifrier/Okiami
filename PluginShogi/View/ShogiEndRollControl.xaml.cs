@@ -50,10 +50,7 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public TimeSpan FadeInEndTime
         {
-            get
-            {
-                return (FadeInStartTime + FadeInSpan);
-            }
+            get { return (FadeInStartTime + FadeInSpan); }
         }
 
         /// <summary>
@@ -79,10 +76,7 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public TimeSpan FadeOutEndTime
         {
-            get
-            {
-                return (FadeOutStartTime + FadeOutSpan);
-            }
+            get { return (FadeOutStartTime + FadeOutSpan); }
         }
 
         /// <summary>
@@ -90,10 +84,7 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public TimeSpan VisibleSpan
         {
-            get
-            {
-                return (FadeOutStartTime - FadeInEndTime);
-            }
+            get { return (FadeOutStartTime - FadeInEndTime); }
         }
 
         /// <summary>
@@ -101,10 +92,7 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public TimeSpan FullVisibleSpan
         {
-            get
-            {
-                return (FadeOutEndTime - FadeInStartTime);
-            }
+            get { return (FadeOutEndTime - FadeInStartTime); }
         }
 
         /// <summary>
@@ -308,6 +296,8 @@ namespace VoteSystem.PluginShogi.View
             var count = bmList.Count() + 2;
             this.autoPlay = new ViewModel.AutoPlayEx(board, bmList)
             {
+                EffectManager = this.effectManager,
+                IsChangeMoveCount = true,
                 Interval = TimeSpan.FromSeconds(interval.TotalSeconds / count),
             };
         }

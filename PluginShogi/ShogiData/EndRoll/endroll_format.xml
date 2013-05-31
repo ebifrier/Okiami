@@ -17,15 +17,11 @@
 	</Line>
 	<Line />
 	<Lines Data="$JoinedVoterList">
-<!--		<Line>
-			<Format Column="0" Text="$Name" Alignment="Right" />
-			<Format Column="1" Text="$Skill" Color="$Color" Alignment="Left" />
-		</Line>-->
 		<Line>
 			<Format ColumnSpan="2" Text="$Name" Color="$Color" />
 		</Line>
 		<Line>
-			<Format ColumnSpan="2" Text="「$Skill」" FontSize="12" FontStyle="Oblique" />
+			<Format ColumnSpan="2" Text="「$Skill」" FontSize="10" FontStyle="Oblique" />
 		</Line>
 	</Lines>
 	<Line />
@@ -46,9 +42,8 @@
 
 	<!-- 使用ツールの素材など -->
 	<Line>
-		<Format ColumnSpan="2" Text="ツール素材提供者" FontWeight="Bold" />
+		<Format ColumnSpan="2" Text="ツール素材提供" FontWeight="Bold" />
 	</Line>
-  <Line />
 	<Line>
 		<Format Column="0" Text="イラスト素材" Alignment="Right" />
 		<Format Column="1" Text="梔子こみゅにてぃ" Alignment="Left" />
@@ -62,17 +57,14 @@
 	<Line>
 		<Format Column="1" Text="フリー素材の来夢来人" Alignment="Left" />
 	</Line>
-  <Line />
 	<Line>
 		<Format Column="0" Text="将棋盤・駒素材" Alignment="Right" />
 		<Format Column="1" Text="mind＆2ちゃんねるの方々" Alignment="Left" />
 	</Line>
-  <Line />
 	<Line>
 		<Format Column="0" Text="評価値画像" Alignment="Right" />
 		<Format Column="1" Text="希祥" Alignment="Left" />
 	</Line>
-  <Line />
 	<Line>
 		<Format Column="0" Text="カットイン画像" Alignment="Right" />
 		<Format Column="1" Text="ザビ山" Alignment="Left" />
@@ -80,17 +72,14 @@
 	<Line>
 		<Format Column="1" Text="MAXみちこFEVER" Alignment="Left" />
 	</Line>
-  <Line />
 	<Line>
 		<Format Column="0" Text="囲い画像" Alignment="Right" />
 		<Format Column="1" Text="さまんさ" Alignment="Left" />
 	</Line>
-  <Line />
 	<Line>
 		<Format Column="0" Text="エフェクト素材" Alignment="Right" />
 		<Format Column="1" Text="ぴぽや" Alignment="Left" />
 	</Line>
-  <Line />
 	<Line>
 		<Format Column="0" Text="背景画像" Alignment="Right" />
 		<Format Column="1" Text="とりのあくあ" Alignment="Left" />
@@ -101,12 +90,10 @@
 	<Line>
 		<Format Column="1" Text="yoshi" Alignment="Left" />
 	</Line>
-  <Line />
 	<Line>
 		<Format Column="0" Text="音声素材" Alignment="Right" />
 		<Format Column="1" Text="あみたろ" Alignment="Left" />
 	</Line>
-  <Line />
 	<Line>
 		<Format Column="0" Text="効果音素材" Alignment="Right" />
 		<Format Column="1" Text="Senses Circuit" Alignment="Left" />
@@ -120,7 +107,6 @@
 	<Line>
 		<Format Column="1" Text="369" Alignment="Left" />
 	</Line>
-  <Line />
 	<Line>
 		<Format Column="0" Text="ソースコード" Alignment="Right" />
 		<Format Column="1" Text="Jaroslaw Kowalski" Alignment="Left" />
@@ -162,7 +148,6 @@
 	<Line>
 		<Format ColumnSpan="2" Text="エンディング動画" />
 	</Line>
-  <Line />
 	<Line>
 		<Format ColumnSpan="2" Text="『アリスに花束』" FontWeight="Bold" />
 	</Line>
@@ -176,14 +161,14 @@
 	</Line>
 	<Line>
 		<Format Column="0" Text="歌" Alignment="Right" />
-		<Format Column="1" Text="―――" Alignment="Left" />
+		<Format Column="1" Text="香月ゆか" Alignment="Left" />
 	</Line>
 
 	<Line Count="4" />
 
-	<!-- 将棋連盟協力者一覧 -->
+	<!-- 将棋連盟協力 -->
 	<Line>
-		<Format ColumnSpan="2" Text="将棋連盟協力者" FontWeight="Bold" />
+		<Format ColumnSpan="2" Text="将棋連盟協力" FontWeight="Bold" />
 	</Line>
 	<Line>
 		<Format ColumnSpan="2" Text="将棋兄さん" />
@@ -193,7 +178,7 @@
 
   <!-- ＨＰ制作 -->
   <Line>
-    <Format ColumnSpan="2" Text="ホームページ制作者" FontWeight="Bold" />
+    <Format ColumnSpan="2" Text="ホームページ制作" FontWeight="Bold" />
   </Line>
   <Line>
     <Format ColumnSpan="2" Text="サマンサ" />
@@ -201,29 +186,13 @@
 
   <Line Count="4" />
 
-  <!-- 機材協力者一覧 -->
+  <!-- 機材協力 -->
   <Line>
-    <Format ColumnSpan="2" Text="機材提供 協力者" FontWeight="Bold" />
+    <Format ColumnSpan="2" Text="機材協力" FontWeight="Bold" />
   </Line>
   <Line>
     <Format ColumnSpan="2" Text="スタスタ" />
   </Line>
-
-  <Line Count="4" />
-
-	<!-- 企画スタッフ一覧 -->
-	<Line>
-		<Format ColumnSpan="2" Text="企画スタッフ" FontWeight="Bold" />
-	</Line>
-	<Line>
-		<Format ColumnSpan="2" Text="ｃｃｏ" />
-	</Line>
-	<Line>
-		<Format ColumnSpan="2" Text="エヌる" />
-	</Line>
-	<Line>
-		<Format ColumnSpan="2" Text="スタスタ" />
-	</Line>
 
 	<Line Count="10" />
 
@@ -245,6 +214,41 @@
 		</Line>
 	</Lines>
 
+  <Line Count="4" />
+
+  <!-- 企画スタッフ一覧 -->
+  <Line>
+    <Format ColumnSpan="2" Text="企画スタッフ" FontWeight="Bold" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="ｃｃｏ" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="エヌる" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="スタスタ" />
+  </Line>
+
+  <Line Count="4" />
+
+  <!-- スペシャルサンクス -->
+  <Line>
+    <Format ColumnSpan="2" Text="Special Thanks" FontWeight="Bold" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="竹内亜衣" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="ユーフォリア" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="とまとりあ" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="宣誓" />
+  </Line>
+
 	<Line Count="10" />
 
 	<!-- 放送主一覧とその人数などを表示 -->
@@ -260,6 +264,12 @@
 		</Line>
 	</Lines>
 	<Line />
+  <Lines Data="$LiveOwnerCountOther">
+    <Line>
+      <Format Column="0" Text="その他" FontWeight="Bold" Alignment="Right" />
+      <Format Column="1" Text="$()名" FontWeight="Bold" Alignment="Left" />
+    </Line>
+  </Lines>
 	<Lines Data="$LiveOwnerCount">
 		<Line>
 			<Format Column="0" Text="合計" FontWeight="Bold" Alignment="Right" />
