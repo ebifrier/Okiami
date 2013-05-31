@@ -5,6 +5,9 @@
 
 require 'fileutils'
 require 'make_release'
+require 'kconv'
+require 'mysql'
+require 'rexml/document'
 
 $HtmlBasePath = "E:/Dropbox/NicoNico/homepage/garnet-alice.net/programs/votesystem"
 
@@ -34,6 +37,8 @@ def setup_dist(appdata)
       deleteall(name)
     elsif /SpeedTest\.exe.*$/i =~ name
       deleteall(name)
+    elsif /TimeController\.exe.*$/i =~ name
+      deleteall(name)
     end
   end
   
@@ -57,7 +62,7 @@ end
 def make_dist(appdata)
   # アセンブリバージョンが入ったディレクトリに
   # 作成ファイルを出力します。
-  solution_path = File.join(File.dirname(appdata.dist_path), "VoteSystem.sln")
+  solution_path = File.join( File.dirname(appdata.dist_path), "VoteSystem.sln")
   appdata.build(solution_path, "CLR_V4;PUBLISHED")
   setup_dist(appdata)
   
@@ -69,6 +74,26 @@ def make_dist(appdata)
   appdata.make_release_note()
   make_recent(appdata)
 end
+
+#
+# wordpressのダウンロードリンクを更新します。
+#
+=begin
+def update_link()
+  con = Mysql.connect('garnet-alice.net', 'wordpress', `type db-password`, 'wordpress')
+  con.charset = 'utf8'
+  query = con.query('SELECT post_content FROM wp_posts WHERE ID = 120')
+  if query.size != 1
+    throw "query error"
+  end
+  
+  content = query.first[0]
+  puts content.kconv(Kconv::SJIS, Kconv::UTF8)
+  
+  doc = REXML::Document.new(content)
+  puts doc
+end
+=end
 
 #
 # 必要なファイルをコピーします。
