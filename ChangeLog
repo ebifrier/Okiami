@@ -1,3 +1,28 @@
+2013-06-03  - Ver 1.3.2.1
+
+	* PluginShogi/ShogiData/Effect/Other/CastleEffect/CastleEffect.xaml: 囲
+	いエフェクトの文字サイズを修正しました。
+	* PluginShogi/ShogiGlobal.cs: エンドロールの参加者一覧取得用メソッドを
+	エンドロールコントロールに移動しました。
+	* TimeController/Commands.cs: 手数の上げ下げを専用コマンドで行うように
+	しました。
+	* TimeController/MainWindow.xaml: 手数の上げ下げをNumericUpDownではなく、
+	専用のボタンから行うようにしました。
+	* TimeController/TimeWindow.xaml: 残り時間表示用のウィンドウを修正し、
+	よりきれいに表示されるようにしました。
+	* VoteClient/Settings.part.cs: 秒読みSEのデフォルトをあみたろにしました。
+	* VoteProtocol/Model/EndRollList.cs: DataContextがDynamicViewModelオブ
+	ジェクトの場合の処理を追加しました。このクラスはDynamicObjectを継承して
+	いるため、単純なリフレクションではプロパティ値を取得できません。
+	* VoteProtocol/View/VoteResultControl.xaml: 投票結果の文字を一回り大き
+	くし、見やすくしました。
+	* VoteServer/VoteTimeKeeper.cs: 残り時間が０になっても投票が終わらない
+	バグを修正しました。
+	* VoteClient/Data/Sound/none: ディレクトリ名を0noneから改名しました。0
+	を最初につけていると秒読みＳＥのデフォルトが無音となるため、この名前に
+	していましたが、デフォルトをあみたろにしたので、この措置は不要になりま
+	した。
+
 2013-06-02  - Ver 1.3.2.0
 
 	* バージョンを1.3.2に更新しました。

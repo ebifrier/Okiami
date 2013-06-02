@@ -409,11 +409,11 @@ namespace VoteSystem.Client.Model
                 {
                     CandidateList = new []
                     {
-                        new VoteCandidatePair() {Candidate = "12銀", Point = 10},
-                        new VoteCandidatePair() {Candidate = "55角", Point = 1000},
-                        new VoteCandidatePair() {Candidate = "26成香", Point = 100},
-                        //new VoteCandidatePair() {Candidate = "34成銀直", Point = 33450},
-                        //new VoteCandidatePair() {Candidate = "44桂直不成", Point = 4512},
+                        new VoteCandidatePair() {Candidate = "１二銀", Point = 10},
+                        new VoteCandidatePair() {Candidate = "５五角", Point = 1000},
+                        new VoteCandidatePair() {Candidate = "２六成香", Point = 100},
+                        new VoteCandidatePair() {Candidate = "３四成銀直", Point = 3450},
+                        new VoteCandidatePair() {Candidate = "４四桂直不成", Point = 4512},
                     },
                     TimeExtendPoint = 0,
                     TimeStablePoint = 100,

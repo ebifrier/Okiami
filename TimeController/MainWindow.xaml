@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
         xmlns:l="clr-namespace:TimeController"
-        d:DesignWidth="320"
+        d:DesignWidth="357"
         Title="時間管理します" SizeToContent="WidthAndHeight"
         ResizeMode="CanMinimize" mc:Ignorable="d">
     
@@ -144,26 +144,37 @@
                 <MenuItem Header="時間ウィンドウ(_T)"
                           Command="{x:Static l:Commands.ShowTimeWindow}" />
             </MenuItem>
+            <MenuItem Header="操作(_O)">
+                <MenuItem Header="手を戻す(_U)"
+                          Command="{x:Static l:Commands.DecMoveCount}" />
+            </MenuItem>
         </Menu>
-
-        <GroupBox Grid.Row="1" Grid.Column="1"
-                  Header="手数"
-                  Margin="10,0,10,0">
-            <r:NumericUpDown Value="{Binding MoveCount,
-                                             Converter={StaticResource toDecimalConverter}}"
-                             Minimum="0" Maximum="300"
-                             FontSize="20" MinWidth="70" />
-        </GroupBox>
 
         <GroupBox Grid.Row="1" Grid.Column="0"
                   Header="対局の中断・再開など"
                   Margin="10,0,0,0">
-            <StackPanel Orientation="Horizontal">                
+            <StackPanel Orientation="Horizontal">
                 <Label VerticalAlignment="Center"
                        Content="状態：" />
                 <Label Style="{StaticResource playStateLabelStyle}" />
                 <Button Style="{StaticResource playButtonStyle}"
-                        Command="{x:Static l:Commands.Play}" />
+                        Command="{x:Static l:Commands.Play}"
+                        VerticalAlignment="Center" />
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Grid.Column="1"
+                  Header="手数"
+                  Margin="10,0,10,0">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="{Binding MoveCount}"
+                       ContentStringFormat="{}{0, 3}"
+                       HorizontalContentAlignment="Right"
+                       FontSize="20" MinWidth="50" />
+                <Button Margin="5,0,0,0"
+                        Content="手を進める"
+                        VerticalAlignment="Center"
+                        Command="{x:Static l:Commands.IncMoveCount}" />
             </StackPanel>
         </GroupBox>
 

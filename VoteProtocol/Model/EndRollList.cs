@@ -13,6 +13,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 
 using Ragnarok.Utility;
+using Ragnarok.ObjectModel;
 
 namespace VoteSystem.Protocol.Model
 {
@@ -547,7 +548,13 @@ namespace VoteSystem.Protocol.Model
             }
 
             var g = (m.Groups[1].Success ? m.Groups[1] : m.Groups[2]);
-            var data = MethodUtil.GetPropertyValue(dataContext, g.Value);
+            object data;
+
+            var dobject = dataContext as DynamicViewModel;
+            data = (dobject != null ?
+                dobject[g.Value] :
+                MethodUtil.GetPropertyValue(dataContext, g.Value));
+
             if (data == null)
             {
                 throw new EndRollListException(

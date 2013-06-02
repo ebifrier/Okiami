@@ -494,9 +494,9 @@ namespace VoteSystem.Server
         {
             using (LazyLock())
             {
-                // -1秒になったら投票を終了します。
+                // 0秒になったら投票を終了します。
                 if (VoteState == VoteState.Voting &&
-                    CalcLeaveTime(VoteSpan) < TimeSpan.Zero)
+                    CalcLeaveTime(VoteSpan) <= TimeSpan.Zero)
                 {
                     VoteEnded(VoteState.End);
 

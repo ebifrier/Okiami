@@ -8,10 +8,10 @@
                       MaxAngle="{r:Calc '${StartAngle} + 20'}" />
     <f:TextZone x:Key="targetZone" Text="${CastleName}"
                 FontSize="10" FontFamily="ＭＳ 明朝"
-                ScaleX="{r:Calc '40.0 / ${CastleNameLen}'}"
-                ScaleY="{r:Calc '10 + 27.0 / ${CastleNameLen}'}"
-                DivideX="{r:IntCalc 'min(2.0, 2.0 + 4.0 / ${CastleNameLen})', Mode=Floor}"
-                DivideY="{r:IntCalc '2.0 + 1.0 / ${CastleNameLen}', Mode=Floor}"
+                ScaleX="{r:Calc 'min(17.0, 4.0 + 23.0 / ${CastleNameLen})'}"
+                ScaleY="{r:Calc 'min(20.0, 7.0 + 30.0 / ${CastleNameLen})'}"
+                DivideX="{r:IntCalc '2.0 + 4.0 / ${CastleNameLen}', Mode=Floor}"
+                DivideY="{r:IntCalc '2.0 + 2.0 / ${CastleNameLen}', Mode=Floor}"
                 OffsetX="320" OffsetY="320" />
     
     <Vector3D x:Key="backgroundCoord"
@@ -169,7 +169,7 @@
                             <f:Position Zone="{StaticResource startZone}" />
                             <f:ColorInit Color="0xff00ffff" />
                             <f:Velocity Zone="{StaticResource speedZone}" />
-                            <f:ScaleInit Scale="15.0" />
+                            <f:ScaleInit Scale="13.0" />
                             <f:Lifetime Value="3.8" />
                             <f:TextTargetInit Zone="{StaticResource targetZone}" />
                         </f:Emitter.Initializers>

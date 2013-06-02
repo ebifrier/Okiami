@@ -26,11 +26,6 @@ namespace VoteSystem.PluginShogi
     public static class ShogiGlobal
     {
         /// <summary>
-        /// xamlではメソッドを直接指定することができないため。
-        /// </summary>
-        public static Func<VoterList> VoterListGetter = GetVoterList;
-
-        /// <summary>
         /// 静的コンストラクタ
         /// </summary>
         public static void Initialize(ShogiPlugin plugin)
@@ -207,29 +202,7 @@ namespace VoteSystem.PluginShogi
             private set;
         }
 
-        /// <summary>
-        /// 投票者リストを更新します。
-        /// </summary>
-        public static VoterList GetVoterList()
-        {
-            try
-            {
-                if (VoteClient == null)
-                {
-                    return null;
-                }
-
-                return VoteClient.GetVoterList();
-                //return Protocol.Model.TestVoterList.GetTestVoterList();
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage(ex,
-                    "参加者リストの取得に失敗しました。(-A-;)");
-
-                return null;
-            }
-        }
+        
 
         /// <summary>
         /// エラーメッセージを出力します。

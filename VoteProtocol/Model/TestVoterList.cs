@@ -39,6 +39,7 @@ namespace VoteSystem.Protocol.Model
             {
                 //CreateInfo("ーーーー", "----"),
                 //CreateInfo("^'''''", "____"),
+                CreateInfo("フルチンパイルドライバー", "おつおつおつおつ今来たよ～　って終わってるしｗ"),
                 CreateInfo("(｀・ω・´)", "永世15級"),
                 CreateInfo("12きう"),
                 CreateInfo("sc", "1級"),
@@ -211,6 +212,7 @@ namespace VoteSystem.Protocol.Model
                 CreateInfo("名無しさん", "煽り6段"),
                 CreateInfo("明", "棋力竜王"),
                 CreateInfo("梟", "3級"),
+                CreateInfo("ส้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้（＾ω＾）ส้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้้ ", "テスト"),
             };
 
             var liveOwnerList = new List<string>
@@ -251,16 +253,14 @@ namespace VoteSystem.Protocol.Model
             {
                 UnjoinedVoterCount = 236,
             };
-            voterList.JoinedVoterList.AddRange(
-                list.OrderBy(_ => Guid.NewGuid())
-                    .Take(150));
+            voterList.JoinedVoterList.AddRange(list);
 
             voterList.DonorList.AddRange(
                 list.OrderBy(_ => Guid.NewGuid())
                     .Take(30).Select(_ => _.Name));
 
             voterList.LiveOwnerList.AddRange(
-                from name in liveOwnerList.Take(20)
+                from name in liveOwnerList
                 orderby Guid.NewGuid()
                 select new VoterInfo
                 {

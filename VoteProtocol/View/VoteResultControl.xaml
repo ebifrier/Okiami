@@ -22,6 +22,8 @@
 
     <!-- 縁取り付き文字 -->
     <Style x:Key="decoratedTextStyle" TargetType="r:DecoratedTextBase">
+        <!-- このマージンで上下左右の隙間も作っています。-->
+        <Setter Property="Margin" Value="2,-1,2,-1" />
         <Setter Property="Stroke"
                 Value="{Binding Stroke,
                                 RelativeSource={RelativeSource AncestorType=l:VoteResultControl}}" />
@@ -43,8 +45,7 @@
                                    Converter={StaticResource visibilityConverterHidden}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="10" />
+                <ColumnDefinition MinWidth="5" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
@@ -111,7 +112,7 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition MinWidth="5" />
+                    <ColumnDefinition MinWidth="3" />
                     <ColumnDefinition Width="Auto" MinWidth="40" />
                 </Grid.ColumnDefinitions>
 
@@ -130,6 +131,7 @@
                     </Border>
                     <r:DecoratedText Style="{StaticResource decoratedTextStyle}"
                                      HorizontalAlignment="Right"
+                                     VerticalAlignment="Center"
                                      Text="{Binding VoteState,
                                                     Converter={StaticResource voteStateConverter},
                                                     RelativeSource={RelativeSource TemplatedParent}}" />

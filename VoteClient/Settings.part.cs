@@ -95,7 +95,7 @@ namespace VoteSystem.Client
             set { this["SEVolume"] = value; }
         }
 
-        [DefaultValue("")]
+        [DefaultValue("amiami")]
         public string SoundSetDir
         {
             get { return (string)this["SoundSetDir"]; }

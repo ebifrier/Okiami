@@ -62,6 +62,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModel\Commands.cs" />
+    <Compile Include="ViewModel\EndRollViewModel.cs" />
     <Compile Include="ViewModel\ShogiSettingDialogViewModel.cs" />
     <Compile Include="ViewModel\ShogiWindowViewModel.cs" />
     <Compile Include="View\ShogiEndRollControl.xaml.cs">

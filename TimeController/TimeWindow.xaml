@@ -47,7 +47,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="30" />
+                        <RowDefinition Height="20" />
                     </Grid.RowDefinitions>
 
                     <Button Grid.Row="1" Grid.Column="1"
@@ -56,6 +56,14 @@
                             Command="{x:Static r:MovableWindow.MakeFixWindow}" />
                 </Grid>
             </ControlTemplate>
+            
+            <!-- 時間の表示スタイル -->
+            <Style x:Key="timeSpanStyle" TargetType="r:TimeSpanView">
+                <Setter Property="MaxValueText" Value="無制限" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="VerticalContentAlignment" Value="Top" />
+                <Setter Property="FontSize" Value="20" />
+            </Style>
             
             <!-- 先手番用の表示スタイル -->
             <Style x:Key="blackTurnStyle" TargetType="FrameworkElement">
@@ -92,11 +100,12 @@
 
     <Grid>
         <Viewbox>
-            <Grid>
+            <Grid Margin="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
+                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -106,38 +115,43 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <r:DecoratedText Grid.Row="0" Grid.Column="0"
+                <r:DecoratedText Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
                                  Style="{StaticResource blackTurnStyle}"
                                  Text="○" />
-                <r:DecoratedText Grid.Row="1" Grid.RowSpan="2" Grid.Column="0"
+                <r:DecoratedText Grid.Row="2" Grid.RowSpan="2" Grid.Column="0"
                                  Style="{StaticResource whiteTurnStyle}"
                                  Text="○" />
 
                 <r:DecoratedText Grid.Row="0" Grid.Column="2"
-                                 VerticalAlignment="Center"
-                                 Text="▲" />
-                <r:DecoratedText Grid.Row="1" Grid.RowSpan="2" Grid.Column="2"
-                                 VerticalAlignment="Center"
-                                 Text="△" />
+                                 VerticalAlignment="Bottom"
+                                 Text="先手▲" />
+                <r:DecoratedText Grid.Row="1" Grid.Column="2"
+                                 VerticalAlignment="Top"
+                                 Text="リスナー" />
+                <r:DecoratedText Grid.Row="2" Grid.Column="2"
+                                 VerticalAlignment="Bottom"
+                                 Text="後手△" />
+                <r:DecoratedText Grid.Row="3" Grid.Column="2"
+                                 VerticalAlignment="Top"
+                                 Text="西尾明六段" />
 
-                <r:TimeSpanView Grid.Row="0" Grid.Column="4"
-                                VerticalAlignment="Center"
-                                Value="{Binding BlackLeaveTime}"
-                                MaxValueText="無制限" />
-                <r:TimeSpanView Grid.Row="1" Grid.Column="4"
-                                Value="{Binding WhiteLeaveTime}"
-                                MaxValueText="無制限" />
+                <r:TimeSpanView Grid.Row="0" Grid.Column="4" Grid.RowSpan="2"
+                                Style="{StaticResource timeSpanStyle}"
+                                Value="{Binding BlackLeaveTime}" />
                 <r:TimeSpanView Grid.Row="2" Grid.Column="4"
+                                Style="{StaticResource timeSpanStyle}"
+                                Value="{Binding WhiteLeaveTime}" />
+                <r:TimeSpanView Grid.Row="3" Grid.Column="4"
+                                Style="{StaticResource timeSpanStyle}"
                                 Foreground="Gray"
-                                Value="{Binding WhiteUsedTime}"
-                                MaxValueText="無制限" />
+                                Value="{Binding WhiteUsedTime}" />
             </Grid>
         </Viewbox>
 
         <!-- 移動用のボタンなどを表示します。-->
         <Control Template="{StaticResource movableControlTemplate}"
-                    Visibility="{Binding IsMovable,
-                                        RelativeSource={RelativeSource AncestorType=r:MovableWindow},
-                                        Converter={StaticResource visibilityConverter}}" />
+                 Visibility="{Binding IsMovable,
+                                      RelativeSource={RelativeSource AncestorType=r:MovableWindow},
+                                      Converter={StaticResource visibilityConverter}}" />
     </Grid>
 </r:MovableWindow>

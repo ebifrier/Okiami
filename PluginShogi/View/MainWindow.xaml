@@ -196,7 +196,6 @@
 
             <!-- エンドロールです。-->
             <s:EndRollControl x:Name="endRoll"
-                              DataGetter="{x:Static l:ShogiGlobal.VoterListGetter}"
                               Background="#A0000000"
                               RollTimeSeconds="30"
                               LineHeight="30.0"

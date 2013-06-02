@@ -648,16 +648,10 @@ namespace VoteSystem.PluginShogi.Effects
             }
 
             // 効果音を調整します。
-            if (!Settings.SD_IsUseEffectSound)
-            {
-                effect.StartSoundPath = null;
-            }
-            else
-            {
-                var percent = Settings.SD_EffectVolume;
-
-                effect.StartSoundVolume *= MathEx.Between(0, 100, percent) / 100.0;
-            }
+            var percent = (Settings.SD_IsUseEffectSound ?
+                Settings.SD_EffectVolume : 0);
+            var rate = MathEx.Between(0, 100, percent) / 100.0;
+            effect.MultiplyStartVolume(rate);
 
             WPFUtil.UIProcess(() =>
             {

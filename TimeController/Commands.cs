@@ -46,6 +46,34 @@ namespace TimeController
         }
         #endregion
 
+        #region Inc MoveCount
+        /// <summary>
+        /// 手数を一つ増やします。
+        /// </summary>
+        public static readonly RelayCommand IncMoveCount =
+            new RelayCommand(ExecuteIncMoveCount);
+
+        private static void ExecuteIncMoveCount()
+        {
+            Global.MainViewModel.MoveCount += 1;
+        }
+        #endregion
+
+        #region Dec MoveCount
+        /// <summary>
+        /// 手数を一つ減らします。
+        /// </summary>
+        public static readonly RelayCommand DecMoveCount =
+            new RelayCommand(ExecuteDecMoveCount);
+
+        private static void ExecuteDecMoveCount()
+        {
+            var value = Global.MainViewModel.MoveCount - 1;
+
+            Global.MainViewModel.MoveCount = Math.Max(0, value);
+        }
+        #endregion
+
         #region Set BlackLeaveTime
         /// <summary>
         /// 先手番の残り時間を再設定します。
