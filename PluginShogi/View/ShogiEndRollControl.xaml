@@ -30,11 +30,11 @@
         <Canvas Width="640" Height="360">
             <Border Width="640" Height="360">
                 <Border.Background>
-                    <!--<DrawingBrush x:Name="MovieBrush"
-                                  Opacity="0.0" />-->
-                    <SolidColorBrush x:Name="MovieBrush"
+                    <DrawingBrush x:Name="MovieBrush"
+                                  Opacity="0.0" />
+                    <!--<SolidColorBrush x:Name="MovieBrush"
                                      Color="Black"
-                                     Opacity="0.0" />
+                                     Opacity="0.0" />-->
                 </Border.Background>
             </Border>
 
@@ -60,8 +60,10 @@
                                 IsLeaveTimeVisible="False" />
             </Grid>
 
-            <s:EndRollControl Canvas.Left="120"
-                              Width="480" Height="360"
+            <!-- Canvas.Left=-80 が中心位置
+                 左右に80ずつはみ出してる -->
+            <s:EndRollControl Canvas.Left="-120"
+                              Width="800" Height="360"
                               x:Name="EndRoll"
                               LineHeight="23"
                               OpacityLineCount="2"

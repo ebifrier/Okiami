@@ -562,11 +562,11 @@ namespace VoteSystem.Protocol.Model
                         "{0}: オブジェクト名が正しくありません。"));
             }
 
-            // データがリストなどなら、それをそのまま返します。
-            var tdata = data as IEnumerable;
-            if (tdata != null)
+            // 当然、文字列の場合はリストとして処理しません。
+            var edata = data as IEnumerable;
+            if (!(data is string) && edata != null)
             {
-                return tdata.Cast<object>().ToList();
+                return edata.Cast<object>().ToList();
             }
 
             return new List<object> { data };

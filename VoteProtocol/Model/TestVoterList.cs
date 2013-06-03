@@ -252,12 +252,16 @@ namespace VoteSystem.Protocol.Model
             var voterList = new VoterList
             {
                 UnjoinedVoterCount = 236,
+                DonorAmount = 160000,
+                TotalLiveCount = 100,
+                TotalLiveVisitorCount = 1000,
+                TotalLiveCommentCount = 120000,
             };
             voterList.JoinedVoterList.AddRange(list);
 
             voterList.DonorList.AddRange(
                 list.OrderBy(_ => Guid.NewGuid())
-                    .Take(30).Select(_ => _.Name));
+                    .Take(20).Select(_ => _.Name));
 
             voterList.LiveOwnerList.AddRange(
                 from name in liveOwnerList

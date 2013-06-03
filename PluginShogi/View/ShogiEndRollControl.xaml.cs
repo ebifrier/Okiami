@@ -180,17 +180,17 @@ namespace VoteSystem.PluginShogi.View
 
             MovieTimeline = new TimelineData
             {
-                FadeInStartTime = TimeSpanFrom(0, 13),
+                FadeInStartTime = TimeSpanFrom(0, 10),
                 FadeInSpan = TimeSpanFrom(10),
-                FadeOutStartTime = TimeSpanFrom(5, 30),
+                FadeOutStartTime = TimeSpanFrom(6, 25),
                 FadeOutSpan = TimeSpanFrom(10),
             };
 
             EndRollTime = new TimelineData
             {
-                FadeInStartTime = TimeSpanFrom(0, 27),
+                FadeInStartTime = TimeSpanFrom(0, 26),
                 FadeInSpan = TimeSpan.Zero,
-                FadeOutStartTime = TimeSpanFrom(5, 30),
+                FadeOutStartTime = TimeSpanFrom(5, 40),
                 FadeOutSpan = TimeSpan.Zero,
             };
 
@@ -207,17 +207,16 @@ namespace VoteSystem.PluginShogi.View
                 Volume = 0.1,
             };
             this.player.MediaOpened += MediaOpened;
-            //this.player.Open(new Uri(@"E:\movies\ending\alice2.avi"));
-            this.player.Open(new Uri(@"E:\movies\ending\ending2\alice_demo.mp3"));
+            this.player.Open(new Uri(@"E:\movies\ending\ending4\ending4.avi"));
 
-            /*MovieBrush.Drawing = new VideoDrawing
+            MovieBrush.Drawing = new VideoDrawing
             {
                 Player = this.player,
-                Rect = new Rect(0, 0, 100, 100),
-            };*/
+                Rect = new Rect(0, 0, 16, 9),
+            };
 
             EndRoll.FormatFilePath = @"ShogiData/EndRoll/endroll_format.xml";
-            EndRoll.DataGetter = Protocol.Model.TestVoterList.GetTestVoterList;
+            EndRoll.DataGetter = GetVoterList;
 
             this.effectManager = new EffectManager
             {
@@ -239,6 +238,32 @@ namespace VoteSystem.PluginShogi.View
                 (_, __) => UpdatePosition(this.player.Position),
                 Dispatcher);
             this.timer.Start();
+        }
+
+        /// <summary>
+        /// 投票者リストを更新します。
+        /// </summary>
+        public object GetVoterList()
+        {
+            try
+            {
+                if (ShogiGlobal.VoteClient == null)
+                {
+                    return null;
+                }
+
+                dynamic value = new EndRollViewModel(
+                    //ShogiGlobal.VoteClient.GetVoterList()
+                    Protocol.Model.TestVoterList.GetTestVoterList());
+                return value;
+            }
+            catch (Exception ex)
+            {
+                ShogiGlobal.ErrorMessage(ex,
+                    "参加者リストの取得に失敗しました。(-A-;)");
+
+                return null;
+            }
         }
 
         protected override void OnClosed(EventArgs e)
@@ -270,11 +295,11 @@ namespace VoteSystem.PluginShogi.View
 
         private void MediaOpened(object sender, EventArgs e)
         {
-            this.oneTimer = new System.Threading.Timer(
+            /*this.oneTimer = new System.Threading.Timer(
                 _ => Ragnarok.Presentation.WPFUtil.UIProcess(Play),
                 null,
-                20 * 1000, -1);
-            //Play();
+                20 * 1000, -1);*/
+            Play();
         }
 
         public void Play()
@@ -285,7 +310,7 @@ namespace VoteSystem.PluginShogi.View
             }
 
             this.player.Play();
-            //this.player.Position = TimeSpan.FromSeconds(280);
+            this.player.Position = TimeSpan.FromSeconds(0);
 
             // エンディングの前に現局面を設定します。
             var board = new Board();
@@ -326,8 +351,11 @@ namespace VoteSystem.PluginShogi.View
                 this.autoPlay = null;
             }
 
-            ShogiControl.Render(elapsed);
-            ShogiBackground.Render(elapsed);
+            if (elapsed < TimeSpan.FromSeconds(10))
+            {
+                ShogiControl.Render(elapsed);
+                ShogiBackground.Render(elapsed);
+            }
             
             ShogiGrid.Opacity = ShogiTimeline.GetRatio(position) * 0.40;
             MovieBrush.Opacity = MovieTimeline.GetRatio(position);

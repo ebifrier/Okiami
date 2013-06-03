@@ -99,7 +99,7 @@ namespace VoteSystem.Protocol.Vote
         /// 放送数合計を取得または設定します。
         /// </summary>
         [DataMember(Order = 10, IsRequired = true)]
-        public int LiveCount
+        public int TotalLiveCount
         {
             get;
             set;
@@ -109,7 +109,7 @@ namespace VoteSystem.Protocol.Vote
         /// 来場者数合計を取得または設定します。
         /// </summary>
         [DataMember(Order = 11, IsRequired = true)]
-        public int LiveVisitorCount
+        public int TotalLiveVisitorCount
         {
             get;
             set;
@@ -119,7 +119,7 @@ namespace VoteSystem.Protocol.Vote
         /// コメント数合計を取得または設定します。
         /// </summary>
         [DataMember(Order = 12, IsRequired = true)]
-        public int LiveCommentCount
+        public int TotalLiveCommentCount
         {
             get;
             set;

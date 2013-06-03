@@ -1,3 +1,13 @@
+2013-06-03  - Ver 1.3.2.2
+
+	* PluginShogi/View/ShogiEndRollControl.xaml.cs: 文字の表示タイミングな
+	どを調整しました。
+	* PluginShogi/ViewModel/EndRollViewModel.cs: 大きな数字に億や万などの記
+	号を付加するようにしました。
+	* VoteProtocol/Model/EndRollList.cs: string型がIEnumerable<char>の配列
+	として処理されていたバグを修正しました。
+	* VoteProtocol/Vote/VoterList.cs: 変数名をいくつか変更しました。
+
 2013-06-03  - Ver 1.3.2.1
 
 	* PluginShogi/ShogiData/Effect/Other/CastleEffect/CastleEffect.xaml: 囲
