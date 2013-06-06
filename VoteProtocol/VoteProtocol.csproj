@@ -81,6 +81,7 @@
     <Compile Include="View\VoteResultSettingDialog.xaml.cs">
       <DependentUpon>VoteResultSettingDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\AnalogmaControl.cs" />
     <Compile Include="Vote\TimeExtendKind.cs" />
     <Compile Include="Vote\VoteMode.cs" />
     <Compile Include="Vote\VoteParticipantInfo.cs" />
@@ -145,6 +146,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\AnalogmaControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\analogma.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -182,7 +182,7 @@ namespace VoteSystem.PluginShogi.View
             {
                 FadeInStartTime = TimeSpanFrom(0, 10),
                 FadeInSpan = TimeSpanFrom(10),
-                FadeOutStartTime = TimeSpanFrom(6, 25),
+                FadeOutStartTime = TimeSpanFrom(6, 26),
                 FadeOutSpan = TimeSpanFrom(10),
             };
 
@@ -190,7 +190,7 @@ namespace VoteSystem.PluginShogi.View
             {
                 FadeInStartTime = TimeSpanFrom(0, 26),
                 FadeInSpan = TimeSpan.Zero,
-                FadeOutStartTime = TimeSpanFrom(5, 40),
+                FadeOutStartTime = TimeSpanFrom(5, 42),
                 FadeOutSpan = TimeSpan.Zero,
             };
 
@@ -252,10 +252,9 @@ namespace VoteSystem.PluginShogi.View
                     return null;
                 }
 
-                dynamic value = new EndRollViewModel(
+                return new EndRollViewModel(
                     //ShogiGlobal.VoteClient.GetVoterList()
                     Protocol.Model.TestVoterList.GetTestVoterList());
-                return value;
             }
             catch (Exception ex)
             {
@@ -310,7 +309,7 @@ namespace VoteSystem.PluginShogi.View
             }
 
             this.player.Play();
-            this.player.Position = TimeSpan.FromSeconds(0);
+            this.player.Position = TimeSpan.FromSeconds(300);
 
             // エンディングの前に現局面を設定します。
             var board = new Board();

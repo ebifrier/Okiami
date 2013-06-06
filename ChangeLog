@@ -1,3 +1,14 @@
+2013-06-07  - Ver 1.3.2.3
+
+	* PluginShogi/View/ShogiEndRollControl.xaml.cs: エンドロールの表示タイ
+	ミングを修正しました。
+	* TimeController/Properties/AssemblyInfo.cs: 時間調整用のアプリを更新し
+	ました。
+	* VoteProtocol/Vote/VoterInfo.cs: 参加時のメッセージは全角で２０文字ま
+	でとしました。
+	* VoteProtocol/View/AnalogmaControl.xaml: エンドロールまでの残り時間を
+	表示するアナロ熊コントロールを追加しました。
+
 2013-06-03  - Ver 1.3.2.2
 
 	* PluginShogi/View/ShogiEndRollControl.xaml.cs: 文字の表示タイミングな

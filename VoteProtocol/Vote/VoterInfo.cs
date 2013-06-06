@@ -64,8 +64,8 @@ namespace VoteSystem.Protocol.Vote
             get { return this.skill; }
             set
             {
-                // 強さは全角で12文字までとします。
-                this.skill = value.HankakuSubstring(12 * 2);
+                // 強さは全角で20文字までとします。
+                this.skill = value.HankakuSubstring(20 * 2);
             }
         }
 

@@ -19,7 +19,7 @@
 	<Lines Data="$JoinedVoterViewList">
     <Line>
       <Format Column="0" Text="$Name" Color="$Color" Alignment="Right" />
-      <Format Column="1" Text="$Skill" FontStyle="Oblique" Alignment="Left" />
+      <Format Column="1" Text="$Skill" Alignment="Left" />
     </Line>
 		<!--<Line>
 			<Format ColumnSpan="2" Text="$Name" Color="$Color" />
@@ -68,14 +68,17 @@
 	<Line>
 		<Format Column="1" Text="フリー素材の来夢来人" Alignment="Left" />
 	</Line>
+  <Line />
 	<Line>
 		<Format Column="0" Text="将棋盤・駒素材" Alignment="Right" />
 		<Format Column="1" Text="mind＆2ちゃんねるの方々" Alignment="Left" />
 	</Line>
+  <Line />
 	<Line>
 		<Format Column="0" Text="評価値画像" Alignment="Right" />
 		<Format Column="1" Text="希祥" Alignment="Left" />
 	</Line>
+  <Line />
 	<Line>
 		<Format Column="0" Text="カットイン画像" Alignment="Right" />
 		<Format Column="1" Text="ザビ山" Alignment="Left" />
@@ -83,14 +86,17 @@
 	<Line>
 		<Format Column="1" Text="MAXみちこFEVER" Alignment="Left" />
 	</Line>
+  <Line />
 	<Line>
 		<Format Column="0" Text="囲い画像" Alignment="Right" />
 		<Format Column="1" Text="さまんさ" Alignment="Left" />
 	</Line>
+  <Line />
 	<Line>
 		<Format Column="0" Text="エフェクト素材" Alignment="Right" />
 		<Format Column="1" Text="ぴぽや" Alignment="Left" />
 	</Line>
+  <Line />
 	<Line>
 		<Format Column="0" Text="背景画像" Alignment="Right" />
 		<Format Column="1" Text="とりのあくあ" Alignment="Left" />
@@ -101,10 +107,12 @@
 	<Line>
 		<Format Column="1" Text="yoshi" Alignment="Left" />
 	</Line>
+  <Line />
 	<Line>
 		<Format Column="0" Text="音声素材" Alignment="Right" />
 		<Format Column="1" Text="あみたろ" Alignment="Left" />
 	</Line>
+  <Line />
 	<Line>
 		<Format Column="0" Text="効果音素材" Alignment="Right" />
 		<Format Column="1" Text="Senses Circuit" Alignment="Left" />
@@ -118,6 +126,7 @@
 	<Line>
 		<Format Column="1" Text="369" Alignment="Left" />
 	</Line>
+  <Line />
 	<Line>
 		<Format Column="0" Text="ソースコード" Alignment="Right" />
 		<Format Column="1" Text="Jaroslaw Kowalski" Alignment="Left" />
@@ -177,16 +186,6 @@
 
   <Line Count="3" />
 
-  <!-- 将棋連盟協力 -->
-  <Line>
-    <Format ColumnSpan="2" Text="将棋連盟協力" FontWeight="Bold" />
-  </Line>
-  <Line>
-    <Format ColumnSpan="2" Text="将棋兄さん" />
-  </Line>
-
-  <Line Count="3" />
-
   <!-- ＨＰ制作 -->
   <Line>
     <Format ColumnSpan="2" Text="ホームページ制作" FontWeight="Bold" />
@@ -221,7 +220,7 @@
     <Format ColumnSpan="2" Text="スタスタ" />
   </Line>
 
-  <Line Count="12" />
+  <Line Count="7" />
 
   <!-- 寄付者一覧とその人数などを表示 -->
   <Line>
@@ -243,6 +242,16 @@
 
   <Line Count="3" />
 
+  <!-- 将棋連盟協力 -->
+  <Line>
+    <Format ColumnSpan="2" Text="将棋連盟協力" FontWeight="Bold" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="将棋兄さん" />
+  </Line>
+
+  <Line Count="3" />
+
   <!-- スペシャルサンクス -->
   <Line>
     <Format ColumnSpan="2" Text="Special Thanks" FontWeight="Bold" />
@@ -260,7 +269,7 @@
     <Format ColumnSpan="2" Text="宣誓" />
   </Line>
 
-	<Line Count="12" />
+	<Line Count="7" />
 
 	<!-- 放送主一覧とその人数などを表示 -->
 	<Line>
@@ -385,7 +394,7 @@
 		<Format ColumnSpan="2" Text="どうもありがとうございました" FontWeight="Bold" />
 	 </Line>
 
-  <Line Count="11" />
+  <Line Count="14" />
 
   <Line>
     <Format ColumnSpan="2" FontSize="16" Text="ニコニコ超将棋会議" FontWeight="Bold" />
