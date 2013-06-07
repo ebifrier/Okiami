@@ -37,7 +37,8 @@
             </TabItem>            
         </TabControl>
 
-        <ContentControl Grid.Row="1"
-                        Template="{StaticResource ButtonsTemplate}" />
+        <Control Grid.Row="1"
+                 Template="{StaticResource ButtonsTemplate}"
+                 Focusable="False" />
     </Grid>
 </Window>

@@ -8,10 +8,12 @@ using System.Windows.Input;
 using Microsoft.Win32;
 
 using Ragnarok;
+using Ragnarok.Net;
 using Ragnarok.Shogi;
 using Ragnarok.NicoNico;
 using Ragnarok.NicoNico.Live;
 using Ragnarok.Presentation;
+using Ragnarok.Presentation.Control;
 
 namespace VoteSystem.PluginShogi.ViewModel
 {
@@ -678,17 +680,71 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// ウィンドウから時間間隔を取得します。
+        /// </summary>
+        private static TimeSpan? GetTimeSpan(TimeSpan defaultValue)
+        {
+            // 時間間隔をウィンドウから取得します。
+            var window = new TimeSpanWindow(defaultValue);
+            var result = window.ShowDialogCenterMouse();
+            if (result == null || !result.Value)
+            {
+                return null;
+            }
+
+            return window.Value;
+        }
+
+        /// <summary>
         /// エンドロールを開始します。
         /// </summary>
         private static void ExecutePlayEndRoll(object sender, ExecutedRoutedEventArgs e)
         {
-            var window = ShogiGlobal.MainWindow;
-            if (window == null)
+            var voteClient = ShogiGlobal.VoteClient;
+            if (voteClient == null)
             {
                 return;
             }
 
-            window.PlayEndRoll(TimeSpan.FromSeconds(30));
+            try
+            {
+                var timeSpan = GetTimeSpan(TimeSpan.FromMinutes(20));
+                if (timeSpan == null)
+                {
+                    return;
+                }
+
+                // 動画の開始時間を設定します。
+                var time = NtpClient.GetTime() + timeSpan.Value;
+                time = time.Add(TimeSpan.FromMinutes(9));
+
+                // 動画の開始時間は、現在時刻＋指定時刻された時間で
+                // キリの良いところが選ばれます。
+                var startTimeNtp = new DateTime(
+                    time.Year, time.Month, time.Day,
+                    time.Hour, (time.Minute / 10) * 10, 0);
+                var result = DialogUtil.Show(
+                    string.Format(
+                        @"{1}{0}{0}この時刻に開始しますがよろしいですか？",
+                        Environment.NewLine,
+                        startTimeNtp),
+                    "時刻確認",
+                    MessageBoxButton.YesNo);
+                if (result != MessageBoxResult.Yes)
+                {
+                    return;
+                }
+                //var startTimeNtp = time;
+
+                voteClient.SendStartEndRoll(startTimeNtp);
+            }
+            catch (Exception ex)
+            {
+                Util.ThrowIfFatal(ex);
+
+                ShogiGlobal.ErrorMessage(ex,
+                    "エンディングの開始に失敗しました。");
+            }
         }
 
         /// <summary>
@@ -696,13 +752,23 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// </summary>
         private static void ExecuteStopEndRoll(object sender, ExecutedRoutedEventArgs e)
         {
-            var window = ShogiGlobal.MainWindow;
-            if (window == null)
+            var voteClient = ShogiGlobal.VoteClient;
+            if (voteClient == null)
             {
                 return;
             }
 
-            window.StopEndRoll();
+            try
+            {
+                voteClient.SendStopEndRoll();
+            }
+            catch (Exception ex)
+            {
+                Util.ThrowIfFatal(ex);
+
+                ShogiGlobal.ErrorMessage(ex,
+                    "エンディングの停止に失敗しました。");
+            }
         }
 
         /// <summary>

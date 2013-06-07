@@ -1,3 +1,22 @@
+2013-06-08  - Ver 1.3.2.4
+
+	* PluginShogi/ShogiData/EndRoll/endroll_format.xml: テスト用のエンドロ
+	ールファイルに変更しました。
+	* PluginShogi/View/MainWindow.xaml: メインウィンドウ上にエンディングが
+	表示されるようにしました。
+	* PluginShogi/View/MainWindow.xaml.cs: エンディングの再生を別コントロー
+	ルに移譲するようにしました。
+	* PluginShogi/View/ShogiEndRollControl.xaml: エンディング表示用のウィン
+	ドウをコントロールに修正しました。
+	* VoteProtocol/ProtoBuf/Protocol.proto: エンドロール再生指示時に再生開
+	始時刻を渡すようにしました。
+	* VoteProtocol/ServerSettings.cs: 通信プロトコルのバージョンを更新しま
+	した。
+	* VoteProtocol/View/AnalogmaControl.xaml: アナロ熊コントロールにテキス
+	トを表示できるようにしました。
+	* VoteProtocol/View/EndingControl.cs: エンディング開始時に、動画のダウ
+	ンロードやその進捗状況を表示するためのコントロールを追加しました。
+
 2013-06-07  - Ver 1.3.2.3
 
 	* PluginShogi/View/ShogiEndRollControl.xaml.cs: エンドロールの表示タイ

@@ -15,131 +15,69 @@ using System.Windows.Threading;
 
 using Ragnarok;
 using Ragnarok.Shogi;
+using Ragnarok.Utility;
+using Ragnarok.Presentation.Shogi;
 
 namespace VoteSystem.PluginShogi.View
 {
     using Protocol.View;
     using Effects;
+    using Model;
     using ViewModel;
 
     /// <summary>
-    /// 時間管理をするためのクラスです。
+    /// エンドロールを流すためのコントロールです。
     /// </summary>
-    public sealed class TimelineData
-    {
-        /// <summary>
-        /// フェードインが始まる時間を取得または設定します。
-        /// </summary>
-        public TimeSpan FadeInStartTime
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// フェードインを行う時間を取得または設定します。
-        /// </summary>
-        public TimeSpan FadeInSpan
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// フェードインが終わる時間を取得します。
-        /// </summary>
-        public TimeSpan FadeInEndTime
-        {
-            get { return (FadeInStartTime + FadeInSpan); }
-        }
-
-        /// <summary>
-        /// フェードアウトが始まる時間を取得または設定します。
-        /// </summary>
-        public TimeSpan FadeOutStartTime
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// フェードアウトが終わる時間を取得または設定します。
-        /// </summary>
-        public TimeSpan FadeOutSpan
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// フェードアウトが終わる時間を取得または設定します。
-        /// </summary>
-        public TimeSpan FadeOutEndTime
-        {
-            get { return (FadeOutStartTime + FadeOutSpan); }
-        }
-
-        /// <summary>
-        /// フェードイン終了後からフェードアウト開始までの時間を取得します。
-        /// </summary>
-        public TimeSpan VisibleSpan
-        {
-            get { return (FadeOutStartTime - FadeInEndTime); }
-        }
-
-        /// <summary>
-        /// フェードイン開始からフェードアウト終了後までの時間を取得します。
-        /// </summary>
-        public TimeSpan FullVisibleSpan
-        {
-            get { return (FadeOutEndTime - FadeInStartTime); }
-        }
-
-        /// <summary>
-        /// フェードイン・フェードアウトなどの、進行度を取得します。
-        /// </summary>
-        public double GetRatio(TimeSpan position)
-        {
-            if (position < FadeInStartTime)
-            {
-                // フェードイン前なら進行度は０
-                return 0.0;
-            }
-            else if (position < FadeInEndTime)
-            {
-                var current = FadeInEndTime - position;
-                var r = current.TotalSeconds / FadeInSpan.TotalSeconds;
-
-                return MathEx.InterpLiner(1.0, 0.0, r);
-            }
-            else if (position < FadeOutStartTime)
-            {
-                // 表示中は進行度は１
-                return 1.0;
-            }
-            else if (position < FadeOutEndTime)
-            {
-                var current = FadeOutEndTime - position;
-                var r = current.TotalSeconds / FadeOutSpan.TotalSeconds;
-
-                return MathEx.InterpLiner(0.0, 1.0, r);
-            }
-
-            // フェードアウト後なら進行度は０
-            return 0.0;
-        }
-    }
-
-    /// <summary>
-    /// エンドロールを流すウィンドウです。
-    /// </summary>
-    public partial class ShogiEndRollControl : Window
+    /// <remarks>
+    /// 動画のダウンロードや動画再生までの残り時間表示機能
+    /// などがついています。
+    /// </remarks>
+    public partial class ShogiEndRollControl : UserControl
     {
         private EffectManager effectManager;
         private DispatcherTimer timer;
-        private MediaPlayer player;
         private AutoPlayEx autoPlay;
         private TimeSpan prevPosition = TimeSpan.Zero;
+
+        private static TimeSpan TimeSpanFrom(double seconds)
+        {
+            return TimeSpan.FromSeconds(seconds);
+        }
+
+        private static TimeSpan TimeSpanFrom(double minutes, double seconds)
+        {
+            return TimeSpan.FromSeconds(minutes * 60 + seconds);
+        }
+
+        /// <summary>
+        /// 投票者リストを更新します。
+        /// </summary>
+        public static object GetVoterList()
+        {
+            try
+            {
+                if (ShogiGlobal.VoteClient == null)
+                {
+                    return null;
+                }
+
+                return new EndRollViewModel(
+                    ShogiGlobal.VoteClient.GetVoterList());
+                    //Protocol.Model.TestVoterList.GetTestVoterList());
+            }
+            catch (Exception ex)
+            {
+                ShogiGlobal.ErrorMessage(ex,
+                    "参加者リストの取得に失敗しました。(-A-;)");
+
+                return null;
+            }
+        }
+
+        public MediaPlayer MoviePlayer
+        {
+            get { return Ending.MoviePlayer; }
+        }
 
         public TimelineData MovieTimeline
         {
@@ -159,16 +97,6 @@ namespace VoteSystem.PluginShogi.View
             set;
         }
 
-        private static TimeSpan TimeSpanFrom(double seconds)
-        {
-            return TimeSpan.FromSeconds(seconds);
-        }
-
-        private static TimeSpan TimeSpanFrom(double minutes, double seconds)
-        {
-            return TimeSpan.FromSeconds(minutes * 60 + seconds);
-        }
-
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -178,7 +106,7 @@ namespace VoteSystem.PluginShogi.View
             EndRoll.InitializeBindings(this);
             ShogiControl.InitializeBindings(this);
 
-            MovieTimeline = new TimelineData
+            /*MovieTimeline = new TimelineData
             {
                 FadeInStartTime = TimeSpanFrom(0, 10),
                 FadeInSpan = TimeSpanFrom(10),
@@ -200,72 +128,63 @@ namespace VoteSystem.PluginShogi.View
                 FadeInSpan = TimeSpanFrom(5),
                 FadeOutStartTime = TimeSpanFrom(5, 0),
                 FadeOutSpan = TimeSpanFrom(10),
+            };*/
+
+            MovieTimeline = new TimelineData
+            {
+                FadeInStartTime = TimeSpanFrom(0, 5),
+                FadeInSpan = TimeSpanFrom(5),
+                FadeOutStartTime = TimeSpanFrom(1, 28),
+                FadeOutSpan = TimeSpanFrom(5),
             };
 
-            this.player = new MediaPlayer
+            EndRollTime = new TimelineData
             {
-                Volume = 0.1,
+                FadeInStartTime = TimeSpanFrom(0, 10),
+                FadeInSpan = TimeSpan.Zero,
+                FadeOutStartTime = TimeSpanFrom(1, 32),
+                FadeOutSpan = TimeSpan.Zero,
             };
-            this.player.MediaOpened += MediaOpened;
-            this.player.Open(new Uri(@"E:\movies\ending\ending4\ending4.avi"));
+
+            ShogiTimeline = new TimelineData
+            {
+                FadeInStartTime = TimeSpanFrom(0, 0),
+                FadeInSpan = TimeSpanFrom(0),
+                FadeOutStartTime = TimeSpanFrom(0, 0),
+                FadeOutSpan = TimeSpanFrom(0),
+            };
 
             MovieBrush.Drawing = new VideoDrawing
             {
-                Player = this.player,
+                Player = MoviePlayer,
                 Rect = new Rect(0, 0, 16, 9),
             };
 
             EndRoll.FormatFilePath = @"ShogiData/EndRoll/endroll_format.xml";
             EndRoll.DataGetter = GetVoterList;
 
+            // エフェクト表示用のオブジェクト
             this.effectManager = new EffectManager
             {
                 Background = ShogiBackground,
                 EffectEnabled = false,
                 EffectMoveCount = 0,
             };
-            ShogiControl.EffectManager = this.effectManager;
-            //ShogiControl.Board = new Board();
-            //ShogiControl.Effect = new Ragnarok.Presentation.Effect.GrayscaleEffect();
-
             this.effectManager.ChangeMoveCount(1);
+            ShogiControl.EffectManager = this.effectManager;
 
+            Unloaded += (_, __) => OnUnloaded();
             DataContext = ShogiGlobal.ShogiModel;
 
             this.timer = new DispatcherTimer(
                 TimeSpan.FromMilliseconds(50),
                 DispatcherPriority.Normal,
-                (_, __) => UpdatePosition(this.player.Position),
+                (_, __) => Update(),
                 Dispatcher);
             this.timer.Start();
         }
 
-        /// <summary>
-        /// 投票者リストを更新します。
-        /// </summary>
-        public object GetVoterList()
-        {
-            try
-            {
-                if (ShogiGlobal.VoteClient == null)
-                {
-                    return null;
-                }
-
-                return new EndRollViewModel(
-                    //ShogiGlobal.VoteClient.GetVoterList()
-                    Protocol.Model.TestVoterList.GetTestVoterList());
-            }
-            catch (Exception ex)
-            {
-                ShogiGlobal.ErrorMessage(ex,
-                    "参加者リストの取得に失敗しました。(-A-;)");
-
-                return null;
-            }
-        }
-
-        protected override void OnClosed(EventArgs e)
+        private void OnUnloaded()
         {
             EndRoll.Stop();
 
@@ -274,51 +193,59 @@ namespace VoteSystem.PluginShogi.View
                 this.timer.Stop();
                 this.timer = null;
             }
-
-            if (this.oneTimer != null)
-            {
-                this.oneTimer.Dispose();
-                this.oneTimer = null;
-            }
-
-            if (this.player != null)
-            {
-                this.player.Stop();
-                this.player = null;
-            }
-
-            base.OnClosed(e);
         }
 
-        private System.Threading.Timer oneTimer;
-
-        private void MediaOpened(object sender, EventArgs e)
+        /// <summary>
+        /// 動画の再生準備を開始します。
+        /// </summary>
+        public void StartPrepare(Uri movieUri, DateTime startTimeNtp)
         {
-            /*this.oneTimer = new System.Threading.Timer(
-                _ => Ragnarok.Presentation.WPFUtil.UIProcess(Play),
-                null,
-                20 * 1000, -1);*/
-            Play();
+            Ending.StartPrepare(movieUri, startTimeNtp);
         }
 
-        public void Play()
+        /// <summary>
+        /// 定期的に呼ばれます。
+        /// </summary>
+        private void Update()
         {
-            if (this.player == null)
+            if (Ending.State == EndingState.Idle)
             {
+                // 再生中または待機時
+                UpdatePosition(MoviePlayer.Position);
                 return;
             }
+            else if (Ending.State == EndingState.Completed)
+            {
+                var now = Ragnarok.Net.NtpClient.GetTime();
 
-            this.player.Play();
-            this.player.Position = TimeSpan.FromSeconds(300);
+                // 時刻はNTPで比較します。
+                if (now >= Ending.StartTimeNtp)
+                {
+                    Play();
+                }
+            }
+        }
+
+        /// <summary>
+        /// エンディングの再生を開始します。
+        /// </summary>
+        public void Play()
+        {
+            Ending.MoviePlayed();
+            MoviePlayer.Play();
+            //MoviePlayer.Position = TimeSpan.FromSeconds(300);
 
             // エンディングの前に現局面を設定します。
-            var board = new Board();
+            var board = ShogiGlobal.ShogiModel.CurrentBoard.Clone();
+            board.UndoAll();
+
+            /*var board = new Board();
             var moveList = BoardExtension.MakeMoveList(SampleMove.Tsume);
-            var bmList = board.ConvertMove(moveList);
+            var bmList = board.ConvertMove(moveList);*/
 
             var interval = ShogiTimeline.VisibleSpan - TimeSpan.FromSeconds(3);
-            var count = bmList.Count() + 2;
-            this.autoPlay = new ViewModel.AutoPlayEx(board, bmList)
+            var count = board.CanRedoCount + 2;
+            this.autoPlay = new ViewModel.AutoPlayEx(board, AutoPlayType.Redo)
             {
                 EffectManager = this.effectManager,
                 IsChangeMoveCount = true,
@@ -329,8 +256,15 @@ namespace VoteSystem.PluginShogi.View
         private void UpdatePosition(TimeSpan position)
         {
             var elapsed = position - this.prevPosition;
+            this.prevPosition = position;
 
-            if (position > EndRollTime.FadeInStartTime)
+            if (elapsed == TimeSpan.Zero)
+            {
+                return;
+            }
+
+            if (position > EndRollTime.FadeInStartTime &&
+                position < EndRollTime.FadeOutEndTime)
             {
                 if (EndRoll.State == EndRollState.Stop)
                 {
@@ -358,22 +292,6 @@ namespace VoteSystem.PluginShogi.View
             
             ShogiGrid.Opacity = ShogiTimeline.GetRatio(position) * 0.40;
             MovieBrush.Opacity = MovieTimeline.GetRatio(position);
-
-            /*if (position > MovieTimeline.FadeInEndTime)
-            {
-                var total = MovieTimeline.FadeOutStartTime - MovieTimeline.FadeInEndTime - TimeSpan.FromSeconds(20);
-                var basePos = position - MovieTimeline.FadeInEndTime;
-                var ratio = basePos.TotalSeconds / total.TotalSeconds;
-
-                // 800x4800 = 1:8
-                //ImageBrush.ViewportUnits = BrushMappingMode.RelativeToBoundingBox;
-                //ImageBrush.Viewport = new Rect(0, 1.0 - ratio, 1.0, 1.0);
-                ImageBrush.ViewboxUnits = BrushMappingMode.RelativeToBoundingBox;
-                ImageBrush.Viewbox = new Rect(0, 1.0 - ratio*(1.0 + 1.0/6), 1.0, 1.0/6);
-                ImageBrush.Opacity = 0.4;
-            }*/
-
-            this.prevPosition = position;
         }
     }
 }

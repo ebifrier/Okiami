@@ -1221,7 +1221,7 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// エンドロールの開始コマンドを送信します。
         /// </summary>
-        public void SendStartEndRoll(double rollTimeSeconds)
+        public void SendStartEndRoll(DateTime startTimeNtp)
         {
             using (LazyLock())
             {
@@ -1229,7 +1229,7 @@ namespace VoteSystem.Client.Model
 
                 this.conn.SendCommand(new StartEndRollCommand()
                 {
-                    RollTimeSeconds = rollTimeSeconds,
+                    StartTimeNtpTicks = startTimeNtp.Ticks,
                 });
             }
         }

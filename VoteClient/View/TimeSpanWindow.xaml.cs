@@ -50,50 +50,11 @@ namespace VoteSystem.Client.View
         public TimeSpanWindow(TimeSpan timeSpan)
         {
             InitializeComponent();
-            InitializeCommands();
 
-            Activated += delegate { this.tabTopControl.Focus(); };
-            Closed += delegate { Global.Settings.Reload(); };
+            Activated += delegate { this.buttons.Focus(); };
             DataContext = this;
 
             Value = timeSpan;
-        }
-
-        /// <summary>
-        /// コマンドを初期化します。
-        /// </summary>
-        private void InitializeCommands()
-        {
-            CommandBindings.Add(
-                new CommandBinding(
-                    RagnarokCommands.OK,
-                    ExecuteOk));
-            CommandBindings.Add(
-                new CommandBinding(
-                    RagnarokCommands.Cancel,
-                    ExecuteCancel));
-        }
-
-        /// <summary>
-        /// OKボタン押下。
-        /// </summary>
-        private void ExecuteOk(object sender,
-                               ExecutedRoutedEventArgs e)
-        {
-            Global.Settings.Save();
-
-            DialogResult = true;
-        }
-
-        /// <summary>
-        /// キャンセルボタン押下。
-        /// </summary>
-        private void ExecuteCancel(object sender,
-                                   ExecutedRoutedEventArgs e)
-        {
-            Global.Settings.Reload();
-
-            DialogResult = false;
         }
     }
 }

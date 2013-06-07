@@ -27,21 +27,51 @@ namespace VoteSystem.Protocol.View
     /// <summary>
     /// 残りあと○○分○○秒ですと表示するコントロールです。
     /// </summary>
+    [TemplatePart(Type = typeof(DecoratedText), Name = "PART_Label")]
     [TemplatePart(Type = typeof(DecoratedText), Name = "PART_Minutes")]
     [TemplatePart(Type = typeof(DecoratedText), Name = "PART_Seconds")]
     public class AnalogmaControl : UserControl
     {
-        /// <summary>
-        /// 分表示用のコントロール名
-        /// </summary>
+        private const string ElementLabelName = "PART_Label";
         private const string ElementMinutesName = "PART_Minutes";
-        /// <summary>
-        /// 秒表示用のコントロール名
-        /// </summary>
         private const string ElementSecondsName = "PART_Seconds";
 
+        private DecoratedText labelText;
         private DecoratedText minutesText;
         private DecoratedText secondsText;
+
+        /// <summary>
+        /// 表示するラベルを取得または設定します。
+        /// </summary>
+        public static readonly DependencyProperty TextProperty =
+            DependencyProperty.Register(
+                "Text", typeof(string), typeof(AnalogmaControl),
+                new FrameworkPropertyMetadata(string.Empty, OnTextChanged));
+
+        /// <summary>
+        /// 表示する残り時間を取得または設定します。
+        /// </summary>
+        [Bindable(true)]
+        public string Text
+        {
+            get { return (string)GetValue(TextProperty); }
+            set { SetValue(TextProperty, value); }
+        }
+
+        private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var self = (AnalogmaControl)d;
+
+            self.UpdateText((string)e.NewValue);
+        }
+
+        private void UpdateText(string text)
+        {
+            if (this.labelText != null)
+            {
+                this.labelText.Text = text;
+            }
+        }
 
         /// <summary>
         /// 表示する残り時間を取得または設定します。
@@ -90,9 +120,11 @@ namespace VoteSystem.Protocol.View
         {
             base.OnApplyTemplate();
 
+            this.labelText = GetTemplateChild(ElementLabelName) as DecoratedText;
             this.minutesText = GetTemplateChild(ElementMinutesName) as DecoratedText;
             this.secondsText = GetTemplateChild(ElementSecondsName) as DecoratedText;
 
+            UpdateText(Text);
             UpdateLeaveTime(LeaveTime);
         }
 
@@ -104,13 +136,6 @@ namespace VoteSystem.Protocol.View
             DefaultStyleKeyProperty.OverrideMetadata(
                 typeof(AnalogmaControl),
                 new FrameworkPropertyMetadata(typeof(AnalogmaControl)));
-        }
-
-        /// <summary>
-        /// コンストラクタ
-        /// </summary>
-        public AnalogmaControl()
-        {
         }
     }
 }

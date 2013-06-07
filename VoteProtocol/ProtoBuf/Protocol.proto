@@ -255,7 +255,8 @@ message NotificationCommand {
 // エンドロールの開始メッセージを送信します。
 // サーバー、クライアント双方に送られます。
 message StartEndRollCommand {
-	required double RollTimeSeconds = 1;
+//	required double RollTimeSeconds = 1;
+	required int64 StartTimeNtpTicks = 2;
 }
 
 // エンドロールの停止メッセージを送信します。

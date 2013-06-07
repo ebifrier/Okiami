@@ -195,14 +195,22 @@
                             WhitePlayerName="{Binding Settings.SD_WhitePlayerName}" />
 
             <!-- エンドロールです。-->
-            <s:EndRollControl x:Name="endRoll"
+            <!--<s:EndRollControl x:Name="endRoll"
                               Background="#A0000000"
                               RollTimeSeconds="30"
                               LineHeight="30.0"
                               OpacityLineCount="3"
                               IsHitTestVisible="False"
                               AutoUpdate="True"
-                              IsUpdateBackground="True" />
+                              IsUpdateBackground="True" />-->
+                
+                <!--<Border Width="64" Height="48" Background="Red" />-->
+
+            <Viewbox Stretch="UniformToFill">
+                <v:ShogiEndRollControl x:Name="endRoll"
+                                       Width="640" Height="360"
+                                       IsHitTestVisible="False" />
+            </Viewbox>
         </Grid>
 
         <!-- ステータスバーです。-->

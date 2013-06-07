@@ -106,46 +106,11 @@ namespace VoteSystem.PluginShogi.View
         /// <summary>
         /// エンドロールを開始します。
         /// </summary>
-        public void PlayEndRoll(TimeSpan rollTimeSpan)
+        public void PlayEndRoll(DateTime startTimeNtp)
         {
-            var model = ShogiGlobal.ShogiModel;
-            var total = TimeSpan.FromSeconds(2*60 + 30);
-
-            var count = model.CurrentBoard.MoveCount;
-            if (count == 0)
-            {
-                return;
-            }
-            
-            // エンディングの前に現局面を設定します。
-            var board = model.CurrentBoard.Clone();
-            board.UndoAll();
-            model.SetBoard(board);
-
-            // 音は消します。
-            var oldUseSound = ShogiGlobal.Settings.SD_IsUseEffectSound;
-            ShogiGlobal.Settings.SD_IsUseEffectSound = false;
-
-            var autoPlay = new AutoPlayEx(model.Board, AutoPlayType.Redo)
-            {
-                IsChangeBackground = false,
-                IsUseCutIn = false,
-                IsConfirmPlay = false,
-                Interval = TimeSpan.FromSeconds(total.TotalSeconds / count),
-            };
-            model.StartAutoPlay(autoPlay);
-
-            // エンドロール後は音の設定を元に戻します。
-            RoutedEventHandler handler = null;
-            handler = (_, __) =>
-            {
-                ShogiGlobal.Settings.SD_IsUseEffectSound = oldUseSound;
-                this.endRoll.Stopped -= handler;
-            };
-            this.endRoll.Stopped += handler;
-
-            this.endRoll.RollTimeSeconds = (int)total.TotalSeconds;            
-            this.endRoll.Play();
+            this.endRoll.StartPrepare(
+                new Uri(@"http://garnet-alice.net/shogi/tmp/ending_test.wmv"),
+                startTimeNtp);
         }
 
         /// <summary>
@@ -153,14 +118,7 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public void StopEndRoll()
         {
-            var model = ShogiGlobal.ShogiModel;
-            if (model != null)
-            {
-                // 駒の自動再生を止めます。
-                model.StopAutoPlay();
-            }
-
-            this.endRoll.Stop();
+            //this.endRoll.Sto
         }
 
         private void FrameTimer_EnterFrame(object sender, FrameEventArgs e)

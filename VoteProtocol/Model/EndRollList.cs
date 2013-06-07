@@ -645,10 +645,11 @@ namespace VoteSystem.Protocol.Model
                 }
                 else
                 {
-                    throw new EndRollListException(
+                    // 不明なタグは単に無視します。
+                    /*throw new EndRollListException(
                         string.Format("{0}タグには対応していません。",
                             elem.Name.LocalName),
-                        elem);
+                        elem);*/
                 }
             }
 

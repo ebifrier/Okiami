@@ -6,7 +6,7 @@
     <Style x:Key="textStyle" TargetType="r:DecoratedText">
         <Setter Property="FontSize" Value="30" />
         <Setter Property="FontFamily" Value="MS PGothic" />
-        <Setter Property="FontWeight" Value="ExtraBlack" />
+        <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="Stroke" Value="Black" />
         <Setter Property="StrokeThickness" Value="1.0" />
@@ -15,6 +15,7 @@
 
     <Style x:Key="bigTextStyle" TargetType="r:DecoratedText"
            BasedOn="{StaticResource textStyle}">
+        <Setter Property="FontFamily" Value="MS Mincho" />
         <Setter Property="FontSize" Value="120" />
         <Setter Property="StrokeThickness" Value="3.0" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
@@ -31,7 +32,8 @@
 
     <ControlTemplate x:Key="mainControl">
         <Border Background="#30000000"
-                Padding="10">
+                Padding="10"
+                IsHitTestVisible="False">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -46,11 +48,14 @@
                        Source="pack://application:,,,/VoteProtocol;component/Resources/Image/analogma.png"
                        Height="220"
                        Stretch="Uniform"
-                       HorizontalAlignment="Left" />
+                       Margin="0,0,0,30"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Bottom" />
 
                 <Grid Grid.Row="1"
                       Margin="30,0,0,0">
                     <Grid.RowDefinitions>
+                        <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
@@ -69,6 +74,13 @@
                     <r:DecoratedText Grid.Row="2"
                                      Style="{StaticResource textStyle}"
                                      Text="開始まで" />
+                    <Border Grid.Row="3" Grid.ColumnSpan="3"
+                            Background="#a0707070"
+                            Margin="-10,-5,0,5" />
+                    <r:DecoratedText Grid.Row="3" Grid.ColumnSpan="3"
+                                     Style="{StaticResource textStyle}"
+                                     FontSize="24"
+                                     x:Name="PART_Label" />
 
                     <StackPanel Grid.RowSpan="2" Grid.Column="1"
                                 Orientation="Vertical">
@@ -87,6 +99,7 @@
                                          VerticalAlignment="Bottom"
                                          Text="分" />
                         <r:DecoratedText Style="{StaticResource bigTextStyle}"
+                                         Width="125"
                                          x:Name="PART_Seconds" />
                         <r:DecoratedText Style="{StaticResource smallTextStyle}"
                                          VerticalAlignment="Bottom"

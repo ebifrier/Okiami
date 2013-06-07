@@ -348,11 +348,7 @@ namespace VoteSystem.Server
                     "投票ルームオーナーではありません。");
             }
 
-            var seconds = e.Command.RollTimeSeconds;
-            BroadcastCommand(new StartEndRollCommand
-            {
-                RollTimeSeconds = seconds,
-            });
+            BroadcastCommand(e.Command);
         }
 
         /// <summary>

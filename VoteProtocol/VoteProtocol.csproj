@@ -76,6 +76,7 @@
     <Compile Include="SystemNotificationType.cs" />
     <Compile Include="Tests\ProtocolUtilTest.cs" />
     <Compile Include="View\EndRollControl.cs" />
+    <Compile Include="View\EndingControl.cs" />
     <Compile Include="View\PointToStringConverter.cs" />
     <Compile Include="View\VoteResultControl.cs" />
     <Compile Include="View\VoteResultSettingDialog.xaml.cs">
@@ -123,6 +124,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\EndingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -194,6 +194,11 @@ namespace VoteSystem.PluginShogi.Effects
 
             return ((SD_EffectFlag & flag) != 0);*/
 
+            if (Settings == null)
+            {
+                return false;
+            }
+
             return Settings.HasEffectFlag(flag);
         }
 

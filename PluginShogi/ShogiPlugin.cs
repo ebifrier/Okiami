@@ -196,9 +196,6 @@ namespace VoteSystem.PluginShogi
 
             ShogiGlobal.MainWindow = window;
             window.Show();
-
-            //var xx = new View.ShogiEndRollControl();
-            //xx.Show();
         }
 
         /// <summary>
@@ -232,10 +229,10 @@ namespace VoteSystem.PluginShogi
                 return;
             }
 
-            var seconds = e.Command.RollTimeSeconds;
+            var startTimeNtp = new DateTime(e.Command.StartTimeNtpTicks);
 
             WPFUtil.UIProcess(() =>
-                window.PlayEndRoll(TimeSpan.FromSeconds(seconds)));
+                window.PlayEndRoll(startTimeNtp));
         }
 
         /// <summary>

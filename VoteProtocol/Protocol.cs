@@ -724,12 +724,12 @@ namespace VoteSystem.Protocol
   {
     public StartEndRollCommand() {}
     
-    private double _RollTimeSeconds;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"RollTimeSeconds", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public double RollTimeSeconds
+    private long _StartTimeNtpTicks;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"StartTimeNtpTicks", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public long StartTimeNtpTicks
     {
-      get { return _RollTimeSeconds; }
-      set { _RollTimeSeconds = value; }
+      get { return _StartTimeNtpTicks; }
+      set { _StartTimeNtpTicks = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

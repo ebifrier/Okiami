@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Effects\EffectTable.cs" />
+    <Compile Include="Model\TimelineData.cs" />
     <Compile Include="RenderingQuality.cs" />
     <Compile Include="ViewModel\AutoPlayEx.cs">
       <SubType>Code</SubType>
