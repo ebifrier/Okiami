@@ -352,6 +352,40 @@ namespace VoteSystem.Server
         }
 
         /// <summary>
+        /// 計算された残り時間が<paramref name="minimum"/>以下であれば、
+        /// 時刻調整を行います。
+        /// </summary>
+        /// <remarks>
+        /// <paramref name="voteSpan"/>は今の残り時間ではなく、
+        /// 投票開始～終了までの時間を表しています。
+        /// 
+        /// ここで調整するのは投票の「残り時間」のため、
+        /// 少し計算が複雑になっています。
+        /// </remarks>
+        private TimeSpan? AdjustVoteSpan(TimeSpan voteSpan, TimeSpan minimum)
+        {
+            if (minimum != TimeSpan.MinValue &&
+                CalcLeaveTime(voteSpan) < minimum)
+            {
+                var oldLeaveTime = CalcLeaveTime(VoteSpan);
+                if (oldLeaveTime < minimum)
+                {
+                    // 元の時間もminimum以下であれば、時刻調整は行いません。
+                    return null;
+                }
+                else
+                {
+                    // 元の時間がminimum以上であれば、時刻をminimumに設定します。
+                    // 投票期間から今の残り時間を引くと、
+                    // 残り時間を０にできます。
+                    voteSpan = (VoteSpan - oldLeaveTime) + minimum;
+                }
+            }
+
+            return voteSpan;
+        }
+
+        /// <summary>
         /// 投票時間を追加します。(メッセージは出さない)
         /// </summary>
         /// <remarks>
@@ -389,29 +423,14 @@ namespace VoteSystem.Server
                     TimeSpan.Zero,
                     MathEx.Min(VoteSpan + addSpan, TotalVoteSpan));
 
-                // VoteSpan, newSpanは今の残り時間ではなく、
-                // 投票開始～終了までの時間を表しています。
-                // 計算された新しい残り時間がminimum以下であれば、
-                // 時刻調整を行います。
-                if (minimum != TimeSpan.MinValue &&
-                    CalcLeaveTime(newSpan) < minimum)
+                // 残り時間がminimum以下にならないように調整します。
+                var adjustedSpan = AdjustVoteSpan(newSpan, minimum);
+                if (adjustedSpan == null)
                 {
-                    var oldLeaveTime = CalcLeaveTime(VoteSpan);
-                    if (oldLeaveTime < minimum)
-                    {
-                        // 元の時間もminimum以下であれば、時刻調整は行いません。
-                        return false;
-                    }
-                    else
-                    {
-                        // 元の時間がminimum以上であれば、時刻をminimumに設定します。
-                        // 投票期間から今の残り時間を引くと、
-                        // 残り時間を０にできます。
-                        newSpan = (VoteSpan - oldLeaveTime) + minimum;
-                    }
+                    return false;
                 }
 
-                VoteSpan = newSpan;
+                VoteSpan = adjustedSpan.Value;
 
                 // 投票停止時間を検出するタイマを開始します。
                 AdjustTimer();
@@ -564,16 +583,19 @@ namespace VoteSystem.Server
             using (LazyLock())
             {
                 // 0秒になったら投票を終了します。
-                if (VoteState == VoteState.Voting &&
-                    CalcLeaveTime(VoteSpan) <= TimeSpan.Zero)
+                if (VoteState != VoteState.Voting ||
+                    CalcLeaveTime(VoteSpan) > TimeSpan.Zero)
                 {
-                    VoteEnded(VoteState.End);
-
-                    this.voteRoom.Updated();
-                    this.voteRoom.BroadcastSystemNotification(
-                        SystemNotificationType.VoteEnd);
+                    return;
                 }
+
+                VoteEnded(VoteState.End);
             }
+
+            // 投票ルーム関係のメソッドはロック外で呼び出します。
+            this.voteRoom.Updated();
+            this.voteRoom.BroadcastSystemNotification(
+                SystemNotificationType.VoteEnd);
         }
 
         /// <summary>
