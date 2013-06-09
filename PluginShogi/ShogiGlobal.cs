@@ -34,6 +34,7 @@ namespace VoteSystem.PluginShogi
 
             FlintSharp.Utils.ScreenSize = new Size(640, 480);
 
+            // FrameTimerはSettingsの前に初期化します。
             ShogiPlugin = plugin;
             FrameTimer = new FrameTimer()
             {

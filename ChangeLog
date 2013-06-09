@@ -1,3 +1,27 @@
+2013-06-10  - Ver 1.3.4.1
+
+	* PluginShogi/ViewModel/Commands.cs: 投票停止と持ち時間の追加を同時に行
+	うようにしました。こうすることで余計な時間延長メッセージがでなくなりま
+	す。
+	* VoteClient/Model/Live/LiveNicoClient.cs: 次枠情報をコミュニティページ
+	ではなくアラート情報から取るようにしました。
+	* VoteServer/VoteModel.cs: 投票が急に止まるのを防ぐため、時間短縮の最低
+	時間を設けるようにしました。これにより、ある一定の時間以下には投票時間
+	を短縮できなくなります。
+	* VoteServer/VoteTimeKeeper.cs: 投票時間と持ち時間のミリ秒単位の時間を
+	合わせるようにしました。これで、二つの時間の表示タイミングが一致するよ
+	うになります。
+	* VoteProtocol/Resources/Image/analogma.xcf: アナロ熊の編集前画像を追加
+	しました。
+
+2013-06-08  - Ver 1.3.4.0
+
+	* バグ修正のためバージョンを1.3.4に更新しました。
+
+2013-06-08  - Ver 1.3.3.0
+
+	* バージョンを1.3.3に更新しました。
+
 2013-06-08  - Ver 1.3.2.4
 
 	* PluginShogi/ShogiData/EndRoll/endroll_format.xml: テスト用のエンドロ

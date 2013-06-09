@@ -20,6 +20,12 @@ namespace VoteSystem.Server
     /// </summary>
     public sealed class VoteModel : NotifyObject, ILogObject
     {
+        /// <summary>
+        /// 投票時間の最短時間です。コメントによる時刻調整時に使います。
+        /// </summary>
+        private static readonly TimeSpan MinimumVoteSpan =
+            TimeSpan.FromSeconds(20.6);
+
         private readonly VoteRoom voteRoom;
         private readonly Dictionary<VoteMode, VoteStrategy.IVoteStrategy> strategyList =
             new Dictionary<VoteMode, VoteStrategy.IVoteStrategy>();
@@ -28,8 +34,8 @@ namespace VoteSystem.Server
         private int voteEndCount = 5;
         private TimeSpan voteExtendTime = TimeSpan.FromSeconds(60);
 
-        private readonly Dictionary<string, TimeExtendKind> timeExtendDic =
-            new Dictionary<string, TimeExtendKind>();
+        private readonly List<TimeExtendKind> timeExtendList =
+            new List<TimeExtendKind>();
         private readonly Queue<double> evaluationPointQueue = new Queue<double>();
 
         /// <summary>
@@ -492,10 +498,10 @@ namespace VoteSystem.Server
         {
             get
             {
-                lock (this.timeExtendDic)
+                lock (this.timeExtendList)
                 {
-                    return this.timeExtendDic.Count(
-                        pair => pair.Value == TimeExtendKind.Extend);
+                    return this.timeExtendList.Count(
+                        _ => _ == TimeExtendKind.Extend);
                 }
             }
         }
@@ -507,10 +513,10 @@ namespace VoteSystem.Server
         {
             get
             {
-                lock (this.timeExtendDic)
+                lock (this.timeExtendList)
                 {
-                    return this.timeExtendDic.Count(
-                        pair => pair.Value == TimeExtendKind.Stable);
+                    return this.timeExtendList.Count(
+                        _ => _ == TimeExtendKind.Stable);
                 }
             }
         }
@@ -586,7 +592,7 @@ namespace VoteSystem.Server
                 return false;
             }
 
-            lock (this.timeExtendDic)
+            lock (this.timeExtendList)
             {
                 // 同じ値なら何も処理しません。
                 /*TimeExtendKind value;
@@ -596,7 +602,7 @@ namespace VoteSystem.Server
                     return false;
                 }*/
 
-                this.timeExtendDic[voterId] = kind;
+                this.timeExtendList.Add(kind);
             }
 
             OnVoteResultChanged();
@@ -620,20 +626,22 @@ namespace VoteSystem.Server
         {
             var timeKeeper = this.voteRoom.VoteTimeKeeper;
 
+#if false
             // 5票以上集まったら、投票自体を打ち切ります。
             if (TimeStablePoint >= this.voteEndCount)
             {
                 timeKeeper.SetVoteSpan(TimeSpan.Zero);
                 return;
             }
+#endif
 
             if (kind == TimeExtendKind.Extend)
             {
-                timeKeeper.AddVoteSpan(this.voteExtendTime);
+                timeKeeper.AddVoteSpan(this.voteExtendTime, MinimumVoteSpan);
             }
             else
             {
-                timeKeeper.AddVoteSpan(-this.voteExtendTime);
+                timeKeeper.AddVoteSpan(-this.voteExtendTime, MinimumVoteSpan);
             }
         }
 
@@ -642,9 +650,9 @@ namespace VoteSystem.Server
         /// </summary>
         public void ClearTimeExtendDemand()
         {
-            lock (this.timeExtendDic)
+            lock (this.timeExtendList)
             {
-                this.timeExtendDic.Clear();
+                this.timeExtendList.Clear();
             }
 
             OnVoteResultChanged();

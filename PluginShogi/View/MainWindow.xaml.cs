@@ -200,7 +200,7 @@ namespace VoteSystem.PluginShogi.View
                 // 盤上の駒20枚×２ ＋ 駒台の駒９種(玉と無も込み)×２
                 // ＋ ルート２個 ＋ 前回のマスの位置 ＋ 手番表示
                 // ＋ 背景用オブジェクト×２
-                var count = 20 * 2 + 9 * 2 + 2 + 2 + 2 + 1;
+                var count = (20 * 2 + 9 * 2 + 2 + 2 + 2) * 2 + 1;
                 if (list.Count() > count)
                 {
                     Ragnarok.Presentation.DialogUtil.ShowError(

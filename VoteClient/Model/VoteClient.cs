@@ -1020,14 +1020,25 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// 投票停止コマンドを送信します。
         /// </summary>
-        public void StopVote()
+        public void StopVote(TimeSpan addTotalTime)
         {
             using (LazyLock())
             {
                 CheckEnteringVoteRoom(true);
 
-                this.conn.SendCommand(new StopVoteCommand());
+                this.conn.SendCommand(new StopVoteCommand()
+                {
+                    AddTotalTimeSeconds = addTotalTime.TotalSeconds
+                });
             }
+        }
+
+        /// <summary>
+        /// 投票停止コマンドを送信します。
+        /// </summary>
+        public void StopVote()
+        {
+            StopVote(TimeSpan.Zero);
         }
 
         /// <summary>
@@ -1501,8 +1512,8 @@ namespace VoteSystem.Client.Model
                 this.leaveTimeTimer = new Timer(
                     LeaveTimeTimer_Callback,
                     null,
-                    TimeSpan.FromMilliseconds(500),
-                    TimeSpan.FromMilliseconds(1000));
+                    TimeSpan.FromMilliseconds(1000),
+                    TimeSpan.FromMilliseconds(200));
             }
         }
 

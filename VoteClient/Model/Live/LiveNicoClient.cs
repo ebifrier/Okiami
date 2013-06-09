@@ -28,45 +28,42 @@ namespace VoteSystem.Client.Model.Live
         private readonly object SyncObject = new object();
         private readonly NicoClient nicoClient;
         private readonly CommentClient commentClient;
-        private readonly Timer timer;
+        private readonly AlertClient alert;
 
         /// <summary>
-        /// 放送への自動接続機能があるため、
-        /// それを使用するかどうかを取得または設定します。
+        /// 放送への自動接続機能に使うコミュニティ番号を取得します。
         /// </summary>
         /// <remarks>
-        /// 人為的な接続／切断ボタンによりスイッチされます。
+        /// URLにコミュニティURLを指定すると、
+        /// 自動接続機能がオンになり、
+        /// 新しい放送に自動的に接続するようになります。
         /// </remarks>
-        public bool IsWantToConnect
+        public int CommunityId
         {
-            get { return GetValue<bool>("IsWantToConnect"); }
-            private set { SetValue("IsWantToConnect", value); }
+            get { return GetValue<int>("CommunityId"); }
+            private set { SetValue("CommunityId", value); }
         }
 
         /// <summary>
         /// 放送URLにコミュニティURLが指定された場合は、
         /// それを放送URLに変換します。
         /// </summary>
-        private string ConvertUrl(string url, out bool isCommunityUrl)
+        private string ConvertUrl(string url, out int communityId)
         {
             try
             {
-                isCommunityUrl = false;
-
-                if (string.IsNullOrEmpty(url) ||
-                    !this.nicoClient.IsLogin)
+                if (string.IsNullOrEmpty(url) || !this.nicoClient.IsLogin)
                 {
+                    communityId = -1;
                     return null;
                 }
 
-                var communityId = LiveUtil.GetCommunityId(LiveUrlText);
+                communityId = LiveUtil.GetCommunityId(LiveUrlText);
                 if (communityId < 0)
                 {
                     // URLにコミュニティが指定されていない。
                     return null;
                 }
-
-                isCommunityUrl = true;
 
                 var liveUrl = LiveUtil.GetCurrentLiveUrl(
                     communityId,
@@ -86,7 +83,7 @@ namespace VoteSystem.Client.Model.Live
                     "放送URL変換中にエラーが発生しました。");
             }
 
-            isCommunityUrl = false;
+            communityId = -1;
             return null;
         }
 
@@ -95,20 +92,23 @@ namespace VoteSystem.Client.Model.Live
         /// </summary>
         public override void ConnectCommand()
         {
-            bool isCommunityUrl;
+            int communityId;
 
-            // コミュニティのURLの可能性があります。
-            var liveUrl = ConvertUrl(LiveUrlText, out isCommunityUrl);
-            if (isCommunityUrl && string.IsNullOrEmpty(liveUrl))
+            // 指定されたURLがコミュニティURLで
+            // 現在放送中の放送が見つからない場合は失敗とします。
+            var liveUrl = ConvertUrl(LiveUrlText, out communityId);
+            if (communityId > 0 && string.IsNullOrEmpty(liveUrl))
             {
                 throw new VoteClientException(
                     "コミュニティの放送が確認できませんでした。");
             }
 
+            // コミュニティから得られた放送URLか
+            // 指定されたURLそのままを使用して接続に行きます。
             liveUrl = liveUrl ?? LiveUrlText;
             Connect(liveUrl);
 
-            IsWantToConnect = true;
+            CommunityId = communityId;
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace VoteSystem.Client.Model.Live
                     return;
                 }
 
-                IsWantToConnect = false;
+                CommunityId = -1;
                 this.commentClient.Disconnect();
             }
         }
@@ -272,27 +272,15 @@ namespace VoteSystem.Client.Model.Live
             VoteClient.SendNotification(notification, isFromLiveOwner);
         }
 
-        /// <summary>
-        /// 放送URLにコミュニティURLが指定された場合は、
-        /// 放送開始後に自動的に再接続に行きます。
-        /// </summary>
-        private void OnTimerCallback(object state)
+        void alert_LiveAlerted(object sender, LiveAlertedEventArgs e)
         {
-            lock (SyncObject)
+            if (e.ProviderData.ProviderType != ProviderType.Community ||
+                e.ProviderData.Id != CommunityId)
             {
-                if (this.commentClient.IsConnected ||
-                    !IsWantToConnect)
-                {
-                    return;
-                }
-
-                bool isCommunityUrl;
-                var liveUrl = ConvertUrl(LiveUrlText, out isCommunityUrl);
-                if (liveUrl != null)
-                {
-                    Connect(liveUrl);
-                }
+                return;
             }
+
+            Connect(e.LiveIdString);
         }
 
         /// <summary>
@@ -344,11 +332,9 @@ namespace VoteSystem.Client.Model.Live
             this.commentClient.CommentReceived +=
                 (sender, e) => HandleComment(e.RoomIndex, e.Comment);
 
-            this.timer = new Timer(
-                OnTimerCallback,
-                null,
-                TimeSpan.FromSeconds(10),
-                TimeSpan.FromSeconds(10));
+            this.alert = new AlertClient();
+            this.alert.LiveAlerted += alert_LiveAlerted;
+            this.alert.Connect();
         }
     }
 }

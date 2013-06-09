@@ -829,13 +829,13 @@ namespace VoteSystem.PluginShogi.ViewModel
                     }
 
                     var addTime = Normalize(
-                        dialog.AddLimitTime, TimeSpan.Zero);                    
+                        dialog.AddLimitTime, TimeSpan.Zero);
                     if (dialog.IsVoteStop)
                     {
                         // 現局面更新前に投票を停止する場合
-                        voteClient.StopVote();
+                        voteClient.StopVote(addTime);
                     }
-                    if (addTime != TimeSpan.Zero)
+                    else if (addTime != TimeSpan.Zero)
                     {
                         // 時間変更のみの場合
                         voteClient.AddTotalVoteSpan(addTime);

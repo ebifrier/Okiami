@@ -33,22 +33,18 @@ namespace VoteSystem.Protocol.View
         /// <summary>
         /// 初期状態です。
         /// </summary>
-        [LabelDescription(Label = "")]
         Idle,
         /// <summary>
         /// 動画ファイルのダウンロード中です。
         /// </summary>
-        [LabelDescription(Label = "動画ファイルのダウンロード中")]
         Downloading,
         /// <summary>
         /// 動画ファイルの読み込み中です。
         /// </summary>
-        [LabelDescription(Label = "動画ファイルの読み込み中")]
         Loading,
         /// <summary>
         /// すべての順が完了しました。
         /// </summary>
-        [LabelDescription(Label = "動画準備ＯＫ")]
         Completed,
     }
 

@@ -13,5 +13,7 @@ _ReSharper.VoteSystem/
 ShogiApp/
 document/
 TestResults/
+TimeController/dist/TimeController_1_0_0
+TimeController/dist/TimeController_1_1_0
 syntax: regexp
 dist/VoteClient_[0-9_]+

@@ -88,7 +88,19 @@ namespace VoteSystem.Server
         public TimeSpan VoteSpan
         {
             get { return GetValue<TimeSpan>("VoteSpan"); }
-            private set { SetValue("VoteSpan", value); }
+            private set
+            {
+                if (value != TimeSpan.MinValue && value != TimeSpan.MaxValue)
+                {
+                    // ミリ秒以下の部分はTotalVoteSpanと合わせます。
+                    // そうしないと両者の表示タイミングがずれてしまいます。
+                    value = TimeSpan.FromMilliseconds(
+                        (int)value.TotalSeconds * 1000 +
+                        TotalVoteSpan.Milliseconds);
+                }
+
+                SetValue("VoteSpan", value);
+            }
         }
 
         /// <summary>
@@ -100,7 +112,13 @@ namespace VoteSystem.Server
         public TimeSpan TotalVoteSpan
         {
             get { return GetValue<TimeSpan>("TotalVoteSpan"); }
-            private set { SetValue("TotalVoteSpan", value); }
+            private set
+            {
+                SetValue("TotalVoteSpan", value);
+
+                // ミリ秒を合わせるための処理です。
+                VoteSpan = VoteSpan;
+            }
         }
 
         /// <summary>
@@ -125,6 +143,17 @@ namespace VoteSystem.Server
         /// 全時間から現在までの経過時間を考慮し、投票残り時間を計算します。
         /// </summary>
         private TimeSpan CalcLeaveTime(TimeSpan allSpan)
+        {
+            return ProtocolUtil.CalcVoteLeaveTime(
+                VoteState,
+                VoteStartTimeNtp,
+                allSpan);
+        }
+
+        /// <summary>
+        /// 全時間から現在までの経過時間を考慮し、投票残り時間を計算します。
+        /// </summary>
+        private TimeSpan CalcTotalLeaveTime(TimeSpan allSpan)
         {
             return ProtocolUtil.CalcTotalVoteLeaveTime(
                 VoteState,
@@ -281,7 +310,7 @@ namespace VoteSystem.Server
                 }
 
                 // 全投票時間の秒数を合わせます。
-                NormalizeVoteSpan();
+                //NormalizeVoteSpan();
 
                 // 投票終了時に延長要求もクリアします。
                 this.voteRoom.VoteModel.ClearTimeExtendDemand();
@@ -332,7 +361,7 @@ namespace VoteSystem.Server
         /// 条件）
         /// ・投票時間は全投票時間以上には設定できない。
         /// </remarks>
-        private bool AddVoteSpanInternal(TimeSpan addSpan)
+        private bool AddVoteSpanInternal(TimeSpan addSpan, TimeSpan minimum)
         {
             using (LazyLock())
             {
@@ -356,9 +385,33 @@ namespace VoteSystem.Server
                 }
 
                 // 条件:０ <= 投票時間 <= 全投票時間
-                VoteSpan = MathEx.Max(
+                var newSpan = MathEx.Max(
                     TimeSpan.Zero,
                     MathEx.Min(VoteSpan + addSpan, TotalVoteSpan));
+
+                // VoteSpan, newSpanは今の残り時間ではなく、
+                // 投票開始～終了までの時間を表しています。
+                // 計算された新しい残り時間がminimum以下であれば、
+                // 時刻調整を行います。
+                if (minimum != TimeSpan.MinValue &&
+                    CalcLeaveTime(newSpan) < minimum)
+                {
+                    var oldLeaveTime = CalcLeaveTime(VoteSpan);
+                    if (oldLeaveTime < minimum)
+                    {
+                        // 元の時間もminimum以下であれば、時刻調整は行いません。
+                        return false;
+                    }
+                    else
+                    {
+                        // 元の時間がminimum以上であれば、時刻をminimumに設定します。
+                        // 投票期間から今の残り時間を引くと、
+                        // 残り時間を０にできます。
+                        newSpan = (VoteSpan - oldLeaveTime) + minimum;
+                    }
+                }
+
+                VoteSpan = newSpan;
 
                 // 投票停止時間を検出するタイマを開始します。
                 AdjustTimer();
@@ -394,7 +447,7 @@ namespace VoteSystem.Server
                     TotalVoteSpan + addSpan, TimeSpan.Zero);
 
                 // 全投票時間を変えた後、投票時間を再調整します。
-                AddVoteSpanInternal(TimeSpan.Zero);
+                AddVoteSpanInternal(TimeSpan.Zero, TimeSpan.MaxValue);
                 return true;
             }
         }
@@ -403,6 +456,14 @@ namespace VoteSystem.Server
         /// 投票時間を再設定します。
         /// </summary>
         public void SetVoteSpan(TimeSpan newSpan)
+        {
+            SetVoteSpan(newSpan, TimeSpan.MinValue);
+        }
+
+        /// <summary>
+        /// 投票時間を再設定します。
+        /// </summary>
+        public void SetVoteSpan(TimeSpan newSpan, TimeSpan minimum)
         {
             newSpan = FloorSeconds(newSpan);
 
@@ -420,7 +481,7 @@ namespace VoteSystem.Server
                 newSpan -= leaveTime;
             }
 
-            if (AddVoteSpanInternal(newSpan))
+            if (AddVoteSpanInternal(newSpan, minimum))
             {
                 this.voteRoom.Updated();
                 this.voteRoom.BroadcastSystemNotification(
@@ -433,9 +494,17 @@ namespace VoteSystem.Server
         /// </summary>
         public void AddVoteSpan(TimeSpan diff)
         {
+            AddVoteSpan(diff, TimeSpan.MinValue);
+        }
+
+        /// <summary>
+        /// 投票時間を延長(短縮)します。
+        /// </summary>
+        public void AddVoteSpan(TimeSpan diff, TimeSpan minimum)
+        {
             diff = FloorSeconds(diff);
 
-            if (AddVoteSpanInternal(diff))
+            if (AddVoteSpanInternal(diff, minimum))
             {
                 this.voteRoom.Updated();
                 this.voteRoom.BroadcastSystemNotification(
@@ -457,7 +526,7 @@ namespace VoteSystem.Server
                 // 少し工夫する必要があり、
                 // ここでは<現在の残り時間>と<新しい残り時間>の差を、
                 // 全体の投票時間に加算することで実現しています。
-                var leaveTime = CalcLeaveTime(TotalVoteSpan);
+                var leaveTime = CalcTotalLeaveTime(TotalVoteSpan);
 
                 // <新しい残り時間> - <現在の残り時間>
                 // を投票の全期間に足すことで、新しい期間を計算します。
