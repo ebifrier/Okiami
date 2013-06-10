@@ -97,7 +97,13 @@
   <ItemGroup>
     <Resource Include="Resources\Image\shogiban_image.png" />
     <Resource Include="Resources\Image\ending_image.png" />
+    <Content Include="ShogiData\Effect\Other\CastleEffect\Image\Mino.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ShogiData\Effect\Other\CastleEffect\Voice\IbisyaAnaguma3.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ShogiData\Effect\Other\CastleEffect\Image\Yagura.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ShogiData\EndRoll\endroll_format.xml">
@@ -149,9 +155,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ShogiData\Background\SummerEffect\Leaf.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ShogiData\Effect\Other\CastleEffect\CastleBack.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ShogiData\Effect\Other\CastleEffect\ExplosionWhite.png">

@@ -16,6 +16,8 @@
     
     <Vector3D x:Key="backgroundCoord"
               X="320" Y="240" Z="{x:Static r:ShogiControl.PreEffectZ}" />
+    <Vector3D x:Key="castleBackCoord"
+              X="320" Y="220" Z="{x:Static r:ShogiControl.PreEffectZ}" />
 
     <r:CellMeshConverter x:Key="cellMeshConv" />
     <r:CellMeshConverter x:Key="cellMeshWideConv" Widen="0.2" />
@@ -121,10 +123,10 @@
 
             <!-- 囲い背景 -->
             <r:EffectObject Duration="0:0:4"
-                            ImageUri="CastleBack.png"
+                            ImageUri="Image/Yagura.png"
                             MaterialType="Diffuse"
-                            Coord="{StaticResource backgroundCoord}"
-                            Scale="480,480,1"
+                            Coord="{StaticResource castleBackCoord}"
+                            Scale="460,400,1"
                             StartSoundVolume="0.5"
                             StartSoundPath="Bom.wav">
                 <r:EffectObject.Scenario>
