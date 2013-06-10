@@ -6,8 +6,9 @@ using System.ComponentModel;
 
 using Ragnarok;
 using Ragnarok.ObjectModel;
-using Ragnarok.Shogi;
 using Ragnarok.Utility;
+using Ragnarok.Shogi;
+using Ragnarok.Presentation.Shogi;
 
 namespace VoteSystem.PluginShogi.ViewModel
 {

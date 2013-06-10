@@ -9,8 +9,9 @@ using System.Windows.Media;
 
 using Ragnarok;
 using Ragnarok.ObjectModel;
-using Ragnarok.Shogi;
 using Ragnarok.Utility;
+using Ragnarok.Shogi;
+using Ragnarok.Presentation.Shogi;
 
 // コメント不足への警告を無くします。
 #pragma warning disable 1591

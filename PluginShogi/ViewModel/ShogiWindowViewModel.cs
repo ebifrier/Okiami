@@ -284,6 +284,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// 盤などの画像読み込みを行います。
         /// </summary>
         private BitmapImage CreateImage<T>(T value)
+            where T : struct
         {
             try
             {

@@ -72,7 +72,6 @@
     <Compile Include="Util3D.cs" />
     <Compile Include="Model\VariationCommentManager.cs" />
     <Compile Include="Model\EachStateManager.cs" />
-    <Compile Include="ImageType.cs" />
     <Compile Include="Effects\EffectContext.cs" />
     <Compile Include="Effects\EffectManager.cs" />
     <Compile Include="Model\Variation.cs" />
@@ -105,16 +104,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Resource Include="Resources\Image\ban\ban.jpg" />
-    <Resource Include="Resources\Image\ban\ban_dirty.jpg" />
-    <Resource Include="Resources\Image\ban\ban_kaya1.jpg" />
-    <Resource Include="Resources\Image\ban\ban_kaya2.jpg" />
     <Resource Include="Resources\Image\resign.png" />
     <Resource Include="Resources\Image\interrupt.png" />
     <Resource Include="Resources\Image\start.png" />
-    <Resource Include="Resources\Image\koma\koma_1moji.png" />
-    <Resource Include="Resources\Image\koma\koma_kinki.png" />
-    <Resource Include="Resources\Image\koma\koma_ryoko.png" />
     <Resource Include="Resources\Image\endroll_play.png" />
     <Resource Include="Resources\Image\endroll_stop.png" />
     <Content Include="ShogiData\Background\AutumnEffect\Back.jpg">
@@ -566,14 +558,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Image\get_current_board.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\komadai\komadai1.jpg" />
-    <Resource Include="Resources\Image\komadai\komadai2.jpg" />
-    <Resource Include="Resources\Image\komadai\komadai3.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\ban\ban_paper.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

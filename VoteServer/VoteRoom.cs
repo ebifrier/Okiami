@@ -792,13 +792,8 @@ namespace VoteSystem.Server
         public VoteRoom(VoteParticipant voteRoomOwner, int id,
                         string name, string password)
         {
-            // VoteModelのプロパティ値は変更は、VoteRoom側で行います。
             this.voteModel = new VoteModel(this);
-
-            // TimeKeeperの方は手動で更新します。
-            // そうしないと遅くなるためです。
             this.voteTimeKeeper = new VoteTimeKeeper(this);
-            
             this.voterListManager = new VoterListManager();
 
             this.voteRoomOwner = voteRoomOwner;

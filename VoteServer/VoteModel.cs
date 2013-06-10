@@ -30,13 +30,10 @@ namespace VoteSystem.Server
         private readonly Dictionary<VoteMode, VoteStrategy.IVoteStrategy> strategyList =
             new Dictionary<VoteMode, VoteStrategy.IVoteStrategy>();
         private VoteStrategy.IVoteStrategy voteStrategy;
-        private bool isVoteResultChanged = true;
-        private int voteEndCount = 5;
         private TimeSpan voteExtendTime = TimeSpan.FromSeconds(60);
-
-        private readonly List<TimeExtendKind> timeExtendList =
+        private readonly List<TimeExtendKind> timeExtendList = 
             new List<TimeExtendKind>();
-        private readonly Queue<double> evaluationPointQueue = new Queue<double>();
+        private bool isVoteResultChanged = true;
 
         /// <summary>
         /// ログ表示名を取得します。
@@ -323,19 +320,8 @@ namespace VoteSystem.Server
         /// </summary>
         public double EvaluationPoint
         {
-            get
-            {
-                lock (this.evaluationPointQueue)
-                {
-                    if (!this.evaluationPointQueue.Any())
-                    {
-                        return 0.0;
-                    }
-
-                    // 単純に平均した値を返します。
-                    return this.evaluationPointQueue.Average();
-                }
-            }
+            get { return GetValue<double>("EvaluationPoint"); }
+            set { SetValue("EvaluationPoint", value); }
         }
 
         /// <summary>
@@ -396,23 +382,8 @@ namespace VoteSystem.Server
                 return;
             }
 
-            // 値を9999～-9999の範囲に収めます。
-            value = Math.Min(value.Value, 9999.0);
-            value = Math.Max(value.Value, -9999.0);
-
-            // 投票者と評価値をヒモ付けます。
-            lock (this.evaluationPointQueue)
-            {
-                // 評価値が大きく変わった場合、昔の評価値が残っていると
-                // 新しい評価値の計算に大きな影響が出るため、
-                // 最新の評価値ｎ個の平均値を取るようにしています。
-                while (this.evaluationPointQueue.Count() > 5)
-                {
-                    this.evaluationPointQueue.Dequeue();
-                }
-
-                this.evaluationPointQueue.Enqueue(value.Value);
-            }
+            // 値を-10000～+10000の範囲に収めます。
+            EvaluationPoint = MathEx.Between(-10000, 10000, value.Value);
 
             OnVoteResultChanged();
 
@@ -433,11 +404,7 @@ namespace VoteSystem.Server
         /// </summary>
         private void ClearEvaluationPoint()
         {
-            lock (this.evaluationPointQueue)
-            {
-                this.evaluationPointQueue.Clear();
-            }
-
+            EvaluationPoint = 0.0;
             OnVoteResultChanged();
 
             Log.Info(this,
@@ -760,19 +727,19 @@ namespace VoteSystem.Server
         private void HandleSetTimeExtendSettingCommand(
             object sender, PbCommandEventArgs<SetTimeExtendSettingCommand> e)
         {
-            var voteEndCount = e.Command.VoteEndCount;
+            //var voteEndCount = e.Command.VoteEndCount;
             var voteExtendTime = e.Command.VoteExtendTimeSeconds;
 
             using (LazyLock())
             {
-                if (voteEndCount > 0)
+                /*if (voteEndCount > 0)
                 {
                     this.voteEndCount = voteEndCount;
 
                     Log.Info(
                         "投票打ち切りのカウントを設定しました: {0}",
                         voteEndCount);
-                }
+                }*/
 
                 if (voteExtendTime >= 0)
                 {
