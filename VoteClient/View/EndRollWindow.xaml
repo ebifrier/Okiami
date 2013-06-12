@@ -113,7 +113,6 @@
             
             <s:EndRollControl x:Name="endRoll"
                               Background="{Binding Background}"
-                              DataGetter="{x:Static t:Global.VoterListGetter}"
                               LineHeight="{Binding LineHeight}"
                               RollTimeSeconds="{Binding RollTimeSeconds}"
                               OpacityLineCount="{Binding OpacityLineCount}"

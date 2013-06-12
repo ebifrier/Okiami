@@ -119,9 +119,9 @@ namespace VoteSystem.Client.ViewModel
         /// レスポンスが返るまでに異常な時間がかかることがあります。
         /// 
         /// 以前は、更新処理に<see cref="System.Threading.Timer"/>を使って
-        /// いたのですが、余り長い時間を使うコールバックでは
-        /// 他のタイマーとの兼ね合いで渋滞を引き起こすことがあるので、
-        /// 安全のためスレッドを使うように変更しました。
+        /// いましたが、長い時間を使うコールバックでは
+        /// 他のタイマーとの兼ね合いで渋滞を引き起こすことがあります。
+        /// そのため、スレッドを使うように変更しました。
         /// </remarks>
         private void UpdateVoteRoomInfoLoop(object state)
         {

@@ -45,6 +45,14 @@ namespace VoteSystem.Client.View
             {
                 get { return Global.Settings; }
             }
+
+            /// <summary>
+            /// モデルオブジェクトを取得します。
+            /// </summary>
+            public Model.MainModel MainModel
+            {
+                get { return Global.MainModel; }
+            }
         }
 
         /// <summary>

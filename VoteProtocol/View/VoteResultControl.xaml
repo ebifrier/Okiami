@@ -69,6 +69,48 @@
 
     <!-- 投票状態の背景を点滅させます。-->
     <Style x:Key="voteBackgroundStyle" TargetType="Border">
+        <!-- 背景色 -->
+        <Setter Property="Background">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource voteBackgroundConverter}">
+                    <Binding Path="VoteState"
+                             RelativeSource="{RelativeSource TemplatedParent}" />
+                    <Binding Path="VoteLeaveTime"
+                             RelativeSource="{RelativeSource TemplatedParent}" />
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <!-- 背景の点滅 -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding VoteState,
+                                           RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                         Value="Voting">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard Name="voteBackgroundStoryboard">
+                        <Storyboard RepeatBehavior="Forever"
+                                    AutoReverse="False">
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="Opacity"
+                                From="0.8" To="0.0"
+                                BeginTime="0:0:0"
+                                Duration="0:0:3">
+                                <DoubleAnimation.EasingFunction>
+                                    <PowerEase Power="2" EasingMode="EaseIn" />
+                                </DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <StopStoryboard BeginStoryboardName="voteBackgroundStoryboard" />
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- 放送未接続時の警告スタイル -->
+    <Style x:Key="liveWorningBackgroundStyle" TargetType="Border">
+        
         <Style.Triggers>
             <DataTrigger Binding="{Binding VoteState,
                                            RelativeSource={RelativeSource Mode=TemplatedParent}}"
@@ -108,6 +150,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="3" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -118,17 +161,7 @@
 
                 <!-- 投票状態 -->
                 <Grid Grid.Row="0" Grid.ColumnSpan="3">
-                    <Border x:Name="voteBackground"
-                            Style="{StaticResource voteBackgroundStyle}">
-                        <Border.Background>
-                            <MultiBinding Converter="{StaticResource voteBackgroundConverter}">
-                                <Binding Path="VoteState"
-                                         RelativeSource="{RelativeSource TemplatedParent}" />
-                                <Binding Path="VoteLeaveTime"
-                                         RelativeSource="{RelativeSource TemplatedParent}" />
-                            </MultiBinding>
-                        </Border.Background>
-                    </Border>
+                    <Border Style="{StaticResource voteBackgroundStyle}" />
                     <r:DecoratedText Style="{StaticResource decoratedTextStyle}"
                                      HorizontalAlignment="Right"
                                      VerticalAlignment="Center"
@@ -159,22 +192,6 @@
                         </MultiBinding>
                     </r:TimeSpanView.Value>
                 </r:TimeSpanView>
-                <!--<ContentControl Grid.Row="1" Grid.Column="2"
-                                Visibility="{Binding IsShowTotalVoteTime,
-                                                     RelativeSource={RelativeSource TemplatedParent},
-                                                     Converter={StaticResource visibilityConverterCollapsed}}"
-                                ContentTemplate="{StaticResource decoratedText}"
-                                HorizontalAlignment="Right">
-                    <ContentControl.Content>
-                        <MultiBinding Converter="{StaticResource totalVoteLeaveTimeConverter}"
-                                      Mode="OneWay">
-                            <Binding Path="TotalVoteLeaveTime"
-                                     RelativeSource="{RelativeSource TemplatedParent}" />
-                            <Binding Path="VoteState"
-                                     RelativeSource="{RelativeSource TemplatedParent}" />
-                        </MultiBinding>
-                    </ContentControl.Content>
-                </ContentControl>-->
 
                 <!-- 投票時間 -->
                 <ContentControl Grid.Row="2" Grid.Column="0"
@@ -197,22 +214,28 @@
                     </r:TimeSpanView.Value>
                 </r:TimeSpanView>
 
-                <!-- 時間延長に関して -->
+                <!-- 思考時間 -->
                 <ContentControl Grid.Row="4" Grid.Column="0"
                                 ContentTemplate="{StaticResource decoratedText}"
-                                Content="延長拒否" />
-                <ContentControl Grid.Row="4" Grid.Column="2"
-                                ContentTemplate="{StaticResource decoratedText}"
-                                HorizontalAlignment="Right">
-                    <ContentControl.Content>
-                        <MultiBinding Converter="{StaticResource pointToStringConverter}">
-                            <Binding Path="VoteResult.TimeStablePoint"
-                                     RelativeSource="{RelativeSource Mode=TemplatedParent}" />
-                            <Binding Path="IsDisplayPointFullWidth"
-                                     RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+                                Content="思考時間"
+                                HorizontalAlignment="Left"
+                                Opacity="0.6" />
+                <r:TimeSpanView Grid.Row="4" Grid.Column="2"
+                                Style="{StaticResource decoratedTextStyle}"
+                                MinValueText=""
+                                MaxValueText="不明"
+                                HorizontalAlignment="Right"
+                                Opacity="0.6">
+                    <r:TimeSpanView.Value>
+                        <MultiBinding Converter="{StaticResource voteLeaveTimeConverter}"
+                                      Mode="OneWay">
+                            <Binding Path="ThinkTime"
+                                     RelativeSource="{RelativeSource TemplatedParent}" />
+                            <Binding Path="VoteState"
+                                     RelativeSource="{RelativeSource TemplatedParent}" />
                         </MultiBinding>
-                    </ContentControl.Content>
-                </ContentControl>
+                    </r:TimeSpanView.Value>
+                </r:TimeSpanView>
 
                 <!-- 投票結果を表示 -->
                 <ContentControl Grid.Row="6" Grid.ColumnSpan="3"
@@ -223,6 +246,18 @@
                               Margin="10,0,0,0"
                               ItemsSource="{TemplateBinding DisplayCandidateList}"
                               ItemTemplate="{StaticResource voteResultTemplate}" />
+
+                <!-- 放送未接続時の警告 -->
+                <Grid Grid.Row="8" Grid.ColumnSpan="3"
+                      Background="#80FFA500"
+                      Visibility="{Binding HasLiveNotConnectWarning,
+                                           Converter={StaticResource visibilityConverterCollapsed},
+                                           RelativeSource={RelativeSource TemplatedParent}}">
+                    <r:DecoratedText Style="{StaticResource decoratedTextStyle}"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Center"
+                                     Text="放送未接続" />
+                </Grid>
             </Grid>
         </Viewbox>
     </ControlTemplate>

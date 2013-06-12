@@ -19,8 +19,7 @@
     </ResourceDictionary.MergedDictionaries>
     
     <!-- 放送データを表示します。-->
-    <DataTemplate x:Key="liveDataTemplate"
-                  DataType="{x:Type p:LiveData}">
+    <DataTemplate x:Key="liveDataTemplate" DataType="p:LiveData">
         <TextBlock HorizontalAlignment="Center"
                    ToolTip="{Binding Explain}">
             <Hyperlink NavigateUri="{Binding Url}"
@@ -35,7 +34,7 @@
         <Setter Property="Opacity" Value="1.0" />
 
         <Style.Triggers>
-            <EventTrigger RoutedEvent="v:MainWindow.MessageChanged">
+            <DataTrigger Binding="{Binding Message}">
                 <BeginStoryboard>
                     <Storyboard>
                         <DoubleAnimation
@@ -44,13 +43,13 @@
                                     Duration="0:0:2" />
                     </Storyboard>
                 </BeginStoryboard>
-            </EventTrigger>
+            </DataTrigger>
         </Style.Triggers>
     </Style>-->
 
     <!-- 投票ルーム中の各メンバーの情報を表示します。-->
     <DataTemplate x:Key="userInfoTemplate"
-                  DataType="{x:Type vc:ParticipantWithVoteRoomInfo}">
+                  DataType="vc:ParticipantWithVoteRoomInfo">
         <StackPanel Orientation="Vertical" Margin="5,0,0,0"
                     Width="72"
                     ToolTip="{Binding Participant.Name}">
@@ -58,7 +57,7 @@
             <!-- 一言メッセージを表示します。-->
             <TextBlock Text="{Binding Participant.ShortMessage}"
                        ToolTip="{Binding Participant.Message}"
-                       HorizontalAlignment="Left" />
+                       HorizontalAlignment="Center" />
             
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center"

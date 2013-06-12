@@ -28,6 +28,7 @@ namespace VoteSystem.Protocol.View
     /// </summary>
     public partial class VoteResultControl : UserControl
     {
+        #region 基本プロパティ
         /// <summary>
         /// 投票結果を扱う依存プロパティです。
         /// </summary>
@@ -190,6 +191,27 @@ namespace VoteSystem.Protocol.View
         }
 
         /// <summary>
+        /// 思考時間を扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty ThinkTimeProperty =
+            DependencyProperty.Register(
+                "ThinkTime",
+                typeof(TimeSpan),
+                typeof(VoteResultControl),
+                new FrameworkPropertyMetadata(TimeSpan.Zero));
+
+        /// <summary>
+        /// 思考時間を取得または設定します。
+        /// </summary>
+        public TimeSpan ThinkTime
+        {
+            get { return (TimeSpan)GetValue(ThinkTimeProperty); }
+            set { SetValue(ThinkTimeProperty, value); }
+        }
+        #endregion
+
+        #region 見た目のプロパティ
+        /// <summary>
         /// 全投票時間を表示するかどうかを扱う依存プロパティです。
         /// </summary>
         public static readonly DependencyProperty IsShowTotalVoteTimeProperty =
@@ -344,7 +366,79 @@ namespace VoteSystem.Protocol.View
             get { return (decimal)GetValue(StrokeThicknessProperty); }
             private set { SetValue(StrokeThicknessProperty, value); }
         }
+        #endregion
 
+        #region 放送関係のプロパティ
+        /// <summary>
+        /// 放送未接続時のエラーを出すかどうかを示す依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty IsUseLiveNotConnectWarningProperty =
+            DependencyProperty.Register(
+                "IsUseLiveNotConnectWarning",
+                typeof(bool),
+                typeof(VoteResultControl),
+                new FrameworkPropertyMetadata(true,
+                    UpdateHasLiveNotConnectWarning));
+
+        /// <summary>
+        /// 放送未接続時のエラーを出すかどうかを取得または設定します。
+        /// </summary>
+        public bool IsUseLiveNotConnectWarning
+        {
+            get { return (bool)GetValue(IsUseLiveNotConnectWarningProperty); }
+            set { SetValue(IsUseLiveNotConnectWarningProperty, value); }
+        }
+
+        /// <summary>
+        /// 放送に接続中かどうかを示す依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty IsConnectedToLiveProperty =
+            DependencyProperty.Register(
+                "IsConnectedToLive",
+                typeof(bool),
+                typeof(VoteResultControl),
+                new FrameworkPropertyMetadata(false,
+                    UpdateHasLiveNotConnectWarning));
+
+        /// <summary>
+        /// 放送に接続中かどうかを取得または設定します。
+        /// </summary>
+        public bool IsConnectedToLive
+        {
+            get { return (bool)GetValue(IsConnectedToLiveProperty); }
+            set { SetValue(IsConnectedToLiveProperty, value); }
+        }
+
+        /// <summary>
+        /// 放送未接続のエラーを出すかどうかを示す依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty HasLiveNotConnectWarningProperty =
+            DependencyProperty.Register(
+                "HasLiveNotConnectWarning",
+                typeof(bool),
+                typeof(VoteResultControl),
+                new FrameworkPropertyMetadata(true));
+
+        /// <summary>
+        /// 放送未接続のエラーを出すかどうかを取得します。
+        /// </summary>
+        public bool HasLiveNotConnectWarning
+        {
+            get { return (bool)GetValue(HasLiveNotConnectWarningProperty); }
+            private set { SetValue(HasLiveNotConnectWarningProperty, value); }
+        }
+
+        private static void UpdateHasLiveNotConnectWarning(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var self = (VoteResultControl)d;
+
+            self.HasLiveNotConnectWarning =
+                self.IsUseLiveNotConnectWarning &&
+                !self.IsConnectedToLive;
+        }
+        #endregion
+
+        #region イベント
         /// <summary>
         /// 設定が更新されたときに呼ばれるイベントです。
         /// </summary>
@@ -399,6 +493,7 @@ namespace VoteSystem.Protocol.View
                     "設定ダイアログで例外が発生しました。");
             }
         }
+        #endregion
 
         /// <summary>
         /// 静的コンストラクタ

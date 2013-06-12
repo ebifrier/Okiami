@@ -416,15 +416,7 @@ namespace VoteSystem.Client.Command
         /// </summary>
         private static TimeSpan? GetTimeSpan(TimeSpan defaultValue)
         {
-            // 時間間隔をウィンドウから取得します。
-            var window = new View.TimeSpanWindow(defaultValue);
-            var result = window.ShowDialogCenterMouse();
-            if (result == null || !result.Value)
-            {
-                return null;
-            }
-
-            return window.Value;
+            return DialogUtil.ShowTimeSpanDialog(defaultValue);
         }
 
         /// <summary>

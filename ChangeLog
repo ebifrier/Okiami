@@ -1,3 +1,16 @@
+2013-06-11  - Ver 1.3.4.4
+
+	* VoteClient/Model/MainModel.cs: リファクタリングを行いました。
+	* VoteClient/Model/SoundManager.cs: リファクタリングを行いました。
+	* VoteClient/Model/VoteClient.cs: 思考時間へのサポートを追加しました。
+	* VoteClient/ViewModel/MainViewModel.cs: リファクタリングを行いました。
+	* VoteProtocol/ProtocolUtil.cs: 思考時間へのサポートを追加しました。
+	* VoteProtocol/View/VoteResultControl.cs: 思考時間へのサポートを追加し
+	ました。
+	* VoteProtocol/Vote/VoteRoomInfo.cs: 一時停止たときに思考時間を正しく反
+	映できるようにプロパティを一つ追加しました。
+	* VoteServer/VoteTimeKeeper.cs: 思考時間へのサポートを追加しました。
+
 2013-06-11  - Ver 1.3.4.3
 
 	* PluginShogi/ShogiData/Effect/Other/CastleEffect/Image: 囲いの背景画像

@@ -155,6 +155,7 @@ namespace VoteSystem.Server
                     BaseTimeNtp = this.voteTimeKeeper.VoteStartTimeNtp,
                     VoteSpan = this.voteTimeKeeper.VoteSpan,
                     TotalVoteSpan = this.voteTimeKeeper.TotalVoteSpan,
+                    ProgressSpan = this.voteTimeKeeper.ProgressSpan,
                 };
 
                 if (needList)

@@ -26,14 +26,20 @@ namespace VoteSystem.Client.View.Control
         {
             InitializeComponent();
 
-            this.password.Password = Global.MainModel.VoteRoomPassword;
+            if (Global.MainModel != null)
+            {
+                this.password.Password = Global.MainModel.VoteRoomPassword;
+            }
         }
 
-        private void voteRoomPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        private void passwordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             var password = (PasswordBox)sender;
 
-            Global.MainModel.VoteRoomPassword = password.Password;
+            if (Global.MainModel != null)
+            {
+                Global.MainModel.VoteRoomPassword = password.Password;
+            }
         }
     }
 }

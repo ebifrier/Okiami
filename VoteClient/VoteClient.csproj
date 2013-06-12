@@ -173,9 +173,6 @@
     <Compile Include="View\SettingDialog.xaml.cs">
       <DependentUpon>SettingDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\TimeSpanWindow.xaml.cs">
-      <DependentUpon>TimeSpanWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\VoteResultWindow.xaml.cs">
       <DependentUpon>VoteResultWindow.xaml</DependentUpon>
     </Compile>
@@ -205,10 +202,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SettingDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\TimeSpanWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

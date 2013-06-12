@@ -83,6 +83,9 @@
                              VoteState="{Binding VoteClient.VoteState}"
                              TotalVoteLeaveTime="{Binding VoteClient.TotalVoteLeaveTime}"
                              VoteLeaveTime="{Binding VoteClient.VoteLeaveTime}"
+                             ThinkTime="{Binding VoteClient.ThinkTime}"
+                             IsConnectedToLive="{Binding MainModel.IsConnectedToLive}"
+                             IsUseLiveNotConnectWarning="False"
                              Foreground="{Binding Settings.VR_FontColor,
                                                   Converter={StaticResource brushConverter}}"
                              Background="{Binding Settings.VR_BackgroundColor,

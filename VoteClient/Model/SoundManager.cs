@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 using Ragnarok;
 using Ragnarok.Presentation.Utility;
@@ -39,7 +41,7 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// 音声ディレクトリの一覧を取得します。
         /// </summary>
-        public List<SoundSetInfo> SoundDirList
+        public List<SoundSetInfo> SoundInfoList
         {
             get
             {
@@ -62,7 +64,7 @@ namespace VoteSystem.Client.Model
                 {
                     this.selectedSoundSet = value;
 
-                    UpdateSoundPath();
+                    SoundPathUpdated();
                 }
             }
         }
@@ -70,7 +72,7 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// 評価値が変化したときに呼ばれます。
         /// </summary>
-        private void UpdateSoundPath()
+        private void SoundPathUpdated()
         {
             if (SelectedSoundSet == null)
             {
@@ -175,7 +177,7 @@ namespace VoteSystem.Client.Model
                 // Data\Soundのサブディレクトリを
                 // 音声ファイルの入ったディレクトリとして列挙します。
                 this.soundInfoList =
-                    InfoBase.ReadInfoDirectory<SoundSetInfo>(@"Data\Sound");
+                    InfoBase.ReadInfoDirectory<SoundSetInfo>(@"Data/Sound");
 
                 var dirName = Global.Settings.SoundSetDir;
                 var info = this.soundInfoList.FirstOrDefault(
@@ -202,6 +204,27 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
+        /// 設定オブジェクトの音量お変更を反映します。
+        /// </summary>
+        private void Settings_SEVolumeUpdated()
+        {
+            this.manager.Volume = Global.Settings.SEVolume;
+        }
+
+        /// <summary>
+        /// 設定オブジェクトの音声セット変更を反映します。
+        /// </summary>
+        private void Settings_SoundSetDirUpdated()
+        {
+            var thisAsm = Assembly.GetEntryAssembly();
+
+            this.manager.DefaultPath = Path.Combine(
+                Path.GetDirectoryName(thisAsm.Location),
+                "Data/Sound",
+                Global.Settings.SoundSetDir ?? "");
+        }
+
+        /// <summary>
         /// 音声プレイヤーオブジェクトを初期化します。
         /// </summary>
         public SoundManager()
@@ -210,27 +233,23 @@ namespace VoteSystem.Client.Model
             {
                 this.manager = new Ragnarok.Extra.Sound.SoundManager();
 
-                this.manager.DefaultPath = Path.Combine(
-                    Ragnarok.Extra.Sound.SoundManager.AssemblyLocation,
-                    "Data", "Sound",
-                    Global.Settings.SoundSetDir ?? "");
-                this.manager.Volume = Global.Settings.SEVolume;
+                // 初期設定
+                Settings_SEVolumeUpdated();
+                Settings_SoundSetDirUpdated();
 
                 Global.Settings.PropertyChanged += (sender, e) =>
                 {
                     if (e.PropertyName == "SEVolume")
                     {
-                        this.manager.Volume = Global.Settings.SEVolume;
+                        Settings_SEVolumeUpdated();
                     }
                     else if (e.PropertyName == "SoundSetDir")
                     {
-                        this.manager.DefaultPath = Path.Combine(
-                            Ragnarok.Extra.Sound.SoundManager.AssemblyLocation,
-                            "Data", "Sound",
-                            Global.Settings.SoundSetDir ?? "");
+                        Settings_SoundSetDirUpdated();
                     }
                 };
 
+                // 音声セットのディレクトリ一覧を更新します。
                 InitSoundDir();
             }
             catch (Exception ex)

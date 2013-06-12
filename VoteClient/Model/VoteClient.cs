@@ -40,6 +40,7 @@ namespace VoteSystem.Client.Model
         private DateTime roomInfoLastUpdated = DateTime.MinValue;
         private int oldVoteLeaveSeconds;
         private int oldTotalVoteLeaveSeconds;
+        private int oldThinkTimeSeconds;
         private Timer leaveTimeTimer;
         private bool disposed = false;
 
@@ -536,6 +537,34 @@ namespace VoteSystem.Client.Model
             }
         }
 
+        /// <summary>
+        /// 思考時間を取得します。
+        /// </summary>
+        [DependOnProperty(typeof(VoteRoomInfo), "State")]
+        [DependOnProperty(typeof(VoteRoomInfo), "BaseTimeNtp")]
+        [DependOnProperty(typeof(VoteRoomInfo), "VoteSpan")]
+        [DependOnProperty(typeof(VoteRoomInfo), "ProgressSpan")]
+        public TimeSpan ThinkTime
+        {
+            get
+            {
+                using (LazyLock())
+                {
+                    // 未入室の場合
+                    if (VoteRoomInfo == null)
+                    {
+                        return TimeSpan.Zero;
+                    }
+
+                    return ProtocolUtil.CalcThinkTime(
+                        VoteRoomInfo.State,
+                        VoteRoomInfo.BaseTimeNtp,
+                        VoteRoomInfo.ProgressSpan,
+                        VoteRoomInfo.VoteSpan);
+                }
+            }
+        }
+
         #region リクエスト送信
         /// <summary>
         /// 投票ルームに入室中かどうかを調べます。
@@ -964,6 +993,10 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// 入室中投票ルームの情報取得要求を出します。
         /// </summary>
+        /// <remarks>
+        /// 投票ルーム情報は差分で更新されますが、
+        /// それに失敗した場合に呼ばれます。
+        /// </remarks>
         private void GetVoteRoomInfoFromServer()
         {
             using (LazyLock())
@@ -973,13 +1006,15 @@ namespace VoteSystem.Client.Model
                 // ルーム情報の連続取得を避けるため、
                 // "結果が返ってきていない and 一定時間立っていない"
                 // 間は取得コマンドの送信を行わないようにします。
-                // 結果受信時にroomInfoLastUpdatedはMinValueに設定されます。
-                //
-                // roomInfoLastUpdatedはMinValueの可能性があるため
-                // 加減算ができません＞＜
+                // 
+                // roomInfoLastUpdatedは受信待ちの時は要求送信時刻、
+                // そうでない場合はMinValueに設定されます。
+                // このため、roomInfoLastUpdatedが時刻で
+                // かつ一定時間立っていないときにはそのまま帰ります。
                 var baseTime = DateTime.Now - TimeSpan.FromSeconds(30);
                 if (baseTime < this.roomInfoLastUpdated)
                 {
+                    // roomInfoLastUpdatedがMinValueの時は常にfalse
                     return;
                 }
 
@@ -1287,6 +1322,7 @@ namespace VoteSystem.Client.Model
             using (LazyLock())
             {
                 // ルーム情報の更新時間はエラーに関係なく設定します。
+                // MinValue => ルーム情報受信待ちではない
                 this.roomInfoLastUpdated = DateTime.MinValue;
 
                 var roomInfo = e.Command.RoomInfo;
@@ -1486,18 +1522,25 @@ namespace VoteSystem.Client.Model
         /// </summary>
         private void LeaveTimeTimer_Callback(object state)
         {
-            var leaveSeconds = (int)VoteLeaveTime.TotalSeconds;
-            if (leaveSeconds != this.oldVoteLeaveSeconds)
+            var seconds = (int)VoteLeaveTime.TotalSeconds;
+            if (seconds != this.oldVoteLeaveSeconds)
             {
-                this.oldVoteLeaveSeconds = leaveSeconds;
+                this.oldVoteLeaveSeconds = seconds;
                 this.RaisePropertyChanged("VoteLeaveTime");
             }
 
-            leaveSeconds = (int)TotalVoteLeaveTime.TotalSeconds;
-            if (leaveSeconds != this.oldTotalVoteLeaveSeconds)
+            seconds = (int)TotalVoteLeaveTime.TotalSeconds;
+            if (seconds != this.oldTotalVoteLeaveSeconds)
             {
-                this.oldTotalVoteLeaveSeconds = leaveSeconds;
+                this.oldTotalVoteLeaveSeconds = seconds;
                 this.RaisePropertyChanged("TotalVoteLeaveTime");
+            }
+
+            seconds = (int)ThinkTime.TotalSeconds;
+            if (seconds != this.oldThinkTimeSeconds)
+            {
+                this.oldThinkTimeSeconds = seconds;
+                this.RaisePropertyChanged("ThinkTime");
             }
         }
 

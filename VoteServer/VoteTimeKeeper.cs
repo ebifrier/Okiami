@@ -122,6 +122,18 @@ namespace VoteSystem.Server
         }
 
         /// <summary>
+        /// 一時停止される前までに経過した時刻を取得または設定します。
+        /// </summary>
+        /// <remarks>
+        /// 一時停止されなければ、経過時間は０です。
+        /// </remarks>
+        public TimeSpan ProgressSpan
+        {
+            get { return GetValue<TimeSpan>("ProgressSpan"); }
+            private set { SetValue("ProgressSpan", value); }
+        }
+
+        /// <summary>
         /// 投票時間が無制限かどうか取得します。
         /// </summary>
         [DependOnProperty("VoteSpan")]
@@ -194,6 +206,7 @@ namespace VoteSystem.Server
                         VoteSpan = MathEx.Max(
                             TimeSpan.Zero,
                             MathEx.Min(voteSpan, TotalVoteSpan));
+                        ProgressSpan = TimeSpan.Zero;
                         VoteState = VoteState.Voting;
 
                         // 開始前にも投票時間を正規化しておきます。
@@ -244,6 +257,13 @@ namespace VoteSystem.Server
                 {
                     TotalVoteSpan -= diff;
                 }
+
+                // GUIの表示タイミングを合わせるため、
+                // ミリ秒以下をカットします。
+                // GUI側で合わせると、一時停止時に時刻が
+                // 増えたり減ったりしてしまいます。
+                ProgressSpan = TimeSpan.FromSeconds(
+                    Math.Ceiling((ProgressSpan + diff).TotalSeconds));
 
                 // 投票停止時間を検出するタイマを停止します。
                 AdjustTimer();
@@ -301,6 +321,7 @@ namespace VoteSystem.Server
                 var leaveTime = CalcLeaveTime(TotalVoteSpan);
 
                 VoteSpan = TimeSpan.Zero;
+                ProgressSpan = TimeSpan.Zero;
                 VoteState = state;
 
                 // 全投票時間は減ります。
@@ -778,6 +799,7 @@ namespace VoteSystem.Server
             VoteStartTimeNtp = DateTime.MinValue;
             VoteSpan = TimeSpan.Zero;
             TotalVoteSpan = TimeSpan.FromSeconds(120 * 60 + 0.9);
+            ProgressSpan = TimeSpan.Zero;
 
             this.timer = new Timer(
                 (_) => Util.SafeCall(CheckVoteEnd),

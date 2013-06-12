@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading;
-using System.Windows;
-using System.Windows.Data;
-using System.Windows.Threading;
 
 using Ragnarok;
 using Ragnarok.Utility;
 using Ragnarok.NicoNico;
 using Ragnarok.NicoNico.Live;
 using Ragnarok.ObjectModel;
-using Ragnarok.Presentation;
 
 namespace VoteSystem.Client.Model
 {
@@ -35,10 +30,22 @@ namespace VoteSystem.Client.Model
     {
         private readonly VoteClient voteClient;
         private readonly NicoClient nicoClient;
-        private readonly List<LiveClient> liveClientList =
-            new List<LiveClient>();
-        private readonly ConcurrentQueue<Notification> notificationQueue =
-            new ConcurrentQueue<Notification>();
+
+        /// <summary>
+        /// 投票用のクライアントを取得します。
+        /// </summary>
+        public VoteClient VoteClient
+        {
+            get { return this.voteClient; }
+        }
+
+        /// <summary>
+        /// ニコニコ用のクライアントオブジェクトを取得します。
+        /// </summary>
+        public NicoClient NicoClient
+        {
+            get { return this.nicoClient; }
+        }
 
         /// <summary>
         /// 投票ルームで使われるIDを取得または設定します。
@@ -191,35 +198,29 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
-        /// 投票用のクライアントを取得します。
-        /// </summary>
-        public VoteClient VoteClient
-        {
-            get { return this.voteClient; }
-        }
-
-        /// <summary>
         /// 投票サーバーから得られたメッセージのリストを取得します。
         /// </summary>
         public ConcurrentQueue<Notification> NotificationQueue
         {
-            get { return this.notificationQueue; }
+            get { return GetValue<ConcurrentQueue<Notification>>("NotificationQueue"); }
+            set { SetValue("NotificationQueue", value); }
         }
 
         /// <summary>
-        /// 放送クライアントのリストのコピーを取得します。
+        /// 放送クライアントのリストを取得します。
         /// </summary>
         public List<LiveClient> LiveClientList
         {
-            get { return new List<LiveClient>(this.liveClientList); }
+            get { return GetValue<List<LiveClient>>("LiveClientList"); }
+            private set { SetValue("LiveClientList", value); }
         }
-
+        
         /// <summary>
-        /// ニコニコ用のクライアントオブジェクトを取得します。
+        /// 一つでも放送に接続していれば真を返します。
         /// </summary>
-        public NicoClient NicoClient
+        public bool IsConnectedToLive
         {
-            get { return this.nicoClient; }
+            get { return LiveClientList.Any(_ => _.IsConnected); }
         }
 
         /// <summary>
@@ -272,72 +273,6 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
-        /// 接続待ちの放送一覧を取得します。
-        /// </summary>
-        [DependOnProperty(typeof(VoteClient), "CommenterClientList")]
-        public NotifyCollection<CommenterCommentClient> CommenterClientList
-        {
-            get { return this.voteClient.CommenterClientList; }
-        }
-
-        /// <summary>
-        /// 中継したコメント一覧を取得します。
-        /// </summary>
-        [DependOnProperty(typeof(VoteClient), "PostCommentList")]
-        public CollectionView PostCommentList
-        {
-            get
-            {
-                var view = (CollectionView)
-                    CollectionViewSource.GetDefaultView(
-                        this.voteClient.PostCommentList);
-
-                view.SortDescriptions.Add(
-                    new SortDescription(
-                        "Timestamp",
-                        ListSortDirection.Descending));
-
-                return view;
-            }
-        }
-
-        /// <summary>
-        /// 投票状態を取得します。
-        /// </summary>
-        [DependOnProperty(typeof(VoteClient), "VoteState")]
-        public VoteState VoteState
-        {
-            get { return this.voteClient.VoteState; }
-        }
-
-        /// <summary>
-        /// 投票の残り時間を取得します。
-        /// </summary>
-        [DependOnProperty(typeof(VoteClient), "VoteLeaveTime")]
-        public TimeSpan VoteLeaveTime
-        {
-            get { return this.voteClient.VoteLeaveTime; }
-        }
-
-        /// <summary>
-        /// 投票の全残り時間を取得します。
-        /// </summary>
-        [DependOnProperty(typeof(VoteClient), "TotalVoteLeaveTime")]
-        public TimeSpan TotalVoteLeaveTime
-        {
-            get { return this.voteClient.VoteLeaveTime; }
-        }
-
-        /// <summary>
-        /// 投票時間が無制限かどうかを取得します。
-        /// </summary>
-        [DependOnProperty(typeof(VoteClient), "IsVoteSpanNolimit")]
-        public bool IsVoteSpanNolimit
-        {
-            get { return this.voteClient.IsVoteSpanNolimit; }
-        }
-
-        /// <summary>
         /// 投票サーバーからメッセージが届いたときに呼ばれます。
         /// </summary>
         private void HandleNotification(object sender, NotificationEventArgs e)
@@ -350,10 +285,10 @@ namespace VoteSystem.Client.Model
             }
 
             // 並列実行可能なコレクションを使っています。
-            this.notificationQueue.Enqueue(notification);
+            NotificationQueue.Enqueue(notification);
 
             // 各放送に通知を処理させます。
-            foreach (var liveClient in this.liveClientList)
+            foreach (var liveClient in LiveClientList)
             {
                 liveClient.HandleNotification(notification);
             }
@@ -410,7 +345,7 @@ namespace VoteSystem.Client.Model
         {
             if (this.voteClient.IsLogined)
             {
-                foreach (var liveClient in this.liveClientList)
+                foreach (var liveClient in LiveClientList)
                 {
                     liveClient.VoteLogined();
                 }
@@ -508,11 +443,18 @@ namespace VoteSystem.Client.Model
             }
 
             // 放送サイトごとのリストを作成します。
-            this.liveClientList = new List<LiveClient>()
+            LiveClientList = new List<LiveClient>()
             {
                 new LiveNicoClient(this, this.nicoClient),
             };
 
+            // 放送接続状態が変わったら、このオブジェクトのプロパティも更新します。
+            LiveClientList.ForEach(_ => 
+                _.AddPropertyChangedHandler(
+                    "IsConnected",
+                    (__, ___) => this.RaisePropertyChanged("IsConnectedToLive")));
+
+            NotificationQueue = new ConcurrentQueue<Notification>();
             CurrentVoteMode = VoteMode.Shogi;
 
             this.AddDependModel(this.nicoClient);

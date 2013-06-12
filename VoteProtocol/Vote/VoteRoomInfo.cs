@@ -103,6 +103,10 @@ namespace VoteSystem.Protocol.Vote
         /// <summary>
         /// <see cref="VoteSpan"/>の基準時刻を取得または設定です。
         /// </summary>
+        /// <remarks>
+        /// 一時停止が再開されると、<see cref="BaseTimeNtp"/>は
+        /// その時刻に再設定されます。
+        /// </remarks>
         [DataMember(Order = 8, IsRequired = true)]
         public DateTime BaseTimeNtp
         {
@@ -130,6 +134,19 @@ namespace VoteSystem.Protocol.Vote
         {
             get { return GetValue<TimeSpan>("VoteSpan"); }
             set { SetValue("VoteSpan", value); }
+        }
+
+        /// <summary>
+        /// 一時停止される前までに経過した時刻を取得または設定します。
+        /// </summary>
+        /// <remarks>
+        /// 一時停止されなければ、経過時間は０です。
+        /// </remarks>
+        [DataMember(Order = 14, IsRequired = true)]
+        public TimeSpan ProgressSpan
+        {
+            get { return GetValue<TimeSpan>("ProgressSpan"); }
+            set { SetValue("ProgressSpan", value); }
         }
 
         /// <summary>

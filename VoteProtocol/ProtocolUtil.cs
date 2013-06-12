@@ -261,7 +261,7 @@ namespace VoteSystem.Protocol
         }
 
         /// <summary>
-        /// 現在残っている全投票時間を計算します。
+        /// 全投票時間の残り時間を計算します。
         /// </summary>
         public static TimeSpan CalcTotalVoteLeaveTime(VoteState state,
                                                       DateTime startTimeNtp,
@@ -292,7 +292,7 @@ namespace VoteSystem.Protocol
         }
 
         /// <summary>
-        /// 投票の残り時間を取得します。
+        /// 投票の残り時間を計算します。
         /// </summary>
         public static TimeSpan CalcVoteLeaveTime(VoteState state,
                                                  DateTime startTimeNtp,
@@ -322,6 +322,59 @@ namespace VoteSystem.Protocol
             }
 
             return TimeSpan.Zero;
+        }
+
+        /// <summary>
+        /// 思考時間を計算します。
+        /// </summary>
+        public static TimeSpan CalcThinkTime(VoteState state,
+                                             DateTime startTimeNtp,
+                                             TimeSpan progressSpan)
+        {
+            return CalcThinkTime(
+                state, startTimeNtp, progressSpan, TimeSpan.MinValue);
+        }
+
+        /// <summary>
+        /// 思考時間を計算します。
+        /// </summary>
+        /// <remarks>
+        /// <paramref name="voteSpan"/>は時刻のミリ秒を
+        /// 合わせるために使います。
+        /// そうしないと、投票時間と思考時間で時刻の
+        /// 表示タイミングがずれてしまいます。
+        /// </remarks>
+        public static TimeSpan CalcThinkTime(VoteState state,
+                                             DateTime startTimeNtp,
+                                             TimeSpan progressSpan,
+                                             TimeSpan voteSpan)
+        {
+            var nowTimeNtp = NtpClient.GetTime();
+            var span = TimeSpan.Zero;
+            switch (state)
+            {
+                case VoteState.Voting:
+                    // 今までの経過時間 + (現在時刻 - 開始時刻) です。
+                    span = progressSpan + (nowTimeNtp - startTimeNtp);
+                    break;
+                case VoteState.Pause:
+                    span = progressSpan;
+                    break;
+                case VoteState.Stop:
+                case VoteState.End:
+                    return TimeSpan.Zero;
+            }
+
+            // 投票残り時間とミリ秒以下の端数を合わせます。
+            // 
+            // 投票時間は減る、思考時間は増えるため、
+            // "ミリ秒の最大値 - ミリ秒" を思考時間に加算します。
+            var millis = TimeSpan.FromMilliseconds(
+                voteSpan == TimeSpan.MinValue || voteSpan == TimeSpan.MaxValue ?
+                0 :
+                999 - voteSpan.Milliseconds);
+
+            return (span + millis);
         }
 
         /// <summary>

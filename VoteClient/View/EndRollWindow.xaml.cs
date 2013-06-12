@@ -17,6 +17,7 @@ using Ragnarok.Presentation.Control;
 namespace VoteSystem.Client.View
 {
     using Protocol.View;
+    using Protocol.Vote;
 
     /// <summary>
     /// エンドロールを流すウィンドウです。
@@ -29,7 +30,28 @@ namespace VoteSystem.Client.View
         public EndRollWindow()
         {
             InitializeComponent();
+
             this.endRoll.InitializeBindings(this);
+            this.endRoll.DataGetter = GetVoterList;
+        }
+
+        /// <summary>
+        /// 投票者リストを更新します。
+        /// </summary>
+        private static VoterList GetVoterList()
+        {
+            try
+            {
+                return Global.VoteClient.GetVoterList();
+                //return Protocol.Model.TestVoterList.GetTestVoterList();
+            }
+            catch (Exception ex)
+            {
+                MessageUtil.ErrorMessage(ex,
+                    "参加者リストの取得に失敗しました。(-A-;)");
+
+                return null;
+            }
         }
     }
 }

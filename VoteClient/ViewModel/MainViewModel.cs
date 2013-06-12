@@ -5,6 +5,7 @@ using System.Text;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -30,9 +31,6 @@ namespace VoteSystem.Client.ViewModel
     public class MainViewModel : DynamicViewModel, ILogObject
     {
         private readonly MainModel baseModel;
-        private List<MenuItem> pluginMenuList;
-        private string messageString = string.Empty;
-        private string notificationString = string.Empty;
         private VoteState oldVoteState = VoteState.Stop;
 
         /// <summary>
@@ -44,20 +42,30 @@ namespace VoteSystem.Client.ViewModel
         }
 
         /// <summary>
+        /// 一言メッセージを取得または設定します。
+        /// </summary>
+        public string MessageString
+        {
+            get { return GetValue<string>("MessageString"); }
+            set { SetValue("MessageString", value); }
+        }
+
+        /// <summary>
+        /// 通知メッセージを取得または設定します。
+        /// </summary>
+        public string NotificationString
+        {
+            get { return GetValue<string>("NotificationString"); }
+            set { SetValue("NotificationString", value); }
+        }
+
+        /// <summary>
         /// 各プラグインのメニュー一覧を取得します。
         /// </summary>
         public List<MenuItem> PluginMenuList
         {
-            get
-            {
-                return this.pluginMenuList;
-            }
-            private set
-            {
-                this.pluginMenuList = value;
-
-                this.RaisePropertyChanged("PluginMenuList");
-            }
+            get { return GetValue<List<MenuItem>>("PluginMenuList"); }
+            private set { SetValue("PluginMenuList", value); }
         }
 
         /// <summary>
@@ -85,46 +93,6 @@ namespace VoteSystem.Client.ViewModel
         }
 
         /// <summary>
-        /// 一言メッセージを取得または設定します。
-        /// </summary>
-        public string MessageString
-        {
-            get
-            {
-                return this.messageString;
-            }
-            set
-            {
-                if (this.messageString != value)
-                {
-                    this.messageString = value;
-
-                    RaisePropertyChanged("MessageString");
-                }
-            }
-        }
-
-        /// <summary>
-        /// 通知メッセージを取得または設定します。
-        /// </summary>
-        public string NotificationString
-        {
-            get
-            {
-                return this.notificationString;
-            }
-            set
-            {
-                if (this.notificationString != value)
-                {
-                    this.notificationString = value;
-
-                    RaisePropertyChanged("NotificationString");
-                }
-            }
-        }
-
-        /// <summary>
         /// 通知メッセージを送るときのパラメーターを取得します。
         /// </summary>
         [DependOnProperty("NotificationString")]
@@ -136,7 +104,7 @@ namespace VoteSystem.Client.ViewModel
                 {
                     Notification = new Notification()
                     {
-                        Text = this.notificationString,
+                        Text = NotificationString,
                         FromLiveRoom = null,
                         VoterId = "$self",
                         VoterName = this.baseModel.NickName,
@@ -157,7 +125,7 @@ namespace VoteSystem.Client.ViewModel
         }
 
         /// <summary>
-        /// 放送タイトルを取得します。
+        /// ログインユーザーの紹介ページURLを取得します。
         /// </summary>
         [DependOnProperty(typeof(NicoClient), "LoginId")]
         public string NicoLoginUserUrl
@@ -174,6 +142,33 @@ namespace VoteSystem.Client.ViewModel
             }
         }
 
+        /// <summary>
+        /// 中継したコメント一覧を取得します。
+        /// </summary>
+        [DependOnProperty(typeof(VoteClient), "PostCommentList")]
+        public CollectionView PostCommentList
+        {
+            get
+            {
+                var voteClient = this.baseModel.VoteClient;
+                if (voteClient == null)
+                {
+                    return null;
+                }
+
+                var view = (CollectionView)
+                    CollectionViewSource.GetDefaultView(
+                        voteClient.PostCommentList);
+
+                view.SortDescriptions.Add(
+                    new SortDescription(
+                        "Timestamp",
+                        ListSortDirection.Descending));
+
+                return view;
+            }
+        }
+
         private void this_PropertyChanged(object sender,
                                           PropertyChangedEventArgs e)
         {
@@ -182,10 +177,16 @@ namespace VoteSystem.Client.ViewModel
                 return;
             }
 
+            var voteClient = this.baseModel.VoteClient;
+            if (voteClient == null)
+            {
+                return;
+            }
+
             // 投票状態の変更に応じてSEを再生します。
             if (e.PropertyName == "VoteState")
             {
-                var state = this.baseModel.VoteState;
+                var state = voteClient.VoteState;
                 if (state != this.oldVoteState)
                 {
                     Global.SoundManager.PlayVoteSE(state);
@@ -196,16 +197,16 @@ namespace VoteSystem.Client.ViewModel
             // 秒読みSEを鳴らします。
             if (e.PropertyName == "VoteLeaveTime")
             {
-                var info = this.baseModel.VoteClient.VoteRoomInfo;
+                var info = voteClient.VoteRoomInfo;
                 var time = Ragnarok.Net.NtpClient.GetTime();
                 var interval = TimeSpan.FromSeconds(1.5);
 
                 // 状態変更SEと秒読みSEが重ならないようにします。
                 if (info != null &&
                     time - info.BaseTimeNtp > interval &&
-                    this.baseModel.VoteState == VoteState.Voting)
+                    voteClient.VoteState == VoteState.Voting)
                 {
-                    var leaveTime = this.baseModel.VoteLeaveTime;
+                    var leaveTime = voteClient.VoteLeaveTime;
                     var leaveSeconds = (int)leaveTime.TotalSeconds;
 
                     Global.SoundManager.PlayCountdownSE(leaveSeconds);
@@ -237,6 +238,10 @@ namespace VoteSystem.Client.ViewModel
         public MainViewModel(MainModel model)
             : base(model)
         {
+            MessageString = string.Empty;
+            NotificationString = string.Empty;
+            PluginMenuList = new List<MenuItem>();
+
             Global.PluginLoaded += InitPluginMenu;
 
             this.PropertyChanged += this_PropertyChanged;
