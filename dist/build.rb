@@ -43,7 +43,7 @@ def setup_dist(appdata)
   end
   
   # readme.txt をコピーします。
-  FileUtils.cp("readme.txt", File.join(outdir, "readme.txt"))
+  FileUtils.cp("readme.html", outdir)
 end
 
 #
