@@ -28,6 +28,8 @@
 	* VoteClient/View/TimeSpanWindow.xaml: 不要なファイルを削除しました。
 	* dist/build.rb: readme.htmlを付属するようにしました。
 	* dist/readme.txt: 不要になったため削除しました。
+	* PluginShogi/Model/CastleInfo.cs: 囲いテーブルをRagnarok.Shogiから移動
+	しました。囲いのイラストなどを指定する必要が出てきたためです。
 
 2013-06-11  - Ver 1.3.4.4
 
