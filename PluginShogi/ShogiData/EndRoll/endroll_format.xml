@@ -1,6 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <FormatRoot>
+	<MovieTimeline FadeInStartTime="00:00:05"
+				   FadeInSpan="00:00:05"
+				   FadeOutStartTime="00:01:28"
+				   FadeOutSpan="00:00:05" />
+	<EndRollTimeline FadeInStartTime="00:00:10"
+					 FadeInSpan="00:00:00"
+					 FadeOutStartTime="00:01:32"
+					 FadeOutSpan="00:00:00" />
+
 	<ColumnDefinitions>
 		<ColumnDefinition Width="1" />
 		<ColumnDefinition Width="1" />

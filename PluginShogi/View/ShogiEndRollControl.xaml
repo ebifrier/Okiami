@@ -63,15 +63,15 @@
                 </Grid>
 
                 <!-- Canvas.Left=-80 が中心位置
-                        左右に80ずつはみ出してる -->
+                     左右に80ずつはみ出してる -->
                 <s:EndRollControl Canvas.Left="-120"
-                                    Width="800" Height="360"
-                                    x:Name="EndRoll"
-                                    LineHeight="23"
-                                    OpacityLineCount="2"
-                                    Background="Transparent"
-                                    IsUpdateBackground="False"
-                                    AutoUpdate="False" />
+                                  Width="800" Height="360"
+                                  x:Name="EndRoll"
+                                  LineHeight="23"
+                                  OpacityLineCount="2"
+                                  Background="Transparent"
+                                  IsUpdateBackground="False"
+                                  AutoUpdate="False" />
             </Canvas>
         </Viewbox>
 

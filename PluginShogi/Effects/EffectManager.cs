@@ -20,6 +20,7 @@ using Ragnarok.Presentation.Shogi.View;
 namespace VoteSystem.PluginShogi.Effects
 {
     using View;
+    using Model;
 
     /// <summary>
     /// エフェクトの使用フラグです。
@@ -412,21 +413,20 @@ namespace VoteSystem.PluginShogi.Effects
         {
             var p = Container.GetPiecePos(position);
 
-            var angle = 0.0;
-            if (position.File < 5)
-            {
-                angle = 0;
-            }
-            else
-            {
-                angle = 180;
-            }
+            // 字形を描くパーティクルの放出角度
+            var angle = (position.File < 5 ? 0.0 : 180.0);
+
+            // 囲い画像の名前
+            var imageName = (string.IsNullOrEmpty(castle.ImageName) ?
+                "Other.png" :
+                castle.ImageName);
 
             var dic = new Dictionary<string, object>
             {
                 {"CastleName", castle.Name},
                 {"CastleNameLen", castle.Name.Length},
                 {"CastleId", castle.Id},
+                {"CastleImage", imageName},
                 {"StartAngle", angle},
                 {"StartXY", new Vector(p.X, p.Y)},
             };

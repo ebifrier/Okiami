@@ -55,6 +55,30 @@ namespace VoteSystem.PluginShogi.ViewModel
         private readonly CommentClient commentClient;
 
         /// <summary>
+        /// 投票クライアントを取得します。
+        /// </summary>
+        public Client.Model.VoteClient VoteClient
+        {
+            get { return ShogiGlobal.VoteClient; }
+        }
+
+        /// <summary>
+        /// 設定オブジェクトを取得します。
+        /// </summary>
+        public Settings Settings
+        {
+            get { return ShogiGlobal.Settings; }
+        }
+
+        /// <summary>
+        /// クライアントのモデルオブジェクトを取得します。
+        /// </summary>
+        public Client.Model.MainModel ClientModel
+        {
+            get { return ShogiGlobal.ClientModel; }
+        }
+
+        /// <summary>
         /// 盤面を取得または設定します。
         /// </summary>
         public Board Board
@@ -146,22 +170,6 @@ namespace VoteSystem.PluginShogi.ViewModel
         {
             get { return ShogiGlobal.Settings.AS_Comment; }
             set { ShogiGlobal.Settings.AS_Comment = value; }
-        }
-
-        /// <summary>
-        /// 投票クライアントを取得します。
-        /// </summary>
-        public Client.Model.VoteClient VoteClient
-        {
-            get { return ShogiGlobal.VoteClient; }
-        }
-
-        /// <summary>
-        /// 設定オブジェクトを取得します。
-        /// </summary>
-        public Settings Settings
-        {
-            get { return ShogiGlobal.Settings; }
         }
 
         /// <summary>
@@ -515,8 +523,10 @@ namespace VoteSystem.PluginShogi.ViewModel
             {
                 var autoPlay = new AutoPlayEx(variation)
                 {
+                    EffectManager = ShogiGlobal.EffectManager,
                     IsChangeBackground = true,
                     IsUseCutIn = true,
+                    IsConfirmPlay = true,
                 };
 
                 StartAutoPlay(autoPlay);
@@ -618,11 +628,9 @@ namespace VoteSystem.PluginShogi.ViewModel
                 return;
             }
 
-            ShogiGlobal.EffectManager.IsAutoPlayEffect = true;
-            ShogiGlobal.EffectManager.EffectMoveCount = 0;
             autoPlay.Stopped += (_, __) => StopAutoPlay();
-
             this.currentAutoPlay = autoPlay;
+
             Board = autoPlay.Board;
             shogi.StartAutoPlay(autoPlay);
         }
@@ -641,9 +649,6 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             // 変化停止時の処理
             WPFUtil.InvalidateCommand();
-
-            ShogiGlobal.EffectManager.IsAutoPlayEffect = false;
-            ShogiGlobal.EffectManager.EffectMoveCount = 0;
 
             // もし次の変化があればそれも表示します。
             BeginAutoPlay();

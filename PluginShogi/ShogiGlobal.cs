@@ -100,9 +100,9 @@ namespace VoteSystem.PluginShogi
         }
 
         /// <summary>
-        /// ニコニコへのログインオブジェクトを取得または設定します。
+        /// クライアントのメインモデルを取得または設定します。
         /// </summary>
-        public static Ragnarok.NicoNico.NicoClient NicoClient
+        public static Client.Model.MainModel ClientModel
         {
             get;
             set;
@@ -202,8 +202,6 @@ namespace VoteSystem.PluginShogi
             get;
             private set;
         }
-
-        
 
         /// <summary>
         /// エラーメッセージを出力します。

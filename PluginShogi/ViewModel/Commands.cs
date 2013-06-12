@@ -13,14 +13,13 @@ using Ragnarok.Shogi;
 using Ragnarok.NicoNico;
 using Ragnarok.NicoNico.Live;
 using Ragnarok.Presentation;
-using Ragnarok.Presentation.Control;
 
 namespace VoteSystem.PluginShogi.ViewModel
 {
-    using VoteSystem.PluginShogi.Model;
-    using VoteSystem.PluginShogi.View;
-    using VoteSystem.Protocol;
-    using VoteSystem.Protocol.Vote;
+    using Model;
+    using View;
+    using Protocol;
+    using Protocol.Vote;
 
     /// <summary>
     /// コマンドを保持します。
@@ -684,15 +683,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// </summary>
         private static TimeSpan? GetTimeSpan(TimeSpan defaultValue)
         {
-            // 時間間隔をウィンドウから取得します。
-            var window = new TimeSpanWindow(defaultValue);
-            var result = window.ShowDialogCenterMouse();
-            if (result == null || !result.Value)
-            {
-                return null;
-            }
-
-            return window.Value;
+            return DialogUtil.ShowTimeSpanDialog(defaultValue);
         }
 
         /// <summary>
@@ -716,7 +707,7 @@ namespace VoteSystem.PluginShogi.ViewModel
 
                 // 動画の開始時間を設定します。
                 var time = NtpClient.GetTime() + timeSpan.Value;
-                time = time.Add(TimeSpan.FromMinutes(9));
+                //time = time.Add(TimeSpan.FromMinutes(9));
 
                 // 動画の開始時間は、現在時刻＋指定時刻された時間で
                 // キリの良いところが選ばれます。
@@ -734,7 +725,6 @@ namespace VoteSystem.PluginShogi.ViewModel
                 {
                     return;
                 }
-                //var startTimeNtp = time;
 
                 voteClient.SendStartEndRoll(startTimeNtp);
             }
@@ -885,7 +875,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         public static bool DoConnectToNicoLive(string liveUrl, bool showDialog)
         {
             var model = ShogiGlobal.ShogiModel;
-            var nicoClient = ShogiGlobal.NicoClient;
+            var nicoClient = ShogiGlobal.ClientModel.NicoClient;
             var commentClient = model.CommentClient;
 
             try
@@ -1088,7 +1078,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         public static void DoPostVariationComment()
         {
             var model = ShogiGlobal.ShogiModel;
-            var nicoClient = ShogiGlobal.NicoClient;
+            var nicoClient = ShogiGlobal.ClientModel.NicoClient;
             var commentClient = model.CommentClient;
 
             try
@@ -1207,9 +1197,6 @@ namespace VoteSystem.PluginShogi.ViewModel
         {
             try
             {
-                /*var model = ShogiGlobal.ShogiModel;
-                SendSetCurrentBoard(model.Board);*/
-
                 var manager = ShogiGlobal.EffectManager;
                 if (manager == null)
                 {

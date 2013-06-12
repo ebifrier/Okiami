@@ -42,20 +42,16 @@
                                    Content="設定できるのはルームオーナーのみです。"
                                    Foreground="DarkRed" />
 
-                            <Label
-                                Grid.Row="2" Grid.ColumnSpan="3"
-                                Content="投票打ち切り回数" />
-                            <r:NumericUpDown
-                                Grid.Row="3" Grid.Column="1"
-                                Minimum="0" Maximum="1000"
-                                Value="{Binding VoteEndCount}" />
+                            <Label Grid.Row="2" Grid.ColumnSpan="3"
+                                   Content="投票打ち切り回数" />
+                            <r:NumericUpDown Grid.Row="3" Grid.Column="1"
+                                             Minimum="0" Maximum="1000"
+                                             Value="{Binding VoteEndCount}" />
 
-                            <Label
-                                Grid.Row="5" Grid.ColumnSpan="3"
-                                Content="投票時間を延長／短縮した場合の変更時間" />
-                            <r:TimeSpanEditControl
-                                Grid.Row="6" Grid.Column="1"
-                                Value="{Binding VoteExtendTime}" />
+                            <Label Grid.Row="5" Grid.ColumnSpan="3"
+                                   Content="投票時間を延長／短縮した場合の変更時間" />
+                            <r:TimeSpanEditControl Grid.Row="6" Grid.Column="1"
+                                                   Value="{Binding VoteExtendTime}" />
                         </Grid>
                     </GroupBox>
                 </Grid>

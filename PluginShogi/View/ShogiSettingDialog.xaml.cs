@@ -33,10 +33,6 @@ namespace VoteSystem.PluginShogi.View
             
             CommandBindings.Add(
                 new CommandBinding(
-                    ApplicationCommands.Open,
-                    ExecuteOpenBackground));
-            CommandBindings.Add(
-                new CommandBinding(
                     RagnarokCommands.OK,
                     ExecuteOK));
             CommandBindings.Add(
@@ -45,44 +41,17 @@ namespace VoteSystem.PluginShogi.View
                     ExecuteCancel));
         }
 
-        private void ExecuteOpenBackground(object sender, ExecutedRoutedEventArgs e)
-        {
-            var model = DataContext as ShogiSettingDialogViewModel;
-            if (model == null)
-            {
-                return;
-            }
-
-            // 転送するログファイル名を選択。
-            var dialog = new Microsoft.Win32.OpenFileDialog()
-            {
-                CheckFileExists = true,
-                CheckPathExists = true,
-                DefaultExt = ".jpg",
-                ReadOnlyChecked = true,
-                Title = "背景画像を選択します。",
-                Multiselect = false,
-                Filter = "画像ファイル(*.jpg;*.jpeg;*.png;*.bmp;*.tif;*.gif)|*.jpg;*.jpeg;*.png;*.bmp;*.tif;*.gif|すべてのファイル(*.*)|*.*",
-            };
-            var result = dialog.ShowDialog();
-            if (result == null || !result.Value)
-            {
-                return;
-            }
-
-            model.BackgroundPath = dialog.FileName;
-        }
-
         private void ExecuteOK(object sender, ExecutedRoutedEventArgs e)
         {
             var model = ShogiGlobal.ShogiModel;
+            var manager = ShogiGlobal.EffectManager;
 
             ShogiGlobal.Settings.Save();
 
             // ここでエフェクト設定を更新しないと、
             // 一部のエフェクトに設定が反映されません。
-            ShogiGlobal.EffectManager.InitEffect(model.Board.Turn);
-            ShogiGlobal.EffectManager.UpdateBackground();
+            manager.InitEffect(model.Board.Turn);
+            manager.UpdateBackground();
 
             DialogResult = true;
         }

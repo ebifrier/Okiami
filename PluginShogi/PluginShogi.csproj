@@ -53,10 +53,13 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Effects\EffectTable.cs" />
+    <Compile Include="Model\CastleInfo.cs" />
+    <Compile Include="Model\CastleInfoTable.cs" />
     <Compile Include="Model\TimelineData.cs" />
     <Compile Include="RenderingQuality.cs" />
     <Compile Include="ViewModel\AutoPlayEx.cs">
@@ -98,6 +101,9 @@
     <Resource Include="Resources\Image\shogiban_image.png" />
     <Resource Include="Resources\Image\ending_image.png" />
     <Content Include="ShogiData\Effect\Other\CastleEffect\Image\Mino.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ShogiData\Effect\Other\CastleEffect\Image\Other.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ShogiData\Effect\Other\CastleEffect\Voice\IbisyaAnaguma3.wav">
@@ -544,6 +550,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Model\GenFiles\castle_list.yaml" />
+    <None Include="Model\GenFiles\make_castle.bat" />
+    <None Include="Model\GenFiles\make_castle.rb" />
     <None Include="PluginShogi.snk" />
   </ItemGroup>
   <ItemGroup>

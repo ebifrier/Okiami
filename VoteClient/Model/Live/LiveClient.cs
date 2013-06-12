@@ -26,6 +26,14 @@ namespace VoteSystem.Client.Model.Live
         private LiveAttribute attribute;
 
         /// <summary>
+        /// 放送に接続しているかどうかを取得します。
+        /// </summary>
+        public abstract bool IsConnected
+        {
+            get;
+        }
+
+        /// <summary>
         /// 放送に接続します。
         /// </summary>
         public abstract void ConnectCommand();

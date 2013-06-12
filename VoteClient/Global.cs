@@ -26,14 +26,15 @@ namespace VoteSystem.Client
     public static class Global
     {
         /// <summary>
+        /// アプリの更新用URLです。
+        /// </summary>
+        public static readonly string UpdateUrl =
+            @"http://garnet-alice.net/programs/votesystem/update/versioninfo.xml";
+
+        /// <summary>
         /// プラグインが読み込まれたときに呼ばれます。
         /// </summary>
         public static event EventHandler PluginLoaded;
-
-        /// <summary>
-        /// xamlではメソッドを直接指定することができないため。
-        /// </summary>
-        public static Func<VoterList> VoterListGetter = GetVoterList;
 
         /// <summary>
         /// 公開用プログラムかどうかを取得します。
@@ -130,7 +131,15 @@ namespace VoteSystem.Client
         /// </summary>
         public static Model.VoteClient VoteClient
         {
-            get { return MainModel.VoteClient; }
+            get
+            {
+                if (MainModel == null)
+                {
+                    return null;
+                }
+
+                return MainModel.VoteClient;
+            }
         }
 
         /// <summary>
@@ -185,15 +194,6 @@ namespace VoteSystem.Client
         {
             get;
             set;
-        }
-
-        /// <summary>
-        /// 投票モード固有の評価値を取得または設定します。
-        /// </summary>
-        public static double ModeCustomPoint
-        {
-            get { return MainModel.ModeCustomPoint; }
-            set { MainModel.ModeCustomPoint = value; }
         }
 
         /// <summary>
@@ -356,8 +356,7 @@ namespace VoteSystem.Client
             MainViewModel = new ViewModel.MainViewModel(MainModel);
             VoteRoomInfoModel = new ViewModel.VoteRoomInfoViewModel();
 
-            Updater = new PresentationUpdater(
-                "http://garnet-alice.net/programs/votesystem/update/versioninfo.xml");
+            Updater = new PresentationUpdater(UpdateUrl);
             Updater.Start();
         }
 
@@ -371,25 +370,6 @@ namespace VoteSystem.Client
             if (voteClient != null)
             {
                 voteClient.Disconnect();
-            }
-        }
-
-        /// <summary>
-        /// 投票者リストを更新します。
-        /// </summary>
-        public static VoterList GetVoterList()
-        {
-            try
-            {
-                return VoteClient.GetVoterList();
-                //return Protocol.Model.TestVoterList.GetTestVoterList();
-            }
-            catch (Exception ex)
-            {
-                MessageUtil.ErrorMessage(ex,
-                    "参加者リストの取得に失敗しました。(-A-;)");
-
-                return null;
             }
         }
     }

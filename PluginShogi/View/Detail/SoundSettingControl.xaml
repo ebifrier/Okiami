@@ -12,10 +12,10 @@
 
         <CheckBox Grid.Row="0" Margin="5"
                   Content="効果音を使用する"
-                  IsChecked="{Binding IsUseEffectSound}" />
+                  IsChecked="{Binding Settings.SD_IsUseEffectSound}" />
 
         <GroupBox Grid.Row="1" Header="ボリューム"
-                  IsEnabled="{Binding IsUseEffectSound}">
+                  IsEnabled="{Binding Settings.SD_IsUseEffectSound}">
             <StackPanel Orientation="Vertical"
                         Margin="0,5,0,0">
                 <Grid>

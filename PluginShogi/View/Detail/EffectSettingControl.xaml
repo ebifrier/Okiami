@@ -13,7 +13,7 @@
         <TextBlock />
         <CheckBox Content="背景エフェクトを使用"
                   IsChecked="{Binding IsUseBackgroundEffect}" />
-        <CheckBox Content="通常の駒に関するエフェクトを使用"
+        <CheckBox Content="駒移動／駒打ちのエフェクトを使用"
                   IsChecked="{Binding IsUsePieceEffect}" />
         <CheckBox Content="囲いエフェクトを使用"
                   IsChecked="{Binding IsUseCastleEffect}" />
@@ -30,10 +30,10 @@
         <CheckBox Content="エフェクトを使用する"
                   Margin="5"
                   Name="isUseEffectCB"
-                  IsChecked="{Binding IsUseEffect}" />
+                  IsChecked="{Binding Settings.SD_IsUseEffect}" />
         
         <GroupBox Header="エフェクト設定"
-                  IsEnabled="{Binding IsUseEffect}">
+                  IsEnabled="{Binding Settings.SD_IsUseEffect}">
             <StaticResource ResourceKey="mainTemplate" />
         </GroupBox>
     </StackPanel>

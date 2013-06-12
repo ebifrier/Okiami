@@ -12,25 +12,19 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="./LiveControlTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
-            <DataTemplate x:Key="checkBoxTemplate" DataType="String">
-                <CheckBox />
-            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
-        <ItemsControl ItemsSource="{Binding LiveClientList}"
-                      ItemTemplate="{StaticResource liveControlTemplate}">
-            <ItemsControl.Template>
-                <ControlTemplate>
-                    <Grid>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <VirtualizingStackPanel IsItemsHost="True" />
-                        </ScrollViewer>
-                    </Grid>
-                </ControlTemplate>
-            </ItemsControl.Template>
-        </ItemsControl>
-    </Grid>
+    <ItemsControl ItemsSource="{Binding LiveClientList}"
+                  ItemTemplate="{StaticResource liveControlTemplate}">
+        <ItemsControl.Template>
+            <ControlTemplate>
+                <Grid>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <VirtualizingStackPanel IsItemsHost="True" />
+                    </ScrollViewer>
+                </Grid>
+            </ControlTemplate>
+        </ItemsControl.Template>
+    </ItemsControl>
 </UserControl>

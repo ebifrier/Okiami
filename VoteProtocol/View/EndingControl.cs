@@ -363,14 +363,20 @@ namespace VoteSystem.Protocol.View
                 throw new ArgumentNullException("movieUri");
             }
 
+            // 依然と違うURLであれば新たにダウンロードします。
+            if (MovieUri != movieUri)
+            {
+                Downloader.CancelAll();
+
+                Downloader.BeginDownload(
+                    movieUri,
+                    (_, __) => WPFUtil.UIProcess(
+                        () => OnMovieDownloaded(_, __)));
+            }
+
             MovieUri = movieUri;
             StartTimeNtp = startTimeNtp;
             State = EndingState.Downloading;
-
-            Downloader.BeginDownload(
-                movieUri,
-                (_, __) => WPFUtil.UIProcess(
-                    () => OnMovieDownloaded(_, __)));
 
             /*// 動画ファイルを読み込みます。
             var ext = System.IO.Path.GetExtension(MovieUri.ToString());

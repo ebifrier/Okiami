@@ -55,9 +55,9 @@ namespace VoteSystem.Client
         }
 
         /// <summary>
-        /// ニコニコへのログインオブジェクトを取得します。
+        /// クライアントのメインオブジェクトを取得します。
         /// </summary>
-        public Ragnarok.NicoNico.NicoClient NicoClient
+        public Model.MainModel MainModel
         {
             get;
             internal set;
@@ -128,7 +128,7 @@ namespace VoteSystem.Client
                     SettingDir = Path.GetDirectoryName(conf.FilePath),
                     Window = Global.MainWindow,
                     VoteClient = Global.VoteClient,
-                    NicoClient = Global.MainModel.NicoClient,
+                    MainModel = Global.MainModel,
                 });
 
                 return plugin;

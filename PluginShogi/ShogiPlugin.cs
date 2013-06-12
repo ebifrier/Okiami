@@ -94,7 +94,7 @@ namespace VoteSystem.PluginShogi
 
                 ShogiGlobal.ClientWindow = host.Window;
                 ShogiGlobal.VoteClient = host.VoteClient;
-                ShogiGlobal.NicoClient = host.NicoClient;
+                ShogiGlobal.ClientModel = host.MainModel;
 
                 // ログイン時に現局面を取得するようにします。
                 host.VoteClient.PropertyChanged += VoteClient_PropertyChanged;
@@ -489,7 +489,7 @@ namespace VoteSystem.PluginShogi
             nameList = (nameList ?? new List<string>());
 
             // 投票モード固有の評価値を設定します。
-            Global.ModeCustomPoint = e.Command.Value;
+            Global.MainModel.ModeCustomPoint = e.Command.Value;
 
             // 初回取得時は、取得のみを行います。
             if (this.whaleNameList == null)

@@ -39,10 +39,28 @@ namespace VoteSystem.Server
                         UnjoinedVoterCount = this.unjoinedVoterDic.Count,
                         LiveOwnerList = this.liveOwnerDic.Values.ToList(),
                         ModeCustomJoinerList = this.modeCustomjoinerSet.ToList(),
+                        //DonorAmount = 171920,
+                        //DonorList = DonorList.ToList(),
                     };
                 }
             }
         }
+
+        /*private List<string> DonorList
+        {
+            get
+            {
+                return new List<string>
+                {
+                    "izuminoshita",
+                    "石渡良二",
+                    "サマンサ",
+                    "エスペラード",
+                    "ebifrier",
+                    "kokujira",
+                };
+            }
+        }*/
 
         /// <summary>
         /// 参加していない投票者をリストに追加します。

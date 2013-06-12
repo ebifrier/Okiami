@@ -23,7 +23,7 @@
                     <StackPanel Orientation="Vertical">
                         <Label Content="秒読み君/ちゃんを選択します。" />
 
-                        <ComboBox ItemsSource="{Binding SoundDirList, Mode=OneWay}"
+                        <ComboBox ItemsSource="{Binding SoundInfoList, Mode=OneWay}"
                                   SelectedItem="{Binding SelectedSoundSet}"
                                   DisplayMemberPath="Title" />
 

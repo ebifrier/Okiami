@@ -173,8 +173,6 @@
             </Grid>
         </GroupBox>
 
-        <Control HorizontalAlignment="Right"
-                 Focusable="False"
-                 Template="{StaticResource ButtonsTemplate}" />
+        <Control Style="{StaticResource ButtonsStyle}" />
     </StackPanel>
 </Window>

@@ -44,9 +44,8 @@
                 <StaticResource ResourceKey="soundSettingControl" />
             </TabItem>
         </TabControl>
-
+        
         <Control Grid.Row="2"
-                 Template="{StaticResource ButtonsTemplate}"
-                 Focusable="False" />
+                 Style="{StaticResource ButtonsStyle}" />
     </Grid>
 </Window>

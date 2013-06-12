@@ -79,9 +79,19 @@ namespace VoteSystem.PluginShogi.ViewModel
         {
             if (EffectManager != null)
             {
-                EffectManager.EffectEnabled = false;
                 EffectManager.IsAutoPlayEffect = true;
                 EffectManager.EffectMoveCount = 0;
+            }
+
+            foreach (var result in WaitExecutor(BeginningInterval))
+            {
+                yield return result;
+            }
+
+            // 最初に背景色のみを更新します。
+            foreach (var result in BackgroundFadeInExecutor())
+            {
+                yield return result;
             }
 
             // カットインが表示できたら、指定の時間だけ待ちます。
@@ -95,17 +105,6 @@ namespace VoteSystem.PluginShogi.ViewModel
                 }
 
                 BasePosition += CutInInternal;
-            }
-
-            foreach (var result in WaitExecutor(BeginningInterval))
-            {
-                yield return result;
-            }
-
-            // 最初に背景色のみを更新します。
-            foreach (var result in BackgroundFadeInExecutor())
-            {
-                yield return result;
             }
 
             // 指し手を進めます。
@@ -132,7 +131,6 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             if (EffectManager != null)
             {
-                EffectManager.EffectEnabled = true;
                 EffectManager.IsAutoPlayEffect = false;
                 EffectManager.EffectMoveCount = 0;
             }
@@ -144,14 +142,20 @@ namespace VoteSystem.PluginShogi.ViewModel
         public AutoPlayEx(Variation variation)
             : this(variation.Board, variation.BoardMoveList)
         {
-            ConfirmMessage = string.Format(
-                "{1}{0}{0}コメント: {2}{0}{0}を再生しますか？",
+            var sb = new StringBuilder();
+            sb.AppendFormat("{1}{0}{0}",
                 Environment.NewLine,
-                variation.Label,
-                variation.Comment);
+                variation.Label);
+            if (!string.IsNullOrEmpty(variation.Comment))
+            {
+                sb.AppendFormat("コメント: {1}{0}{0}",
+                    Environment.NewLine,
+                    variation.Comment);
+            }
+            sb.AppendFormat("を再生しますか？");
 
+            ConfirmMessage = sb.ToString();
             CutInInternal = TimeSpan.FromSeconds(2.0);
-
             UpdateEnumerator = MakeUpdateEnumerator().GetEnumerator();
         }
 
@@ -162,7 +166,6 @@ namespace VoteSystem.PluginShogi.ViewModel
             : base(board, moveList)
         {
             CutInInternal = TimeSpan.FromSeconds(2.0);
-
             UpdateEnumerator = MakeUpdateEnumerator().GetEnumerator();
         }
 

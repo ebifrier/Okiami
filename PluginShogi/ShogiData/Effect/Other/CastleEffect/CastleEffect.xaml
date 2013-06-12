@@ -123,7 +123,7 @@
 
             <!-- 囲い背景 -->
             <r:EffectObject Duration="0:0:4"
-                            ImageUri="Image/Yagura.png"
+                            ImageUri="Image/${CastleImage}"
                             MaterialType="Diffuse"
                             Coord="{StaticResource castleBackCoord}"
                             Scale="460,400,1"

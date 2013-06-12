@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
 using Ragnarok;
 
@@ -112,6 +113,49 @@ namespace VoteSystem.PluginShogi.Model
 
             // フェードアウト後なら進行度は０
             return 0.0;
+        }
+
+        private static TimeSpan ParseTimeSpan(XAttribute attr)
+        {
+            if (attr == null)
+            {
+                return TimeSpan.Zero;
+            }
+
+            TimeSpan result;
+            if (!TimeSpan.TryParse(attr.Value, out result))
+            {
+                return TimeSpan.Zero;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Xmlデータからオブジェクトを作成します。
+        /// </summary>
+        public static TimelineData Create(XElement e)
+        {
+            if (e == null)
+            {
+                throw new ArgumentNullException("e");
+            }
+
+            var result = new TimelineData();
+
+            var attr = e.Attribute("FadeInStartTime");
+            result.FadeInStartTime = ParseTimeSpan(attr);
+
+            attr = e.Attribute("FadeInSpan");
+            result.FadeInSpan = ParseTimeSpan(attr);
+
+            attr = e.Attribute("FadeOutStartTime");
+            result.FadeOutStartTime = ParseTimeSpan(attr);
+
+            attr = e.Attribute("FadeOutSpan");
+            result.FadeOutSpan = ParseTimeSpan(attr);
+
+            return result;
         }
     }
 }

@@ -17,15 +17,12 @@
                 <RowDefinition Height="{StaticResource space}" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="{StaticResource space}" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Content="駒の選択" />
             <ComboBox Grid.Row="1"
                       ItemsSource="{r:EnumList EnumType=r:KomaImageType}"
-                      SelectedValue="{Binding KomaImage}"
+                      SelectedValue="{Binding Settings.SD_KomaImage}"
                       SelectedValuePath="Value"
                       DisplayMemberPath="Label"
                       ToolTip="駒画像を選択します"
@@ -34,7 +31,7 @@
             <Label Grid.Row="3" Content="盤の選択" />
             <ComboBox Grid.Row="4"
                       ItemsSource="{r:EnumList EnumType=r:BanImageType}"
-                      SelectedValue="{Binding BanImage}"
+                      SelectedValue="{Binding Settings.SD_BanImage}"
                       SelectedValuePath="Value"
                       DisplayMemberPath="Label"
                       ToolTip="盤画像を選択します"
@@ -43,23 +40,11 @@
             <Label Grid.Row="6" Content="駒台の選択" />
             <ComboBox Grid.Row="7"
                       ItemsSource="{r:EnumList EnumType=r:KomadaiImageType}"
-                      SelectedValue="{Binding KomadaiImage}"
+                      SelectedValue="{Binding Settings.SD_KomadaiImage}"
                       SelectedValuePath="Value"
                       DisplayMemberPath="Label"
                       ToolTip="駒台画像を選択します"
                       IsReadOnly="True" />
-
-            <Label Grid.Row="9" Content="背景画像選択" />
-            <Grid Grid.Row="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <TextBox Text="{Binding BackgroundPath}" />
-                <Button Grid.Column="1" Content=" ･･･ "
-                        Command="Open" />
-            </Grid>
         </Grid>
     </ControlTemplate>
 
@@ -86,7 +71,7 @@
 
                 <Label Grid.Column="0" Content="盤・駒台の不透明度" />
                 <r:NumericUpDown Grid.Column="2"
-                                 Value="{Binding BanOpacity}"
+                                 Value="{Binding Settings.SD_BanOpacity}"
                                  TextFormat="{}{0:F2}"
                                  MinWidth="60"
                                  Minimum="0.0" Maximum="1.0"

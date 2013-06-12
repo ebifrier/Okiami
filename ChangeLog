@@ -1,3 +1,32 @@
+2013-06-12  - Ver 1.3.4.5
+
+	* PluginShogi/Effects/EffectManager.cs: 囲い画像の変更に対応しました。
+	* PluginShogi/Model/TimelineData.cs: xmlからのTimelineData読み込みに対
+	応しました。
+	* PluginShogi/ShogiData/EndRoll/endroll_format.xml: 再生時間などをフォ
+	ーマットファイルに含めました。
+	* PluginShogi/View/Detail/GeneralSettingControl.xaml: 放送未接続時にそ
+	れを示す警告を表示するようにしました。
+	* PluginShogi/View/MainWindow.xaml: 「各種設定」を「設定」に変更しまし
+	た。
+	* PluginShogi/View/ShogiEndRollControl.xaml.cs: TimelineDataの読み込み
+	をxmlから行うようにしました。
+	* PluginShogi/ViewModel/AutoPlayEx.cs: カットインの表示タイミング変更し
+	ました。
+	* PluginShogi/ViewModel/ShogiSettingDialogViewModel.cs: Settingsからの
+	委譲プロパティをすべて削除しました。
+	* PluginShogi/ViewModel/ShogiWindowViewModel.cs: 自動再生開始時に
+	EffectManagerを設定し、カットインを有効にしました。
+	* TimeController/app.config: loadFromRemoteSourcesを真にし、.NET4の新し
+	いセキュリティモデルを突破するようにしました。
+	* VoteClient/Model/Live/LiveClient.cs: 放送に接続しているかどうかを調べ
+	るためのプロパティを追加しました。
+	* VoteClient/View/Control/LiveControlTemplate.xaml: ミラーコメントと確
+	認コメントの設定順序を逆にしました。
+	* VoteServer/VoteStrategy/ShogiVoteStrategy.cs: 現局面で無効な指し手は
+	票としてカウントしないようにしました。
+	* VoteClient/View/TimeSpanWindow.xaml: 不要なファイルを削除しました。
+
 2013-06-11  - Ver 1.3.4.4
 
 	* VoteClient/Model/MainModel.cs: リファクタリングを行いました。

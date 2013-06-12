@@ -31,6 +31,15 @@ namespace VoteSystem.Client.Model.Live
         private readonly AlertClient alert;
 
         /// <summary>
+        /// 放送に接続しているかどうかを取得します。
+        /// </summary>
+        [DependOnProperty(typeof(CommentClient), "IsConnected")]
+        public override bool IsConnected
+        {
+            get { return this.commentClient.IsConnected; }
+        }
+
+        /// <summary>
         /// 放送への自動接続機能に使うコミュニティ番号を取得します。
         /// </summary>
         /// <remarks>
@@ -331,6 +340,7 @@ namespace VoteSystem.Client.Model.Live
                 (sender, e) => LiveDisconnected();
             this.commentClient.CommentReceived +=
                 (sender, e) => HandleComment(e.RoomIndex, e.Comment);
+            this.AddDependModel(this.commentClient);
 
             this.alert = new AlertClient();
             this.alert.LiveAlerted += alert_LiveAlerted;

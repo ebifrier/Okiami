@@ -529,7 +529,7 @@ namespace VoteSystem.Server.VoteStrategy
         /// 　^指し手([\w]+.*)?
         /// の形式しか受理されません。
         /// </remarks>
-        private static Move ParseMove(Notification source)
+        private Move ParseMove(Notification source)
         {
             var text = source.Text;
             
@@ -555,7 +555,20 @@ namespace VoteSystem.Server.VoteStrategy
                 text = moveText + "　" + afterText;
             }
 
-            return ShogiParser.ParseMove(text, true);
+            var move = ShogiParser.ParseMove(text, true);
+            if (move == null || !move.Validate())
+            {
+                return null;
+            }
+
+            // 現局面から指せるかどうか調べます。
+            if (this.board != null &&
+                this.board.ConvertMove(move) == null)
+            {
+                return null;
+            }
+
+            return move;
         }
 
         /// <summary>

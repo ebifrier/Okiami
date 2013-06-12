@@ -46,7 +46,7 @@
 
             <Button Grid.Column="4"
                     Content="投稿"
-                    MinWidth="40"
+                    MinWidth="40" VerticalAlignment="Center"
                     Command="{x:Static svm:Commands.PostVariationComment}" />
         </Grid>
     </ControlTemplate>

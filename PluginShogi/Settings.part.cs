@@ -119,13 +119,6 @@ namespace VoteSystem.PluginShogi
             set { SetValue("SD_WhitePlayerName", value); }
         }
 
-        [DefaultValue(RenderingQuality.Normal)]
-        public RenderingQuality SD_RenderingQuality
-        {
-            get { return GetValue<RenderingQuality>("SD_RenderingQuality"); }
-            set { SetValue("SD_RenderingQuality", value); }
-        }
-
         [DefaultValue(BWType.None)]
         public BWType SD_Teban
         {
@@ -133,11 +126,25 @@ namespace VoteSystem.PluginShogi
             set { SetValue("SD_Teban", value); }
         }
 
+        [DefaultValue(RenderingQuality.Normal)]
+        public RenderingQuality SD_RenderingQuality
+        {
+            get { return GetValue<RenderingQuality>("SD_RenderingQuality"); }
+            set { SetValue("SD_RenderingQuality", value); }
+        }
+
         [DefaultValue(false)]
         public bool SD_IsAutoUpdateCurrentBoard
         {
             get { return GetValue<bool>("SD_IsAutoUpdateCurrentBoard"); }
             set { SetValue("SD_IsAutoUpdateCurrentBoard", value); }
+        }
+
+        [DefaultValue(true)]
+        public bool SD_IsUseLiveNotConnectWarning
+        {
+            get { return GetValue<bool>("SD_IsUseLiveNotConnectWarning"); }
+            set { SetValue("SD_IsUseLiveNotConnectWarning", value); }
         }
         #endregion
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -39,14 +40,97 @@ namespace VoteSystem.PluginShogi.View
         private AutoPlayEx autoPlay;
         private TimeSpan prevPosition = TimeSpan.Zero;
 
-        private static TimeSpan TimeSpanFrom(double seconds)
+        /// <summary>
+        /// フォーマットファイルのパスを扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty FormatFilePathProperty =
+            DependencyProperty.Register(
+                "FormatFilePath", typeof(string), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(string.Empty,
+                    OnFormatFilePathChanged));
+
+        /// <summary>
+        /// フォーマットファイルのパスを取得または設定します。
+        /// </summary>
+        public string FormatFilePath
         {
-            return TimeSpan.FromSeconds(seconds);
+            get { return (string)GetValue(FormatFilePathProperty); }
+            set { SetValue(FormatFilePathProperty, value); }
         }
 
-        private static TimeSpan TimeSpanFrom(double minutes, double seconds)
+        private static void OnFormatFilePathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            return TimeSpan.FromSeconds(minutes * 60 + seconds);
+            var self = (ShogiEndRollControl)d;
+            var path = (string)e.NewValue;
+
+            self.LoadFormat(path);
+
+            if (self.EndRoll != null)
+            {
+                self.EndRoll.FormatFilePath = path;
+            }
+        }
+
+        /// <summary>
+        /// 映像の表示タイミングを扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty MovieTimelineProperty =
+            DependencyProperty.Register(
+                "MovieTimeline", typeof(TimelineData), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(new TimelineData()));
+
+        /// <summary>
+        /// 映像の表示タイミングを取得または設定します。
+        /// </summary>
+        /// <remarks>
+        /// 映像は音声の再生後に表示されます。
+        /// </remarks>
+        public TimelineData MovieTimeline
+        {
+            get { return (TimelineData)GetValue(MovieTimelineProperty); }
+            set { SetValue(MovieTimelineProperty, value); }
+        }
+
+        /// <summary>
+        /// スタッフ一覧などの表示タイミングを扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty EndRollTimelineProperty =
+            DependencyProperty.Register(
+                "EndRollTimeline", typeof(TimelineData), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(new TimelineData()));
+
+        /// <summary>
+        /// スタッフ一覧などの表示タイミングを取得または設定します。
+        /// </summary>
+        public TimelineData EndRollTimeline
+        {
+            get { return (TimelineData)GetValue(EndRollTimelineProperty); }
+            set { SetValue(EndRollTimelineProperty, value); }
+        }
+
+        /// <summary>
+        /// 将棋盤の表示タイミングを扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty ShogiTimelineProperty =
+            DependencyProperty.Register(
+                "ShogiTimeline", typeof(TimelineData), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(new TimelineData()));
+
+        /// <summary>
+        /// 将棋盤の表示タイミングを取得または設定します。
+        /// </summary>
+        public TimelineData ShogiTimeline
+        {
+            get { return (TimelineData)GetValue(ShogiTimelineProperty); }
+            set { SetValue(ShogiTimelineProperty, value); }
+        }
+
+        /// <summary>
+        /// 自分で使う用
+        /// </summary>
+        private MediaPlayer MoviePlayer
+        {
+            get { return Ending.MoviePlayer; }
         }
 
         /// <summary>
@@ -63,7 +147,7 @@ namespace VoteSystem.PluginShogi.View
 
                 return new EndRollViewModel(
                     ShogiGlobal.VoteClient.GetVoterList());
-                    //Protocol.Model.TestVoterList.GetTestVoterList());
+                //Protocol.Model.TestVoterList.GetTestVoterList());
             }
             catch (Exception ex)
             {
@@ -72,29 +156,6 @@ namespace VoteSystem.PluginShogi.View
 
                 return null;
             }
-        }
-
-        public MediaPlayer MoviePlayer
-        {
-            get { return Ending.MoviePlayer; }
-        }
-
-        public TimelineData MovieTimeline
-        {
-            get;
-            set;
-        }
-
-        public TimelineData EndRollTime
-        {
-            get;
-            set;
-        }
-
-        public TimelineData ShogiTimeline
-        {
-            get;
-            set;
         }
 
         /// <summary>
@@ -130,37 +191,12 @@ namespace VoteSystem.PluginShogi.View
                 FadeOutSpan = TimeSpanFrom(10),
             };*/
 
-            MovieTimeline = new TimelineData
-            {
-                FadeInStartTime = TimeSpanFrom(0, 5),
-                FadeInSpan = TimeSpanFrom(5),
-                FadeOutStartTime = TimeSpanFrom(1, 28),
-                FadeOutSpan = TimeSpanFrom(5),
-            };
-
-            EndRollTime = new TimelineData
-            {
-                FadeInStartTime = TimeSpanFrom(0, 10),
-                FadeInSpan = TimeSpan.Zero,
-                FadeOutStartTime = TimeSpanFrom(1, 32),
-                FadeOutSpan = TimeSpan.Zero,
-            };
-
-            ShogiTimeline = new TimelineData
-            {
-                FadeInStartTime = TimeSpanFrom(0, 0),
-                FadeInSpan = TimeSpanFrom(0),
-                FadeOutStartTime = TimeSpanFrom(0, 0),
-                FadeOutSpan = TimeSpanFrom(0),
-            };
-
             MovieBrush.Drawing = new VideoDrawing
             {
                 Player = MoviePlayer,
                 Rect = new Rect(0, 0, 16, 9),
             };
 
-            EndRoll.FormatFilePath = @"ShogiData/EndRoll/endroll_format.xml";
             EndRoll.DataGetter = GetVoterList;
 
             // エフェクト表示用のオブジェクト
@@ -176,22 +212,67 @@ namespace VoteSystem.PluginShogi.View
             Unloaded += (_, __) => OnUnloaded();
             DataContext = ShogiGlobal.ShogiModel;
 
-            this.timer = new DispatcherTimer(
-                TimeSpan.FromMilliseconds(50),
-                DispatcherPriority.Normal,
-                (_, __) => Update(),
-                Dispatcher);
-            this.timer.Start();
+            // フォーマットファイル設定
+            FormatFilePath = @"ShogiData/EndRoll/endroll_format.xml";
+
+            if (!Ragnarok.Presentation.WPFUtil.IsInDesignMode)
+            {
+                this.timer = new DispatcherTimer(
+                    TimeSpan.FromMilliseconds(50),
+                    DispatcherPriority.Normal,
+                    (_, __) => Update(),
+                    Dispatcher);
+                this.timer.Start();
+            }
         }
 
         private void OnUnloaded()
         {
             EndRoll.Stop();
 
+            if (MoviePlayer != null)
+            {
+                MoviePlayer.Stop();
+            }
+
             if (this.timer != null)
             {
                 this.timer.Stop();
                 this.timer = null;
+            }
+        }
+
+        /// <summary>
+        /// xmlファイルを読み込みます。
+        /// </summary>
+        private void LoadFormat(string filepath)
+        {
+            if (string.IsNullOrEmpty(filepath) ||
+                !System.IO.File.Exists(filepath))
+            {
+                Log.Error(
+                    "{0}: ファイルが存在しません。",
+                    filepath);
+                return;
+            }
+
+            var doc = XElement.Load(filepath, LoadOptions.SetLineInfo);
+            foreach (var elem in doc.Elements())
+            {
+                var name = elem.Name.LocalName;
+
+                if (name == "MovieTimeline")
+                {
+                    MovieTimeline = TimelineData.Create(elem);
+                }
+                else if (name == "EndRollTimeline")
+                {
+                    EndRollTimeline = TimelineData.Create(elem);
+                }
+                else if (name == "ShogiTimeline")
+                {
+                    ShogiTimeline = TimelineData.Create(elem);
+                }
             }
         }
 
@@ -263,18 +344,18 @@ namespace VoteSystem.PluginShogi.View
                 return;
             }
 
-            if (position > EndRollTime.FadeInStartTime &&
-                position < EndRollTime.FadeOutEndTime)
+            if (position > EndRollTimeline.FadeInStartTime &&
+                position < EndRollTimeline.FadeOutEndTime)
             {
                 if (EndRoll.State == EndRollState.Stop)
                 {
-                    var span = EndRollTime.VisibleSpan;
+                    var span = EndRollTimeline.VisibleSpan;
 
                     EndRoll.RollTimeSeconds = (int)Math.Ceiling(span.TotalSeconds);
                     EndRoll.Play();
                 }
 
-                EndRoll.UpdateScreen(position - EndRollTime.FadeInStartTime);
+                EndRoll.UpdateScreen(position - EndRollTimeline.FadeInStartTime);
             }
 
             if (this.autoPlay != null &&

@@ -72,6 +72,53 @@
 
                 <TreeViewItem IsExpanded="True">
                     <TreeViewItem.Header>
+                        <CheckBox Content="他放送からのミラーコメントを投稿する"
+                                  IsChecked="{Binding IsPostMirrorComment}"
+                                  Name="isPostMirrorCommentControl" />
+                    </TreeViewItem.Header>
+
+                    <TreeViewItem Header="投稿するコメントの種類"
+                                  IsEnabled="{Binding IsChecked, ElementName=isPostMirrorCommentControl}"
+                                  IsExpanded="{Binding IsChecked, ElementName=isPostMirrorCommentControl}">
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="通常メッセージ"
+                                          IsChecked="{Binding IsPostMirrorMessageComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="投票コメント"
+                                          IsChecked="{Binding IsPostMirrorVoteComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="参加コメント"
+                                          IsChecked="{Binding IsPostMirrorJoinComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="延長コメント"
+                                          IsChecked="{Binding IsPostMirrorTimeExtendComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <CheckBox Content="評価値コメント"
+                                          IsChecked="{Binding IsPostMirrorEvaluationComment}" />
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                </TreeViewItem>
+
+                <TreeViewItem IsExpanded="True">
+                    <TreeViewItem.Header>
                         <CheckBox Content="自放送からの確認コメントを投稿する"
                                   IsChecked="{Binding IsPostConfirmComment}"
                                   Name="isPostConfirmCommentControl" />
@@ -112,53 +159,6 @@
                             <TreeViewItem.Header>
                                 <CheckBox Content="評価値コメント"
                                           IsChecked="{Binding IsPostConfirmEvaluationComment}" />
-                            </TreeViewItem.Header>
-                        </TreeViewItem>
-                    </TreeViewItem>
-                </TreeViewItem>
-
-                <TreeViewItem IsExpanded="True">
-                    <TreeViewItem.Header>
-                        <CheckBox Content="他放送からのミラーコメントを投稿する"
-                                  IsChecked="{Binding IsPostMirrorComment}"
-                                  Name="isPostMirrorCommentControl" />
-                    </TreeViewItem.Header>
-                    
-                    <TreeViewItem Header="投稿するコメントの種類"
-                                  IsEnabled="{Binding IsChecked, ElementName=isPostMirrorCommentControl}"
-                                  IsExpanded="{Binding IsChecked, ElementName=isPostMirrorCommentControl}">
-                        <TreeViewItem>
-                            <TreeViewItem.Header>
-                                <CheckBox Content="通常メッセージ"
-                                          IsChecked="{Binding IsPostMirrorMessageComment}" />
-                            </TreeViewItem.Header>
-                        </TreeViewItem>
-
-                        <TreeViewItem>
-                            <TreeViewItem.Header>
-                                <CheckBox Content="投票コメント"
-                                          IsChecked="{Binding IsPostMirrorVoteComment}" />
-                            </TreeViewItem.Header>
-                        </TreeViewItem>
-
-                        <TreeViewItem>
-                            <TreeViewItem.Header>
-                                <CheckBox Content="参加コメント"
-                                          IsChecked="{Binding IsPostMirrorJoinComment}" />
-                            </TreeViewItem.Header>
-                        </TreeViewItem>
-
-                        <TreeViewItem>
-                            <TreeViewItem.Header>
-                                <CheckBox Content="延長コメント"
-                                          IsChecked="{Binding IsPostMirrorTimeExtendComment}" />
-                            </TreeViewItem.Header>
-                        </TreeViewItem>
-
-                        <TreeViewItem>
-                            <TreeViewItem.Header>
-                                <CheckBox Content="評価値コメント"
-                                          IsChecked="{Binding IsPostMirrorEvaluationComment}" />
                             </TreeViewItem.Header>
                         </TreeViewItem>
                     </TreeViewItem>
