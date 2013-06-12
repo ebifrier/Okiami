@@ -128,6 +128,7 @@ namespace VoteSystem.PluginShogi.Effects
             {
                 new EffectArgument("CastleName", typeof(string), ""),
                 new EffectArgument("CastleNameLen", typeof(int), "1"),
+                new EffectArgument("CastleImage", typeof(int), "Other.png"),
                 new EffectArgument("StartAngle", typeof(double), "0"),
                 new EffectArgument("StartXY", typeof(Vector), "0,0"),
             });

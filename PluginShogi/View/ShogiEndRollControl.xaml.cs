@@ -72,6 +72,23 @@ namespace VoteSystem.PluginShogi.View
         }
 
         /// <summary>
+        /// 動画のダウンロード先URLを扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty MovieUrlProperty =
+            DependencyProperty.Register(
+                "MovieUrl", typeof(Uri), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(null));
+
+        /// <summary>
+        /// 動画のダウンロード先URLを取得または設定します。
+        /// </summary>
+        public Uri MovieUrl
+        {
+            get { return (Uri)GetValue(MovieUrlProperty); }
+            set { SetValue(MovieUrlProperty, value); }
+        }
+
+        /// <summary>
         /// 映像の表示タイミングを扱う依存プロパティです。
         /// </summary>
         public static readonly DependencyProperty MovieTimelineProperty =
@@ -257,6 +274,14 @@ namespace VoteSystem.PluginShogi.View
             }
 
             var doc = XElement.Load(filepath, LoadOptions.SetLineInfo);
+
+            // 動画URLはフォーマットファイルに書かれています。
+            var attr = doc.Attribute("MovieUrl");
+            if (attr != null)
+            {
+                MovieUrl = new Uri(attr.Value);
+            }
+
             foreach (var elem in doc.Elements())
             {
                 var name = elem.Name.LocalName;
@@ -279,9 +304,9 @@ namespace VoteSystem.PluginShogi.View
         /// <summary>
         /// 動画の再生準備を開始します。
         /// </summary>
-        public void StartPrepare(Uri movieUri, DateTime startTimeNtp)
+        public void StartPrepare(DateTime startTimeNtp)
         {
-            Ending.StartPrepare(movieUri, startTimeNtp);
+            Ending.StartPrepare(MovieUrl, startTimeNtp);
         }
 
         /// <summary>
@@ -312,8 +337,7 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public void Play()
         {
-            Ending.MoviePlayed();
-            MoviePlayer.Play();
+            Ending.PlayMovie();
             //MoviePlayer.Position = TimeSpan.FromSeconds(300);
 
             // エンディングの前に現局面を設定します。
@@ -336,7 +360,7 @@ namespace VoteSystem.PluginShogi.View
 
         private void UpdatePosition(TimeSpan position)
         {
-            var elapsed = position - this.prevPosition;
+            var elapsed = MathEx.Max(TimeSpan.Zero, position - this.prevPosition);
             this.prevPosition = position;
 
             if (elapsed == TimeSpan.Zero)

@@ -108,9 +108,7 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public void PlayEndRoll(DateTime startTimeNtp)
         {
-            this.endRoll.StartPrepare(
-                new Uri(@"http://garnet-alice.net/shogi/tmp/ending_test.wmv"),
-                startTimeNtp);
+            this.endRoll.StartPrepare(startTimeNtp);
         }
 
         /// <summary>

@@ -46,6 +46,10 @@ namespace VoteSystem.Protocol.View
         /// すべての順が完了しました。
         /// </summary>
         Completed,
+        /// <summary>
+        /// エラーにより動画の準備に失敗しました。
+        /// </summary>
+        Error,
     }
 
     /// <summary>
@@ -62,6 +66,7 @@ namespace VoteSystem.Protocol.View
         private const string ElementViewboxName = "PART_Viewbox";
         private const string ElementAnalogmaName = "PART_Analogma";
 
+        private readonly ReentrancyLock progressLock = new ReentrancyLock();
         private Viewbox viewbox;
         private AnalogmaControl analogma;
         private DispatcherTimer timer;
@@ -274,6 +279,9 @@ namespace VoteSystem.Protocol.View
             UpdateState();
         }
 
+        /// <summary>
+        /// 残り時間に追うおじて、アナロ熊のサイズなどを変更します。
+        /// </summary>
         private void UpdateLeaveTime()
         {
             if (this.viewbox == null || this.analogma == null ||
@@ -284,12 +292,15 @@ namespace VoteSystem.Protocol.View
 
             if (State == EndingState.Idle)
             {
+                // エンディング準備前、または再生後なら
+                // アナロ熊を隠します。
                 this.viewbox.Visibility = Visibility.Hidden;
             }
             else
             {
                 this.viewbox.Visibility = Visibility.Visible;
 
+                // ５分前になったらだんだん大きくします。
                 var ViewSpan = TimeSpan.FromMinutes(5.0);
                 var leaveTime = StartTimeNtp - NtpClient.GetTime();
                 this.analogma.LeaveTime = leaveTime;
@@ -309,7 +320,6 @@ namespace VoteSystem.Protocol.View
             }
         }
 
-        private readonly ReentrancyLock progressLock = new ReentrancyLock();
         private void OnProgressRateChanged()
         {
             using (var result = this.progressLock.Lock())
@@ -321,7 +331,7 @@ namespace VoteSystem.Protocol.View
         }
 
         /// <summary>
-        /// 状態の更新後に呼ばれます。
+        /// 更新状態を表示します。
         /// </summary>
         private void UpdateState()
         {
@@ -347,6 +357,9 @@ namespace VoteSystem.Protocol.View
                 case EndingState.Completed:
                     text = "準備完了！";
                     break;
+                case EndingState.Error:
+                    text = "エラーが発生しました (≧≦)";
+                    break;
             }
 
             this.analogma.Text = text;
@@ -358,13 +371,24 @@ namespace VoteSystem.Protocol.View
         /// </summary>
         public void StartPrepare(Uri movieUri, DateTime startTimeNtp)
         {
+            StartPrepare(movieUri, startTimeNtp, false);
+        }
+
+        /// <summary>
+        /// 動画の再生準備を開始します。
+        /// </summary>
+        private void StartPrepare(Uri movieUri, DateTime startTimeNtp,
+                                  bool retry)
+        {
             if (movieUri == null)
             {
                 throw new ArgumentNullException("movieUri");
             }
 
-            // 依然と違うURLであれば新たにダウンロードします。
-            if (MovieUri != movieUri)
+            // 依然と違うURLであればダウンロードします。
+            // というのも、開始時間が変わるとStartPrepareが
+            // 何度も呼ばれる可能性があるためです。
+            if (retry || MovieUri != movieUri)
             {
                 Downloader.CancelAll();
 
@@ -374,16 +398,36 @@ namespace VoteSystem.Protocol.View
                         () => OnMovieDownloaded(_, __)));
             }
 
+            // ダウンロードが残っていたらダウンロード中止とし、
+            // それ以外の場合は（＝再スタートなど）
+            // 状態を変えずにそのままにします。
+            if (Downloader.LeaveCount != 0)
+            {
+                State = EndingState.Downloading;
+            }
+            else if (State == EndingState.Idle && Downloader.LeaveCount == 0)
+            {
+                // 二度目の再生時にはここに来ます。
+                State = EndingState.Completed;
+            }
+
             MovieUri = movieUri;
             StartTimeNtp = startTimeNtp;
-            State = EndingState.Downloading;
 
-            /*// 動画ファイルを読み込みます。
-            var ext = System.IO.Path.GetExtension(MovieUri.ToString());
-            var MovieFilePath = "ShogiData/EndRoll/movie.avi"; // +ext;
+            // 二度目の再生の可能性があるため。
+            MoviePlayer.Stop();
+            MoviePlayer.Position = TimeSpan.Zero;
+        }
 
-            MoviePlayer.Open(new Uri(MovieFilePath, UriKind.Relative));
-            State = EndingState.Loading;*/
+        /// <summary>
+        /// 動画のURLから、ローカルの動画ファイルパスを取得します。
+        /// </summary>
+        private Uri GetLocalMoviePath(Uri movieUri)
+        {
+            var ext = System.IO.Path.GetExtension(movieUri.ToString());
+            var path = "ShogiData/EndRoll/movie" + ext;
+
+            return new Uri(path, UriKind.Relative);
         }
 
         private void OnMovieDownloaded(object sender, DownloadDataCompletedEventArgs e)
@@ -395,9 +439,8 @@ namespace VoteSystem.Protocol.View
                     throw e.Error;
                 }
 
-                var ext = System.IO.Path.GetExtension(MovieUri.ToString());
-                var MovieFilePath = "ShogiData/EndRoll/movie" + ext;
-                using (var tmpfile = new PassingTmpFile(MovieFilePath))
+                var localMoviePath = GetLocalMoviePath(MovieUri);
+                using (var tmpfile = new PassingTmpFile(localMoviePath.ToString()))
                 {
                     using (var stream = new FileStream(tmpfile.TmpFileName,
                                                        FileMode.Create))
@@ -408,21 +451,60 @@ namespace VoteSystem.Protocol.View
                     tmpfile.Success();
                 }
 
-                // 動画ファイルを読み込みます。
-                MoviePlayer.Open(new Uri(MovieFilePath, UriKind.Relative));
+                OpenMedia(localMoviePath);
+            }
+            catch (WebException ex)
+            {
+                Log.ErrorException(ex,
+                    "動画ファイルのダウンロードに失敗しました。");
+
+                if (ex.Status == WebExceptionStatus.ProtocolError)
+                {
+                    State = EndingState.Error;
+                }
+                else
+                {
+                    RetryDownload();
+                }
+            }
+            catch (Exception ex)
+            {
+                Util.ThrowIfFatal(ex);
+                Log.ErrorException(ex,
+                    "動画ファイルのダウンロードに失敗しました。");
+
+                RetryDownload();
+            }
+        }
+
+        /// <summary>
+        /// 一度キャンセルして、ダウンロードを再トライします。
+        /// </summary>
+        private void RetryDownload()
+        {
+            Downloader.CancelAll();
+            StartPrepare(MovieUri, StartTimeNtp, true);
+        }
+
+        /// <summary>
+        /// 動画の読み込みを開始します。
+        /// </summary>
+        private void OpenMedia(Uri localMoviePath)
+        {
+            try
+            {
+                MoviePlayer.Open(localMoviePath);
+                MoviePlayer.Position = TimeSpan.Zero;
 
                 State = EndingState.Loading;
             }
             catch (Exception ex)
             {
                 Util.ThrowIfFatal(ex);
-
                 Log.ErrorException(ex,
-                    "動画ファイルのダウンロードに失敗しました。");
+                    "動画ファイルの読み込みに失敗しました。");
 
-                // 一度キャンセルして、ダウンロード再トライ
-                Downloader.CancelAll();
-                StartPrepare(MovieUri, StartTimeNtp);
+                State = EndingState.Error;
             }
         }
 
@@ -436,12 +518,20 @@ namespace VoteSystem.Protocol.View
         }
 
         /// <summary>
-        /// エンドロールの再生を開始しました。
+        /// エンドロールの再生を開始します。
         /// </summary>
-        public void MoviePlayed()
+        public void PlayMovie()
         {
             WPFUtil.UIProcess(() =>
-                State = EndingState.Idle);
+            {
+                if (State != EndingState.Completed)
+                {
+                    return;
+                }
+
+                MoviePlayer.Play();
+                State = EndingState.Idle;
+            });
         }
     }
 }
