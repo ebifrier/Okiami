@@ -1,0 +1,414 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<FormatRoot>
+	
+	
+	<ColumnDefinitions>
+		<ColumnDefinition Width="1" />
+		<ColumnDefinition Width="1" />
+	</ColumnDefinitions>
+	
+	<Line>
+		<Format ColumnSpan="2" Text="参加者 ＆ スタッフ一覧（順不同）" FontWeight="Bold" />
+	</Line>
+	<Line Count="3" />
+
+	<!-- 参加者一覧とその人数などを表示 -->
+	<Line>
+		<Format ColumnSpan="2" Text="参加者一覧" FontWeight="Bold" />
+	</Line>
+	<Line />
+	<Lines Data="$JoinedVoterViewList">
+    <Line>
+      <Format Column="0" Text="$Name" Color="$Color" Alignment="Right" />
+      <Format Column="1" Text="$Skill" Alignment="Left" />
+    </Line>
+		<!--<Line>
+			<Format ColumnSpan="2" Text="$Name" Color="$Color" />
+		</Line>
+		<Line>
+			<Format ColumnSpan="2" Text="「$Skill」" FontSize="10" FontStyle="Oblique" />
+		</Line>-->
+	</Lines>
+	<Line />
+  <Lines Data="$JoinedVoterViewCount">
+    <Line>
+      <Format Column="0" Text="以上" Alignment="Right" />
+      <Format Column="1" Text="$()名" Alignment="Left" />
+    </Line>
+  </Lines>
+	<Lines Data="$VoterOtherCount">
+		<Line>
+			<Format Column="0" Text="その他" Alignment="Right" />
+			<Format Column="1" Text="$()名" Alignment="Left" />
+		</Line>
+	</Lines>
+	<Lines Data="$VoterCount">
+		<Line>
+			<Format Column="0" Text="合計" Alignment="Right" />
+			<Format Column="1" Text="$()名" Alignment="Left" />
+		</Line>
+	</Lines>
+
+	<Line Count="10" />
+
+	<!-- 使用ツールの素材など -->
+	<Line>
+		<Format ColumnSpan="2" Text="ツール素材提供" FontWeight="Bold" />
+	</Line>
+  <Line />
+	<Line>
+		<Format Column="0" Text="イラスト素材" Alignment="Right" />
+		<Format Column="1" Text="梔子こみゅにてぃ" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="famfamfam" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="イラスト・フリー素材" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="フリー素材の来夢来人" Alignment="Left" />
+	</Line>
+  <Line />
+	<Line>
+		<Format Column="0" Text="将棋盤・駒素材" Alignment="Right" />
+		<Format Column="1" Text="mind＆2ちゃんねるの方々" Alignment="Left" />
+	</Line>
+  <Line />
+	<Line>
+		<Format Column="0" Text="評価値画像" Alignment="Right" />
+		<Format Column="1" Text="希祥" Alignment="Left" />
+	</Line>
+  <Line />
+	<Line>
+		<Format Column="0" Text="カットイン画像" Alignment="Right" />
+		<Format Column="1" Text="ザビ山" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="MAXみちこFEVER" Alignment="Left" />
+	</Line>
+  <Line />
+	<Line>
+		<Format Column="0" Text="囲い画像" Alignment="Right" />
+		<Format Column="1" Text="さまんさ" Alignment="Left" />
+	</Line>
+  <Line />
+	<Line>
+		<Format Column="0" Text="エフェクト素材" Alignment="Right" />
+		<Format Column="1" Text="ぴぽや" Alignment="Left" />
+	</Line>
+  <Line />
+	<Line>
+		<Format Column="0" Text="背景画像" Alignment="Right" />
+		<Format Column="1" Text="とりのあくあ" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="伍長" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="yoshi" Alignment="Left" />
+	</Line>
+  <Line />
+	<Line>
+		<Format Column="0" Text="音声素材" Alignment="Right" />
+		<Format Column="1" Text="あみたろ" Alignment="Left" />
+	</Line>
+  <Line />
+	<Line>
+		<Format Column="0" Text="効果音素材" Alignment="Right" />
+		<Format Column="1" Text="Senses Circuit" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="AFFEXCEED (自遊素材)" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="ザ・マッチメイカァズ" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="369" Alignment="Left" />
+	</Line>
+  <Line />
+	<Line>
+		<Format Column="0" Text="ソースコード" Alignment="Right" />
+		<Format Column="1" Text="Jaroslaw Kowalski" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="Mike Krueger" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="Marc Gravell" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="CookieGetterSharp製作者" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="Ambiera" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="Marc Gravell" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="Dirk Eisenberg" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="Codehaus" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="Richard Lord" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="Ben Baker" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="1" Text="Ury Jamshy" Alignment="Left" />
+	</Line>
+
+	<Line Count="3" />
+
+	<!-- 動画製作者 -->
+	<Line>
+		<Format ColumnSpan="2" Text="エンディング動画" />
+	</Line>
+	<Line>
+		<Format ColumnSpan="2" Text="『アリスに花束』" FontWeight="Bold" />
+	</Line>
+	<Line>
+		<Format Column="0" Text="作詞・作曲" Alignment="Right" />
+		<Format Column="1" Text="スマイルＰ" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="0" Text="イラスト・動画" Alignment="Right" />
+		<Format Column="1" Text="―――" Alignment="Left" />
+	</Line>
+	<Line>
+		<Format Column="0" Text="歌" Alignment="Right" />
+		<Format Column="1" Text="香月ゆか" Alignment="Left" />
+	</Line>
+
+  <Line Count="3" />
+
+  <!-- ＨＰ制作 -->
+  <Line>
+    <Format ColumnSpan="2" Text="ホームページ制作" FontWeight="Bold" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="サマンサ" />
+  </Line>
+
+  <Line Count="3" />
+
+  <!-- 機材協力 -->
+  <Line>
+    <Format ColumnSpan="2" Text="機材協力" FontWeight="Bold" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="スタスタ" />
+  </Line>
+
+  <Line Count="3" />
+
+  <!-- 企画スタッフ一覧 -->
+  <Line>
+    <Format ColumnSpan="2" Text="企画スタッフ" FontWeight="Bold" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="ｃｃｏ" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="エヌる" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="スタスタ" />
+  </Line>
+
+  <Line Count="7" />
+
+  <!-- 寄付者一覧とその人数などを表示 -->
+  <Line>
+    <Format ColumnSpan="2" Text="寄付者一覧" FontWeight="Bold" />
+  </Line>
+  <Line />
+  <Lines Data="$DonorList">
+    <Line>
+      <Format ColumnSpan="2" Text="$()" />
+    </Line>
+  </Lines>
+  <Line />
+  <Lines Data="$DonorCount">
+    <Line>
+      <Format Column="0" Text="合計" FontWeight="Bold" Alignment="Right" />
+      <Format Column="1" Text="$()名" FontWeight="Bold" Alignment="Left" />
+    </Line>
+  </Lines>
+
+  <Line Count="3" />
+
+  <!-- 将棋連盟協力 -->
+  <Line>
+    <Format ColumnSpan="2" Text="将棋連盟協力" FontWeight="Bold" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="将棋兄さん" />
+  </Line>
+
+  <Line Count="3" />
+
+  <!-- スペシャルサンクス -->
+  <Line>
+    <Format ColumnSpan="2" Text="Special Thanks" FontWeight="Bold" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="竹内亜衣" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="ユーフォリア" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="とまとりあ" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="宣誓" />
+  </Line>
+  
+  <Line Count="3" />
+
+  <!-- 特別出演 -->
+  <Line>
+    <Format ColumnSpan="2" Text="特別出演" FontWeight="Bold" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="アナロ熊" />
+  </Line>
+
+	<Line Count="4" />
+
+	<!-- 放送主一覧とその人数などを表示 -->
+	<Line>
+		<Format ColumnSpan="2" Text="放送主一覧" FontWeight="Bold" />
+	</Line>
+  <Line />
+	<Lines Data="$LiveOwnerList">
+		<!--<Line>
+			<Format ColumnSpan="2" Text=" " />
+		</Line>-->
+		<Line>
+			<Format ColumnSpan="2" Text="$Name" Color="$Color" />
+		</Line>
+	</Lines>
+	<Line />
+  <Lines Data="$LiveOwnerViewCount">
+    <Line>
+      <Format Column="0" Text="以上" FontWeight="Bold" Alignment="Right" />
+      <Format Column="1" Text="$()名" FontWeight="Bold" Alignment="Left" />
+    </Line>
+  </Lines>
+  <Lines Data="$LiveOwnerOtherCount">
+    <Line>
+      <Format Column="0" Text="その他" FontWeight="Bold" Alignment="Right" />
+      <Format Column="1" Text="$()名" FontWeight="Bold" Alignment="Left" />
+    </Line>
+  </Lines>
+	<Lines Data="$LiveOwnerCount">
+		<Line>
+			<Format Column="0" Text="合計" FontWeight="Bold" Alignment="Right" />
+			<Format Column="1" Text="$()名" FontWeight="Bold" Alignment="Left" />
+		</Line>
+	</Lines>
+
+	<Line Count="4" />
+
+	<!-- 企画統括を表示 -->
+	<Line>
+		<Format ColumnSpan="2" Text="企画統括" FontWeight="Bold" />
+	</Line>
+	<Line>
+		<Format ColumnSpan="2" Text="えびふらい" />
+	</Line>
+
+	<Line Count="2" />
+
+	<!-- 当日のデータなど -->
+	<Line>
+		<Format ColumnSpan="2" Text="今日の来場者数など" FontWeight="Bold" />
+	</Line>
+  <Lines Data="$TotalLiveCountText">
+    <Line>
+      <Format Column="0" Text="全放送数" Alignment="Right" />
+      <Format Column="1" Text="$()" Alignment="Left" />
+    </Line>
+  </Lines>
+  <Lines Data="$TotalLiveVisitorCountText">
+    <Line>
+		  <Format Column="0" Text="来場者数合計" Alignment="Right" />
+		  <Format Column="1" Text="$()" Alignment="Left" />
+	  </Line>
+  </Lines>
+  <Lines Data="$TotalLiveCommentCountText">
+	  <Line>
+		  <Format Column="0" Text="コメント数合計" Alignment="Right" />
+		  <Format Column="1" Text="$()" Alignment="Left" />
+	  </Line>
+  </Lines>
+  <Lines Data="$DonorAmountText">
+	  <Line>
+		  <Format Column="0" Text="寄付金総額" Alignment="Right" />
+		  <Format Column="1" Text="$()円" Alignment="Left" />
+	  </Line>
+  </Lines>
+
+	<Line Count="4" />
+
+	<!-- 記録係を表示 -->
+	<Line>
+		<Format ColumnSpan="2" Text="記録係" FontWeight="Bold" />
+	</Line>
+	<Line>
+		<Format ColumnSpan="2" Text="中村桃子女流初段" />
+	</Line>
+
+	<Line />
+
+	<!-- 盤代理操作人を表示 -->
+	<Line>
+		<Format ColumnSpan="2" Text="盤代理操作人" FontWeight="Bold" />
+	</Line>
+	<Line>
+		<Format ColumnSpan="2" Text="知花賢三段" />
+	</Line>
+
+	<Line />
+
+	<!-- 対局相手を表示 -->
+	<Line>
+		<Format ColumnSpan="2" Text="対局者" FontWeight="Bold" />
+	</Line>
+	<Line>
+		<Format ColumnSpan="2" Text="西尾明六段" />
+	</Line>
+
+	<Line Count="3" />
+
+	<!-- 放送主名を表示 -->
+	<Line>
+		<Format ColumnSpan="2" Text="放送主" FontWeight="Bold" />
+	</Line>
+	<Line>
+		<Format ColumnSpan="2" Text="誰か" />
+	</Line>
+
+	<Line Count="11" />
+
+	<Line>
+		<Format ColumnSpan="2" Text="最後までおつきあい頂き" FontWeight="Bold" />
+	</Line>
+	<Line>
+		<Format ColumnSpan="2" Text="どうもありがとうございました" FontWeight="Bold" />
+	 </Line>
+
+  <Line Count="14" />
+
+  <Line>
+    <Format ColumnSpan="2" FontSize="16" Text="ニコニコ超将棋会議" FontWeight="Bold" />
+  </Line>
+</FormatRoot>
