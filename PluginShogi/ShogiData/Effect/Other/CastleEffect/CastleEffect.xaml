@@ -8,16 +8,16 @@
                       MaxAngle="{r:Calc '${StartAngle} + 20'}" />
     <f:TextZone x:Key="targetZone" Text="${CastleName}"
                 FontSize="10" FontFamily="ＭＳ 明朝"
-                ScaleX="{r:Calc 'min(17.0, 4.0 + 23.0 / ${CastleNameLen})'}"
-                ScaleY="{r:Calc 'min(20.0, 7.0 + 30.0 / ${CastleNameLen})'}"
-                DivideX="{r:IntCalc '2.0 + 4.0 / ${CastleNameLen}', Mode=Floor}"
+                ScaleX="{r:Calc 'min(14.0, 4.0 + 23.0 / ${CastleNameLen})'}"
+                ScaleY="{r:Calc 'min(18.0, 7.0 + 30.0 / ${CastleNameLen})'}"
+                DivideX="{r:IntCalc '2.0 + 2.0 / ${CastleNameLen}', Mode=Floor}"
                 DivideY="{r:IntCalc '2.0 + 2.0 / ${CastleNameLen}', Mode=Floor}"
-                OffsetX="320" OffsetY="320" />
+                OffsetX="320" OffsetY="360" />
     
     <Vector3D x:Key="backgroundCoord"
               X="320" Y="240" Z="{x:Static r:ShogiControl.PreEffectZ}" />
     <Vector3D x:Key="castleBackCoord"
-              X="320" Y="220" Z="{x:Static r:ShogiControl.PreEffectZ}" />
+              X="320" Y="200" Z="{x:Static r:ShogiControl.PreEffectZ}" />
 
     <r:CellMeshConverter x:Key="cellMeshConv" />
     <r:CellMeshConverter x:Key="cellMeshWideConv" Widen="0.2" />
@@ -126,7 +126,7 @@
                             ImageUri="Image/${CastleImage}"
                             MaterialType="Diffuse"
                             Coord="{StaticResource castleBackCoord}"
-                            Scale="460,400,1"
+                            Scale="430,380,1"
                             StartSoundVolume="0.5"
                             StartSoundPath="Bom.wav">
                 <r:EffectObject.Scenario>

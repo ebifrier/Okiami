@@ -706,14 +706,9 @@ namespace VoteSystem.PluginShogi.ViewModel
                 }
 
                 // 動画の開始時間を設定します。
-                var time = NtpClient.GetTime() + timeSpan.Value;
-                //time = time.Add(TimeSpan.FromMinutes(9));
+                var startTimeNtp = NtpClient.GetTime() + timeSpan.Value;
 
-                // 動画の開始時間は、現在時刻＋指定時刻された時間で
-                // キリの良いところが選ばれます。
-                var startTimeNtp = new DateTime(
-                    time.Year, time.Month, time.Day,
-                    time.Hour, (time.Minute / 10) * 10, 0);
+                // 念のため、確認ダイアログを出します。
                 var result = DialogUtil.Show(
                     string.Format(
                         @"{1}{0}{0}この時刻に開始しますがよろしいですか？",

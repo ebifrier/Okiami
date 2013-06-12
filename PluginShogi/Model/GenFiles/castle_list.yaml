@@ -2,7 +2,8 @@
 # 囲い情報
 #
 
-#- name: テスト囲い
+#- name: 矢倉
+#  id: KataMino
 #  piece_list:
 #  - Gyoku: 5, 9
 #  - Gin: 3, 8
