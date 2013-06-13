@@ -90,6 +90,23 @@ namespace VoteSystem.PluginShogi.View
         }
 
         /// <summary>
+        /// 動画の拡張子(.付き)を扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty MovieExtProperty =
+            DependencyProperty.Register(
+                "MovieExt", typeof(string), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(string.Empty));
+
+        /// <summary>
+        /// 動画の拡張子(.付き)を取得または設定します。
+        /// </summary>
+        public string MovieExt
+        {
+            get { return (string)GetValue(MovieExtProperty); }
+            set { SetValue(MovieExtProperty, value); }
+        }
+
+        /// <summary>
         /// 将棋盤の不透明度を扱う依存プロパティです。
         /// </summary>
         public static readonly DependencyProperty ShogiOpacityProperty =
@@ -170,7 +187,7 @@ namespace VoteSystem.PluginShogi.View
         public static readonly DependencyProperty IsMovieMuteProperty =
             DependencyProperty.Register(
                 "IsMovieMute", typeof(bool), typeof(ShogiEndRollControl),
-                new FrameworkPropertyMetadata(false,
+                new FrameworkPropertyMetadata(true,
                     OnIsMovieMuteChanged));
 
         /// <summary>
@@ -195,7 +212,7 @@ namespace VoteSystem.PluginShogi.View
         public static readonly DependencyProperty MovieVolumeProperty =
             DependencyProperty.Register(
                 "MovieVolume", typeof(int), typeof(ShogiEndRollControl),
-                new FrameworkPropertyMetadata(100,
+                new FrameworkPropertyMetadata(0,
                     OnMovieVolumeChanged));
 
         /// <summary>
@@ -268,12 +285,14 @@ namespace VoteSystem.PluginShogi.View
             EndRoll.DataGetter = GetVoterList;
             ShogiControl.EffectManager = this.effectManager;
 
-            // フォーマットファイル設定
-            FormatFilePath = @"ShogiData/EndRoll/endroll_format_1.xml";
-
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
             DataContext = ShogiGlobal.ShogiModel;
+
+            // プロパティ設定
+            FormatFilePath = @"ShogiData/EndRoll/endroll_format_1.xml";
+            IsMovieMute = false;
+            MovieVolume = 50;
 
             if (!Ragnarok.Presentation.WPFUtil.IsInDesignMode)
             {
@@ -313,40 +332,54 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         private void LoadFormat(string filepath)
         {
-            if (string.IsNullOrEmpty(filepath) ||
-                !System.IO.File.Exists(filepath))
+            try
             {
-                Log.Error(
-                    "{0}: ファイルが存在しません。",
-                    filepath);
-                return;
+                if (string.IsNullOrEmpty(filepath) ||
+                    !System.IO.File.Exists(filepath))
+                {
+                    Log.Error(
+                        "{0}: ファイルが存在しません。",
+                        filepath);
+                    return;
+                }
+
+                var doc = XElement.Load(filepath, LoadOptions.SetLineInfo);
+
+                // 動画URLはフォーマットファイルに書かれています。
+                var attr = doc.Attribute("MovieUrl");
+                if (attr != null)
+                {
+                    MovieUrl = new Uri(attr.Value);
+                }
+
+                // 動画の拡張子はURLに指定されているものと違う可能性があるため、
+                // 別に指定できるようにしています。
+                attr = doc.Attribute("MovieExt");
+                MovieExt = (attr != null ? attr.Value : string.Empty);
+
+                foreach (var elem in doc.Elements())
+                {
+                    var name = elem.Name.LocalName;
+
+                    if (name == "MovieTimeline")
+                    {
+                        MovieTimeline = TimelineData.Create(elem);
+                    }
+                    else if (name == "EndRollTimeline")
+                    {
+                        EndRollTimeline = TimelineData.Create(elem);
+                    }
+                    else if (name == "ShogiTimeline")
+                    {
+                        ShogiTimeline = TimelineData.Create(elem);
+                    }
+                }
             }
-
-            var doc = XElement.Load(filepath, LoadOptions.SetLineInfo);
-
-            // 動画URLはフォーマットファイルに書かれています。
-            var attr = doc.Attribute("MovieUrl");
-            if (attr != null)
+            catch (Exception ex)
             {
-                MovieUrl = new Uri(attr.Value);
-            }
-
-            foreach (var elem in doc.Elements())
-            {
-                var name = elem.Name.LocalName;
-
-                if (name == "MovieTimeline")
-                {
-                    MovieTimeline = TimelineData.Create(elem);
-                }
-                else if (name == "EndRollTimeline")
-                {
-                    EndRollTimeline = TimelineData.Create(elem);
-                }
-                else if (name == "ShogiTimeline")
-                {
-                    ShogiTimeline = TimelineData.Create(elem);
-                }
+                Util.ThrowIfFatal(ex);
+                Log.ErrorException(ex,
+                    "エンディングのフォーマットファイルの解析に失敗しました。");
             }
         }
 
@@ -355,7 +388,14 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public void StartPrepare(DateTime startTimeNtp)
         {
-            Ending.StartPrepare(MovieUrl, startTimeNtp);
+            if (MovieUrl == null)
+            {
+                ShogiGlobal.ErrorMessage(
+                    "動画ファイルのURLがありませんorz");
+                return;
+            }
+
+            Ending.StartPrepare(MovieUrl, MovieExt, startTimeNtp);
         }
 
         /// <summary>

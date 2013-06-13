@@ -70,6 +70,7 @@ namespace VoteSystem.Protocol.View
         private Viewbox viewbox;
         private AnalogmaControl analogma;
         private DispatcherTimer timer;
+        private double prevProgressRate = -1.0;
 
         #region event
         /// <summary>
@@ -168,6 +169,23 @@ namespace VoteSystem.Protocol.View
         }
 
         /// <summary>
+        /// エンディング動画の拡張子(.付き)を扱います。
+        /// </summary>
+        public static readonly DependencyProperty MovieExtProperty =
+            DependencyProperty.Register(
+                "MovieExt", typeof(string), typeof(EndingControl),
+                new FrameworkPropertyMetadata(string.Empty));
+
+        /// <summary>
+        /// エンディング動画の拡張子(.付き)を取得します。
+        /// </summary>
+        public string MovieExt
+        {
+            get { return (string)GetValue(MovieExtProperty); }
+            private set { SetValue(MovieExtProperty, value); }
+        }
+
+        /// <summary>
         /// エンディング再生開始時間を取得または設定します。
         /// </summary>
         public static readonly DependencyProperty StartTimeNtpProperty =
@@ -243,7 +261,8 @@ namespace VoteSystem.Protocol.View
             Downloader = new Downloader();
             Downloader.AddPropertyChangedHandler(
                 "ProgressRate",
-                (_, __) => WPFUtil.UIProcess(OnProgressRateChanged));
+                (_, __) => WPFUtil.UIProcess(
+                    () => OnProgressRateChanged(_, __)));
 
             Unloaded += (_, __) =>
             {
@@ -345,12 +364,21 @@ namespace VoteSystem.Protocol.View
         /// <summary>
         /// ダウンロード進捗度の更新時に呼ばれます。
         /// </summary>
-        private void OnProgressRateChanged()
+        private void OnProgressRateChanged(object sender, PropertyChangedEventArgs e)
         {
             using (var result = this.progressLock.Lock())
             {
                 if (result == null) return;
 
+                // あまりに小さい進捗は無視します。
+                var rate = Downloader.ProgressRate;
+                var diff = Math.Abs(this.prevProgressRate - rate);
+                if (diff < 0.0001)
+                {
+                    return;
+                }
+
+                this.prevProgressRate = rate;
                 UpdateMessageText();
             }
         }
@@ -407,16 +435,16 @@ namespace VoteSystem.Protocol.View
         /// <summary>
         /// 動画の再生準備を開始します。
         /// </summary>
-        public void StartPrepare(Uri movieUri, DateTime startTimeNtp)
+        public void StartPrepare(Uri movieUri, string movieExt, DateTime startTimeNtp)
         {
-            StartPrepare(movieUri, startTimeNtp, false);
+            StartPrepare(movieUri, movieExt, startTimeNtp, false);
         }
 
         /// <summary>
         /// 動画の再生準備を開始します。
         /// </summary>
-        private void StartPrepare(Uri movieUri, DateTime startTimeNtp,
-                                  bool retry)
+        private void StartPrepare(Uri movieUri, string movieExt,
+                                  DateTime startTimeNtp, bool retry)
         {
             if (movieUri == null)
             {
@@ -450,7 +478,14 @@ namespace VoteSystem.Protocol.View
             }
 
             MovieUri = movieUri;
+            MovieExt = movieExt ?? string.Empty;
             StartTimeNtp = startTimeNtp;
+
+            // ファイルの拡張子が無ければ、リンクURLから取得します。
+            if (string.IsNullOrEmpty(movieExt))
+            {
+                MovieExt = System.IO.Path.GetExtension(movieUri.LocalPath);
+            }
 
             // 二度目の再生の可能性があるため。
             MoviePlayer.Stop();
@@ -466,8 +501,7 @@ namespace VoteSystem.Protocol.View
         /// </remarks>
         private Uri GetLocalMoviePath(Uri movieUri)
         {
-            var ext = System.IO.Path.GetExtension(movieUri.ToString());
-            var path = System.IO.Path.GetTempFileName() + ext;
+            var path = System.IO.Path.GetTempFileName() + MovieExt;
 
             return new Uri(path, UriKind.Absolute);
         }
@@ -531,7 +565,7 @@ namespace VoteSystem.Protocol.View
         private void RetryDownload()
         {
             Downloader.CancelAll();
-            StartPrepare(MovieUri, StartTimeNtp, true);
+            StartPrepare(MovieUri, MovieExt, StartTimeNtp, true);
         }
 
         /// <summary>

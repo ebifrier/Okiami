@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
-<FormatRoot MovieUrl="http://garnet-alice.net/shogi/tmp/ending_test.wmv">
+<!--http://garnet-alice.net/shogi/tmp/ending_test.wmv -->
+
+<FormatRoot MovieUrl="http://server36.firestorage.jp/download.mcgi?act=download_file&amp;d=d21063&amp;e=48ef93&amp;key=fc61017de55aec24233745f8b5cf8c5ee518b231"
+			MovieExt=".wmv">
 	<MovieTimeline FadeInStartTime="00:00:05"
 				   FadeInSpan="00:00:05"
 				   FadeOutStartTime="00:01:28"
