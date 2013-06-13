@@ -433,12 +433,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="Resources\Image\clear_evaluation.png" />
-    <Resource Include="Resources\Image\endroll_close.png" />
-    <Resource Include="Resources\Image\endroll_start.png" />
     <Resource Include="Resources\Image\clear_time_extend.png" />
     <Resource Include="Resources\Image\clear_vote.png" />
-    <Resource Include="Resources\Image\endroll_pause.png" />
-    <Resource Include="Resources\Image\endroll_stop.png" />
     <Resource Include="Resources\Image\has_password.png" />
     <Resource Include="Resources\Image\koma\koma_cat_b.png" />
     <Resource Include="Resources\Image\koma\koma_cat_g.png" />

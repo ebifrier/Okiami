@@ -35,7 +35,15 @@ namespace VoteSystem.PluginShogi.ViewModel
                 "ShowBoard",
                 typeof(Window));
         /// <summary>
-        /// 将棋コントロールを表示します。
+        /// 設定ダイアログを表示します。
+        /// </summary>
+        public static readonly ICommand ShowSettingDialog =
+            new RoutedUICommand(
+                "設定ダイアログを表示します。",
+                "ShowSettingDialog",
+                typeof(Window));
+        /// <summary>
+        /// 変化コントロールを表示します。
         /// </summary>
         public static readonly ICommand ShowMoveManageView =
             new RoutedUICommand(
@@ -43,12 +51,12 @@ namespace VoteSystem.PluginShogi.ViewModel
                 "ShowMoveManageView",
                 typeof(Window));
         /// <summary>
-        /// 設定ダイアログを表示します。
+        /// エンディングの設定用コントロールを表示します。
         /// </summary>
-        public static readonly ICommand ShowSettingDialog =
+        public static readonly ICommand ShowEndingSettingWindow =
             new RoutedUICommand(
-                "設定ダイアログを表示します。",
-                "ShowSettingDialog",
+                "エンディングの設定用コントロールを表示します。",
+                "ShowEndingSettingWindow",
                 typeof(Window));
 
         /// <summary>
@@ -208,12 +216,16 @@ namespace VoteSystem.PluginShogi.ViewModel
         {
             bindings.Add(
                 new CommandBinding(
+                    ShowSettingDialog,
+                    ExecuteShowSettingDialog, CanExecute));
+            bindings.Add(
+                new CommandBinding(
                     Commands.ShowMoveManageView,
                     ExecuteShowMoveManageView, CanExecute));
             bindings.Add(
                 new CommandBinding(
-                    ShowSettingDialog,
-                    ExecuteShowSettingDialog, CanExecute));
+                    ShowEndingSettingWindow,
+                    ExecuteShowEndingSettingWindow, CanExecute));
 
             bindings.Add(
                 new CommandBinding(
@@ -350,6 +362,33 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// 設定ダイアログを開きます。
+        /// </summary>
+        private static void ExecuteShowSettingDialog(object sender, ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                var model = new ShogiSettingDialogViewModel();
+                var dialog = new ShogiSettingDialog()
+                {
+                    Owner = ShogiGlobal.MainWindow,
+                    DataContext = model,
+                };
+
+                dialog.Loaded += (_, __) =>
+                    dialog.AdjustInDisplay();
+
+                dialog.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                ShogiGlobal.ErrorMessage(ex,
+                    "設定ダイアログの表示に失敗しました(￣ω￣;)");
+                return;
+            }
+        }
+
+        /// <summary>
         /// 将棋コントロールを開きます。
         /// </summary>
         private static void ExecuteShowMoveManageView(object sender, ExecutedRoutedEventArgs e)
@@ -385,28 +424,27 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
-        /// 設定ダイアログを開きます。
+        /// エンディングの設定用コントロールを開きます。
         /// </summary>
-        private static void ExecuteShowSettingDialog(object sender, ExecutedRoutedEventArgs e)
+        private static void ExecuteShowEndingSettingWindow(object sender, ExecutedRoutedEventArgs e)
         {
             try
             {
-                var model = new ShogiSettingDialogViewModel();
-                var dialog = new ShogiSettingDialog()
+                var window = ShogiGlobal.MainWindow;
+                var dialog = new EndingSettingWindow(window)
                 {
-                    Owner = ShogiGlobal.MainWindow,
-                    DataContext = model,
+                    Owner = window,
                 };
 
                 dialog.Loaded += (_, __) =>
                     dialog.AdjustInDisplay();
 
-                dialog.ShowDialog();
+                dialog.Show();
             }
             catch (Exception ex)
             {
                 ShogiGlobal.ErrorMessage(ex,
-                    "設定ダイアログの表示に失敗しました(￣ω￣;)");
+                    "エンディングの設定用コントロールの表示に失敗しました(￣ω￣;)");
                 return;
             }
         }

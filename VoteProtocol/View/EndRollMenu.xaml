@@ -7,22 +7,6 @@
     </ResourceDictionary.MergedDictionaries>
 
     <p:ValueToIntConverter x:Key="intConverter" />
-
-    <!-- 操作を行うボタンの共通スタイルです。-->
-    <Style x:Key="imageButtonStyle" TargetType="Button">
-        <Setter Property="Margin" Value="2,0,2,0" />
-        <Setter Property="Width" Value="24" />
-        <Setter Property="Height" Value="24" />
-        <Setter Property="ContentTemplate"
-                Value="{StaticResource DisableImageTemplate}" />
-
-        <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="True">
-                <Setter Property="ContentTemplate"
-                        Value="{StaticResource ImageTemplate}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
     
     <!-- 各種メニュー -->
     <ControlTemplate x:Key="EndRollMenu">
@@ -34,16 +18,16 @@
             </Grid.ColumnDefinitions>
         
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <Button Style="{StaticResource imageButtonStyle}"
-                        Content="pack://application:,,,/Resources/Image/endroll_start.png"
+                <Button Style="{StaticResource ToolBarButtonStyle}"
+                        Content="pack://application:,,,/VoteProtocol;component/Resources/Image/endroll_play.png"
                         ToolTip="開始"
                         Command="{x:Static v:EndRollControl.PlayCommand}" />
-                <Button Style="{StaticResource imageButtonStyle}"
-                        Content="pack://application:,,,/Resources/Image/endroll_pause.png"
+                <Button Style="{StaticResource ToolBarButtonStyle}"
+                        Content="pack://application:,,,/VoteProtocol;component/Resources/Image/endroll_pause.png"
                         ToolTip="一時停止"
                         Command="{x:Static v:EndRollControl.PauseCommand}" />
-                <Button Style="{StaticResource imageButtonStyle}"
-                        Content="pack://application:,,,/Resources/Image/endroll_stop.png"
+                <Button Style="{StaticResource ToolBarButtonStyle}"
+                        Content="pack://application:,,,/VoteProtocol;component/Resources/Image/endroll_stop.png"
                         ToolTip="停止"
                         Command="{x:Static v:EndRollControl.StopCommand}" />
                     
@@ -62,13 +46,13 @@
 
             <Slider Grid.Column="1"
                     SmallChange="1" TickFrequency="5" IsSnapToTickEnabled="False"
-                    TickPlacement="TopLeft" IsMoveToPointEnabled="True"
+                    AutoToolTipPlacement="TopLeft" IsMoveToPointEnabled="True"
                     Maximum="{Binding RollTimeSeconds}"
                     Value="{Binding CurrentPos}" />
 
             <StackPanel Grid.Column="2" Orientation="Horizontal">
-                <Button Style="{StaticResource imageButtonStyle}"
-                        Content="pack://application:,,,/Resources/Image/endroll_close.png"
+                <Button Style="{StaticResource ToolBarButtonStyle}"
+                        Content="pack://application:,,,/VoteProtocol;component/Resources/Image/endroll_close.png"
                         ToolTip="閉じる"
                         Command="Close" />
             </StackPanel>

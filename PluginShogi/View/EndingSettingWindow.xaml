@@ -1,0 +1,68 @@
+﻿<Window x:Class="VoteSystem.PluginShogi.View.EndingSettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+        xmlns:l="clr-namespace:VoteSystem.PluginShogi.View"
+        xmlns:vm="clr-namespace:VoteSystem.PluginShogi.ViewModel"
+        mc:Ignorable="d" x:Name="window"
+        Title="エンディング設定" d:DesignHeight="300" d:DesignWidth="300"
+        ResizeMode="NoResize" ShowInTaskbar="False" SizeToContent="WidthAndHeight"
+        WindowStyle="ToolWindow">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Ragnarok.Presentation;component/Themes/Common.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <ControlTemplate x:Key="soundTemplate">
+                <Image Source="pack://application:,,,/VoteProtocol;component/Resources/Image/sound_none.png"
+                       ToolTip="ミュートにする" />
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="soundMuteTemplate">
+                <Image Source="pack://application:,,,/VoteProtocol;component/Resources/Image/sound_mute.png"
+                       ToolTip="ミュート解除" />
+            </ControlTemplate>
+
+            <!-- ミュート・非ミュートの切り替えボタン -->
+            <Style x:Key="soundButtonStyle" TargetType="Control"
+                   BasedOn="{StaticResource ToolBarButtonBaseStyle}">
+                <Setter Property="Template" Value="{StaticResource soundTemplate}" />
+                
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsMute, ElementName=window}"
+                                 Value="True">
+                        <Setter Property="Template" Value="{StaticResource soundMuteTemplate}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <StackPanel Orientation="Horizontal"
+                Margin="5">
+        <Button Style="{StaticResource ToolBarButtonStyle}"
+                Content="pack://application:,,,/VoteProtocol;component/Resources/Image/endroll_play.png"
+                ToolTip="エンディングの開始準備を行います。"
+                Command="{x:Static vm:Commands.PlayEndRoll}" />
+        <Button Style="{StaticResource ToolBarButtonStyle}"
+                Content="pack://application:,,,/VoteProtocol;component/Resources/Image/endroll_pause.png"
+                ToolTip="エンディングを一時停止します。"
+                IsEnabled="False" />
+        <Button Style="{StaticResource ToolBarButtonStyle}"
+                Content="pack://application:,,,/VoteProtocol;component/Resources/Image/endroll_stop.png"
+                ToolTip="エンディングを停止します。"
+                Command="{x:Static vm:Commands.StopEndRoll}" />
+
+        <Button Style="{StaticResource soundButtonStyle}"
+                Margin="10,0,0,0"
+                Click="MuteButton_Click" />
+        <Slider Width="150"
+                IsSnapToTickEnabled="True"
+                Minimum="0" Maximum="100" SmallChange="1"
+                AutoToolTipPlacement="TopLeft"
+                Value="{Binding Volume, ElementName=window}" />
+    </StackPanel>
+</Window>

@@ -158,6 +158,20 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Image\analogma.png" />
+    <Resource Include="Resources\Image\endroll_play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\endroll_close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\endroll_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\endroll_pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\sound_mute.png" />
+    <Resource Include="Resources\Image\sound_none.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

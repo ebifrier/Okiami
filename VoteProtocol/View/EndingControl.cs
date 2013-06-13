@@ -458,22 +458,18 @@ namespace VoteSystem.Protocol.View
         }
 
         /// <summary>
-        /// 動画のURLから、ローカルの動画ファイルパスを取得します。
+        /// ローカルの動画ファイルパスを取得します。
         /// </summary>
         /// <remarks>
-        /// 同名のファイルが存在し、しかも使用中である場合は
-        /// そのファイルを消すことも使うこともできません。
-        /// そのためファイル名は重複しないようなものを返します。
+        /// 拡張子は元動画のURLと同じにします。
+        /// そうしないと動画が正しく再生されません。
         /// </remarks>
         private Uri GetLocalMoviePath(Uri movieUri)
         {
             var ext = System.IO.Path.GetExtension(movieUri.ToString());
-            var path = string.Format(
-                @"ShogiData/EndRoll/{0}{1}",
-                Guid.NewGuid().ToString("D").Substring(0, 18),
-                ext);
+            var path = System.IO.Path.GetTempFileName() + ext;
 
-            return new Uri(path, UriKind.Relative);
+            return new Uri(path, UriKind.Absolute);
         }
 
         /// <summary>
@@ -497,15 +493,10 @@ namespace VoteSystem.Protocol.View
                 // 動画データをファイルに保存します。
                 // 一時ファイルを作った後でリネームするようにしています。
                 var localMoviePath = GetLocalMoviePath(MovieUri);
-                using (var tmpfile = new PassingTmpFile(localMoviePath.ToString()))
+                using (var stream = new FileStream(localMoviePath.LocalPath,
+                                                   FileMode.Create))
                 {
-                    using (var stream = new FileStream(tmpfile.TmpFileName,
-                                                       FileMode.Create))
-                    {
-                        stream.Write(e.Result, 0, e.Result.Length);
-                    }
-
-                    tmpfile.Success();
+                    stream.Write(e.Result, 0, e.Result.Length);
                 }
 
                 OpenMedia(localMoviePath);

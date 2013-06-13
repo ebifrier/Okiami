@@ -40,6 +40,7 @@ namespace VoteSystem.PluginShogi.View
         private AutoPlayEx autoPlay;
         private TimeSpan prevPosition = TimeSpan.Zero;
 
+        #region 基本プロパティ
         /// <summary>
         /// フォーマットファイルのパスを扱う依存プロパティです。
         /// </summary>
@@ -88,6 +89,25 @@ namespace VoteSystem.PluginShogi.View
             set { SetValue(MovieUrlProperty, value); }
         }
 
+        /// <summary>
+        /// 将棋盤の不透明度を扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty ShogiOpacityProperty =
+            DependencyProperty.Register(
+                "ShogiOpacity", typeof(double), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(0.4));
+
+        /// <summary>
+        /// 将棋盤の不透明度を取得または設定します。
+        /// </summary>
+        public double ShogiOpacity
+        {
+            get { return (double)GetValue(ShogiOpacityProperty); }
+            set { SetValue(ShogiOpacityProperty, value); }
+        }
+        #endregion
+
+        #region タイムラインプロパティ
         /// <summary>
         /// 映像の表示タイミングを扱う依存プロパティです。
         /// </summary>
@@ -141,23 +161,60 @@ namespace VoteSystem.PluginShogi.View
             get { return (TimelineData)GetValue(ShogiTimelineProperty); }
             set { SetValue(ShogiTimelineProperty, value); }
         }
+        #endregion
 
+        #region サウンドプロパティ
         /// <summary>
-        /// 将棋盤の不透明度を扱う依存プロパティです。
+        /// 動画がミュートかどうかを扱う依存プロパティです。
         /// </summary>
-        public static readonly DependencyProperty ShogiOpacityProperty =
+        public static readonly DependencyProperty IsMovieMuteProperty =
             DependencyProperty.Register(
-                "ShogiOpacity", typeof(double), typeof(ShogiEndRollControl),
-                new FrameworkPropertyMetadata(0.4));
+                "IsMovieMute", typeof(bool), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(false,
+                    OnIsMovieMuteChanged));
 
         /// <summary>
-        /// 将棋盤の不透明度を取得または設定します。
+        /// 動画がミュートかどうかを取得または設定します。
         /// </summary>
-        public double ShogiOpacity
+        public bool IsMovieMute
         {
-            get { return (double)GetValue(ShogiOpacityProperty); }
-            set { SetValue(ShogiOpacityProperty, value); }
+            get { return (bool)GetValue(IsMovieMuteProperty); }
+            set { SetValue(IsMovieMuteProperty, value); }
         }
+
+        private static void OnIsMovieMuteChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var self = (ShogiEndRollControl)d;
+
+            self.Ending.MoviePlayer.IsMuted = (bool)e.NewValue;
+        }
+
+        /// <summary>
+        /// 動画の音量を扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty MovieVolumeProperty =
+            DependencyProperty.Register(
+                "MovieVolume", typeof(int), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(100,
+                    OnMovieVolumeChanged));
+
+        /// <summary>
+        /// 動画の音量を取得または設定します。
+        /// </summary>
+        public int MovieVolume
+        {
+            get { return (int)GetValue(MovieVolumeProperty); }
+            set { SetValue(MovieVolumeProperty, value); }
+        }
+
+        private static void OnMovieVolumeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var self = (ShogiEndRollControl)d;
+
+            self.Ending.MoviePlayer.Volume =
+                MathEx.Between(0, 100, (int)e.NewValue) / 100.0;
+        }
+        #endregion
 
         /// <summary>
         /// 投票者リストを更新します。

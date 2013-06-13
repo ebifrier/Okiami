@@ -44,7 +44,6 @@
                     <Border.Background>
                         <ImageBrush x:Name="ImageBrush"
                                     Stretch="UniformToFill"
-                                    ImageSource="pack://application:,,,/PluginShogi;component/Resources/Image/ending_image.png"
                                     Opacity="0.0" />
                     </Border.Background>
                 </Border>

@@ -108,7 +108,7 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public void PlayEndRoll(DateTime startTimeNtp)
         {
-            this.endRoll.StartPrepare(startTimeNtp);
+            ShogiEndRoll.StartPrepare(startTimeNtp);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public void StopEndRoll()
         {
-            this.endRoll.Stop();
+            ShogiEndRoll.Stop();
         }
 
         private void FrameTimer_EnterFrame(object sender, FrameEventArgs e)

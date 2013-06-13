@@ -76,48 +76,38 @@
                 Content="pack://application:,,,/PluginShogi;component/Resources/Image/resign.png"
                 ToolTip="投了"
                 Command="{x:Static svm:Commands.Resign}" />
+    </ToolBar>
 
-        <Separator />
-
+    <!-- ツールバーです。-->
+    <ToolBar x:Key="shogiToolBar" Band="1">
         <Button Style="{StaticResource ToolBarButtonStyle}"
-                Content="pack://application:,,,/PluginShogi;component/Resources/Image/move_goto_first.png"
+                Content="pack://application:,,,/Ragnarok.Presentation.Shogi;component/Resources/Image/move_goto_first.png"
                 ToolTip="開始局面へ"
                 Command="{x:Static r:ShogiCommands.GotoFirstState}" />
         <Button Style="{StaticResource ToolBarButtonStyle}"
-                Content="pack://application:,,,/PluginShogi;component/Resources/Image/move_undo_continue.png"
+                Content="pack://application:,,,/Ragnarok.Presentation.Shogi;component/Resources/Image/move_undo_continue.png"
                 ToolTip="連続して戻す"
                 Command="{x:Static r:ShogiCommands.MoveUndoContinue}" />
         <Button Style="{StaticResource ToolBarButtonStyle}"
-                Content="pack://application:,,,/PluginShogi;component/Resources/Image/move_undo.png"
+                Content="pack://application:,,,/Ragnarok.Presentation.Shogi;component/Resources/Image/move_undo.png"
                 ToolTip="１手戻す"
                 Command="{x:Static r:ShogiCommands.MoveUndo}" />
         <Button Style="{StaticResource ToolBarButtonStyle}"
-                Content="pack://application:,,,/PluginShogi;component/Resources/Image/move_pause.png"
+                Content="pack://application:,,,/Ragnarok.Presentation.Shogi;component/Resources/Image/move_pause.png"
                 ToolTip="再現停止"
                 Command="{x:Static r:ShogiCommands.MoveStop}" />
         <Button Style="{StaticResource ToolBarButtonStyle}"
-                Content="pack://application:,,,/PluginShogi;component/Resources/Image/move_redo.png"
+                Content="pack://application:,,,/Ragnarok.Presentation.Shogi;component/Resources/Image/move_redo.png"
                 ToolTip="１手進める"
                 Command="{x:Static r:ShogiCommands.MoveRedo}" />
         <Button Style="{StaticResource ToolBarButtonStyle}"
-                Content="pack://application:,,,/PluginShogi;component/Resources/Image/move_redo_continue.png"
+                Content="pack://application:,,,/Ragnarok.Presentation.Shogi;component/Resources/Image/move_redo_continue.png"
                 ToolTip="連続して進める"
                 Command="{x:Static r:ShogiCommands.MoveRedoContinue}" />
         <Button Style="{StaticResource ToolBarButtonStyle}"
-                Content="pack://application:,,,/PluginShogi;component/Resources/Image/move_goto_last.png"
+                Content="pack://application:,,,/Ragnarok.Presentation.Shogi;component/Resources/Image/move_goto_last.png"
                 ToolTip="最終局面へ"
                 Command="{x:Static r:ShogiCommands.GotoLastState}" />
-
-        <Separator />
-
-        <Button Style="{StaticResource ToolBarButtonStyle}"
-                Content="pack://application:,,,/PluginShogi;component/Resources/Image/endroll_play.png"
-                ToolTip="エンドロールを開始"
-                Command="{x:Static svm:Commands.PlayEndRoll}" />
-        <Button Style="{StaticResource ToolBarButtonStyle}"
-                Content="pack://application:,,,/PluginShogi;component/Resources/Image/endroll_stop.png"
-                ToolTip="エンドロールを停止"
-                Command="{x:Static svm:Commands.StopEndRoll}" />
     </ToolBar>
 
     <!-- 手数を表示するツールバーです。-->
