@@ -9,12 +9,13 @@ using Ragnarok;
 using Ragnarok.Net;
 using Ragnarok.Net.ProtoBuf;
 using Ragnarok.ObjectModel;
+using Ragnarok.Utility;
 
 namespace VoteSystem.Server
 {
-    using VoteSystem.Protocol;
-    using VoteSystem.Protocol.Vote;
-    using VoteSystem.Server.VoteStrategy;
+    using Protocol;
+    using Protocol.Vote;
+    using VoteStrategy;
 
     /// <summary>
     /// 投票の開始／停止、時間管理などを行うオブジェクトです。
@@ -51,6 +52,7 @@ namespace VoteSystem.Server
 
         private readonly VoteRoom voteRoom;
         private DateTime votePauseTimeNtp = DateTime.MinValue;
+        private readonly ReentrancyLock timerLock = new ReentrancyLock();
         private readonly Timer timer;
 
         /// <summary>
@@ -601,22 +603,29 @@ namespace VoteSystem.Server
         /// </summary>
         private void CheckVoteEnd()
         {
-            using (LazyLock())
+            // Timerオブジェクトはコールバックを同時に呼ぶことがあるため、
+            // その対策を行っています。
+            using (var result = this.timerLock.Lock())
             {
-                // 0秒になったら投票を終了します。
-                if (VoteState != VoteState.Voting ||
-                    CalcLeaveTime(VoteSpan) > TimeSpan.Zero)
+                if (result == null) return;
+
+                using (LazyLock())
                 {
-                    return;
+                    // 0秒になったら投票を終了します。
+                    if (VoteState != VoteState.Voting ||
+                        CalcLeaveTime(VoteSpan) > TimeSpan.Zero)
+                    {
+                        return;
+                    }
+
+                    VoteEnded(VoteState.End);
                 }
 
-                VoteEnded(VoteState.End);
+                // 投票ルーム関係のメソッドはロック外で呼び出します。
+                this.voteRoom.Updated();
+                this.voteRoom.BroadcastSystemNotification(
+                    SystemNotificationType.VoteEnd);
             }
-
-            // 投票ルーム関係のメソッドはロック外で呼び出します。
-            this.voteRoom.Updated();
-            this.voteRoom.BroadcastSystemNotification(
-                SystemNotificationType.VoteEnd);
         }
 
         /// <summary>
@@ -802,10 +811,7 @@ namespace VoteSystem.Server
             ProgressSpan = TimeSpan.Zero;
 
             this.timer = new Timer(
-                (_) => Util.SafeCall(CheckVoteEnd),
-                null,
-                Timeout.Infinite,
-                Timeout.Infinite);
+                _ => Util.SafeCall(CheckVoteEnd));
         }
     }
 }

@@ -351,15 +351,6 @@ namespace VoteSystem.PluginShogi.ViewModel
         {
             get { return ShogiGlobal.Settings.SD_BanOpacity; }
         }
-
-        /// <summary>
-        /// 背景画像のパスを取得します。
-        /// </summary>
-        [DependOnProperty(typeof(Settings), "SD_BackgroundPath")]
-        public string BackgroundPath
-        {
-            get { return ShogiGlobal.Settings.SD_BackgroundPath; }
-        }
         #endregion
 
         /// <summary>

@@ -31,6 +31,8 @@ namespace VoteSystem.Client.Model
     /// </summary>
     public class VoteClient : NotifyObject, IDisposable
     {
+        private readonly ReentrancyLock leaveTimeTimerLock = new ReentrancyLock();
+        private Timer leaveTimeTimer;
         private readonly CommenterManager commenterManager;
         private PbConnection conn = null;
         private bool showErrorMessage = true;        
@@ -41,7 +43,6 @@ namespace VoteSystem.Client.Model
         private int oldVoteLeaveSeconds;
         private int oldTotalVoteLeaveSeconds;
         private int oldThinkTimeSeconds;
-        private Timer leaveTimeTimer;
         private bool disposed = false;
 
         /// <summary>
@@ -1522,25 +1523,32 @@ namespace VoteSystem.Client.Model
         /// </summary>
         private void LeaveTimeTimer_Callback(object state)
         {
-            var seconds = (int)VoteLeaveTime.TotalSeconds;
-            if (seconds != this.oldVoteLeaveSeconds)
+            // Timerオブジェクトはコールバックを同時に呼ぶことがあるため、
+            // その対策を行っています。
+            using (var result = this.leaveTimeTimerLock.Lock())
             {
-                this.oldVoteLeaveSeconds = seconds;
-                this.RaisePropertyChanged("VoteLeaveTime");
-            }
+                if (result == null) return;
 
-            seconds = (int)TotalVoteLeaveTime.TotalSeconds;
-            if (seconds != this.oldTotalVoteLeaveSeconds)
-            {
-                this.oldTotalVoteLeaveSeconds = seconds;
-                this.RaisePropertyChanged("TotalVoteLeaveTime");
-            }
+                var seconds = (int)VoteLeaveTime.TotalSeconds;
+                if (seconds != this.oldVoteLeaveSeconds)
+                {
+                    this.oldVoteLeaveSeconds = seconds;
+                    this.RaisePropertyChanged("VoteLeaveTime");
+                }
 
-            seconds = (int)ThinkTime.TotalSeconds;
-            if (seconds != this.oldThinkTimeSeconds)
-            {
-                this.oldThinkTimeSeconds = seconds;
-                this.RaisePropertyChanged("ThinkTime");
+                seconds = (int)TotalVoteLeaveTime.TotalSeconds;
+                if (seconds != this.oldTotalVoteLeaveSeconds)
+                {
+                    this.oldTotalVoteLeaveSeconds = seconds;
+                    this.RaisePropertyChanged("TotalVoteLeaveTime");
+                }
+
+                seconds = (int)ThinkTime.TotalSeconds;
+                if (seconds != this.oldThinkTimeSeconds)
+                {
+                    this.oldThinkTimeSeconds = seconds;
+                    this.RaisePropertyChanged("ThinkTime");
+                }
             }
         }
 

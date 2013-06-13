@@ -223,9 +223,9 @@ namespace VoteSystem.Client.Model
                 process.Start();
 
                 // プロセスの書き込みバッファがいっぱいになると、
-                // そのバッファが読まれるまで待つことになる。
+                // そのプロセスはバッファが読み込まれるまでウェイト状態になります。
                 // 呼び出し側もプロセスの実行が終わるまで待つようにすると、
-                // Deadlockするため、プロセスのウェイトはしないようにする。
+                // Deadlockするため、プロセスのウェイトはしないようにします。
                 // 参考）
                 // http://msdn.microsoft.com/en-us/library/system.diagnostics.process.standardoutput.aspx
                 //
@@ -253,7 +253,7 @@ namespace VoteSystem.Client.Model
                 return -1;
             }
 
-            lock(this.commenterCountDic)
+            lock (this.commenterCountDic)
             {
                 var count = 0;
                 if (!this.commenterCountDic.TryGetValue(addrPort, out count))

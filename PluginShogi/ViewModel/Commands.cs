@@ -710,12 +710,14 @@ namespace VoteSystem.PluginShogi.ViewModel
 
                 // 念のため、確認ダイアログを出します。
                 var result = DialogUtil.Show(
+                    ShogiGlobal.MainWindow,
                     string.Format(
                         @"{1:h時mm分}{0}{0}この時刻に開始しますがよろしいですか？",
                         Environment.NewLine,
                         startTimeNtp),
                     "時刻確認",
-                    MessageBoxButton.YesNo);
+                    MessageBoxButton.YesNo,
+                    MessageBoxResult.No);
                 if (result != MessageBoxResult.Yes)
                 {
                     return;
@@ -745,6 +747,18 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             try
             {
+                // 念のため、確認ダイアログを出します。
+                var result = DialogUtil.Show(
+                    ShogiGlobal.MainWindow,
+                    "エンディングを停止しますがよろしいですか？",
+                    "停止確認",
+                    MessageBoxButton.YesNo,
+                    MessageBoxResult.No);
+                if (result != MessageBoxResult.Yes)
+                {
+                    return;
+                }
+
                 voteClient.SendStopEndRoll();
             }
             catch (Exception ex)

@@ -231,6 +231,9 @@ namespace VoteSystem.PluginShogi
 
             var startTimeNtp = new DateTime(e.Command.StartTimeNtpTicks);
 
+            // エンドロールの再生時刻を設定。
+            ShogiGlobal.StartEndrollTimeNtp = startTimeNtp;
+
             WPFUtil.UIProcess(() =>
                 window.PlayEndRoll(startTimeNtp));
         }
@@ -247,6 +250,9 @@ namespace VoteSystem.PluginShogi
             {
                 return;
             }
+
+            // エンドロールは再生しない。
+            ShogiGlobal.StartEndrollTimeNtp = DateTime.MinValue;
 
             WPFUtil.UIProcess(() =>
                 window.StopEndRoll());

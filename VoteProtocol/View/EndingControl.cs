@@ -147,7 +147,7 @@ namespace VoteSystem.Protocol.View
         {
             var self = (EndingControl)d;
 
-            self.UpdateState();
+            self.UpdateMessageText();
         }
 
         /// <summary>
@@ -237,17 +237,13 @@ namespace VoteSystem.Protocol.View
         /// </summary>
         public EndingControl()
         {
-            MoviePlayer = new MediaPlayer
-            {
-                Volume = 0.1,
-            };
+            MoviePlayer = new MediaPlayer();
             MoviePlayer.MediaOpened += MediaOpened;
 
             Downloader = new Downloader();
             Downloader.AddPropertyChangedHandler(
                 "ProgressRate",
-                (_, __) => WPFUtil.UIProcess(
-                    () => OnProgressRateChanged()));
+                (_, __) => WPFUtil.UIProcess(OnProgressRateChanged));
 
             Unloaded += (_, __) =>
             {
@@ -259,7 +255,7 @@ namespace VoteSystem.Protocol.View
             };
 
             this.timer = new DispatcherTimer(
-                TimeSpan.FromMilliseconds(200),
+                TimeSpan.FromMilliseconds(100),
                 DispatcherPriority.Normal,
                 (_, __) => UpdateLeaveTime(),
                 Dispatcher);
@@ -276,11 +272,18 @@ namespace VoteSystem.Protocol.View
             this.viewbox = GetTemplateChild(ElementViewboxName) as Viewbox;
             this.analogma = GetTemplateChild(ElementAnalogmaName) as AnalogmaControl;
 
-            UpdateState();
+            UpdateMessageText();
         }
 
+        private static readonly TimeSpan AnalogmaHideInterval =
+            TimeSpan.FromSeconds(5.0);
+        private static readonly TimeSpan AnalogmaSizingInterval =
+            TimeSpan.FromMinutes(5.0);
+        private static readonly double AnalogmaMinHeight = 150.0;
+        private static readonly double AnalogmaMaxHeight = 300.0;
+
         /// <summary>
-        /// 残り時間に追うおじて、アナロ熊のサイズなどを変更します。
+        /// 残り時間に応じて、アナロ熊のサイズなどを変更します。
         /// </summary>
         private void UpdateLeaveTime()
         {
@@ -300,40 +303,62 @@ namespace VoteSystem.Protocol.View
             {
                 this.viewbox.Visibility = Visibility.Visible;
 
-                // ５分前になったらだんだん大きくします。
-                var ViewSpan = TimeSpan.FromMinutes(5.0);
                 var leaveTime = StartTimeNtp - NtpClient.GetTime();
-                this.analogma.LeaveTime = leaveTime;
-                if (leaveTime > ViewSpan)
+                this.analogma.LeaveTime = leaveTime;                
+
+                // 数秒前になったら熊をだんだん消します。
+                if (leaveTime > AnalogmaHideInterval ||
+                    leaveTime < -AnalogmaHideInterval)
                 {
-                    this.viewbox.Height = 150;
-                }
-                else if (leaveTime < TimeSpan.Zero)
-                {
-                    this.viewbox.Height = 150 + ViewSpan.TotalSeconds / 2;
+                    this.viewbox.Opacity = 1.0;
                 }
                 else
                 {
-                    var time = ViewSpan - leaveTime;
-                    this.viewbox.Height = 150 + time.TotalSeconds / 2;
+                    var time = AnalogmaHideInterval - leaveTime;
+                    var rate = time.TotalSeconds /
+                        AnalogmaHideInterval.TotalSeconds;
+
+                    this.viewbox.Opacity = MathEx.InterpEaseOut(1.0, 0.0, rate);
+                }
+
+                // 数分前になったらだんだん大きくします。
+                if (leaveTime > AnalogmaSizingInterval)
+                {
+                    this.viewbox.Height = AnalogmaMinHeight;
+                }
+                else if (leaveTime < TimeSpan.Zero)
+                {
+                    this.viewbox.Height = AnalogmaMaxHeight;
+                }
+                else
+                {
+                    var time = AnalogmaSizingInterval - leaveTime;
+                    var rate = time.TotalSeconds /
+                        AnalogmaSizingInterval.TotalSeconds;
+
+                    this.viewbox.Height = MathEx.InterpLiner(
+                        AnalogmaMinHeight, AnalogmaMaxHeight, rate);
                 }
             }
         }
 
+        /// <summary>
+        /// ダウンロード進捗度の更新時に呼ばれます。
+        /// </summary>
         private void OnProgressRateChanged()
         {
             using (var result = this.progressLock.Lock())
             {
                 if (result == null) return;
 
-                UpdateState();
+                UpdateMessageText();
             }
         }
 
         /// <summary>
-        /// 更新状態を表示します。
+        /// 状態表示を表示します。
         /// </summary>
-        private void UpdateState()
+        private void UpdateMessageText()
         {
             if (this.analogma == null)
             {
@@ -364,6 +389,19 @@ namespace VoteSystem.Protocol.View
 
             this.analogma.Text = text;
             UpdateLeaveTime();
+        }
+
+        /// <summary>
+        /// エンディングの再生を取りやめます。
+        /// </summary>
+        public void Stop()
+        {
+            State = EndingState.Idle;
+            MovieUri = null;
+            StartTimeNtp = DateTime.MinValue;
+            MoviePlayer.Stop();
+
+            Downloader.CancelAll();
         }
 
         /// <summary>
@@ -422,23 +460,42 @@ namespace VoteSystem.Protocol.View
         /// <summary>
         /// 動画のURLから、ローカルの動画ファイルパスを取得します。
         /// </summary>
+        /// <remarks>
+        /// 同名のファイルが存在し、しかも使用中である場合は
+        /// そのファイルを消すことも使うこともできません。
+        /// そのためファイル名は重複しないようなものを返します。
+        /// </remarks>
         private Uri GetLocalMoviePath(Uri movieUri)
         {
             var ext = System.IO.Path.GetExtension(movieUri.ToString());
-            var path = "ShogiData/EndRoll/movie" + ext;
+            var path = string.Format(
+                @"ShogiData/EndRoll/{0}{1}",
+                Guid.NewGuid().ToString("D").Substring(0, 18),
+                ext);
 
             return new Uri(path, UriKind.Relative);
         }
 
+        /// <summary>
+        /// 動画データのダウンロード完了後に呼ばれます。
+        /// </summary>
         private void OnMovieDownloaded(object sender, DownloadDataCompletedEventArgs e)
         {
             try
             {
+                // キャンセルされた場合は素直に帰ります。
+                if (e.Cancelled)
+                {
+                    return;
+                }
+
                 if (e.Error != null)
                 {
                     throw e.Error;
                 }
 
+                // 動画データをファイルに保存します。
+                // 一時ファイルを作った後でリネームするようにしています。
                 var localMoviePath = GetLocalMoviePath(MovieUri);
                 using (var tmpfile = new PassingTmpFile(localMoviePath.ToString()))
                 {

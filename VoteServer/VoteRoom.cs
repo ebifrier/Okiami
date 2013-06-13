@@ -117,6 +117,15 @@ namespace VoteSystem.Server
         }
 
         /// <summary>
+        /// エンドロールの開始時刻(ntp)を取得します。
+        /// </summary>
+        public DateTime EndRollStartTimeNtp
+        {
+            get { return GetValue<DateTime>("EndRollStartTimeNtp"); }
+            private set { SetValue("EndRollStartTimeNtp", value); }
+        }
+
+        /// <summary>
         /// 部屋に接続されている参加者の数を取得します。
         /// </summary>
         public int ParticipantCount
@@ -349,6 +358,19 @@ namespace VoteSystem.Server
                     "投票ルームオーナーではありません。");
             }
 
+            // エンディングの開始時間を設定します。
+            // これは途中からきた参加者に再生情報を送るために必要なものです。
+            try
+            {
+                EndRollStartTimeNtp =
+                    new DateTime(e.Command.StartTimeNtpTicks);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Log.ErrorException(ex,
+                    "エンディングの開始時間が正しく設定できませんでした。");
+            }
+
             BroadcastCommand(e.Command);
         }
 
@@ -366,6 +388,7 @@ namespace VoteSystem.Server
                     "投票ルームオーナーではありません。");
             }
 
+            EndRollStartTimeNtp = DateTime.MinValue;
             BroadcastCommand(new StopEndRollCommand());
         }
 
@@ -433,6 +456,15 @@ namespace VoteSystem.Server
                 ParticipantUpdated(
                     CollectionOperation.CollectionAdd,
                     participant, true);
+
+                // 必要ならエンディングの再生情報を送ります。
+                if (NtpClient.GetTime() < EndRollStartTimeNtp)
+                {
+                    participant.SendCommand(new StartEndRollCommand()
+                    {
+                        StartTimeNtpTicks = EndRollStartTimeNtp.Ticks,
+                    });
+                }
             }
 
             Log.Info(this,
@@ -804,6 +836,8 @@ namespace VoteSystem.Server
             // passwordはnull or '\0'のときに、
             // パスワード不要という意味になります。
             this.password = (string.IsNullOrEmpty(password) ? null : password);
+
+            EndRollStartTimeNtp = DateTime.MinValue;
 
             AddParticipant(voteRoomOwner);
             this.voteModel.ChangeMode(VoteMode.Shogi, false);

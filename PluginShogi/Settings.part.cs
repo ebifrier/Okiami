@@ -167,12 +167,6 @@ namespace VoteSystem.PluginShogi
             set { SetValue("SD_KomadaiImage", value); }
         }
 
-        public string SD_BackgroundPath
-        {
-            get { return GetValue<string>("SD_BackgroundPath"); }
-            set { SetValue("SD_BackgroundPath", value); }
-        }
-
         [DefaultValue(0.6)]
         public double SD_BanOpacity
         {

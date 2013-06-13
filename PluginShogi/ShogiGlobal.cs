@@ -45,6 +45,7 @@ namespace VoteSystem.PluginShogi
             // FrameTimerはSettingsの前に初期化します。
             Settings = Settings.CreateSettings<Settings>();
             ShogiModel = new ShogiWindowViewModel(new Board());
+            StartEndrollTimeNtp = DateTime.MinValue;
 
             EffectManager = new Effects.EffectManager()
             {
@@ -201,6 +202,20 @@ namespace VoteSystem.PluginShogi
         {
             get;
             private set;
+        }
+
+        /// <summary>
+        /// エンドロールの再生開始時刻を取得または設定します。
+        /// </summary>
+        /// <remarks>
+        /// エンドロールの再生時刻は投票サーバーから設定されます。
+        /// これを保持しておかないと、ウィンドウを閉じたときなどに
+        /// 再生時刻が分からなくなります。
+        /// </remarks>
+        public static DateTime StartEndrollTimeNtp
+        {
+            get;
+            set;
         }
 
         /// <summary>

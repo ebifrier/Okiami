@@ -1,3 +1,16 @@
+2013-06-13  - Ver 1.3.4.8
+
+	* PluginShogi/ShogiGlobal.cs: エンドロールの開始時刻を保存し、ウィンド
+	ウが起動したらすぐに動画準備に取り掛かるようにしました。
+	* PluginShogi/View/ShogiEndRollControl.xaml.cs: エンドロールの停止用メ
+	ソッドを追加し、プロパティなどを整理しました。
+	* VoteClient/Model/VoteClient.cs: 時刻更新メソッドで再入を禁止しました。
+	* VoteProtocol/View/EndingControl.cs: アナロ熊を動画再生直前にフェード
+	アウトさせるようにし、ダウンロードのバグなどを修正しました。また、停止
+	用のメソッドも追加しました。
+	* VoteServer/VoteRoom.cs: エンドロールの開始時刻を保存し、新規ログイン
+	者にその情報を渡すようにしました。
+
 2013-06-13  - Ver 1.3.4.7
 
 	* PluginShogi/Effects/EffectTable.cs: 囲いエフェクトのデフォルト変数値

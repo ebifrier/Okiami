@@ -98,6 +98,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ShogiData\EndRoll\endroll_format_1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Resources\Image\shogiban_image.png" />
     <Resource Include="Resources\Image\ending_image.png" />
     <Content Include="ShogiData\Effect\Other\CastleEffect\Image\Mino.png">

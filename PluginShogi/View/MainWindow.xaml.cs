@@ -116,7 +116,7 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public void StopEndRoll()
         {
-            //this.endRoll.Sto
+            this.endRoll.Stop();
         }
 
         private void FrameTimer_EnterFrame(object sender, FrameEventArgs e)
@@ -141,8 +141,6 @@ namespace VoteSystem.PluginShogi.View
             this.evaluationControl.InitializeBindings(this);
             this.evaluationControl.SettingUpdated +=
                 (_, __) => ShogiGlobal.Settings.Save();
-
-            Closed += MainWindow_Closed;
 
             // FPSを表示
             if (Client.Global.IsNonPublished)
@@ -171,9 +169,11 @@ namespace VoteSystem.PluginShogi.View
             // 背景のトランジションが始まります。
             InitBackground();
         }
-
-        void MainWindow_Closed(object sender, EventArgs e)
+        
+        protected override void OnClosed(EventArgs e)
         {
+            base.OnClosed(e);
+
             ShogiGlobal.ShogiModel.StopAutoPlay();
 
             var timer = ShogiGlobal.FrameTimer;
