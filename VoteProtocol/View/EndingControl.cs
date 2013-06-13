@@ -47,9 +47,13 @@ namespace VoteSystem.Protocol.View
         /// </summary>
         Completed,
         /// <summary>
-        /// エラーにより動画の準備に失敗しました。
+        /// 動画のダウンロードに失敗しました。
         /// </summary>
-        Error,
+        DownloadError,
+        /// <summary>
+        /// 動画の読み込みに失敗しました。
+        /// </summary>
+        OpenError,
     }
 
     /// <summary>
@@ -257,6 +261,7 @@ namespace VoteSystem.Protocol.View
         {
             MoviePlayer = new MediaPlayer();
             MoviePlayer.MediaOpened += MediaOpened;
+            MoviePlayer.MediaFailed += MediaFailed;
 
             Downloader = new Downloader();
             Downloader.AddPropertyChangedHandler(
@@ -410,8 +415,11 @@ namespace VoteSystem.Protocol.View
                 case EndingState.Completed:
                     text = "準備完了！";
                     break;
-                case EndingState.Error:
-                    text = "エラーが発生しました (≧≦)";
+                case EndingState.DownloadError:
+                    text = "動画のダウンロードに失敗しました (≧≦)";
+                    break;
+                case EndingState.OpenError:
+                    text = "動画の読み込みに失敗しました (≧≦)";
                     break;
             }
 
@@ -501,7 +509,9 @@ namespace VoteSystem.Protocol.View
         /// </remarks>
         private Uri GetLocalMoviePath(Uri movieUri)
         {
-            var path = System.IO.Path.GetTempFileName() + MovieExt;
+            var path = System.IO.Path.Combine(
+                System.IO.Path.GetTempPath(),
+                Guid.NewGuid().ToString() + MovieExt);
 
             return new Uri(path, UriKind.Absolute);
         }
@@ -533,6 +543,8 @@ namespace VoteSystem.Protocol.View
                     stream.Write(e.Result, 0, e.Result.Length);
                 }
 
+                Log.Debug("{0}: 動画ファイルを保存しました。", localMoviePath);
+
                 OpenMedia(localMoviePath);
             }
             catch (WebException ex)
@@ -542,7 +554,7 @@ namespace VoteSystem.Protocol.View
 
                 if (ex.Status == WebExceptionStatus.ProtocolError)
                 {
-                    State = EndingState.Error;
+                    State = EndingState.DownloadError;
                 }
                 else
                 {
@@ -586,7 +598,7 @@ namespace VoteSystem.Protocol.View
                 Log.ErrorException(ex,
                     "動画ファイルの読み込みに失敗しました。");
 
-                State = EndingState.Error;
+                State = EndingState.OpenError;
             }
         }
 
@@ -597,6 +609,24 @@ namespace VoteSystem.Protocol.View
         {
             WPFUtil.UIProcess(() =>
                 State = EndingState.Completed);
+        }
+
+        /// <summary>
+        /// メディアファイルの読み込み失敗時に呼ばれます。
+        /// </summary>
+        private void MediaFailed(object sender, ExceptionEventArgs e)
+        {
+            Log.ErrorException(e.ErrorException,
+                "動画の読み込みに失敗しました。");
+
+            WPFUtil.UIProcess(() =>
+            {
+                State = EndingState.OpenError;
+
+                DialogUtil.ShowError(
+                    e.ErrorException,
+                    "動画の読み込みに失敗しました。");
+            });
         }
 
         /// <summary>

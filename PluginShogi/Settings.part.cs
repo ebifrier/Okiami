@@ -52,6 +52,18 @@ namespace VoteSystem.PluginShogi
             get { return GetValue<string>("AS_EvaluationImageSetTitle"); }
             set { SetValue("AS_EvaluationImageSetTitle", value); }
         }
+
+        [DefaultValue(false)]
+        public bool AS_IsEndingMode
+        {
+            get { return GetValue<bool>("AS_IsEndingMode"); }
+            set { SetValue("AS_IsEndingMode", value); }
+        }
+
+        public bool IsNormalMode
+        {
+            get { return !AS_IsEndingMode; }
+        }
         #endregion
 
         #region 現局面設定ダイアログ
@@ -335,6 +347,11 @@ namespace VoteSystem.PluginShogi
                     timer.TargetFPS = RenderingQualityUtil.GetFPS(
                         SD_RenderingQuality);
                 }
+            }
+            else if (e.PropertyName == "AS_IsEndingMode")
+            {
+                NotifyPropertyChanged(
+                    new PropertyChangedEventArgs("IsNormalMode"));
             }
         }
     }

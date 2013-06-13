@@ -19,7 +19,10 @@
                 <ResourceDictionary Source="MainMenu.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <r:BooleanToVisibilityConverter x:Key="visibilityConverterHidden" />
+            <r:BooleanToVisibilityConverter x:Key="visibilityConverterHidden"
+                                            DefaultHiddenValue="Hidden" />
+            <r:BooleanToVisibilityConverter x:Key="visibilityConverterCollapsed"
+                                            DefaultHiddenValue="Collapsed" />
             <r:FontFamilyConverter x:Key="fontFamilyConverter" />
             
             <ImageBrush x:Key="banBrush"
@@ -42,6 +45,10 @@
                           Command="{x:Static r:EvaluationControl.OpenSettingDialog}"
                           CommandTarget="{Binding PlacementTarget,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                <Separator />
+                <MenuItem Header="エンディングモード(_M)"
+                          IsCheckable="True"
+                          IsChecked="{Binding Settings.AS_IsEndingMode}" />
             </ContextMenu>
         </ResourceDictionary>
     </Window.Resources>
@@ -60,7 +67,9 @@
         <Menu Grid.Row="0"
               VerticalAlignment="Top"
               HorizontalAlignment="Stretch"
-              HorizontalContentAlignment="Stretch">
+              HorizontalContentAlignment="Stretch"
+              Visibility="{Binding Settings.IsNormalMode, Mode=OneWay,
+                                   Converter={StaticResource visibilityConverterCollapsed}}">
             <MenuItem Header="ファイル(_F)">
                 <MenuItem Header="棋譜の読み込み(_O)"
                           Command="{x:Static svm:Commands.LoadKifFile}"
@@ -107,22 +116,32 @@
                 <Separator />
                 <MenuItem Header="変化ウィンドウ(_V)"
                           Command="{x:Static svm:Commands.ShowMoveManageView}" />
+                <Separator />
+                <MenuItem Header="エンディングモード(_M)"
+                          IsCheckable="True"
+                          IsChecked="{Binding Settings.AS_IsEndingMode}" />
                 <MenuItem Header="エンディング設定(_E)"
                           Command="{x:Static svm:Commands.ShowEndingSettingWindow}" />
             </MenuItem>
         </Menu>
 
         <!-- ToolBarTrayの中に入れるとStretchしなくなります。-->
-        <ToolBarTray Grid.Row="1">
+        <ToolBarTray Grid.Row="1"
+                     Visibility="{Binding Settings.IsNormalMode, Mode=OneWay,
+                                          Converter={StaticResource visibilityConverterCollapsed}}">
             <StaticResource ResourceKey="toolBar" />
             <StaticResource ResourceKey="shogiToolBar" />
             <StaticResource ResourceKey="numberToolBar" />
         </ToolBarTray>
 
         <ToolBar Grid.Row="2"
+                 Visibility="{Binding Settings.IsNormalMode, Mode=OneWay,
+                                      Converter={StaticResource visibilityConverterCollapsed}}"
                  Template="{StaticResource nicoToolBar}" />
 
         <ToolBar Grid.Row="3"
+                 Visibility="{Binding Settings.IsNormalMode, Mode=OneWay,
+                                      Converter={StaticResource visibilityConverterCollapsed}}"
                  Template="{StaticResource variationToolBar}" />
 
         <Grid Grid.Row="4" Grid.RowSpan="2"
