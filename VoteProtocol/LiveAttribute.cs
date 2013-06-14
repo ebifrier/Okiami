@@ -30,13 +30,13 @@ namespace VoteSystem.Protocol
         private NotificationTypeMask systemCommentTypeMask =
             NotificationTypeMask.SystemAll;
 
-        private bool isPostConfirmComment = true;
-        private NotificationTypeMask confirmCommentTypeMask =
-            NotificationTypeMask.CommentCore;
-
         private bool isPostMirrorComment = true;
         private NotificationTypeMask mirrorCommentTypeMask =
             NotificationTypeMask.CommentCore;
+
+        private bool isPostConfirmComment = true;
+        private NotificationTypeMask confirmCommentTypeMask =
+            NotificationTypeMask.None;
 
         #region Systemコメント
         /// <summary>
@@ -122,189 +122,6 @@ namespace VoteSystem.Protocol
                 else
                 {
                     SystemCommentTypeMask &= ~NotificationTypeMask.System;
-                }
-            }
-        }
-        #endregion
-
-        #region Confirmコメント
-        /// <summary>
-        /// 自放送からポストされた投票や参加の確認用コメントを放送に投稿するか
-        /// どうかを取得または設定します。
-        /// </summary>
-        [DataMember(Order = 10, IsRequired = true)]
-        public bool IsPostConfirmComment
-        {
-            get
-            {
-                return this.isPostConfirmComment;
-            }
-            set
-            {
-                if (this.isPostConfirmComment != value)
-                {
-                    this.isPostConfirmComment = value;
-
-                    this.RaisePropertyChanged("IsPostConfirmComment");
-                }
-            }
-        }
-
-        /// <summary>
-        /// 放送に投稿する確認コメントの種類を取得または設定します。
-        /// </summary>
-        public NotificationTypeMask ConfirmCommentTypeMask
-        {
-            get
-            {
-                return this.confirmCommentTypeMask;
-            }
-            set
-            {
-                value &= NotificationTypeMask.CommentAll;
-
-                if (this.confirmCommentTypeMask != value)
-                {
-                    this.confirmCommentTypeMask = value;
-
-                    this.RaisePropertyChanged("ConfirmCommentTypeMask");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Flags属性付きのenumをprotobuf-netが上手く処理できないため、
-        /// シリアライズ用のプロパティを作っています。
-        /// </summary>
-        [DataMember(Order = 11, IsRequired = true)]
-        private int ConfirmCommentTypeMaskForSerialize
-        {
-            get
-            {
-                return (int)ConfirmCommentTypeMask;
-            }
-            set
-            {
-                ConfirmCommentTypeMask = (NotificationTypeMask)value;
-            }
-        }
-
-        /// <summary>
-        /// メッセージ確認コメントを放送に投稿するかどうかを取得または設定します。
-        /// </summary>
-        [DependOnProperty("ConfirmCommentTypeMask")]
-        public bool IsPostConfirmMessageComment
-        {
-            get
-            {
-                return (ConfirmCommentTypeMask &
-                    NotificationTypeMask.Message) != 0;
-            }
-            set
-            {
-                if (value)
-                {
-                    ConfirmCommentTypeMask |= NotificationTypeMask.Message;
-                }
-                else
-                {
-                    ConfirmCommentTypeMask &= ~NotificationTypeMask.Message;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 投票確認コメントを放送に投稿するかどうかを取得または設定します。
-        /// </summary>
-        [DependOnProperty("ConfirmCommentTypeMask")]
-        public bool IsPostConfirmVoteComment
-        {
-            get
-            {
-                return (ConfirmCommentTypeMask &
-                    NotificationTypeMask.Vote) != 0;
-            }
-            set
-            {
-                if (value)
-                {
-                    ConfirmCommentTypeMask |= NotificationTypeMask.Vote;
-                }
-                else
-                {
-                    ConfirmCommentTypeMask &= ~NotificationTypeMask.Vote;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 参加確認コメントを放送に投稿するかどうかを取得または設定します。
-        /// </summary>
-        [DependOnProperty("ConfirmCommentTypeMask")]
-        public bool IsPostConfirmJoinComment
-        {
-            get
-            {
-                return (ConfirmCommentTypeMask &
-                    NotificationTypeMask.Join) != 0;
-            }
-            set
-            {
-                if (value)
-                {
-                    ConfirmCommentTypeMask |= NotificationTypeMask.Join;
-                }
-                else
-                {
-                    ConfirmCommentTypeMask &= ~NotificationTypeMask.Join;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 延長確認コメントを放送に投稿するかどうかを取得または設定します。
-        /// </summary>
-        [DependOnProperty("ConfirmCommentTypeMask")]
-        public bool IsPostConfirmTimeExtendComment
-        {
-            get
-            {
-                return (ConfirmCommentTypeMask &
-                    NotificationTypeMask.TimeExtend) != 0;
-            }
-            set
-            {
-                if (value)
-                {
-                    ConfirmCommentTypeMask |= NotificationTypeMask.TimeExtend;
-                }
-                else
-                {
-                    ConfirmCommentTypeMask &= ~NotificationTypeMask.TimeExtend;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 評価値コメントを放送に投稿するかどうかを取得または設定します。
-        /// </summary>
-        [DependOnProperty("ConfirmCommentTypeMask")]
-        public bool IsPostConfirmEvaluationComment
-        {
-            get
-            {
-                return (ConfirmCommentTypeMask &
-                    NotificationTypeMask.Evaluation) != 0;
-            }
-            set
-            {
-                if (value)
-                {
-                    ConfirmCommentTypeMask |= NotificationTypeMask.Evaluation;
-                }
-                else
-                {
-                    ConfirmCommentTypeMask &= ~NotificationTypeMask.Evaluation;
                 }
             }
         }
@@ -488,6 +305,189 @@ namespace VoteSystem.Protocol
                 else
                 {
                     MirrorCommentTypeMask &= ~NotificationTypeMask.Evaluation;
+                }
+            }
+        }
+        #endregion
+
+        #region Confirmコメント
+        /// <summary>
+        /// 自放送からポストされた投票や参加の確認用コメントを放送に投稿するか
+        /// どうかを取得または設定します。
+        /// </summary>
+        [DataMember(Order = 10, IsRequired = true)]
+        public bool IsPostConfirmComment
+        {
+            get
+            {
+                return this.isPostConfirmComment;
+            }
+            set
+            {
+                if (this.isPostConfirmComment != value)
+                {
+                    this.isPostConfirmComment = value;
+
+                    this.RaisePropertyChanged("IsPostConfirmComment");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 放送に投稿する確認コメントの種類を取得または設定します。
+        /// </summary>
+        public NotificationTypeMask ConfirmCommentTypeMask
+        {
+            get
+            {
+                return this.confirmCommentTypeMask;
+            }
+            set
+            {
+                value &= NotificationTypeMask.CommentAll;
+
+                if (this.confirmCommentTypeMask != value)
+                {
+                    this.confirmCommentTypeMask = value;
+
+                    this.RaisePropertyChanged("ConfirmCommentTypeMask");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Flags属性付きのenumをprotobuf-netが上手く処理できないため、
+        /// シリアライズ用のプロパティを作っています。
+        /// </summary>
+        [DataMember(Order = 11, IsRequired = true)]
+        private int ConfirmCommentTypeMaskForSerialize
+        {
+            get
+            {
+                return (int)ConfirmCommentTypeMask;
+            }
+            set
+            {
+                ConfirmCommentTypeMask = (NotificationTypeMask)value;
+            }
+        }
+
+        /// <summary>
+        /// メッセージ確認コメントを放送に投稿するかどうかを取得または設定します。
+        /// </summary>
+        [DependOnProperty("ConfirmCommentTypeMask")]
+        public bool IsPostConfirmMessageComment
+        {
+            get
+            {
+                return (ConfirmCommentTypeMask &
+                    NotificationTypeMask.Message) != 0;
+            }
+            set
+            {
+                if (value)
+                {
+                    ConfirmCommentTypeMask |= NotificationTypeMask.Message;
+                }
+                else
+                {
+                    ConfirmCommentTypeMask &= ~NotificationTypeMask.Message;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 投票確認コメントを放送に投稿するかどうかを取得または設定します。
+        /// </summary>
+        [DependOnProperty("ConfirmCommentTypeMask")]
+        public bool IsPostConfirmVoteComment
+        {
+            get
+            {
+                return (ConfirmCommentTypeMask &
+                    NotificationTypeMask.Vote) != 0;
+            }
+            set
+            {
+                if (value)
+                {
+                    ConfirmCommentTypeMask |= NotificationTypeMask.Vote;
+                }
+                else
+                {
+                    ConfirmCommentTypeMask &= ~NotificationTypeMask.Vote;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 参加確認コメントを放送に投稿するかどうかを取得または設定します。
+        /// </summary>
+        [DependOnProperty("ConfirmCommentTypeMask")]
+        public bool IsPostConfirmJoinComment
+        {
+            get
+            {
+                return (ConfirmCommentTypeMask &
+                    NotificationTypeMask.Join) != 0;
+            }
+            set
+            {
+                if (value)
+                {
+                    ConfirmCommentTypeMask |= NotificationTypeMask.Join;
+                }
+                else
+                {
+                    ConfirmCommentTypeMask &= ~NotificationTypeMask.Join;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 延長確認コメントを放送に投稿するかどうかを取得または設定します。
+        /// </summary>
+        [DependOnProperty("ConfirmCommentTypeMask")]
+        public bool IsPostConfirmTimeExtendComment
+        {
+            get
+            {
+                return (ConfirmCommentTypeMask &
+                    NotificationTypeMask.TimeExtend) != 0;
+            }
+            set
+            {
+                if (value)
+                {
+                    ConfirmCommentTypeMask |= NotificationTypeMask.TimeExtend;
+                }
+                else
+                {
+                    ConfirmCommentTypeMask &= ~NotificationTypeMask.TimeExtend;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 評価値コメントを放送に投稿するかどうかを取得または設定します。
+        /// </summary>
+        [DependOnProperty("ConfirmCommentTypeMask")]
+        public bool IsPostConfirmEvaluationComment
+        {
+            get
+            {
+                return (ConfirmCommentTypeMask &
+                    NotificationTypeMask.Evaluation) != 0;
+            }
+            set
+            {
+                if (value)
+                {
+                    ConfirmCommentTypeMask |= NotificationTypeMask.Evaluation;
+                }
+                else
+                {
+                    ConfirmCommentTypeMask &= ~NotificationTypeMask.Evaluation;
                 }
             }
         }

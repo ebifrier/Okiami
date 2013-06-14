@@ -300,17 +300,12 @@ namespace VoteSystem.Client.Model.Live
         {
             this.nicoClient = nicoClient;
 
-            // このコンストラクタはアプリ起動時に一度しか呼ばれないため、
-            // グローバル変数にハンドラを設定しています。
-            // 本来はDisposeなどでハンドラを外す必要があります。
-            Attribute =
-                Global.Settings.AS_NicoLiveAttribute ??
-                new LiveAttribute();
-            Attribute.PropertyChanged +=
-                (_, __) => Global.Settings.Save();
-            Global.Settings.AS_NicoLiveAttribute = Attribute;
-
+            Attribute = Global.Settings.AS_NicoLiveAttribute;
             LiveUrlText = Global.Settings.AS_NicoLiveUrl;
+
+            AddPropertyChangedHandler(
+                "Attribute",
+                (_, __) => Global.Settings.AS_NicoLiveAttribute = Attribute);
             AddPropertyChangedHandler(
                 "LiveUrlText",
                 (_, __) => Global.Settings.AS_NicoLiveUrl = LiveUrlText);

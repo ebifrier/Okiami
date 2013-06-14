@@ -402,8 +402,6 @@ namespace VoteSystem.Server
 
             if (participant != null && e.PropertyName == "Info")
             {
-                // TODO: これは遅いかも
-                //this.RaisePropertyChanged("ParticipantList");
                 ParticipantUpdated(
                     CollectionOperation.CollectionReplace,
                     participant, false);

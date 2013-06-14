@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Configuration;
 using System.ComponentModel;
+
+using Ragnarok.Utility;
 
 namespace VoteSystem.Client
 {
@@ -57,22 +58,57 @@ namespace VoteSystem.Client
         /// <summary>
         /// データ読み込み後、UserIdが初期値なら値を設定します。
         /// </summary>
-        private void Settings_SettingsLoaded(object sender, EventArgs e)
+        protected override void OnSettingsLoaded(object sender, SettingsLoadedEventArgs e)
         {
+            base.OnSettingsLoaded(sender, e);
+
             if (AS_UserId == Guid.Empty)
             {
                 AS_UserId = Guid.NewGuid();
             }
 
+            if (AS_NicoLiveAttribute == null)
+            {
+                AS_NicoLiveAttribute = new LiveAttribute();
+            }
+
+            // 確認コメントはデフォルトで投稿しない設定にします。
+            AS_NicoLiveAttribute.IsPostConfirmComment = false;
+
             ValidateAndChangeProperty();
         }
 
-        /// <summary>
-        /// コンストラクタ
-        /// </summary>
-        public Settings()
+        private void AutoSave(object sender, PropertyChangedEventArgs e)
         {
-            this.SettingsLoaded += Settings_SettingsLoaded;
+            Save();
+        }
+
+        /// <summary>
+        /// プロパティ値の変更直前に呼ばれます。
+        /// </summary>
+        protected override void OnPropertyChanging(object sender, PropertyChangingEventArgs e)
+        {
+            base.OnPropertyChanging(sender, e);
+
+            if (e.PropertyName == "AS_NicoLiveAttribute" &&
+                AS_NicoLiveAttribute != null)
+            {
+                AS_NicoLiveAttribute.PropertyChanged -= AutoSave;
+            }
+        }
+
+        /// <summary>
+        /// プロパティ値の変更後に呼ばれます。
+        /// </summary>
+        protected override void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(sender, e);
+
+            if (e.PropertyName == "AS_NicoLiveAttribute" &&
+                AS_NicoLiveAttribute != null)
+            {
+                AS_NicoLiveAttribute.PropertyChanged += AutoSave;
+            }
         }
     }
 }

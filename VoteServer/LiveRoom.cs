@@ -611,7 +611,6 @@ namespace VoteSystem.Server
             this.attribute = new LiveAttribute();
             this.commenterSetList = new List<LinkedList<Commenter>>();
 
-            // TODO
             // ニコ生のルーム番号は最大でも
             // アリーナ、立ち見Ａ，Ｂ，Ｃの４つです。
             for (var i = 0; i < 4; ++i)
