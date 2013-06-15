@@ -165,7 +165,7 @@ namespace VoteSystem.Server
         }
 
         /// <summary>
-        /// 全時間から現在までの経過時間を考慮し、投票残り時間を計算します。
+        /// 全時間から現在までの経過時間を考慮し、全投票残り時間を計算します。
         /// </summary>
         private TimeSpan CalcTotalLeaveTime(TimeSpan allSpan)
         {
@@ -320,7 +320,7 @@ namespace VoteSystem.Server
             using (LazyLock())
             {
                 // 全投票の残り時間は状態変更前に取得します。
-                var leaveTime = CalcLeaveTime(TotalVoteSpan);
+                var leaveTime = CalcTotalLeaveTime(TotalVoteSpan);
 
                 VoteSpan = TimeSpan.Zero;
                 ProgressSpan = TimeSpan.Zero;

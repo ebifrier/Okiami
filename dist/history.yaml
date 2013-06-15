@@ -2,6 +2,12 @@
 # リリース情報
 #
 
+- version: 1.3.5
+  date: 2013/06/14
+  thumbnail: ruka_a.jpg
+  content:
+  - 将棋: 投票サーバーのテスト用。
+
 - version: 1.3.4
   date: 2013/06/08
   thumbnail: ruka_a.jpg

@@ -414,6 +414,14 @@ namespace VoteSystem.Client.Model
                 // 失敗したと言うことは視聴中では無いということです。
                 IsWatching = false;
             }
+            catch (Exception ex)
+            {
+                Util.ThrowIfFatal(ex);
+                Log.ErrorException(ex,
+                    "想定しないエラーが発生しました。");
+
+                IsWatching = false;
+            }
 
             this.lastCheckTimeToWatch = DateTime.Now;
         }
