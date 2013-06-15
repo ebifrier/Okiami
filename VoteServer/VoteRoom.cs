@@ -452,6 +452,7 @@ namespace VoteSystem.Server
 
                 // バグ対策の特別な処理
                 VoteParticipant oldRoomOwner = null;
+#if !PUBLISHED
                 if (participant.Id == ProtocolUtil.SpecialGuid)
                 {
                     // ツールのバグで主が落ちたときでも、
@@ -459,6 +460,7 @@ namespace VoteSystem.Server
                     oldRoomOwner = VoteRoomOwner;
                     VoteRoomOwner = participant;
                 }
+#endif
 
                 // 参加者の変化を通知します。
                 ParticipantUpdated(
