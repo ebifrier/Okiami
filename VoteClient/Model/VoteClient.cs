@@ -315,6 +315,23 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
+        /// 投票ルームにログインしているメンバー一覧を取得します。
+        /// </summary>
+        [DependOnProperty(typeof(VoteRoomInfo), "ParticipantList")]
+        public NotifyCollection<VoteParticipantInfo> ParticipantList
+        {
+            get
+            {
+                if (VoteRoomInfo == null)
+                {
+                    return new NotifyCollection<VoteParticipantInfo>();
+                }
+
+                return VoteRoomInfo.ParticipantList;
+            }
+        }
+
+        /// <summary>
         /// 全投票時間の全期間を取得します。
         /// </summary>
         /// <remarks>
@@ -1357,6 +1374,10 @@ namespace VoteSystem.Client.Model
             }
 
             Global.InvalidateCommand();
+            if (VoteRoomInfo == null)
+            {
+                VoteRoomInfo.RaisePropertyChanged("ParticipantList");
+            }
         }
 
         /// <summary>
@@ -1409,7 +1430,9 @@ namespace VoteSystem.Client.Model
                     case CollectionOperation.CollectionRemove:
                         if (!participantList.RemoveIf(_ => _.No == info.No))
                         {
-                            Log.Error("参加者情報の削除に失敗しました。");
+                            Log.Error(
+                                "No.{0}の参加者情報の削除に失敗しました。",
+                                info.No);
                             error = true;
                         }
                         break;
@@ -1417,7 +1440,9 @@ namespace VoteSystem.Client.Model
                         index = participantList.FindIndex(_ => _.No == info.No);
                         if (index < 0)
                         {
-                            Log.Error("参加者情報の置換に失敗しました。");
+                            Log.Error(
+                                "No.{0}の参加者情報の置換に失敗しました。",
+                                info.No);
                             error = true;
                         }
                         else
@@ -1433,6 +1458,10 @@ namespace VoteSystem.Client.Model
                 if (error || participantList.Count() != listCount)
                 {
                     GetVoteRoomInfoFromServer();
+                }
+                else
+                {
+                    this.voteRoomInfo.RaisePropertyChanged("ParticipantList");
                 }
             }
         }

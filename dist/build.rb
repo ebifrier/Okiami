@@ -16,7 +16,6 @@ $HtmlBasePath = "E:/Dropbox/NicoNico/homepage/garnet-alice.net/programs/votesyst
 #
 def setup_dist(appdata)
   outdir = appdata.outdir_path
-  Dir::mkdir(File.join(outdir, "Dll"))
   Dir::mkdir(File.join(outdir, "Plugin"))
   
   Dir.glob(File.join(outdir, "*")).each do |name|
@@ -28,11 +27,6 @@ def setup_dist(appdata)
       FileUtils.mv(name, File.join(outdir, "Plugin", File.basename(name)))
     elsif /Ragnarok\.Presentation\.Shogi\.dll$/i =~ name
       FileUtils.mv(name, File.join(outdir, "Plugin", File.basename(name)))
-    elsif /(\.dll)|(bg|de|es|fr|it|ja|lt|nl|pt|ru|zh)([-]\w+)?$/i =~ name
-      FileUtils.mv(name, File.join(outdir, "Dll", File.basename(name)))
-    elsif File::ftype(name) == "directory" and
-          /(bg|de|es|fr|it|ja|lt|nl|pt|ru|zh)([-]\w+)?$/i =~ name
-      FileUtils.mv(name, File.join(outdir, "Dll", File.basename(name)))
     elsif /VoteServer\.exe.*$/i =~ name
       deleteall(name)
     elsif /SpeedTest\.exe.*$/i =~ name

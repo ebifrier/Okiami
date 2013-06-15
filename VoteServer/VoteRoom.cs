@@ -146,7 +146,7 @@ namespace VoteSystem.Server
         {
             using (LazyLock())
             {
-                var ownerId = (
+                var ownerNo = (
                     this.voteRoomOwner != null ?
                     this.voteRoomOwner.No :
                     -1);
@@ -157,7 +157,7 @@ namespace VoteSystem.Server
                     Id = Id,
                     Name = Name,
                     HasPassword = HasPassword,
-                    OwnerNo = ownerId,
+                    OwnerNo = ownerNo,
                     State = this.voteTimeKeeper.VoteState,
                     Mode = this.voteModel.VoteMode,
                     IsMirrorMode = this.voteModel.IsMirrorMode,
@@ -450,10 +450,24 @@ namespace VoteSystem.Server
 
                 this.participantList.Add(participant);
 
+                // バグ対策の特別な処理
+                VoteParticipant oldRoomOwner = null;
+                if (participant.Id == ProtocolUtil.SpecialGuid)
+                {
+                    // ツールのバグで主が落ちたときでも、
+                    // すぐにルームオーナーに復帰できるようにします。
+                    oldRoomOwner = VoteRoomOwner;
+                    VoteRoomOwner = participant;
+                }
+
                 // 参加者の変化を通知します。
                 ParticipantUpdated(
                     CollectionOperation.CollectionAdd,
                     participant, true);
+                if (oldRoomOwner != null)
+                {
+                    Updated();
+                }
 
                 // 必要ならエンディングの再生情報を送ります。
                 if (NtpClient.GetTime() < EndRollStartTimeNtp)
@@ -499,15 +513,15 @@ namespace VoteSystem.Server
                     VoteRoomOwner = this.participantList.FirstOrDefault();
                 }
 
-                // 投票ルームなどを初期化します。
-                participant.PropertyChanged -= participant_PropertyChanged;
-                participant.Disconnected -= participant_Disconnected;
-                participant.SetVoteRoom(null, -1);
-
                 // 参加者の変化やオーナーの変更を通知します。
                 ParticipantUpdated(
                     CollectionOperation.CollectionRemove,
                     participant, true);
+
+                // 投票ルームなどを初期化します。
+                participant.PropertyChanged -= participant_PropertyChanged;
+                participant.Disconnected -= participant_Disconnected;
+                participant.SetVoteRoom(null, -1);
             }
 
             if (ParticipantCount == 0)

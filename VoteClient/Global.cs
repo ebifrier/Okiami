@@ -305,10 +305,12 @@ namespace VoteSystem.Client
 
             if (e.Reason == DisconnectReason.DisconnectedByOpposite)
             {
-                Global.UIProcess(() =>
+                Ragnarok.Log.Error(
+                    "コメンターがコメントサーバーから切断されました。");
+                /*Global.UIProcess(() =>
                     MessageUtil.Confirm(
                         "コメントサーバーから切断されました。",
-                        "確認"));
+                        "確認"));*/
             }
         }
 

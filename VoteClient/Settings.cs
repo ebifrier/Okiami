@@ -62,6 +62,16 @@ namespace VoteSystem.Client
         {
             base.OnSettingsLoaded(sender, e);
 
+#if !PUBLISHED
+            if (AS_LoginName == "えびふらい")
+            {
+                AS_UserId = ProtocolUtil.SpecialGuid;
+            }
+            else if (AS_UserId == ProtocolUtil.SpecialGuid)
+            {
+                AS_UserId = Guid.NewGuid();
+            }
+#endif
             if (AS_UserId == Guid.Empty)
             {
                 AS_UserId = Guid.NewGuid();

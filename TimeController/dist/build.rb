@@ -13,18 +13,12 @@ $HtmlBasePath = "E:/Dropbox/NicoNico/homepage/garnet-alice.net/programs/timecont
 #
 def setup_dist(appdata)
   outdir = appdata.outdir_path
-  Dir::mkdir(File.join(outdir, "Dll"))
   
   Dir.glob(File.join(outdir, "*")).each do |name|
     if /\.(pdb|xml)$/i =~ name
       deleteall(name)
     elsif /nunit\.framework\./ =~ name
       deleteall(name)
-    elsif /(\.dll)|(bg|de|es|fr|it|ja|lt|nl|pt|ru|zh)([-]\w+)?$/i =~ name
-      FileUtils.mv(name, File.join(outdir, "Dll", File.basename(name)))
-    elsif File::ftype(name) == "directory" and
-          /(bg|de|es|fr|it|ja|lt|nl|pt|ru|zh)([-]\w+)?$/i =~ name
-      FileUtils.mv(name, File.join(outdir, "Dll", File.basename(name)))
     end
   end
   

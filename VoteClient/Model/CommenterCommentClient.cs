@@ -266,6 +266,12 @@ namespace VoteSystem.Client.Model
 
                     // 状態の更新を行います。
                     ResetState(CommentClientState.Connect);
+
+                    /*if (CommentClient != null)
+                    {
+                        CommentClient.Disconnected -= commentClient_Disconnected;
+                        CommentClient.Disconnect();
+                    }*/
                     CommentClient = commentClient;
 
                     SendConnectedCommand();
@@ -294,14 +300,6 @@ namespace VoteSystem.Client.Model
                     State != CommentClientState.Error)
                 {
                     return;
-                }
-
-                // マルチスレッドのことも一応考えて、ローカル変数にコピーしています。
-                var commentClient = CommentClient;
-                if (commentClient != null)
-                {
-                    commentClient.Disconnected -= commentClient_Disconnected;
-                    commentClient.Disconnect();
                 }
 
                 // 接続待ち状態に移行します。
@@ -412,14 +410,6 @@ namespace VoteSystem.Client.Model
             catch (NicoLiveException)
             {
                 // 失敗したと言うことは視聴中では無いということです。
-                IsWatching = false;
-            }
-            catch (Exception ex)
-            {
-                Util.ThrowIfFatal(ex);
-                Log.ErrorException(ex,
-                    "想定しないエラーが発生しました。");
-
                 IsWatching = false;
             }
 

@@ -16,6 +16,14 @@ namespace VoteSystem.Protocol
     /// </summary>
     public static class ProtocolUtil
     {
+#if !PUBLISHED
+        /// <summary>
+        /// ツールが落ちても主が強制的にルームオーナーになるために使います。
+        /// </summary>
+        public static readonly Guid SpecialGuid =
+            new Guid(0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10, 0x11);
+#endif
+
         /// <summary>
         /// 全投票時間を出力するためのファイル名です。
         /// </summary>

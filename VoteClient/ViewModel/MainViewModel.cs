@@ -142,6 +142,16 @@ namespace VoteSystem.Client.ViewModel
             }
         }
 
+        /*
+        // TODO
+        [DependOnProperty(typeof(VoteClient), "ParticipantList")]
+        public CollectionView ParticipantList
+        {
+            get
+            {
+            }
+        }*/
+
         /// <summary>
         /// 中継したコメント一覧を取得します。
         /// </summary>

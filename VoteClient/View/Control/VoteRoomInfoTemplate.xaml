@@ -156,8 +156,7 @@
                     
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <VirtualizingStackPanel Orientation="Horizontal"
-                                                        DataContext="{Binding ParticipantList}" />
+                                <VirtualizingStackPanel Orientation="Horizontal" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
