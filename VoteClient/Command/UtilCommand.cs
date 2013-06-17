@@ -141,7 +141,7 @@ namespace VoteSystem.Client.Command
 
             for (var i = 0; i < 100; ++i)
             {
-                var client = new Model.VoteClient(false)
+                var client = new Model.VoteClient(null)
                 {
                     IsShowErrorMessage = false,
                 };

@@ -1,3 +1,21 @@
+2013-06-18  - Ver 1.4.5.2
+
+	* PluginShogi/View/MainMenu.xaml: コメントの投稿ボタンを削除しました。
+	変化送信用のボタンですが設定などが分かりにくいためです。
+	* PluginShogi/View/MainWindow.xaml: エンディングモードにするとツールバ
+	ー部分がちらつくため、いくつかのコントロールをStackPanelでまとめました。
+	* PluginShogi/View/ShogiEndRollControl.xaml: 将棋盤の拡大縮小が中心から
+	行われるようにしました。
+	* VoteClient/Model/CommenterManager.cs: コメンター一覧や投稿コメント一
+	覧の更新をUIスレッド上で行うようにしました。NotifyCollectionで扱ってい
+	るためです。
+	* VoteClient/Model/MainModel.cs: CommenterManagerをVoteClientの管轄から
+	、このオブジェクトの管轄に移動しました。
+	* VoteClient/Model/VoteClient.cs: CommenterManagerの管理をやめました。
+	* VoteProtocol/View/EndingControl.xaml: ウィンドウサイズをガイドするた
+	めの、枠を画面上に表示するようにしました。
+	* VoteServer/LiveRoom.cs: コメンターの最大数を指定するようにしました。
+
 2013-06-16  - Ver 1.4.5.1
 
 	* VoteSystem/TimeController/app.config: dllをDllディレクトリに移動する

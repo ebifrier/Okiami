@@ -3,20 +3,26 @@
                     xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
                     xmlns:l="clr-namespace:VoteSystem.Protocol.View">    
     <ControlTemplate x:Key="mainControl">
-        <Grid>
+        <Grid Visibility="{TemplateBinding Visibility}"
+              Opacity="{TemplateBinding Opacity}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            
-            <Viewbox Grid.Row="0" Grid.Column="1"
+
+            <Grid.Background>
+                <ImageBrush ImageSource="/VoteProtocol;component/Resources/Image/size_guide.png"
+                            Stretch="UniformToFill" />
+            </Grid.Background>
+
+            <Viewbox Grid.Row="0" Grid.Column="2"
                      x:Name="PART_Viewbox"
                      Stretch="Uniform"
-                     Visibility="Collapsed"
                      HorizontalAlignment="Left"
                      VerticalAlignment="Bottom">
                 <l:AnalogmaControl HorizontalAlignment="Left"

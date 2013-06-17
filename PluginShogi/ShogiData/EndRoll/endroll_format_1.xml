@@ -209,7 +209,7 @@
     <Format ColumnSpan="2" Text="機材協力" FontWeight="Bold" />
   </Line>
   <Line>
-    <Format ColumnSpan="2" Text="スタスタ" />
+    <Format ColumnSpan="2" Text="すたすた" />
   </Line>
 
   <Line Count="3" />
@@ -225,7 +225,7 @@
     <Format ColumnSpan="2" Text="エヌる" />
   </Line>
   <Line>
-    <Format ColumnSpan="2" Text="スタスタ" />
+    <Format ColumnSpan="2" Text="すたすた" />
   </Line>
 
   <Line Count="7" />

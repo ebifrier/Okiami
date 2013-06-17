@@ -18,17 +18,20 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <!--<UserControl.Background>
-        <ImageBrush ImageSource="pack://application:,,,/PluginShogi;component/Resources/Image/shogiban_image.png" />
-    </UserControl.Background>-->
-
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="80" />
+        </Grid.ColumnDefinitions>
+        
         <!-- 動画は16:9で作り、必要なら左右を切り捨てて再生する。-->
-        <Viewbox Stretch="UniformToFill"
+        <Viewbox Grid.ColumnSpan="3"
+                 Stretch="UniformToFill"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
                  IsHitTestVisible="False">
-            <Canvas Width="640" Height="360">
+            <Canvas Width="640" Height="360">                
                 <Border Width="640" Height="360">
                     <Border.Background>
                         <DrawingBrush x:Name="MovieBrush"
@@ -49,16 +52,18 @@
                 </Border>
 
                 <Grid Canvas.Left="370" Canvas.Top="225"
-                        Width="190" Height="120"
-                        Opacity="0.0"
-                        x:Name="ShogiGrid">
+                      Width="190" Height="120"
+                      Opacity="0.0" HorizontalAlignment="Center"
+                      x:Name="ShogiGrid">
                     <p:VisualBackground x:Name="ShogiBackground" />
                 
                     <p:ShogiControl x:Name="ShogiControl"
                                     PieceImage="{Binding KomaImage}"
                                     BanBrush="{StaticResource banBrush}"
                                     PieceBoxBrush="{StaticResource komadaiBrush}"
-                                    IsLeaveTimeVisible="False" />
+                                    IsLeaveTimeVisible="False"
+                                    BlackPlayerName=""
+                                    WhitePlayerName="" />
                 </Grid>
 
                 <!-- Canvas.Left=-80 が中心位置
@@ -71,11 +76,10 @@
                                   Background="Transparent"
                                   IsUpdateBackground="False"
                                   AutoUpdate="False" />
+
+                <s:EndingControl Width="640" Height="360"
+                                 x:Name="Ending" />
             </Canvas>
         </Viewbox>
-
-        <s:EndingControl HorizontalAlignment="Left"
-                         VerticalAlignment="Bottom"
-                         x:Name="Ending" />
     </Grid>
 </UserControl>

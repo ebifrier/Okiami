@@ -75,6 +75,10 @@ namespace VoteSystem.Server
     public class LiveRoom : ILogObject, IDisposable
     {
         /// <summary>
+        /// コメンターの最大数です。全部屋の合計値がこれを超えないようにします。
+        /// </summary>
+        public const int CommenterMaxCount = 100;
+        /// <summary>
         /// ミラーコメントの印（無幅空白）です。
         /// </summary>
         public const char MirrorCommentMark = ProtocolUtil.MirrorCommentMark;
@@ -586,6 +590,13 @@ namespace VoteSystem.Server
                     // 既に放送開始通知を送っていたらもう送りません。
                     if (alreadySentNotifySet.Contains(participant) ||
                         !participant.IsUseAsNicoCommenter)
+                    {
+                        continue;
+                    }
+
+                    // コメンターの最大数を超えないようにします。
+                    var count = this.commenterSetList.Sum(_ => _.Count());
+                    if (count > CommenterMaxCount)
                     {
                         continue;
                     }

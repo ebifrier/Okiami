@@ -46,15 +46,6 @@ namespace VoteSystem.Client.Command
                 "各放送サイトから切断します。",
                 "DisconnectToLive",
                 typeof(Window));
-
-        /// <summary>
-        /// コメンターに接続用の放送を追加します。(テスト用)
-        /// </summary>
-        public readonly static ICommand AddCommenter =
-            new RoutedUICommand(
-                "コメンターに接続用の放送を追加します。",
-                "AddCommenter",
-                typeof(Window));
     }
 
     /// <summary>
@@ -82,12 +73,6 @@ namespace VoteSystem.Client.Command
                 new CommandBinding(
                     Commands.DisconnectToLive,
                     ExecuteDisconnectToLive,
-                    CanExecuteCommand));
-
-            element.CommandBindings.Add(
-                new CommandBinding(
-                    Commands.AddCommenter,
-                    ExecuteAddCommenter,
                     CanExecuteCommand));
         }
 
@@ -171,42 +156,6 @@ namespace VoteSystem.Client.Command
 
             MessageUtil.Message(
                 "放送からの切断に成功しました ♪(*^-^)/⌒☆ﾞ");
-        }
-
-        /// <summary>
-        /// コメンターに接続用の放送を追加します。
-        /// </summary>
-        public static void ExecuteAddCommenter(object sender,
-                                               ExecutedRoutedEventArgs e)
-        {
-            var liveUrl = (string)e.Parameter;
-            if (string.IsNullOrEmpty(liveUrl))
-            {
-                return;
-            }
-
-            var commenterManager = Global.VoteClient.CommenterManager;
-            if (commenterManager == null)
-            {
-                return;
-            }
-
-            try
-            {
-                var liveNo = LiveUtil.GetLiveId(liveUrl);
-
-                var liveData = new Protocol.LiveData(
-                    Protocol.LiveSite.NicoNama,
-                    string.Format("lv{0}", liveNo));
-
-                commenterManager.NotifyNewLive(liveData);
-            }
-            catch (Exception ex)
-            {
-                MessageUtil.ErrorMessage(ex,
-                    "コメンターの追加に失敗しました (T∇T)");
-                return;
-            }
         }
     }
 }

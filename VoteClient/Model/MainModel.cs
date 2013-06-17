@@ -30,6 +30,7 @@ namespace VoteSystem.Client.Model
     {
         private readonly VoteClient voteClient;
         private readonly NicoClient nicoClient;
+        private readonly CommenterManager commenterManager;
 
         /// <summary>
         /// 投票用のクライアントを取得します。
@@ -45,6 +46,14 @@ namespace VoteSystem.Client.Model
         public NicoClient NicoClient
         {
             get { return this.nicoClient; }
+        }
+
+        /// <summary>
+        /// コメンター管理用のオブジェクトを取得します。
+        /// </summary>
+        public CommenterManager CommenterManager
+        {
+            get { return this.commenterManager; }
         }
 
         /// <summary>
@@ -420,7 +429,9 @@ namespace VoteSystem.Client.Model
                 "IsMirrorMode",
                 (_, __) => UpdateVoteMode());
 
-            this.voteClient = new VoteClient(true);
+            this.commenterManager = new CommenterManager();
+
+            this.voteClient = new VoteClient(this.commenterManager);
             this.voteClient.NotificationReceived += HandleNotification;
             this.voteClient.PropertyChanged += voteClient_PropertyChanged;
             this.voteClient.StartLeaveTimeTimer();

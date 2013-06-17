@@ -2,6 +2,11 @@
 # リリース情報
 #
 
+- version: 1.3.7
+  date: 2013/06/17
+  content:
+  - テスト用の更新。
+
 - version: 1.3.6
   date: 2013/06/15
   thumbnail: suika_odoroku.jpg

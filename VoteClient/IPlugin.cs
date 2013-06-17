@@ -198,6 +198,7 @@ namespace VoteSystem.Client
                 // Plugin/xxx.dllからプラグインを読み込みます。
                 return Directory
                     .EnumerateFiles(pluginPath, "*.dll")
+                    .Where(_ => Path.GetFileName(_).StartsWith("Plugin"))
                     .Select(_ => LoadPlugin(_))
                     .Where(plugin => plugin != null)
                     .ToList();

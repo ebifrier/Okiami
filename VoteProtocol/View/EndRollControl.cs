@@ -577,6 +577,8 @@ namespace VoteSystem.Protocol.View
         {
             State = EndRollState.Stop;
             CurrentPos = 0.0;
+
+            UpdateScreen(TimeSpan.Zero);
         }
 
         /// <summary>

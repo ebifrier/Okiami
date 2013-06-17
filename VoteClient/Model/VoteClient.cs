@@ -34,9 +34,9 @@ namespace VoteSystem.Client.Model
         private readonly ReentrancyLock leaveTimeTimerLock = new ReentrancyLock();
         private Timer leaveTimeTimer;
         private readonly CommenterManager commenterManager;
-        private PbConnection conn = null;
+        private PbConnection conn;
         private bool showErrorMessage = true;        
-        private VoteRoomInfo voteRoomInfo = null;
+        private VoteRoomInfo voteRoomInfo;
         private int participantNo = -1;
         private VoteResult voteResult = new VoteResult();
         private DateTime roomInfoLastUpdated = DateTime.MinValue;
@@ -62,6 +62,17 @@ namespace VoteSystem.Client.Model
                 var e = new NotificationEventArgs(notification);
 
                 Util.CallEvent(() => handler(this, e));
+            }
+        }
+
+        /// <summary>
+        /// コメンターの管理用オブジェクトを取得します。
+        /// </summary>
+        public CommenterManager CommenterManager
+        {
+            get
+            {
+                return this.commenterManager;
             }
         }
 
@@ -461,49 +472,6 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
-        /// コメンターの管理用オブジェクトを取得します。
-        /// </summary>
-        public CommenterManager CommenterManager
-        {
-            get
-            {
-                return this.commenterManager;
-            }
-        }
-
-        /// <summary>
-        /// コメンターへの接続放送一覧を取得します。
-        /// </summary>
-        public NotifyCollection<CommenterCommentClient> CommenterClientList
-        {
-            get
-            {
-                if (this.commenterManager == null)
-                {
-                    return null;
-                }
-
-                return this.commenterManager.CommenterClientList;
-            }
-        }
-
-        /// <summary>
-        /// 中継したコメント一覧を取得します。
-        /// </summary>
-        public NotifyCollection<PostCommentData> PostCommentList
-        {
-            get
-            {
-                if (this.commenterManager == null)
-                {
-                    return null;
-                }
-
-                return this.commenterManager.PostCommentList;
-            }
-        }
-
-        /// <summary>
         /// 投票の残り時間を取得します。
         /// </summary>
         [DependOnProperty(typeof(VoteRoomInfo), "State")]
@@ -637,8 +605,7 @@ namespace VoteSystem.Client.Model
             {
                 if (!IsConnected)
                 {
-                    throw new InvalidOperationException(
-                        "サーバーに接続していません。");
+                    return;
                 }
 
                 this.conn.SendRequest(request, handler);
@@ -660,8 +627,7 @@ namespace VoteSystem.Client.Model
             {
                 if (!IsConnected)
                 {
-                    throw new InvalidOperationException(
-                        "サーバーに接続していません。");
+                    return;
                 }
 
                 this.conn.SendCommand(command);
@@ -1500,51 +1466,7 @@ namespace VoteSystem.Client.Model
             OnNotificationReceived(notification);
         }
 
-        #region コメンター
-        /// <summary>
-        /// 新放送の接続が始まったときに受信します。
-        /// </summary>
-        private void HandleNotifyNewLiveCommand(object sender,
-            PbCommandEventArgs<NotifyNewLiveCommand> e)
-        {
-            if (this.commenterManager == null)
-            {
-                return;
-            }
-
-            this.commenterManager.NotifyNewLive(e.Command.Live);
-        }
-
-        /// <summary>
-        /// 放送が切断されたときに呼ばれます。
-        /// </summary>
-        private void HandleNotifyClosedLiveCommand(object sender,
-            PbCommandEventArgs<NotifyClosedLiveCommand> e)
-        {
-            if (this.commenterManager == null)
-            {
-                return;
-            }
-
-            this.commenterManager.NotifyClosedLive(e.Command.Live);
-        }
-
-        /// <summary>
-        /// 放送が切断されたときに呼ばれます。
-        /// </summary>
-        private void HandleNotificationForPostCommand(object sender,
-            PbCommandEventArgs<NotificationForPostCommand> e)
-        {
-            if (this.commenterManager == null)
-            {
-                return;
-            }
-
-            this.commenterManager.PostComment(
-                e.Command.ToLive,
-                e.Command.Notification);
-        }
-        #endregion
+        
         #endregion
 
         /// <summary>
@@ -1677,9 +1599,10 @@ namespace VoteSystem.Client.Model
             conn.AddCommandHandler<SendVoteResultCommand>(HandleVoteResultCommand);
             conn.AddCommandHandler<NotificationCommand>(HandleNotificationCommand);
 
-            conn.AddCommandHandler<NotifyNewLiveCommand>(HandleNotifyNewLiveCommand);
-            conn.AddCommandHandler<NotifyClosedLiveCommand>(HandleNotifyClosedLiveCommand);
-            conn.AddCommandHandler<NotificationForPostCommand>(HandleNotificationForPostCommand);
+            if (this.commenterManager != null)
+            {
+                this.commenterManager.Attach(conn);
+            }
 
             Plugin_ConnectHandlers(conn);
             return conn;
@@ -1738,15 +1661,12 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public VoteClient(bool isUseCommenterManager)
+        public VoteClient(CommenterManager commenterManager)
         {
             Global.PluginLoaded +=
                 (sender, e) => Plugin_ConnectHandlers(this.conn);
             
-            if (isUseCommenterManager)
-            {
-                this.commenterManager = new CommenterManager();
-            }
+            this.commenterManager = commenterManager;
         }
 
         /// <summary>

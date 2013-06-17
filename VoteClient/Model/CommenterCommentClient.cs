@@ -158,7 +158,6 @@ namespace VoteSystem.Client.Model
             var commentClient = CommentClient;
             if (commentClient == null)
             {
-                // 何で！？
                 return;
             }
 
@@ -267,11 +266,11 @@ namespace VoteSystem.Client.Model
                     // 状態の更新を行います。
                     ResetState(CommentClientState.Connect);
 
-                    /*if (CommentClient != null)
+                    if (CommentClient != null)
                     {
                         CommentClient.Disconnected -= commentClient_Disconnected;
                         CommentClient.Disconnect();
-                    }*/
+                    }
                     CommentClient = commentClient;
 
                     SendConnectedCommand();

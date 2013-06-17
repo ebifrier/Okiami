@@ -7,6 +7,7 @@
              xmlns:c="clr-namespace:VoteSystem.Client.Command"
              xmlns:m="clr-namespace:VoteSystem.Client.Model"
              xmlns:vc="clr-namespace:VoteSystem.Client.View.Control"
+             xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d" 
              d:DesignHeight="395" d:DesignWidth="300">
     <UserControl.Resources>
@@ -21,6 +22,15 @@
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="HorizontalAlignment" Value="Center" />
             </Style>
+
+            <!-- 投稿したコメントリストは時刻順に並べます。-->
+            <CollectionViewSource x:Key="postCommentView"
+                                  Source="{Binding PostCommentList}">
+                <CollectionViewSource.SortDescriptions>
+                    <cm:SortDescription PropertyName="Timestamp"
+                                        Direction="Descending" />
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
 
             <!-- 中継リストを表示します。-->
             <ControlTemplate x:Key="userIdListTemplate">
@@ -89,7 +99,7 @@
 
                     <GroupBox Grid.Row="2"
                               Header="中継したコメント一覧">
-                        <ListView ItemsSource="{Binding PostCommentList}"
+                        <ListView ItemsSource="{Binding Source={StaticResource postCommentView}}"
                                   Height="80">
                             <ListView.View>
                                 <GridView>

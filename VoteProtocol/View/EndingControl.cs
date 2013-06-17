@@ -252,6 +252,9 @@ namespace VoteSystem.Protocol.View
             DefaultStyleKeyProperty.OverrideMetadata(
                 typeof(EndingControl),
                 new FrameworkPropertyMetadata(typeof(EndingControl)));
+            VisibilityProperty.OverrideMetadata(
+                typeof(EndingControl),
+                new FrameworkPropertyMetadata(Visibility.Hidden));
         }
 
         /// <summary>
@@ -321,11 +324,11 @@ namespace VoteSystem.Protocol.View
             {
                 // エンディング準備前、または再生後なら
                 // アナロ熊を隠します。
-                this.viewbox.Visibility = Visibility.Hidden;
+                Visibility = Visibility.Hidden;
             }
             else
             {
-                this.viewbox.Visibility = Visibility.Visible;
+                Visibility = Visibility.Visible;
 
                 var leaveTime = StartTimeNtp - NtpClient.GetTime();
                 this.analogma.LeaveTime = leaveTime;                
@@ -334,7 +337,7 @@ namespace VoteSystem.Protocol.View
                 if (leaveTime > AnalogmaHideInterval ||
                     leaveTime < -AnalogmaHideInterval)
                 {
-                    this.viewbox.Opacity = 1.0;
+                    Opacity = 1.0;
                 }
                 else
                 {
@@ -342,7 +345,7 @@ namespace VoteSystem.Protocol.View
                     var rate = time.TotalSeconds /
                         AnalogmaHideInterval.TotalSeconds;
 
-                    this.viewbox.Opacity = MathEx.InterpEaseOut(1.0, 0.0, rate);
+                    Opacity = MathEx.InterpEaseOut(1.0, 0.0, rate);
                 }
 
                 // 数分前になったらだんだん大きくします。

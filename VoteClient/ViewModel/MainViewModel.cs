@@ -142,43 +142,6 @@ namespace VoteSystem.Client.ViewModel
             }
         }
 
-        /*
-        // TODO
-        [DependOnProperty(typeof(VoteClient), "ParticipantList")]
-        public CollectionView ParticipantList
-        {
-            get
-            {
-            }
-        }*/
-
-        /// <summary>
-        /// 中継したコメント一覧を取得します。
-        /// </summary>
-        [DependOnProperty(typeof(VoteClient), "PostCommentList")]
-        public CollectionView PostCommentList
-        {
-            get
-            {
-                var voteClient = this.baseModel.VoteClient;
-                if (voteClient == null)
-                {
-                    return null;
-                }
-
-                var view = (CollectionView)
-                    CollectionViewSource.GetDefaultView(
-                        voteClient.PostCommentList);
-
-                view.SortDescriptions.Add(
-                    new SortDescription(
-                        "Timestamp",
-                        ListSortDirection.Descending));
-
-                return view;
-            }
-        }
-
         private void this_PropertyChanged(object sender,
                                           PropertyChangedEventArgs e)
         {
@@ -259,6 +222,7 @@ namespace VoteSystem.Client.ViewModel
 
             this.AddDependModel(model.NicoClient);
             this.AddDependModel(model.VoteClient);
+            this.AddDependModel(model.CommenterManager);
         }
     }
 }

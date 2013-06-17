@@ -209,7 +209,7 @@ namespace VoteSystem.Client.ViewModel
         /// </summary>
         public VoteRoomInfoViewModel()
         {
-            this.voteClient = new VoteClient(false)
+            this.voteClient = new VoteClient(null)
             {
                 IsShowErrorMessage = false,
             };

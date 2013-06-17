@@ -6,11 +6,13 @@ using System.Text;
 using System.Threading;
 
 using Ragnarok;
+using Ragnarok.Net.ProtoBuf;
 using Ragnarok.ObjectModel;
 
 namespace VoteSystem.Client.Model
 {
     using VoteSystem.Protocol;
+    using VoteSystem.Protocol.Commenter;
 
     /// <summary>
     /// 放送への接続/切断などを指示します。
@@ -117,6 +119,8 @@ namespace VoteSystem.Client.Model
     /// そのキューを別スレッドから定期的に処理していきます。
     /// ネットワークの接続処理に想像以上の時間がかかることがあるため、
     /// このようにして本スレッドの遅延をなるべく少なくしています。
+    /// また、NotifyCollectionを本スレッド以外から
+    /// 触らせないためにも必要な処理です。
     /// </remarks>
     public sealed class CommenterManager
     {
@@ -146,10 +150,45 @@ namespace VoteSystem.Client.Model
 
         #region サーバーからの要求処理
         /// <summary>
-        /// 放送が始まったときに呼ばれます。
+        /// コマンドの処理ハンドラを登録します。
         /// </summary>
-        public void NotifyNewLive(LiveData liveData)
+        public void Attach(PbConnection conn)
         {
+            if (conn == null)
+            {
+                return;
+            }
+
+            conn.AddCommandHandler<NotifyNewLiveCommand>(
+                HandleNotifyNewLiveCommand);
+            conn.AddCommandHandler<NotifyClosedLiveCommand>(
+                HandleNotifyClosedLiveCommand);
+            conn.AddCommandHandler<NotificationForPostCommand>(
+                HandleNotificationForPostCommand);
+        }
+
+        /// <summary>
+        /// コマンドの処理ハンドラを登録します。
+        /// </summary>
+        public void Detach(PbConnection conn)
+        {
+            if (conn == null)
+            {
+                return;
+            }
+
+            conn.RemoveHandler<NotifyNewLiveCommand>();
+            conn.RemoveHandler<NotifyClosedLiveCommand>();
+            conn.RemoveHandler<NotificationForPostCommand>();
+        }
+
+        /// <summary>
+        /// 新放送の接続が始まったときに受信します。
+        /// </summary>
+        private void HandleNotifyNewLiveCommand(object sender,
+            PbCommandEventArgs<NotifyNewLiveCommand> e)
+        {
+            var liveData = e.Command.Live;
             if (liveData == null || !liveData.Validate())
             {
                 return;
@@ -168,10 +207,12 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
-        /// 放送が終了したときに呼ばれます。
+        /// 放送が切断されたときに呼ばれます。
         /// </summary>
-        public void NotifyClosedLive(LiveData liveData)
+        private void HandleNotifyClosedLiveCommand(object sender,
+            PbCommandEventArgs<NotifyClosedLiveCommand> e)
         {
+            var liveData = e.Command.Live;
             if (liveData == null || !liveData.Validate())
             {
                 return;
@@ -190,15 +231,18 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
-        /// 指定のIDの放送に指定の内容のコメントを投稿します。
+        /// 放送が切断されたときに呼ばれます。
         /// </summary>
-        public void PostComment(LiveData toLive, Notification notification)
+        private void HandleNotificationForPostCommand(object sender,
+            PbCommandEventArgs<NotificationForPostCommand> e)
         {
+            var notification = e.Command.Notification;
             if (notification == null || !notification.Validate())
             {
                 return;
             }
 
+            var toLive = e.Command.ToLive;
             if (toLive == null || !toLive.Validate())
             {
                 return;
@@ -233,10 +277,10 @@ namespace VoteSystem.Client.Model
                 return;
             }
 
-            lock (this.commenterClientList)
-            {
-                this.commenterClientList.Add(commentClient);
-            }
+            commentClient.CommentPost += CommenterClient_CommentPost;
+
+            Global.UIProcess(() =>
+                this.commenterClientList.Add(commentClient));
         }
 
         /// <summary>
@@ -253,18 +297,17 @@ namespace VoteSystem.Client.Model
                 return;
             }
 
-            lock (this.commenterClientList)
+            // リストの変更は必ずUIスレッド上で行います。
+            Global.UIProcess(() =>
             {
-                // コメンターの削除を行います。
                 if (!this.commenterClientList.Remove(commentClient))
                 {
                     return;
                 }
-            }
 
-            // 放送の切断処理を行います。
-            commentClient.CommentPost -= CommenterClient_CommentPost;
-            commentClient.Delete();
+                commentClient.CommentPost -= CommenterClient_CommentPost;
+                commentClient.Delete();
+            });
         }
 
         /// <summary>
@@ -277,11 +320,18 @@ namespace VoteSystem.Client.Model
                 return null;
             }
 
-            lock (this.commenterClientList)
+            // この処理の最中にリストが更新される可能性があるため、
+            // 一応伝統的なやり方を使います。
+            for (var i = 0; i < this.commenterClientList.Count(); ++i)
             {
-                return this.commenterClientList.FirstOrDefault(
-                    commentClient => commentClient.LiveId == liveId);
+                var commentClient = this.commenterClientList[i];
+                if (commentClient.LiveId == liveId)
+                {
+                    return commentClient;
+                }
             }
+
+            return null;
         }
 
         /// <summary>
@@ -289,14 +339,9 @@ namespace VoteSystem.Client.Model
         /// </summary>
         private void ClearCommentClient()
         {
-            lock (this.commenterClientList)
+            while (this.commenterClientList.Any())
             {
-                while (this.commenterClientList.Any())
-                {
-                    var commentClient = this.commenterClientList.First();
-
-                    RemoveCommentClient(commentClient);
-                }
+                RemoveCommentClient(this.commenterClientList[0]);
             }
         }
         #endregion
@@ -370,7 +415,6 @@ namespace VoteSystem.Client.Model
                         IsAllowToConnect =
                             Global.MainModel.IsNicoCommenterAutoStart,
                     };
-                    commentClient.CommentPost += CommenterClient_CommentPost;
 
                     // 放送接続待ちリストに追加します。
                     AddCommentClient(commentClient);
@@ -420,26 +464,33 @@ namespace VoteSystem.Client.Model
         /// </summary>
         private void ProcessUpdate()
         {
-            lock (this.commenterClientList)
+            CommenterCommentClient deleted = null;
+
+            for (var i = 0; i < this.commenterClientList.Count(); )
             {
-                for (var i = 0; i < this.commenterClientList.Count; )
+                var commentClient = this.commenterClientList[i];
+                if (ReferenceEquals(commentClient, deleted))
                 {
-                    var commentClient = this.commenterClientList[i];
+                    // コメンターは別スレッドでリストから外すため、
+                    // RemoveCommentClientを呼んでも削除されているとは限りません。
+                    continue;
+                }
 
-                    // 何かを処理した場合は、処理をそこで打ち切ります。
-                    // 残りは次の更新時に行います。
-                    var processed = commentClient.Update();
+                // 何かを処理した場合は、処理をそこで打ち切ります。
+                // 残りは次の更新時に行います。
+                var processed = commentClient.Update();
 
-                    // もしコメンターが削除されていたら、
-                    // リストから削除します。
-                    if (commentClient.State == CommentClientState.Deleted)
-                    {
-                        this.commenterClientList.RemoveAt(i);
-                    }
-                    else
-                    {
-                        ++i;
-                    }
+                // もしコメンターが削除されていたら、
+                // リストから削除します。
+                if (commentClient.State == CommentClientState.Deleted)
+                {
+                    RemoveCommentClient(commentClient);
+                    deleted = commentClient;
+                }
+                else
+                {
+                    ++i;
+                    deleted = null;
                 }
             }
         }

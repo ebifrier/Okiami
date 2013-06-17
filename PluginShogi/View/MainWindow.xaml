@@ -57,8 +57,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -126,25 +124,22 @@
         </Menu>
 
         <!-- ToolBarTrayの中に入れるとStretchしなくなります。-->
-        <ToolBarTray Grid.Row="1"
-                     Visibility="{Binding Settings.IsNormalMode, Mode=OneWay,
-                                          Converter={StaticResource visibilityConverterCollapsed}}">
-            <StaticResource ResourceKey="toolBar" />
-            <StaticResource ResourceKey="shogiToolBar" />
-            <StaticResource ResourceKey="numberToolBar" />
-        </ToolBarTray>
+        <StackPanel Grid.Row="1"
+                    Orientation="Vertical"
+                    Visibility="{Binding Settings.IsNormalMode, Mode=OneWay,
+                                         Converter={StaticResource visibilityConverterCollapsed}}">
+            <ToolBarTray>
+                <StaticResource ResourceKey="toolBar" />
+                <StaticResource ResourceKey="shogiToolBar" />
+                <StaticResource ResourceKey="numberToolBar" />
+            </ToolBarTray>
 
-        <ToolBar Grid.Row="2"
-                 Visibility="{Binding Settings.IsNormalMode, Mode=OneWay,
-                                      Converter={StaticResource visibilityConverterCollapsed}}"
-                 Template="{StaticResource nicoToolBar}" />
+            <!--<ToolBar Template="{StaticResource nicoToolBar}" />-->
 
-        <ToolBar Grid.Row="3"
-                 Visibility="{Binding Settings.IsNormalMode, Mode=OneWay,
-                                      Converter={StaticResource visibilityConverterCollapsed}}"
-                 Template="{StaticResource variationToolBar}" />
+            <ToolBar Template="{StaticResource variationToolBar}" />
+        </StackPanel>
 
-        <Grid Grid.Row="4" Grid.RowSpan="2"
+        <Grid Grid.Row="2" Grid.RowSpan="2"
               ContextMenu="{DynamicResource contextMenu}">
             <!-- 背景 -->
             <r:VisualBackground x:Name="background"
@@ -231,7 +226,9 @@
                 
                 <!--<Border Width="64" Height="48" Background="Red" />-->
 
-            <Viewbox Stretch="UniformToFill">
+            <Viewbox Stretch="UniformToFill"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center">
                 <v:ShogiEndRollControl x:Name="ShogiEndRoll"
                                        Width="640" Height="360"
                                        IsHitTestVisible="False" />
@@ -239,7 +236,7 @@
         </Grid>
 
         <!-- ステータスバーです。-->
-        <r:MessageStatusBar Grid.Row="5"
+        <r:MessageStatusBar Grid.Row="3"
                             x:Name="MainStatusBar" x:FieldModifier="public"
                             Background="#60000000"
                             MessageBrush="{x:Static Brushes.Beige}"
