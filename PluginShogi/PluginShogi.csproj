@@ -571,7 +571,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set OUTDIR="$(SolutionDir)bin\$(ConfigurationName)\Plugin"
+    <PostBuildEvent>set OUTDIR="$(SolutionDir)bin\$(ConfigurationName)"
 
 if exist "%25OUTDIR%25" goto skip
 mkdir "%25OUTDIR%25"
@@ -579,7 +579,7 @@ mkdir "%25OUTDIR%25"
 :skip
 copy "$(TargetPath)" "%25OUTDIR%25\$(TargetFileName)"
 copy "$(TargetDir)Ragnarok.Presentation.Shogi.dll" "%25OUTDIR%25\"
-xcopy /s /i /y "$(TargetDir)ShogiData" "%25OUTDIR%25\..\ShogiData"</PostBuildEvent>
+xcopy /s /i /y "$(TargetDir)ShogiData" "%25OUTDIR%25\ShogiData"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

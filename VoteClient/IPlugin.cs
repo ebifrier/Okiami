@@ -187,9 +187,10 @@ namespace VoteSystem.Client
             try
             {
                 var asm = Assembly.GetExecutingAssembly();
-                var pluginPath = Path.Combine(
+                /*var pluginPath = Path.Combine(
                     Path.GetDirectoryName(asm.Location),
-                    "Plugin");
+                    "Plugin");*/
+                var pluginPath = Path.GetDirectoryName(asm.Location);
                 if (!Directory.Exists(pluginPath))
                 {
                     return new List<IPlugin>();

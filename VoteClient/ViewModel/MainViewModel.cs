@@ -142,8 +142,7 @@ namespace VoteSystem.Client.ViewModel
             }
         }
 
-        /*
-        // TODO
+        /*// TODO
         [DependOnProperty(typeof(VoteClient), "ParticipantList")]
         public CollectionView ParticipantList
         {
