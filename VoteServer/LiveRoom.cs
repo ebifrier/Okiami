@@ -552,13 +552,6 @@ namespace VoteSystem.Server
         /// </summary>
         public void Close()
         {
-            var voteRoom = this.liveOwner.VoteRoom;
-            if (voteRoom != null)
-            {
-
-                return;
-            }
-
             // 登録してあるコメンターを全部削除します。
             ClearCommenter();
         }

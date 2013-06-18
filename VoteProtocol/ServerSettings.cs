@@ -17,14 +17,14 @@ namespace VoteSystem.Protocol
         /// 通信プロトコルのバージョンです。
         /// </summary>
         public static readonly PbProtocolVersion ProtocolVersion =
-            new PbProtocolVersion(2, 4, 0);
+            new PbProtocolVersion(2, 5, 0);
 
         /// <summary>
         /// 投票サーバーのアドレスです。
         /// </summary>
         public static readonly string VoteAddress =
-            //"garnet-alice.net";
-            "localhost";
+            "garnet-alice.net";
+            //"localhost";
 
         /// <summary>
         /// コメンターサーバーのアドレスです。

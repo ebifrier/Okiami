@@ -450,7 +450,7 @@ namespace VoteSystem.Client.Model
             var loginData = Global.Settings.AS_OwnerNicoLoginData;
             if (loginData != null)
             {
-                //this.nicoClient.LoginAsync(loginData);
+                this.nicoClient.LoginAsync(loginData);
             }
 
             // 放送サイトごとのリストを作成します。
