@@ -543,6 +543,37 @@ namespace VoteSystem.Protocol
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"SetLiveHeartbeatCommand")]
+  public partial class SetLiveHeartbeatCommand : global::ProtoBuf.IExtensible
+  {
+    public SetLiveHeartbeatCommand() {}
+    
+    private VoteSystem.Protocol.LiveData _LiveData;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"LiveData", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public VoteSystem.Protocol.LiveData LiveData
+    {
+      get { return _LiveData; }
+      set { _LiveData = value; }
+    }
+    private int _VisitorCount;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"VisitorCount", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int VisitorCount
+    {
+      get { return _VisitorCount; }
+      set { _VisitorCount = value; }
+    }
+    private int _CommentCount;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"CommentCount", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int CommentCount
+    {
+      get { return _CommentCount; }
+      set { _CommentCount = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"StartVoteCommand")]
   public partial class StartVoteCommand : global::ProtoBuf.IExtensible
   {

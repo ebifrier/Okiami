@@ -29,6 +29,7 @@ namespace VoteSystem.Client.Model.Live
         private readonly NicoClient nicoClient;
         private readonly CommentClient commentClient;
         private readonly AlertClient alert;
+        private readonly Timer heartbeatTimer;
 
         /// <summary>
         /// 放送に接続しているかどうかを取得します。
@@ -281,6 +282,40 @@ namespace VoteSystem.Client.Model.Live
             VoteClient.SendNotification(notification, isFromLiveOwner);
         }
 
+        private void Heartbeat_Callback(object state)
+        {
+            if (LiveData == null || !VoteClient.IsLogined)
+            {
+                return;
+            }
+
+            try
+            {
+                var heartbeat = Heartbeat.Create(
+                    this.commentClient.LiveId,
+                    this.nicoClient.CookieContainer);
+
+                // 来場者数・コメント数を投票サーバーに送ります。
+                VoteClient.SendCommand(
+                    new SetLiveHeartbeatCommand
+                    {
+                        LiveData = LiveData,
+                        CommentCount = heartbeat.CommentCount,
+                        VisitorCount = heartbeat.WatchCount,
+                    });
+            }
+            catch (NicoLiveException)
+            {
+                // ログは出しません。
+            }
+            catch (Exception ex)
+            {
+                Util.ThrowIfFatal(ex);
+                Log.ErrorException(ex,
+                    "heartbeatの取得に失敗しました。");
+            }
+        }
+
         void alert_LiveAlerted(object sender, LiveAlertedEventArgs e)
         {
             if (e.ProviderData.ProviderType != ProviderType.Community ||
@@ -340,6 +375,12 @@ namespace VoteSystem.Client.Model.Live
             this.alert = new AlertClient();
             this.alert.LiveAlerted += alert_LiveAlerted;
             this.alert.Connect();
+
+            this.heartbeatTimer = new Timer(
+                Heartbeat_Callback,
+                null,
+                TimeSpan.FromSeconds(10),
+                TimeSpan.FromMinutes(3.0));
         }
     }
 }

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
              xmlns:l="clr-namespace:VoteSystem.Client"
              xmlns:c="clr-namespace:VoteSystem.Client.Command"
              xmlns:m="clr-namespace:VoteSystem.Client.Model"
@@ -17,11 +18,6 @@
             </ResourceDictionary.MergedDictionaries>
 
             <vc:BoolToSignConverter x:Key="boolToSignConverter" />
-            
-            <Style x:Key="dataGridColumnStyle" TargetType="FrameworkElement">
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="HorizontalAlignment" Value="Center" />
-            </Style>
 
             <!-- 投稿したコメントリストは時刻順に並べます。-->
             <CollectionViewSource x:Key="postCommentView"
@@ -32,16 +28,32 @@
                 </CollectionViewSource.SortDescriptions>
             </CollectionViewSource>
 
+            <Style x:Key="userIdListStyle" TargetType="DataGrid">
+                <Setter Property="ItemsSource" Value="{Binding CommenterClientList}" />
+                <Setter Property="IsEnabled" Value="True" />
+                <Setter Property="Height" Value="100" />
+                <Setter Property="SelectionMode" Value="Single" />
+                <Setter Property="AutoGenerateColumns" Value="False" />
+                <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+                <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+                <Setter Property="HorizontalGridLinesBrush" Value="#FFAAAAAA" />
+                <Setter Property="VerticalGridLinesBrush" Value="#FFAAAAAA" />
+                
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding NicoLoginName}" Value="{x:Null}">
+                        <Setter Property="IsEnabled" Value="False" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="dataGridColumnStyle" TargetType="FrameworkElement">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+            </Style>
+
             <!-- 中継リストを表示します。-->
             <ControlTemplate x:Key="userIdListTemplate">
-                <DataGrid ItemsSource="{Binding CommenterClientList}"
-                          Height="100"
-                          SelectionMode="Single"
-                          AutoGenerateColumns="False"
-                          HorizontalScrollBarVisibility="Auto"
-                          VerticalScrollBarVisibility="Auto"
-                          VerticalGridLinesBrush="#FFAAAAAA"
-                          HorizontalGridLinesBrush="#FFAAAAAA">
+                <DataGrid Style="{StaticResource userIdListStyle}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Width="Auto" Header="放送ID"
                                             Binding="{Binding LiveId}" />
@@ -65,15 +77,54 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </ControlTemplate>
+            
+            <!-- ログイン前の名前表示 -->
+            <ControlTemplate x:Key="notLoginTemplate">
+                <TextBlock>
+                    <TextBlock Text="ログイン名:" />
+                    <TextBlock VerticalAlignment="Center"
+                               Foreground="Gray"
+                               Text="ログインしてください m(._.)m" />
+                </TextBlock>
+            </ControlTemplate>
+            
+            <!-- ログイン後の名前表示 -->
+            <ControlTemplate x:Key="loginedTemplate">
+                <TextBlock>
+                    <TextBlock Text="ログイン名:" />
+                    <Hyperlink NavigateUri="{Binding NicoLoginName}"
+                               Command="{x:Static r:RagnarokCommands.NavigateUrl}"
+                               CommandParameter="{Binding NicoLoginUserUrl}">
+                        <TextBlock Text="{Binding NicoLoginName}" />
+                    </Hyperlink>
+                </TextBlock>
+            </ControlTemplate>
+            
+            <Style x:Key="loginNameStyle" TargetType="Control">
+                <Setter Property="Margin" Value="0,10,0,5" />
+                <Setter Property="Template"
+                        Value="{StaticResource loginedTemplate}" />
+                
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding NicoLoginName}" Value="{x:Null}">
+                        <Setter Property="Template"
+                                Value="{StaticResource notLoginTemplate}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto"
                   VerticalScrollBarVisibility="Auto">
         <StackPanel Orientation="Vertical">
+            <Control Style="{StaticResource loginNameStyle}" />
+
+            <Separator />
+            
             <CheckBox IsChecked="{Binding IsUseAsNicoCommenter}"
                       Content="アカウントをコメント中継に使う"
-                      Margin="2,14,2,1" />
+                      Margin="2,5,2,1" />
         
             <GroupBox Header="コメント中継設定"
                       IsEnabled="{Binding IsUseAsNicoCommenter}">

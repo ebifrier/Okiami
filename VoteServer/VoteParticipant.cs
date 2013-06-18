@@ -410,20 +410,20 @@ namespace VoteSystem.Server
                 // ニコ生のコメンターとして使うかどうかです。
                 if (req.IsUseAsNicoCommenter != null)
                 {
-                    this.IsUseAsNicoCommenter =
+                    IsUseAsNicoCommenter =
                         req.IsUseAsNicoCommenter.Value;
                 }
 
                 // ニコ生へのログイン状況を設定します。
                 if (req.IsSetLoginType)
                 {
-                    this.NicoLoginType = req.LoginType;
+                    NicoLoginType = req.LoginType;
                 }
 
                 // nullや""でメッセージを消去します。
                 if (req.HasMessage)
                 {
-                    this.Message = req.Message;
+                    Message = req.Message;
                 }
             }
 

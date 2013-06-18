@@ -37,8 +37,7 @@
 		</Line>
 	</Lines>
 
-	<Line />
-	<Line />
+  <Line Count="2" />
 	<Line>
 		<Format ColumnSpan="2" Text="クジラちゃん参加ＰＣ一覧" />
 	</Line>
@@ -50,21 +49,36 @@
 		</Line>
 	</Lines>
 
-	<Line />
-	<Line />
+	<Line Count="2" />
 	<Line>
 		<Format ColumnSpan="2" Text="放送主一覧" />
 	</Line>
+
+  <!-- 放送主一覧とその人数などを表示 -->
+  <Line Count="2" />
+  <Line>
+    <Format ColumnSpan="2" Text="今日の来場者数など" FontWeight="Bold" />
+  </Line>
+  <Lines Data="$TotalLiveCountText">
+    <Line>
+      <Format Column="0" Text="全放送数" Alignment="Right" />
+      <Format Column="1" Text="$()" Alignment="Left" />
+    </Line>
+  </Lines>
+  <Lines Data="$TotalLiveVisitorCountText">
+    <Line>
+      <Format Column="0" Text="来場者数合計" Alignment="Right" />
+      <Format Column="1" Text="$()" Alignment="Left" />
+    </Line>
+  </Lines>
+  <Lines Data="$TotalLiveCommentCountText">
+    <Line>
+      <Format Column="0" Text="コメント数合計" Alignment="Right" />
+      <Format Column="1" Text="$()" Alignment="Left" />
+    </Line>
+  </Lines>
 	
-	<Lines Data="$LiveOwnerList">
-		<Line>
-			<Format ColumnSpan="2"
-					Text="$Name" Color="$Color" Alignment="Center" />
-		</Line>
-	</Lines>
-	
-	<Line />
-	<Line />
+	<Line Count="2" />
 	<Line>
 		<Format ColumnSpan="2" Text="最後までおつきあい頂き" />
 	</Line>

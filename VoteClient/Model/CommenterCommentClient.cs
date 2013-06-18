@@ -66,7 +66,7 @@ namespace VoteSystem.Client.Model
     /// </summary>
     public class CommenterCommentClient : NotifyObject
     {
-        private static readonly TimeSpan ErrorInternal = TimeSpan.FromMinutes(5);
+        private static readonly TimeSpan ErrorInterval = TimeSpan.FromMinutes(5);
         private PlayerStatus playerStatus;
         private DateTime lastErrorDateTime = DateTime.Now;
         private DateTime lastCheckTimeToWatch = DateTime.Now;
@@ -473,7 +473,7 @@ namespace VoteSystem.Client.Model
                             // いなければ、何もしません。
                             // そうでなければ、再接続に行きます。
                             var now = DateTime.Now;
-                            if (now < this.lastErrorDateTime + ErrorInternal)
+                            if (now < this.lastErrorDateTime + ErrorInterval)
                             {
                                 return false;
                             }

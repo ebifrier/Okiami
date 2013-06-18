@@ -17,6 +17,30 @@ namespace VoteSystem.Server
     using Protocol.Vote;
 
     /// <summary>
+    /// 来場者数・コメント数を保持します。
+    /// </summary>
+    public class LiveHeartbeat
+    {
+        /// <summary>
+        /// 来場者数を取得または設定します。
+        /// </summary>
+        public int VisitorCount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// コメント数を取得または設定します。
+        /// </summary>
+        public int CommentCount
+        {
+            get;
+            set;
+        }
+    }
+
+    /// <summary>
     /// 投票部屋ごとに用意されるオブジェクトです。
     /// </summary>
     /// <remarks>
@@ -31,6 +55,8 @@ namespace VoteSystem.Server
         private readonly VoterListManager voterListManager;
         private readonly List<VoteParticipant> participantList =
             new List<VoteParticipant>();
+        private readonly Dictionary<LiveData, LiveHeartbeat> liveHeartbeatDic =
+            new Dictionary<LiveData, LiveHeartbeat>();
         private readonly int id;
         private readonly string name;
         private readonly string password;
@@ -140,6 +166,48 @@ namespace VoteSystem.Server
         }
 
         /// <summary>
+        /// 総放送数を取得します。
+        /// </summary>
+        public int TotalLiveCount
+        {
+            get
+            {
+                lock (this.liveHeartbeatDic)
+                {
+                    return this.liveHeartbeatDic.Count();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 総コメント数を取得します。
+        /// </summary>
+        public int TotalLiveCommentCount
+        {
+            get
+            {
+                lock (this.liveHeartbeatDic)
+                {
+                    return this.liveHeartbeatDic.Sum(_ => _.Value.CommentCount);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 総来場者数を取得します。
+        /// </summary>
+        public int TotalLiveVisitorCount
+        {
+            get
+            {
+                lock (this.liveHeartbeatDic)
+                {
+                    return this.liveHeartbeatDic.Sum(_ => _.Value.VisitorCount);
+                }
+            }
+        }
+
+        /// <summary>
         /// 投票部屋の情報を取得します。
         /// </summary>
         public VoteRoomInfo GetInfo(bool needList)
@@ -179,6 +247,37 @@ namespace VoteSystem.Server
                 }
 
                 return voteRoomInfo;
+            }
+        }
+
+        /// <summary>
+        /// 各放送の来場者数、コメント数などを設定します。
+        /// </summary>
+        public void SetLiveHeartbeat(LiveData liveData, LiveHeartbeat heartbeat)
+        {
+            if (liveData == null || !liveData.Validate())
+            {
+                return;
+            }
+
+            if (heartbeat == null)
+            {
+                return;
+            }
+
+            lock (this.liveHeartbeatDic)
+            {
+                LiveHeartbeat value;
+                if (!this.liveHeartbeatDic.TryGetValue(liveData, out value))
+                {
+                    value = new LiveHeartbeat();
+                    this.liveHeartbeatDic.Add(liveData, value);
+                }
+
+                value.CommentCount = Math.Max(
+                    value.CommentCount, heartbeat.CommentCount);
+                value.VisitorCount = Math.Max(
+                    value.VisitorCount, heartbeat.VisitorCount);
             }
         }
 
@@ -330,6 +429,8 @@ namespace VoteSystem.Server
                 HandleStartEndRollCommand);
             connection.AddCommandHandler<StopEndRollCommand>(
                 HandleStopEndRollCommand);
+            connection.AddCommandHandler<SetLiveHeartbeatCommand>(
+                HandleSetLiveHeartbeatCommand);
         }
 
         /// <summary>
@@ -342,6 +443,7 @@ namespace VoteSystem.Server
 
             connection.RemoveHandler<StartEndRollCommand>();
             connection.RemoveHandler<StopEndRollCommand>();
+            connection.RemoveHandler<SetLiveHeartbeatCommand>();
         }
 
         /// <summary>
@@ -390,6 +492,22 @@ namespace VoteSystem.Server
 
             EndRollStartTimeNtp = DateTime.MinValue;
             BroadcastCommand(new StopEndRollCommand());
+        }
+
+        /// <summary>
+        /// 放送の来場者数などを設定します。
+        /// </summary>
+        private void HandleSetLiveHeartbeatCommand(
+            object sender,
+            PbCommandEventArgs<SetLiveHeartbeatCommand> e)
+        {
+            SetLiveHeartbeat(
+                e.Command.LiveData,
+                new LiveHeartbeat
+                {
+                    CommentCount = e.Command.CommentCount,
+                    VisitorCount = e.Command.VisitorCount,
+                });
         }
 
         /// <summary>
@@ -841,7 +959,7 @@ namespace VoteSystem.Server
         {
             this.voteModel = new VoteModel(this);
             this.voteTimeKeeper = new VoteTimeKeeper(this);
-            this.voterListManager = new VoterListManager();
+            this.voterListManager = new VoterListManager(this);
 
             this.voteRoomOwner = voteRoomOwner;
             this.id = id;

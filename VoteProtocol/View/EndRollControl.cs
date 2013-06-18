@@ -500,14 +500,17 @@ namespace VoteSystem.Protocol.View
         /// <summary>
         /// 投票者リストを取得し、それをvisualオブジェクトとに直します。
         /// </summary>
-        private List<LineInfo> GetLineList()
+        private List<LineInfo> GetLineList(object data)
         {
             try
             {
-                var data = DataGetter();
                 if (data == null)
                 {
-                    return new List<LineInfo>();
+                    data = DataGetter();
+                    if (data == null)
+                    {
+                        return new List<LineInfo>();
+                    }
                 }
 
                 var stuffList = new EndRollList();
@@ -550,14 +553,14 @@ namespace VoteSystem.Protocol.View
         /// <summary>
         /// エンドロールを開始します。
         /// </summary>
-        public void Play()
+        public void Play(object data = null)
         {
             switch (State)
             {
                 case EndRollState.Play:
                     break;
                 case EndRollState.Stop:
-                    this.lineList = GetLineList();
+                    this.lineList = GetLineList(data);
 
                     State = EndRollState.Play;
                     CurrentPos = 0.0;
@@ -795,10 +798,8 @@ namespace VoteSystem.Protocol.View
             var decoratedText = textInfo.DecoratedText;
 
             // 列番号を取得します。
-            var column = Math.Max(0,
-                Math.Min(elem.Column, this.columnList.Count - 1));
-            var columnSpan = Math.Max(1,
-                Math.Min(elem.ColumnSpan, this.columnList.Count));
+            var column = MathEx.Between(0, this.columnList.Count - 1, elem.Column);
+            var columnSpan = MathEx.Between(1, this.columnList.Count, elem.ColumnSpan);
 
             // テキストが入る列の左端と右端の相対座標を取得します。
             var leftColumnRate = GetColumnRate(0, column);

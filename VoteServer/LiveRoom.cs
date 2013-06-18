@@ -120,10 +120,7 @@ namespace VoteSystem.Server
         /// </summary>
         public LiveData LiveData
         {
-            get
-            {
-                return this.liveData;
-            }
+            get { return this.liveData; }
         }
 
         /// <summary>
@@ -131,10 +128,7 @@ namespace VoteSystem.Server
         /// </summary>
         public LiveAttribute Attribute
         {
-            get
-            {
-                return this.attribute;
-            }
+            get { return this.attribute; }
             set
             {
                 if (value == null || !value.Validate())
@@ -558,6 +552,13 @@ namespace VoteSystem.Server
         /// </summary>
         public void Close()
         {
+            var voteRoom = this.liveOwner.VoteRoom;
+            if (voteRoom != null)
+            {
+
+                return;
+            }
+
             // 登録してあるコメンターを全部削除します。
             ClearCommenter();
         }

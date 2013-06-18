@@ -38,6 +38,7 @@ namespace VoteSystem.PluginShogi.View
         private EffectManager effectManager;
         private DispatcherTimer timer;
         private AutoPlayEx autoPlay;
+        private object endRollData;
         private TimeSpan prevPosition = TimeSpan.Zero;
 
         #region 基本プロパティ
@@ -403,6 +404,7 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         private void Play()
         {
+            this.endRollData = GetVoterList();
             Ending.PlayMovie();
             //MoviePlayer.Position = TimeSpan.FromSeconds(300);
 
@@ -435,6 +437,7 @@ namespace VoteSystem.PluginShogi.View
             ShogiControl.StopAutoPlay();
             ShogiGrid.Opacity = 0.0;
             MovieBrush.Opacity = 0.0;
+            this.endRollData = null;
         }
 
         /// <summary>
@@ -483,7 +486,7 @@ namespace VoteSystem.PluginShogi.View
                     var span = EndRollTimeline.VisibleSpan;
 
                     EndRoll.RollTimeSeconds = (int)Math.Ceiling(span.TotalSeconds);
-                    EndRoll.Play();
+                    EndRoll.Play(this.endRollData);
                 }
 
                 EndRoll.UpdateScreen(position - EndRollTimeline.FadeInStartTime);

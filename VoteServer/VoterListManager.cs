@@ -12,6 +12,7 @@ namespace VoteSystem.Server
     /// </summary>
     public sealed class VoterListManager
     {
+        private readonly VoteRoom voteRoom;
         private readonly Dictionary<string, VoterInfo> joinedVoterDic =
             new Dictionary<string, VoterInfo>();
         private readonly Dictionary<string, VoterInfo> unjoinedVoterDic =
@@ -39,6 +40,11 @@ namespace VoteSystem.Server
                         UnjoinedVoterCount = this.unjoinedVoterDic.Count,
                         LiveOwnerList = this.liveOwnerDic.Values.ToList(),
                         ModeCustomJoinerList = this.modeCustomjoinerSet.ToList(),
+
+                        TotalLiveCount = this.voteRoom.TotalLiveCount,
+                        TotalLiveCommentCount = this.voteRoom.TotalLiveCommentCount,
+                        TotalLiveVisitorCount = this.voteRoom.TotalLiveVisitorCount,
+
                         //DonorAmount = 171920,
                         //DonorList = DonorList.ToList(),
                     };
@@ -185,6 +191,14 @@ namespace VoteSystem.Server
             {
                 this.modeCustomjoinerSet.Add(name);
             }
+        }
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public VoterListManager(VoteRoom voteRoom)
+        {
+            this.voteRoom = voteRoom;
         }
     }
 }

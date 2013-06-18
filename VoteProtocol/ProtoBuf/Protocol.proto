@@ -187,6 +187,14 @@ message ChangeVoteModeCommand {
 	required bool IsMirrorMode = 2;
 }
 
+// 来場者数とコメント数を更新します。
+// クライアントからサーバーに送られます。
+message SetLiveHeartbeatCommand {
+	required LiveData LiveData = 1;
+	required int32 VisitorCount = 2;
+	required int32 CommentCount = 3;
+}
+
 // 投票を開始します。
 // クライアントからサーバーに送られます。
 message StartVoteCommand {
