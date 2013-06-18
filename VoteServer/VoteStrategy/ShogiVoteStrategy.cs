@@ -562,9 +562,10 @@ namespace VoteSystem.Server.VoteStrategy
             }
 
             // 現局面から指せるかどうか調べます。
-            if (this.board != null &&
+            if (this.board != null && !move.IsResigned &&
                 this.board.ConvertMove(move) == null)
             {
+                // 投了は常にさせることにします。
                 return null;
             }
 

@@ -197,40 +197,50 @@ namespace VoteSystem.Client.Model.Live
         /// </summary>
         public override void HandleNotification(Notification notification)
         {
-            // 受信したメッセージを放送に再投稿します。
-            // システムメッセージのみ。
-            if (this.commentClient.IsConnected &&
-                ProtocolUtil.IsPostComment(notification, false, Attribute, LiveData))
+            try
             {
-                var message = ModifyOwnerComment(notification.Text);
-                var nicoColorStr = ColorConverter.ToNicoColorString(
-                    notification.Color, false);
-
-                if (notification.Type == NotificationType.Important)
+                // 受信したメッセージを放送に再投稿します。
+                // システムメッセージのみ。
+                if (this.commentClient.IsConnected &&
+                    ProtocolUtil.IsPostComment(notification, false, Attribute, LiveData))
                 {
-                    // 重要メッセージ
-                    this.commentClient.SendOwnerComment(
-                        ProtocolUtil.MakeMirrorComment(message),
-                        "184 " + nicoColorStr);
-                }
-                else if (notification.Type == NotificationType.System)
-                {
-                    // システムメッセージ
-                    message = GetVoteSystemMessage(notification.SystemType);
+                    var message = ModifyOwnerComment(notification.Text);
+                    var nicoColorStr = ColorConverter.ToNicoColorString(
+                        notification.Color, false);
 
-                    if (!string.IsNullOrEmpty(message))
+                    if (notification.Type == NotificationType.Important)
                     {
+                        // 重要メッセージ
                         this.commentClient.SendOwnerComment(
                             ProtocolUtil.MakeMirrorComment(message),
                             "184 " + nicoColorStr);
                     }
-                }
-                else
-                {
-                    return;
-                }
+                    else if (notification.Type == NotificationType.System)
+                    {
+                        // システムメッセージ
+                        message = GetVoteSystemMessage(notification.SystemType);
 
-                Log.Info("コメント投稿: {0}", message);
+                        if (!string.IsNullOrEmpty(message))
+                        {
+                            this.commentClient.SendOwnerComment(
+                                ProtocolUtil.MakeMirrorComment(message),
+                                "184 " + nicoColorStr);
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+
+                    Log.Info("コメント投稿: {0}", message);
+                }
+            }
+            catch (Exception ex)
+            {
+                Util.ThrowIfFatal(ex);
+
+                Log.ErrorException(ex,
+                    "放送主コメントの投稿に失敗しました。");
             }
         }
 

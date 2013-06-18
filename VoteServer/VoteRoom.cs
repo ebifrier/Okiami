@@ -172,7 +172,7 @@ namespace VoteSystem.Server
         {
             get
             {
-                lock (this.liveHeartbeatDic)
+                using (LazyLock())
                 {
                     return this.liveHeartbeatDic.Count();
                 }
@@ -186,7 +186,7 @@ namespace VoteSystem.Server
         {
             get
             {
-                lock (this.liveHeartbeatDic)
+                using (LazyLock())
                 {
                     return this.liveHeartbeatDic.Sum(_ => _.Value.CommentCount);
                 }
@@ -200,7 +200,7 @@ namespace VoteSystem.Server
         {
             get
             {
-                lock (this.liveHeartbeatDic)
+                using (LazyLock())
                 {
                     return this.liveHeartbeatDic.Sum(_ => _.Value.VisitorCount);
                 }
@@ -265,7 +265,7 @@ namespace VoteSystem.Server
                 return;
             }
 
-            lock (this.liveHeartbeatDic)
+            using (LazyLock())
             {
                 LiveHeartbeat value;
                 if (!this.liveHeartbeatDic.TryGetValue(liveData, out value))

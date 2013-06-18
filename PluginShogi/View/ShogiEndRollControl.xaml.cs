@@ -404,7 +404,9 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         private void Play()
         {
+            // エンドロール用の参加者一覧は動画再生直前に取得します。
             this.endRollData = GetVoterList();
+
             Ending.PlayMovie();
             //MoviePlayer.Position = TimeSpan.FromSeconds(300);
 

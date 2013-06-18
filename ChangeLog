@@ -1,3 +1,15 @@
+2013-06-18  - Ver 1.3.9.1
+
+	* VoteClient/Model/Live/LiveNicoClient.cs: 放送主コメント投稿失敗時のエ
+	ラー処理を追加しました。
+	* VoteClient/View/Control/CommenterSettingControl.xaml: プロパティのバ
+	インディングモードを変更し、getのみのプロパティでも落ちないようにしまし
+	た。
+	* VoteServer/VoteStrategy/ShogiVoteStrategy.cs: 投了を受理するようにし
+	ました。
+	* VoteServer/LiveRoom.cs: コテハン登録用の＠文字を、ミラー時には少し変
+	更するようにしました。
+
 2013-06-18  - Ver 1.3.9.0
 
 	* VoteProtocol/ServerSettings.cs: 投票サーバーのアドレスを更新しました。

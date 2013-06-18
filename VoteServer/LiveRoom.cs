@@ -434,12 +434,9 @@ namespace VoteSystem.Server
                 return notification;
             }
 
-            // 文字列部分を置き換えます。
-            Notification cloned = notification.Clone();
-
             // コテハン名がつくため、@と＠を別の文字に置き換えます。
-            cloned.Text = cloned.Text.Replace("@", "\u24D0");
-            cloned.Text = cloned.Text.Replace("＠", "\u24D0");
+            text = text.Replace("@", "\u24D0");
+            text = text.Replace("＠", "\u24D0");
 
             // 投票コメントの場合、確認コメントなら票部分のみを
             // ミラーコメントなら全部を投稿します。
@@ -464,22 +461,24 @@ namespace VoteSystem.Server
                 }
 
                 // 先頭に無幅空白を挿入します。
-                cloned.Text = string.Format(
+                text = string.Format(
                     "{0}{1}{2}",
                     MirrorCommentMark,
                     (IsMirrorMode ? "" : ComfirmCommentPrefix),
                     text);
-                return cloned;
             }
             else
             {
-                cloned.Text = string.Format(
+                text = string.Format(
                     "{0}{1}{2}",
                     MirrorCommentMark,
                     (IsMirrorMode ? "" : MirrorCommentPrefix),
                     text);
-                return cloned;
             }
+
+            // 文字列部分を置き換えます。
+            return notification.Clone()
+                .Apply(_ => _.Text = text);
         }
 
         /// <summary>

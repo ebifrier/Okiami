@@ -55,23 +55,21 @@
             <ControlTemplate x:Key="userIdListTemplate">
                 <DataGrid Style="{StaticResource userIdListStyle}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="Auto" Header="放送ID"
+                        <DataGridTextColumn Width="Auto" Header="放送ID" IsReadOnly="True"
                                             Binding="{Binding LiveId}" />
                         <DataGridCheckBoxColumn Width="Auto" Header="中継許可"
-                                                IsReadOnly="False"
                                                 Binding="{Binding IsAllowToConnect, Mode=TwoWay,
                                                                   UpdateSourceTrigger=PropertyChanged}"
                                                 ElementStyle="{StaticResource dataGridColumnStyle}" />
-                        <DataGridTextColumn Width="70" Header="状態"
+                        <DataGridTextColumn Width="70" Header="状態" IsReadOnly="True"
                                             Binding="{Binding State}"
                                             ElementStyle="{StaticResource dataGridColumnStyle}" />
-                        <DataGridTextColumn Width="Auto" Header="投稿"
+                        <DataGridTextColumn Width="Auto" Header="投稿" IsReadOnly="True"
                                             Binding="{Binding IsPostCommentEnabled,
                                                               Converter={StaticResource boolToSignConverter}}"
                                             ElementStyle="{StaticResource dataGridColumnStyle}" />
                         <DataGridTextColumn Width="Auto" Header="視聴" IsReadOnly="True"
                                             Binding="{Binding IsWatching,
-                                                              Mode=OneWay,
                                                               Converter={StaticResource boolToSignConverter}}"
                                             ElementStyle="{StaticResource dataGridColumnStyle}" />
                     </DataGrid.Columns>
