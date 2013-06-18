@@ -23,10 +23,6 @@ def setup_dist(appdata)
       deleteall(name)
     elsif /nunit\.framework\./ =~ name
       deleteall(name)
-    elsif /Plugin\w*\.dll$/i =~ name
-      FileUtils.mv(name, File.join(outdir, "Plugin", File.basename(name)))
-    elsif /Ragnarok\.Presentation\.Shogi\.dll$/i =~ name
-      FileUtils.mv(name, File.join(outdir, "Plugin", File.basename(name)))
     elsif /VoteServer\.exe.*$/i =~ name
       deleteall(name)
     elsif /SpeedTest\.exe.*$/i =~ name
