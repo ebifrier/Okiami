@@ -1,3 +1,15 @@
+2013-06-19  - Ver 1.4.0.0
+
+	* PluginShogi/ViewModel/EndRollViewModel.cs: 参加者一覧で表示する参加者
+	の優先順位をつけるようにしました。具体的にはその放送から参加コメントを
+	打った人を最優先とし、次に生ＩＤの人を優先するようにしました。
+	* VoteClient/Model/MainModel.cs: 指定の放送ＩＤで放送中かどうかを判断す
+	るメソッドを追加しました。
+	* VoteProtocol/ServerSettings.cs: 通信プロトコルのバージョンを上げまし
+	た。
+	* VoteProtocol/Vote/VoterInfo.cs: 参加コメントを打った放送を覚えておく
+	ようにしました。エンドロールで使います。
+
 2013-06-19  - Ver 1.3.9.2
 
 	* PluginShogi/ViewModel/ShogiWindowViewModel.cs: 投票残り時間が短い場合

@@ -420,7 +420,7 @@ namespace VoteSystem.PluginShogi.View
 
             var interval = ShogiTimeline.VisibleSpan - TimeSpan.FromSeconds(3);
             var count = board.CanRedoCount + 2;
-            this.autoPlay = new ViewModel.AutoPlayEx(board, AutoPlayType.Redo)
+            this.autoPlay = new AutoPlayEx(board, AutoPlayType.Redo)
             {
                 EffectManager = this.effectManager,
                 IsChangeMoveCount = true,

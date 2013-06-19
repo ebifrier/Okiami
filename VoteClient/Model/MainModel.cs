@@ -233,6 +233,19 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
+        /// 同じ放送IDを持っているかどうか調べます。
+        /// </summary>
+        public bool HasLiveRoom(LiveData liveData)
+        {
+            if (liveData == null || !liveData.Validate())
+            {
+                return false;
+            }
+
+            return LiveClientList.Any(_ => _.LiveData == liveData);
+        }
+
+        /// <summary>
         /// このニコニコアカウントをコメンターとして扱うかどうかを
         /// 取得または設定します。
         /// </summary>

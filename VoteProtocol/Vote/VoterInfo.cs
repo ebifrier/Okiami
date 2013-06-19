@@ -80,6 +80,16 @@ namespace VoteSystem.Protocol.Vote
         }
 
         /// <summary>
+        /// 参加申請を行った放送を取得または設定します。
+        /// </summary>
+        [DataMember(Order = 6, IsRequired = true)]
+        public LiveData LiveData
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// オブジェクトの比較を行います。
         /// </summary>
         public override bool Equals(object obj)

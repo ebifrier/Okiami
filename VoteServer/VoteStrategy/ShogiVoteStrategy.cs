@@ -721,6 +721,8 @@ namespace VoteSystem.Server.VoteStrategy
                     Name = (isAnonymous ? string.Empty : player.Nickname),
                     Skill = player.SkillLevel.ToString(),
                     Color = GetPlayerColor(player.SkillLevel),
+                    LiveData = (source.FromLiveRoom != null ?
+                        source.FromLiveRoom.LiveData : null),
                 };
 
                 if (isAnonymous)

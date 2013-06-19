@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 using Ragnarok;
 using Ragnarok.ObjectModel;
@@ -11,6 +12,9 @@ namespace VoteSystem.PluginShogi.ViewModel
     using Protocol;
     using Protocol.Vote;
 
+    /// <summary>
+    /// エンディング用のモデルオブジェクトです。
+    /// </summary>
     public sealed class EndRollViewModel : DynamicViewModel
     {
         /// <summary>
@@ -141,6 +145,57 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// 参加者が参加した放送があれば１を返します。
+        /// </summary>
+        int HasLiveRoom(LiveData liveData)
+        {
+            if (liveData == null || !liveData.Validate())
+            {
+                return 0;
+            }
+
+            return (ShogiGlobal.ClientModel.HasLiveRoom(liveData) ? 1 : 0);
+        }
+
+        /// <summary>
+        /// ニコニコの184IDかどうか調べます。
+        /// </summary>
+        int IsAnonymous(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return 1;
+            }
+
+            return (id.All(_ => char.IsNumber(_)) ? 0 : 1);
+        }
+
+        IEnumerable<VoterInfo> SortJoinedVoterList()
+        {
+            if (VoterList.JoinedVoterList == null)
+            {
+                return new VoterInfo[0];
+            }
+
+            return
+                from voter in VoterList.JoinedVoterList
+                where voter != null
+                orderby HasLiveRoom(voter.LiveData) descending,
+                        IsAnonymous(voter.Id) ascending
+                select voter;
+        }
+
+        IEnumerable<VoterInfo> GetLiveOwnerList()
+        {
+            if (VoterList.LiveOwnerList == null)
+            {
+                return new VoterInfo[0];
+            }
+
+            return VoterList.LiveOwnerList;
+        }
+
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         public EndRollViewModel(VoterList voterList)
@@ -148,17 +203,18 @@ namespace VoteSystem.PluginShogi.ViewModel
         {
             VoterList = voterList;
 
-            var list = VoterList.JoinedVoterList
+            // 参加者は一度指定条件でソートし、カットした後、
+            // ランダムに並び替えます。
+            JoinedVoterViewList = SortJoinedVoterList()
+                .Take(210)
                 .OrderBy(_ => Guid.NewGuid())
                 .ToList();
-            JoinedVoterViewList = (list.Count() > 210 ?
-                list.Take(210) : list).ToList();
 
-            list = VoterList.LiveOwnerList
+            // 放送主はランダムに並び替えます。
+            LiveOwnerViewList = GetLiveOwnerList()
                 .OrderBy(_ => Guid.NewGuid())
+                .Take(20)
                 .ToList();
-            LiveOwnerViewList = (list.Count() > 20 ?
-                list.Take(20) : list).ToList();
         }
     }
 }

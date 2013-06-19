@@ -14,6 +14,8 @@ namespace VoteSystem.Protocol.Model
     public static class TestVoterList
     {
         private static int idCounter = 0;
+        private static int liveCounter = 0;
+        private static int anonymousCount = 0;
 
         private static string NextId
         {
@@ -27,7 +29,15 @@ namespace VoteSystem.Protocol.Model
 
         private static VoterInfo CreateInfo(string name, string skill = null)
         {
-            return new VoterInfo(NextId, name, skill);
+            var liveData = (liveCounter++ < 30 ?
+                new LiveData(LiveSite.NicoNama, "lv142093226") : null);
+            var id = (anonymousCount++ < 100 ?
+                Guid.NewGuid().ToString() : NextId);
+
+            return new VoterInfo(id, name, skill)
+            {
+                LiveData = liveData,
+            };
         }
 
         /// <summary>
@@ -265,7 +275,6 @@ namespace VoteSystem.Protocol.Model
 
             voterList.LiveOwnerList.AddRange(
                 from name in liveOwnerList
-                orderby Guid.NewGuid()
                 select new VoterInfo
                 {
                     Id = Guid.NewGuid().ToString(),

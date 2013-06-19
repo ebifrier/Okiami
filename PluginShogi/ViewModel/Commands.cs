@@ -750,7 +750,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 var result = DialogUtil.Show(
                     ShogiGlobal.MainWindow,
                     string.Format(
-                        @"{1:h時mm分}{0}{0}この時刻に開始しますがよろしいですか？",
+                        @"{1:HH時mm分}{0}{0}この時刻に開始しますがよろしいですか？",
                         Environment.NewLine,
                         startTimeNtp),
                     "時刻確認",
