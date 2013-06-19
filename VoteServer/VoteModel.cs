@@ -31,8 +31,8 @@ namespace VoteSystem.Server
             new Dictionary<VoteMode, VoteStrategy.IVoteStrategy>();
         private VoteStrategy.IVoteStrategy voteStrategy;
         private TimeSpan voteExtendTime = TimeSpan.FromSeconds(60);
-        private readonly List<TimeExtendKind> timeExtendList = 
-            new List<TimeExtendKind>();
+        private readonly Dictionary<string, TimeExtendKind> timeExtendDic =
+            new Dictionary<string, TimeExtendKind>();
         private bool isVoteResultChanged = true;
 
         /// <summary>
@@ -465,10 +465,10 @@ namespace VoteSystem.Server
         {
             get
             {
-                lock (this.timeExtendList)
+                lock (this.timeExtendDic)
                 {
-                    return this.timeExtendList.Count(
-                        _ => _ == TimeExtendKind.Extend);
+                    return this.timeExtendDic.Count(
+                        _ => _.Value == TimeExtendKind.Extend);
                 }
             }
         }
@@ -480,10 +480,10 @@ namespace VoteSystem.Server
         {
             get
             {
-                lock (this.timeExtendList)
+                lock (this.timeExtendDic)
                 {
-                    return this.timeExtendList.Count(
-                        _ => _ == TimeExtendKind.Stable);
+                    return this.timeExtendDic.Count(
+                        _ => _.Value == TimeExtendKind.Stable);
                 }
             }
         }
@@ -559,17 +559,18 @@ namespace VoteSystem.Server
                 return false;
             }
 
-            lock (this.timeExtendList)
+            lock (this.timeExtendDic)
             {
-                // 同じ値なら何も処理しません。
-                /*TimeExtendKind value;
-                if (this.timeExtendDic.TryGetValue(voterId, out value) &&
-                    value == kind)
+                // 嵐対策として、時間短縮は一人一回とします。
+                TimeExtendKind value;
+                if (kind == TimeExtendKind.Stable &&
+                    this.timeExtendDic.TryGetValue(voterId, out value) &&
+                    value == TimeExtendKind.Stable)
                 {
                     return false;
-                }*/
+                }
 
-                this.timeExtendList.Add(kind);
+                this.timeExtendDic[voterId] = kind;
             }
 
             OnVoteResultChanged();
@@ -593,15 +594,6 @@ namespace VoteSystem.Server
         {
             var timeKeeper = this.voteRoom.VoteTimeKeeper;
 
-#if false
-            // 5票以上集まったら、投票自体を打ち切ります。
-            if (TimeStablePoint >= this.voteEndCount)
-            {
-                timeKeeper.SetVoteSpan(TimeSpan.Zero);
-                return;
-            }
-#endif
-
             if (kind == TimeExtendKind.Extend)
             {
                 timeKeeper.AddVoteSpan(this.voteExtendTime, MinimumVoteSpan);
@@ -617,9 +609,9 @@ namespace VoteSystem.Server
         /// </summary>
         public void ClearTimeExtendDemand()
         {
-            lock (this.timeExtendList)
+            lock (this.timeExtendDic)
             {
-                this.timeExtendList.Clear();
+                this.timeExtendDic.Clear();
             }
 
             OnVoteResultChanged();

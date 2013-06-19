@@ -152,9 +152,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 .OrderBy(_ => Guid.NewGuid())
                 .ToList();
             JoinedVoterViewList = (list.Count() > 210 ?
-                list.Take(210) :
-                list.Concat(list).Take(210))
-                .ToList();
+                list.Take(210) : list).ToList();
 
             list = VoterList.LiveOwnerList
                 .OrderBy(_ => Guid.NewGuid())

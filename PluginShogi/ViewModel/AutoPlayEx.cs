@@ -48,7 +48,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// カットインの表示間隔を取得または設定します。
         /// </summary>
-        public TimeSpan CutInInternal
+        public TimeSpan CutInInterval
         {
             get;
             set;
@@ -99,12 +99,12 @@ namespace VoteSystem.PluginShogi.ViewModel
                 EffectManager != null &&
                 EffectManager.VariationCutIn())
             {
-                while (PositionFromBase < CutInInternal)
+                while (PositionFromBase < CutInInterval)
                 {
                     yield return true;
                 }
 
-                BasePosition += CutInInternal;
+                BasePosition += CutInInterval;
             }
 
             // 指し手を進めます。
@@ -155,7 +155,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             sb.AppendFormat("を再生しますか？");
 
             ConfirmMessage = sb.ToString();
-            CutInInternal = TimeSpan.FromSeconds(2.0);
+            CutInInterval = TimeSpan.FromSeconds(2.0);
             UpdateEnumerator = MakeUpdateEnumerator().GetEnumerator();
         }
 
@@ -165,7 +165,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         public AutoPlayEx(Board board, IEnumerable<BoardMove> moveList)
             : base(board, moveList)
         {
-            CutInInternal = TimeSpan.FromSeconds(2.0);
+            CutInInterval = TimeSpan.FromSeconds(2.0);
             UpdateEnumerator = MakeUpdateEnumerator().GetEnumerator();
         }
 
@@ -175,7 +175,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         public AutoPlayEx(Board board, AutoPlayType autoPlayType)
             : base(board, autoPlayType)
         {
-            CutInInternal = TimeSpan.FromSeconds(2.0);
+            CutInInterval = TimeSpan.FromSeconds(2.0);
 
             UpdateEnumerator = MakeUpdateEnumerator().GetEnumerator();
         }

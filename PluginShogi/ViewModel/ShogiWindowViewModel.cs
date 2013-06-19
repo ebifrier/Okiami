@@ -43,6 +43,9 @@ namespace VoteSystem.PluginShogi.ViewModel
     /// </summary>
     public class ShogiWindowViewModel : NotifyObject
     {
+        private static readonly TimeSpan AutoPlayMinimumLeaveTime =
+            TimeSpan.FromSeconds(20);
+
         private Board currentBoard;
         private Board board;
 
@@ -574,6 +577,12 @@ namespace VoteSystem.PluginShogi.ViewModel
 
                 // ウィンドウが非表示なら変化を表示しません。
                 if (ShogiGlobal.MainWindow == null)
+                {
+                    return null;
+                }
+
+                // 投票残り時間が短い場合は、自動再生を行いません。
+                if (VoteClient.VoteLeaveTime < AutoPlayMinimumLeaveTime)
                 {
                     return null;
                 }

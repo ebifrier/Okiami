@@ -1,3 +1,10 @@
+2013-06-19  - Ver 1.3.9.2
+
+	* PluginShogi/ViewModel/ShogiWindowViewModel.cs: 投票残り時間が短い場合
+	は自動再生を行わないようにしました。
+	* VoteServer/VoteModel.cs: 時間短縮は１手につき１人１回までとしました。
+	嵐対策のためです。
+
 2013-06-18  - Ver 1.3.9.1
 
 	* VoteClient/Model/Live/LiveNicoClient.cs: 放送主コメント投稿失敗時のエ

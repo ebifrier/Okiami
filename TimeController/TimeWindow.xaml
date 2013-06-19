@@ -4,7 +4,7 @@
                  xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
                  ResizeMode="NoResize" Background="White"
                  AllowsTransparency="True"
-                 Title="TimeWindow" Height="200" Width="300">
+                 Title="TimeWindow" Height="360" Width="640">
     <Window.Resources>
         <ResourceDictionary>
             <r:BooleanToVisibilityConverter x:Key="visibilityConverter"
@@ -102,47 +102,67 @@
         <Viewbox>
             <Grid Margin="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.5*" />
-                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="0.2*" />
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
+                    <RowDefinition Height="0.4*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="0.4*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1" />
                     <ColumnDefinition />
                     <ColumnDefinition Width="2" />
                     <ColumnDefinition />
                     <ColumnDefinition Width="2" />
                     <ColumnDefinition />
+                    <ColumnDefinition Width="1" />
                 </Grid.ColumnDefinitions>
 
-                <r:DecoratedText Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
-                                 Style="{StaticResource blackTurnStyle}"
-                                 Text="○" />
-                <r:DecoratedText Grid.Row="2" Grid.RowSpan="2" Grid.Column="0"
-                                 Style="{StaticResource whiteTurnStyle}"
-                                 Text="○" />
+                <Separator Grid.Row="0"
+                           Background="Transparent" />
+                <Separator Grid.Row="3"
+                           Background="Transparent" />
+                <Separator Grid.Row="6"
+                           Background="Transparent" />
 
-                <r:DecoratedText Grid.Row="0" Grid.Column="2"
+                <r:DecoratedText Grid.Row="1" Grid.RowSpan="2" Grid.Column="1"
+                                 Style="{StaticResource blackTurnStyle}"
+                                 FontSize="20"
+                                 Text="○" />
+                <r:DecoratedText Grid.Row="4" Grid.RowSpan="2" Grid.Column="1"
+                                 Style="{StaticResource whiteTurnStyle}"
+                                 FontSize="20"
+                                 Text="○" />
+                
+                <r:DecoratedText Grid.Row="1" Grid.Column="3"
                                  VerticalAlignment="Bottom"
                                  Text="先手▲" />
-                <r:DecoratedText Grid.Row="1" Grid.Column="2"
+                <r:DecoratedText Grid.Row="2" Grid.Column="3"
                                  VerticalAlignment="Top"
                                  Text="リスナー" />
-                <r:DecoratedText Grid.Row="2" Grid.Column="2"
+                <r:DecoratedText Grid.Row="4" Grid.Column="3"
                                  VerticalAlignment="Bottom"
                                  Text="後手△" />
-                <r:DecoratedText Grid.Row="3" Grid.Column="2"
+                <r:DecoratedText Grid.Row="5" Grid.Column="3"
                                  VerticalAlignment="Top"
                                  Text="西尾明六段" />
 
-                <r:TimeSpanView Grid.Row="0" Grid.Column="4" Grid.RowSpan="2"
+                <r:TimeSpanView Grid.Row="1" Grid.Column="5"
                                 Style="{StaticResource timeSpanStyle}"
                                 Value="{Binding BlackLeaveTime}" />
-                <r:TimeSpanView Grid.Row="2" Grid.Column="4"
+                <r:TimeSpanView Grid.Row="2" Grid.Column="5"
+                                Style="{StaticResource timeSpanStyle}"
+                                Margin="0,-5,0,0"
+                                Foreground="Gray"
+                                Value="00:00:00" />
+                <r:TimeSpanView Grid.Row="4" Grid.Column="5"
                                 Style="{StaticResource timeSpanStyle}"
                                 Value="{Binding WhiteLeaveTime}" />
-                <r:TimeSpanView Grid.Row="3" Grid.Column="4"
+                <r:TimeSpanView Grid.Row="5" Grid.Column="5"
                                 Style="{StaticResource timeSpanStyle}"
+                                Margin="0,-5,0,0"
                                 Foreground="Gray"
                                 Value="{Binding WhiteUsedTime}" />
             </Grid>
