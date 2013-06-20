@@ -2,6 +2,12 @@
 # リリース情報
 #
 
+- version: 1.4.1
+  date: 2013/06/19
+  thumbnail: suika_suki.jpg
+  content:
+  - 将棋: 囲いエフェクトを更新しました。
+
 - version: 1.4.0
   date: 2013/06/19
   thumbnail: ruka_nikkori2.jpg
