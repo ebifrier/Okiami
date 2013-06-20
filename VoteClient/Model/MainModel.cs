@@ -379,16 +379,19 @@ namespace VoteSystem.Client.Model
         /// </summary>
         private void UpdateTotalVoteSpan()
         {
-            if (!this.voteClient.IsLogined)
+            var roomInfo = this.voteClient.VoteRoomInfo;
+
+            if (roomInfo == null)
             {
                 ProtocolUtil.RemoveTotalVoteSpan();
             }
             else
             {
                 ProtocolUtil.WriteTotalVoteSpan(
-                    this.voteClient.VoteState,
-                    this.voteClient.BaseTimeNtp,
-                    this.voteClient.TotalVoteSpan);
+                    roomInfo.State,
+                    roomInfo.BaseTimeNtp,
+                    roomInfo.TotalVoteSpan,
+                    roomInfo.ProgressSpan);
             }
         }
 

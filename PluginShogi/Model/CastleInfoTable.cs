@@ -114,7 +114,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { "片美濃囲い", }),
                 
                 new CastleInfo(
-                    "銀冠", "Ginkan", "", 10,
+                    "銀冠", "Ginkan", "Ginkan.png", 10,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(2, 8)),
@@ -173,7 +173,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { "矢倉", }),
                 
                 new CastleInfo(
-                    "居飛車銀冠", "IbisyaGinkan", "", 10,
+                    "居飛車銀冠", "IbisyaGinkan", "Ginkan.png", 10,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(8, 8)),
@@ -252,7 +252,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { }),
                 
                 new CastleInfo(
-                    "片銀冠", "KataGinkan", "", 0,
+                    "片銀冠", "KataGinkan", "Ginkan.png", 0,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(2, 8)),
@@ -262,7 +262,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { }),
                 
                 new CastleInfo(
-                    "銀冠穴熊", "GinkanAnaguma", "", 0,
+                    "銀冠穴熊", "GinkanAnaguma", "Ginkan.png", 0,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(1, 9)),
@@ -274,7 +274,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { }),
                 
                 new CastleInfo(
-                    "穴熊", "Anaguma", "", 0,
+                    "穴熊", "Anaguma", "Anaguma1.png", 0,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(1, 9)),
@@ -406,7 +406,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { }),
                 
                 new CastleInfo(
-                    "居飛車片銀冠", "IbisyaKataGinkan", "", 0,
+                    "居飛車片銀冠", "IbisyaKataGinkan", "Ginkan.png", 0,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(8, 8)),
@@ -416,7 +416,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { }),
                 
                 new CastleInfo(
-                    "居飛車銀冠穴熊", "IbisyaGinkanAnaguma", "", 0,
+                    "居飛車銀冠穴熊", "IbisyaGinkanAnaguma", "Ginkan.png", 0,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(9, 9)),
@@ -428,7 +428,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { }),
                 
                 new CastleInfo(
-                    "居飛車穴熊", "IbisyaAnaguma", "", 0,
+                    "居飛車穴熊", "IbisyaAnaguma", "Anaguma1.png", 0,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(9, 9)),

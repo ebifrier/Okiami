@@ -209,6 +209,33 @@
                             CommandParameter="{Binding Value, ElementName=blackTimeSpan}"
                             Width="60" Content="再設定" />
                 </Grid>
+
+                <Separator Height="10" />
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0"
+                           Content="思考時間： " />
+                    <Label Grid.Column="1"
+                           Style="{StaticResource blackTimeStyle}"
+                           Content="{Binding BlackUsedTime}" />
+                </Grid>
+
+                <Separator Background="LightGray" />
+
+                <StackPanel Style="{StaticResource blackResetTimeSpanStyle}"
+                            Margin="{StaticResource timeSpanLength}">
+                    <Label Content="先手の思考時間を新たに設定します" />
+                    <r:TimeSpanEditControl x:Name="blackUsedTimeSpan"
+                                           HorizontalAlignment="Right" />
+                    <Button Style="{StaticResource buttonStyle}"
+                            Command="{x:Static l:Commands.SetBlackUsedTime}"
+                            CommandParameter="{Binding Value, ElementName=blackUsedTimeSpan}"
+                            Width="60" Content="再設定" />
+                </StackPanel>
             </StackPanel>
         </GroupBox>
 

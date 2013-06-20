@@ -92,6 +92,24 @@ namespace TimeController
         }
         #endregion
 
+        #region SetBlackUsedTime
+        /// <summary>
+        /// 先手番の思考時間を再設定します。
+        /// </summary>
+        public static readonly RelayCommand<TimeSpan> SetBlackUsedTime =
+            new RelayCommand<TimeSpan>(ExecuteSetBlackUsedTime);
+
+        private static void ExecuteSetBlackUsedTime(TimeSpan span)
+        {
+            if (span == TimeSpan.MinValue)
+            {
+                return;
+            }
+
+            Global.MainViewModel.BlackUsedTime = span;
+        }
+        #endregion
+
         #region Set WhiteLeaveTime
         /// <summary>
         /// 後手番の残り時間を再設定します。

@@ -1,3 +1,15 @@
+2013-06-20  - Ver 1.4.0.1
+
+	* PluginShogi/ShogiData/Effect/Other/CastleEffect: 新しい囲い用の画像を
+	追加し、それに合わせてエフェクトの背景をより暗くしました。
+	* TimeController/MainViewModel.cs: 時間管理用の画面に先手の思考時間も追
+	加するようにしました。
+	* TimeController/MainWindow.xaml: 時間管理用の画面に画像を使うようにし、
+	全体的に華やかにしました。
+	* VoteProtocol/ProtocolUtil.cs: VoteClientと時間管理ツールの連携に思考
+	時間も追加しました。このためデータ受け渡し用のファイルに保存する情報が
+	少し増えました。
+
 2013-06-19  - Ver 1.4.0.0
 
 	* PluginShogi/ViewModel/EndRollViewModel.cs: 参加者一覧で表示する参加者

@@ -56,20 +56,17 @@
                             Command="{x:Static r:MovableWindow.MakeFixWindow}" />
                 </Grid>
             </ControlTemplate>
-            
-            <!-- 時間の表示スタイル -->
-            <Style x:Key="timeSpanStyle" TargetType="r:TimeSpanView">
-                <Setter Property="MaxValueText" Value="無制限" />
-                <Setter Property="VerticalAlignment" Value="Top" />
-                <Setter Property="VerticalContentAlignment" Value="Top" />
-                <Setter Property="FontSize" Value="20" />
+
+            <Style x:Key="turnStyle" TargetType="Image">
+                <Setter Property="Source" Value="/TimeController;component/Resources/Turn.png" />
+                <Setter Property="Width" Value="156" />
+                <Setter Property="Height" Value="177" />
             </Style>
-            
+
             <!-- 先手番用の表示スタイル -->
-            <Style x:Key="blackTurnStyle" TargetType="FrameworkElement">
-                <Setter Property="VerticalAlignment" Value="Center" />
+            <Style x:Key="blackTurnStyle" BasedOn="{StaticResource turnStyle}"
+                   TargetType="Image">
                 <Setter Property="Visibility" Value="Collapsed" />
-                
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Turn}" Value="Black">
                         <Setter Property="Visibility" Value="Visible" />
@@ -78,15 +75,22 @@
             </Style>
 
             <!-- 後手番用の表示スタイル -->
-            <Style x:Key="whiteTurnStyle" TargetType="FrameworkElement">
-                <Setter Property="VerticalAlignment" Value="Center" />
+            <Style x:Key="whiteTurnStyle" BasedOn="{StaticResource turnStyle}"
+                   TargetType="Image">
                 <Setter Property="Visibility" Value="Collapsed" />
-
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Turn}" Value="White">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                 </Style.Triggers>
+            </Style>
+
+            <!-- 時間の表示スタイル -->
+            <Style x:Key="timeSpanStyle" TargetType="r:TimeSpanView">
+                <Setter Property="MaxValueText" Value="無制限" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="VerticalContentAlignment" Value="Top" />
+                <Setter Property="FontSize" Value="115" />
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -99,73 +103,34 @@
     </Window.Style>
 
     <Grid>
-        <Viewbox>
-            <Grid Margin="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="0.2*" />
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="0.4*" />
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="0.4*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1" />
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="2" />
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="2" />
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="1" />
-                </Grid.ColumnDefinitions>
+        <Viewbox Stretch="Fill">
+            <Canvas Width="1210" Height="680">
+                <Canvas.Background>
+                    <ImageBrush ImageSource="/TimeController;component/Resources/Back.png" />
+                </Canvas.Background>
 
-                <Separator Grid.Row="0"
-                           Background="Transparent" />
-                <Separator Grid.Row="3"
-                           Background="Transparent" />
-                <Separator Grid.Row="6"
-                           Background="Transparent" />
+                <Image Canvas.Left="45" Canvas.Top="93"
+                       Style="{StaticResource blackTurnStyle}"
+                       Source="/TimeController;component/Resources/Turn.png" />
+                <Image Canvas.Left="45" Canvas.Top="420"
+                       Style="{StaticResource whiteTurnStyle}"
+                       Source="/TimeController;component/Resources/Turn.png" />
 
-                <r:DecoratedText Grid.Row="1" Grid.RowSpan="2" Grid.Column="1"
-                                 Style="{StaticResource blackTurnStyle}"
-                                 FontSize="20"
-                                 Text="○" />
-                <r:DecoratedText Grid.Row="4" Grid.RowSpan="2" Grid.Column="1"
-                                 Style="{StaticResource whiteTurnStyle}"
-                                 FontSize="20"
-                                 Text="○" />
-                
-                <r:DecoratedText Grid.Row="1" Grid.Column="3"
-                                 VerticalAlignment="Bottom"
-                                 Text="先手▲" />
-                <r:DecoratedText Grid.Row="2" Grid.Column="3"
-                                 VerticalAlignment="Top"
-                                 Text="リスナー" />
-                <r:DecoratedText Grid.Row="4" Grid.Column="3"
-                                 VerticalAlignment="Bottom"
-                                 Text="後手△" />
-                <r:DecoratedText Grid.Row="5" Grid.Column="3"
-                                 VerticalAlignment="Top"
-                                 Text="西尾明六段" />
-
-                <r:TimeSpanView Grid.Row="1" Grid.Column="5"
+                <r:TimeSpanView Canvas.Left="574" Canvas.Top="50"
                                 Style="{StaticResource timeSpanStyle}"
                                 Value="{Binding BlackLeaveTime}" />
-                <r:TimeSpanView Grid.Row="2" Grid.Column="5"
+                <r:TimeSpanView Canvas.Left="574" Canvas.Top="165"
                                 Style="{StaticResource timeSpanStyle}"
-                                Margin="0,-5,0,0"
-                                Foreground="Gray"
-                                Value="00:00:00" />
-                <r:TimeSpanView Grid.Row="4" Grid.Column="5"
+                                Foreground="#A0808080"
+                                Value="{Binding BlackUsedTime}" />
+                <r:TimeSpanView Canvas.Left="574" Canvas.Top="360"
                                 Style="{StaticResource timeSpanStyle}"
                                 Value="{Binding WhiteLeaveTime}" />
-                <r:TimeSpanView Grid.Row="5" Grid.Column="5"
+                <r:TimeSpanView Canvas.Left="574" Canvas.Top="475"
                                 Style="{StaticResource timeSpanStyle}"
-                                Margin="0,-5,0,0"
-                                Foreground="Gray"
+                                Foreground="#A0808080"
                                 Value="{Binding WhiteUsedTime}" />
-            </Grid>
+            </Canvas>
         </Viewbox>
 
         <!-- 移動用のボタンなどを表示します。-->

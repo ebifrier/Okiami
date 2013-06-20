@@ -35,8 +35,8 @@
                 <r:Scenario>
                     <DoubleAnimationUsingKeyFrames r:Scenario.TargetProperty="Opacity">
                         <LinearDoubleKeyFrame KeyTime="0:0:0" Value="0.0" />
-                        <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="0.4" />
-                        <LinearDoubleKeyFrame KeyTime="0:0:4.5" Value="0.4" />
+                        <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="0.6" />
+                        <LinearDoubleKeyFrame KeyTime="0:0:4.5" Value="0.6" />
                         <LinearDoubleKeyFrame KeyTime="0:0:5.0" Value="0.0" />
                     </DoubleAnimationUsingKeyFrames>
                 </r:Scenario>

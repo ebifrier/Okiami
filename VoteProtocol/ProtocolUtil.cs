@@ -41,7 +41,8 @@ namespace VoteSystem.Protocol
         /// </remarks>
         public static void WriteTotalVoteSpan(VoteState state,
                                               DateTime startTimeNtp,
-                                              TimeSpan totalSpan)
+                                              TimeSpan totalSpan,
+                                              TimeSpan progressSpan)
         {
             try
             {
@@ -54,6 +55,7 @@ namespace VoteSystem.Protocol
                     writer.WriteLine((int)state);
                     writer.WriteLine(startTimeNtp.ToString("o", c));
                     writer.WriteLine(totalSpan);
+                    writer.WriteLine(progressSpan);
                 }
             }
             catch (Exception ex)
@@ -71,7 +73,8 @@ namespace VoteSystem.Protocol
         /// </remarks>
         public static bool ReadTotalVoteSpan(out VoteState state,
                                              out DateTime startTimeNtp,
-                                             out TimeSpan totalSpan)
+                                             out TimeSpan totalSpan,
+                                             out TimeSpan progressSpan)
         {
             try
             {
@@ -83,6 +86,7 @@ namespace VoteSystem.Protocol
                     state = VoteState.Stop;
                     startTimeNtp = DateTime.MinValue;
                     totalSpan = TimeSpan.Zero;
+                    progressSpan = TimeSpan.Zero;
                     return false;
                 }
 
@@ -92,6 +96,7 @@ namespace VoteSystem.Protocol
                     state = (VoteState)int.Parse(reader.ReadLine());
                     startTimeNtp = DateTime.ParseExact(reader.ReadLine(), "o", c);
                     totalSpan = TimeSpan.Parse(reader.ReadLine());
+                    progressSpan = TimeSpan.Parse(reader.ReadLine());
 
                     return true;
                 }
@@ -104,36 +109,8 @@ namespace VoteSystem.Protocol
                 state = VoteState.Stop;
                 startTimeNtp = DateTime.MinValue;
                 totalSpan = TimeSpan.Zero;
+                progressSpan = TimeSpan.Zero;
                 return false;
-            }
-        }
-
-        /// <summary>
-        /// 全投票時間をファイルから読み込みます。
-        /// </summary>
-        /// <remarks>
-        /// 他ツールとの連携のために使います。
-        /// </remarks>
-        public static TimeSpan ReadTotalVoteSpan()
-        {
-            try
-            {
-                VoteState state;
-                DateTime startTimeNtp;
-                TimeSpan totalSpan;
-
-                if (ReadTotalVoteSpan(out state, out startTimeNtp, out totalSpan))
-                {
-                    return CalcTotalVoteLeaveTime(state, startTimeNtp, totalSpan);
-                }
-                else
-                {
-                    return TimeSpan.MinValue;
-                }
-            }
-            catch
-            {
-                return TimeSpan.MinValue;
             }
         }
 

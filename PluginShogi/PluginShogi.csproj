@@ -101,6 +101,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ShogiData\Effect\Other\CastleEffect\Image\Anaguma1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ShogiData\Effect\Other\CastleEffect\Image\Ginkan.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ShogiData\EndRoll\endroll_format_1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

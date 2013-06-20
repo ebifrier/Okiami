@@ -86,6 +86,7 @@
 #
 - name: 片銀冠
   id: KataGinkan
+  image: Ginkan
   piece_list:
   - Gyoku: 2, 8
   - Gin: 2, 7
@@ -93,6 +94,7 @@
 
 - name: 銀冠
   id: Ginkan
+  image: Ginkan
   piece_list:
   - Gyoku: 2, 8
   - Gin: 2, 7
@@ -101,6 +103,7 @@
 
 - name: 銀冠穴熊
   id: GinkanAnaguma
+  image: Ginkan
   piece_list:
   - Gyoku: 1, 9
   - Kyo: 1, 8
@@ -113,6 +116,7 @@
 #
 - name: 穴熊
   id: Anaguma
+  image: Anaguma1
   piece_list:
   - Gyoku: 1, 9
   - Kyo: 1, 8
@@ -273,6 +277,7 @@
 #
 - name: 居飛車片銀冠
   id: IbisyaKataGinkan
+  image: Ginkan
   piece_list:
   - Gyoku: 8, 8
   - Gin: 8, 7
@@ -280,6 +285,7 @@
 
 - name: 居飛車銀冠
   id: IbisyaGinkan
+  image: Ginkan
   piece_list:
   - Gyoku: 8, 8
   - Gin: 8, 7
@@ -288,6 +294,7 @@
 
 - name: 居飛車銀冠穴熊
   id: IbisyaGinkanAnaguma
+  image: Ginkan
   piece_list:
   - Gyoku: 9, 9
   - Kyo: 9, 8
@@ -300,6 +307,7 @@
 #
 - name: 居飛車穴熊
   id: IbisyaAnaguma
+  image: Anaguma1
   piece_list:
   - Gyoku: 9, 9
   - Kyo: 9, 8

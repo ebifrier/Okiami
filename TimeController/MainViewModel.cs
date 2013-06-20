@@ -58,6 +58,29 @@ namespace TimeController
         }
 
         /// <summary>
+        /// 先手がその手にかけている時間を取得または設定します。
+        /// </summary>
+        public TimeSpan BlackUsedTime
+        {
+            get { return GetValue<TimeSpan>("BlackUsedTime"); }
+            set
+            {
+                if (value != TimeSpan.MinValue && value != TimeSpan.MaxValue)
+                {
+                    // 時間表示を同期させるため、
+                    // 後手残り時間の(999 - ミリ秒)を思考時間に加えます。
+                    // 残り時間は減っていきますが、思考時間は増えるため、
+                    // このような操作を行います。
+                    value = TimeSpan.FromSeconds(
+                        (int)value.TotalSeconds +
+                        (999 - BlackLeaveTime.Milliseconds) / 1000.0);
+                }
+
+                SetValue("BlackUsedTime", value);
+            }
+        }
+
+        /// <summary>
         /// 先手の残り時間を自動的に同期しているかを取得または設定します。
         /// </summary>
         public bool IsBlackAutoSync
@@ -104,12 +127,12 @@ namespace TimeController
                 if (value != TimeSpan.MinValue && value != TimeSpan.MaxValue)
                 {
                     // 時間表示を同期させるため、
-                    // 後手残り時間の(1000 - ミリ秒)を思考時間に加えます。
+                    // 後手残り時間の(999 - ミリ秒)を思考時間に加えます。
                     // 残り時間は減っていきますが、思考時間は増えるため、
                     // このような操作を行います。
                     value = TimeSpan.FromSeconds(
                         (int)value.TotalSeconds +
-                        Math.Min(999, 1000 - WhiteLeaveTime.Milliseconds) / 1000.0);
+                        (999 - WhiteLeaveTime.Milliseconds) / 1000.0);
                 }
 
                 SetValue("WhiteUsedTime", value);
@@ -138,10 +161,14 @@ namespace TimeController
             // となります。
             var newAddTimeCount = (int)Math.Floor(MoveCount / 2.0);
 
+            // 後手の時刻に自動加算の時間を加えます。
             var newAddTime = new TimeSpan(0, newAddTimeCount, 0);
             WhiteLeaveTime += newAddTime - WhiteAddTime;
-            WhiteUsedTime = TimeSpan.Zero;
             WhiteAddTime = newAddTime;
+
+            // 思考時間は０にします。
+            BlackUsedTime = TimeSpan.Zero;
+            WhiteUsedTime = TimeSpan.Zero;
 
             Turn = ((MoveCount & 1) == 0 ? BWType.Black : BWType.White);
         }
@@ -160,15 +187,17 @@ namespace TimeController
             {
                 if (Turn == BWType.Black)
                 {
+                    // 自動同期無し、もしくは投票中は時間を進めます。
                     if (!IsBlackAutoSync || BlackVoteState == VoteState.Voting)
                     {
                         BlackLeaveTime = MathEx.Max(BlackLeaveTime - elapsed, TimeSpan.Zero);
+                        BlackUsedTime = BlackUsedTime + elapsed;
                     }
                 }
                 else
                 {
                     WhiteLeaveTime = MathEx.Max(WhiteLeaveTime - elapsed, TimeSpan.Zero);
-                    WhiteUsedTime = MathEx.Max(WhiteUsedTime + elapsed, TimeSpan.Zero);
+                    WhiteUsedTime = WhiteUsedTime + elapsed;
                 }
             }
         }
@@ -181,28 +210,22 @@ namespace TimeController
             VoteState state;
             DateTime startTime;
             TimeSpan totalSpan;
+            TimeSpan progressSpan;
 
             if (!ProtocolUtil.ReadTotalVoteSpan(
-                    out state, out startTime, out totalSpan))
+                    out state, out startTime, out totalSpan, out progressSpan))
             {
-                IsBlackAutoSync = false;
                 BlackVoteState = VoteState.Stop;
+                IsBlackAutoSync = false;
                 return;
             }
 
-            var span = ProtocolUtil.CalcTotalVoteLeaveTime(
+            BlackLeaveTime = ProtocolUtil.CalcTotalVoteLeaveTime(
                 state, startTime, totalSpan);
-
-            // 表示と１秒以上違っていたら、時刻を更新します。
-            var diff = BlackLeaveTime - span;
-            if (diff < TimeSpan.Zero) diff = -diff;
-            if (IsPlaying != null && diff > TimeSpan.FromSeconds(1))
-            {
-                BlackLeaveTime = span;
-            }
-
-            IsBlackAutoSync = true;
+            BlackUsedTime = ProtocolUtil.CalcThinkTime(
+                state, startTime, progressSpan);
             BlackVoteState = state;
+            IsBlackAutoSync = true;
         }
 
         /// <summary>
@@ -211,9 +234,12 @@ namespace TimeController
         public MainViewModel()
         {
             Turn = BWType.Black;
+
             BlackLeaveTime = new TimeSpan(2, 0, 0);
-            IsBlackAutoSync = false;
+            BlackUsedTime = TimeSpan.Zero;
             BlackVoteState = VoteState.Stop;
+            IsBlackAutoSync = false;
+
             WhiteLeaveTime = new TimeSpan(2, 0, 0);
             WhiteUsedTime = TimeSpan.Zero;
             WhiteAddTime = TimeSpan.Zero;
