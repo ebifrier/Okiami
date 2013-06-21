@@ -4,7 +4,7 @@
 
 - version: 1.5.0
   date: 2013/06/21
-  thumbnail: suika_tako.jpg
+  thumbnail: ruka_tako.jpg
   content:
   - 本体: 放送が切れたときに、それをGUI側に反映するようにしました。
   - 将棋: 囲いエフェクトに穴熊レベル２、レベル３を追加しました。
