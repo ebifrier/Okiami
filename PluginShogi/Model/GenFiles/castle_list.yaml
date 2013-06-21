@@ -125,6 +125,7 @@
 
 - name: 固い穴熊
   id: Anaguma2
+  image: Anaguma2
   piece_list:
   - Gyoku: 1, 9
   - Kyo: 1, 8
@@ -134,6 +135,7 @@
 
 - name: 固い穴熊
   id: Anaguma2
+  image: Anaguma2
   piece_list:
   - Gyoku: 1, 9
   - Kyo: 1, 8
@@ -143,6 +145,7 @@
 
 - name: すごく固い穴熊
   id: Anaguma3
+  image: Anaguma3
   piece_list:
   - Gyoku: 1, 9
   - Kyo: 1, 8
@@ -316,6 +319,7 @@
 
 - name: 固い居飛車穴熊
   id: IbisyaAnaguma2
+  image: Anaguma2
   piece_list:
   - Gyoku: 9, 9
   - Kyo: 9, 8
@@ -325,6 +329,7 @@
 
 - name: 固い居飛車穴熊
   id: IbisyaAnaguma2
+  image: Anaguma2
   piece_list:
   - Gyoku: 9, 9
   - Kyo: 9, 8
@@ -334,6 +339,7 @@
 
 - name: 超固い居飛車穴熊
   id: IbisyaAnaguma3
+  image: Anaguma3
   piece_list:
   - Gyoku: 9, 9
   - Kyo: 9, 8
@@ -344,6 +350,7 @@
 
 - name: 松尾流穴熊
   id: MatsuoAnaguma
+  image: Anaguma3
   piece_list:
   - Gyoku: 9, 9
   - Kyo: 9, 8

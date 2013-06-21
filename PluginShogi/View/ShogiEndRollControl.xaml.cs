@@ -291,7 +291,7 @@ namespace VoteSystem.PluginShogi.View
             DataContext = ShogiGlobal.ShogiModel;
 
             // プロパティ設定
-            FormatFilePath = @"ShogiData/EndRoll/endroll_format.xml";
+            FormatFilePath = @"ShogiData/EndRoll/endroll_format_1.xml";
             IsMovieMute = false;
             MovieVolume = 50;
 
@@ -408,7 +408,7 @@ namespace VoteSystem.PluginShogi.View
             this.endRollData = GetVoterList();
 
             Ending.PlayMovie();
-            //MoviePlayer.Position = TimeSpan.FromSeconds(300);
+            //Ending.MoviePlayer.Position = TimeSpan.FromSeconds(300);
 
             // エンディングの前に現局面を設定します。
             var board = ShogiGlobal.ShogiModel.CurrentBoard.Clone();

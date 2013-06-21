@@ -30,7 +30,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { "片美濃囲い", "本美濃囲い", }),
                 
                 new CastleInfo(
-                    "すごく固い穴熊", "Anaguma3", "", 20,
+                    "すごく固い穴熊", "Anaguma3", "Anaguma3.png", 20,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(1, 9)),
@@ -43,7 +43,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { "穴熊", "固い穴熊", "固い穴熊", }),
                 
                 new CastleInfo(
-                    "超固い居飛車穴熊", "IbisyaAnaguma3", "", 20,
+                    "超固い居飛車穴熊", "IbisyaAnaguma3", "Anaguma3.png", 20,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(9, 9)),
@@ -56,7 +56,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { "居飛車穴熊", "固い居飛車穴熊", "固い居飛車穴熊", }),
                 
                 new CastleInfo(
-                    "松尾流穴熊", "MatsuoAnaguma", "", 20,
+                    "松尾流穴熊", "MatsuoAnaguma", "Anaguma3.png", 20,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(9, 9)),
@@ -125,7 +125,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { "片銀冠", }),
                 
                 new CastleInfo(
-                    "固い穴熊", "Anaguma2", "", 10,
+                    "固い穴熊", "Anaguma2", "Anaguma2.png", 10,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(1, 9)),
@@ -137,7 +137,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { "穴熊", }),
                 
                 new CastleInfo(
-                    "固い穴熊", "Anaguma2", "", 10,
+                    "固い穴熊", "Anaguma2", "Anaguma2.png", 10,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(1, 9)),
@@ -184,7 +184,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { "居飛車片銀冠", }),
                 
                 new CastleInfo(
-                    "固い居飛車穴熊", "IbisyaAnaguma2", "", 10,
+                    "固い居飛車穴熊", "IbisyaAnaguma2", "Anaguma2.png", 10,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(9, 9)),
@@ -196,7 +196,7 @@ namespace VoteSystem.PluginShogi.Model
                     new string[] { "居飛車穴熊", }),
                 
                 new CastleInfo(
-                    "固い居飛車穴熊", "IbisyaAnaguma2", "", 10,
+                    "固い居飛車穴熊", "IbisyaAnaguma2", "Anaguma2.png", 10,
                     new []
                     {
                         new CastlePiece(PieceType.Gyoku, new Position(9, 9)),

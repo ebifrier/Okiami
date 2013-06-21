@@ -29,6 +29,8 @@ namespace VoteSystem.Server
         {
             get
             {
+                //var test = Protocol.Model.TestVoterList.GetTestVoterList();
+
                 lock (this.joinedVoterDic)
                 lock (this.unjoinedVoterDic)
                 lock (this.liveOwnerDic)
@@ -40,19 +42,29 @@ namespace VoteSystem.Server
                         UnjoinedVoterCount = this.unjoinedVoterDic.Count,
                         LiveOwnerList = this.liveOwnerDic.Values.ToList(),
                         ModeCustomJoinerList = this.modeCustomjoinerSet.ToList(),
-
+                         
                         TotalLiveCount = this.voteRoom.TotalLiveCount,
                         TotalLiveCommentCount = this.voteRoom.TotalLiveCommentCount,
                         TotalLiveVisitorCount = this.voteRoom.TotalLiveVisitorCount,
 
-                        //DonorAmount = 171920,
-                        //DonorList = DonorList.ToList(),
+                        /*JoinedVoterList = test.JoinedVoterList,
+                        UnjoinedVoterCount = test.UnjoinedVoterCount,
+                        LiveOwnerList = test.LiveOwnerList,
+                        ModeCustomJoinerList = test.ModeCustomJoinerList,
+
+                        TotalLiveCount = 256,
+                        TotalLiveCommentCount = 562347162,
+                        TotalLiveVisitorCount = 4328171,*/
+
+                        DonorCount = 15,
+                        DonorAmount = 278919,
+                        DonorViewList = DonorViewList.ToList(),
                     };
                 }
             }
         }
 
-        /*private List<string> DonorList
+        private List<string> DonorViewList
         {
             get
             {
@@ -60,13 +72,17 @@ namespace VoteSystem.Server
                 {
                     "izuminoshita",
                     "石渡良二",
-                    "サマンサ",
+                    "リスナーが負けたら船江君はあきらめます",
                     "エスペラード",
                     "ebifrier",
                     "kokujira",
+                    "むずでょ",
+                    "I.M.",
+                    "ゆうまくん",
+                    "つーてんかく",
                 };
             }
-        }*/
+        }
 
         /// <summary>
         /// 参加していない投票者をリストに追加します。

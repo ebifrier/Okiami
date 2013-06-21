@@ -217,6 +217,18 @@ namespace VoteSystem.PluginShogi.Effects
             }
         }
 
+        /// <summary>
+        /// 音量の調節を行います。
+        /// </summary>
+        private void AdjustVolume(EffectObject effect)
+        {
+            var percent = (Settings.SD_IsUseEffectSound ?
+                Settings.SD_EffectVolume : 0);
+            var rate = MathEx.Between(0, 100, percent) / 100.0;
+
+            effect.MultiplyStartVolume(rate);
+        }
+
         #region データコンテキスト
         /// <summary>
         /// 通常のデータコンテキストを作成します。
@@ -445,6 +457,7 @@ namespace VoteSystem.PluginShogi.Effects
                 effect.Terminated += (_, __) => model.EditMode = oldEditMode;
                 model.EditMode = EditMode.NoEdit;
 
+                AdjustVolume(effect);
                 Container.AddEffect(effect);
             }
         }
@@ -575,18 +588,7 @@ namespace VoteSystem.PluginShogi.Effects
                 return;
             }
 
-            // 効果音を調整します。
-            if (!Settings.SD_IsUseEffectSound)
-            {
-                effect.StartSoundPath = null;
-            }
-            else
-            {
-                var volume = Settings.SD_EffectVolume / 100.0;
-
-                effect.StartSoundVolume *= MathEx.Between(0.0, 1.0, volume);
-            }
-
+            AdjustVolume(effect);
             WPFUtil.UIProcess(() =>
             {
                 effect.DataContext = CreateContext(position);
@@ -652,12 +654,7 @@ namespace VoteSystem.PluginShogi.Effects
                 return;
             }
 
-            // 効果音を調整します。
-            var percent = (Settings.SD_IsUseEffectSound ?
-                Settings.SD_EffectVolume : 0);
-            var rate = MathEx.Between(0, 100, percent) / 100.0;
-            effect.MultiplyStartVolume(rate);
-
+            AdjustVolume(effect);
             WPFUtil.UIProcess(() =>
             {
                 effect.DataContext = CreateContext(position);

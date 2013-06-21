@@ -78,21 +78,13 @@ namespace VoteSystem.Protocol.Vote
         }
 
         /// <summary>
-        /// 寄付者一覧を取得または設定します。
+        /// EDに載せる寄付者一覧を取得または設定します。
         /// </summary>
         [DataMember(Order = 5, IsRequired = true)]
-        public List<string> DonorList
+        public List<string> DonorViewList
         {
             get;
             set;
-        }
-
-        /// <summary>
-        /// 寄付者数を取得します。
-        /// </summary>
-        public int DonorCount
-        {
-            get { return DonorList.Count(); }
         }
 
         /// <summary>
@@ -136,6 +128,16 @@ namespace VoteSystem.Protocol.Vote
         }
 
         /// <summary>
+        /// 寄付者総数を取得または設定します。
+        /// </summary>
+        [DataMember(Order = 14, IsRequired = true)]
+        public int DonorCount
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// デシリアライズ後に呼ばれます。
         /// </summary>
         [OnDeserialized()]
@@ -156,9 +158,9 @@ namespace VoteSystem.Protocol.Vote
                 ModeCustomJoinerList = new List<string>();
             }
 
-            if (DonorList == null)
+            if (DonorViewList == null)
             {
-                DonorList = new List<string>();
+                DonorViewList = new List<string>();
             }
         }
 
@@ -170,7 +172,7 @@ namespace VoteSystem.Protocol.Vote
             JoinedVoterList = new List<VoterInfo>();
             LiveOwnerList = new List<VoterInfo>();
             ModeCustomJoinerList = new List<string>();
-            DonorList = new List<string>();
+            DonorViewList = new List<string>();
         }
     }
 }

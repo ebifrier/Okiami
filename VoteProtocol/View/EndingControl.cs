@@ -501,6 +501,8 @@ namespace VoteSystem.Protocol.View
             // 二度目の再生の可能性があるため。
             MoviePlayer.Stop();
             MoviePlayer.Position = TimeSpan.Zero;
+
+            //OpenMedia(new Uri("file://E:/movies/ending/ending5/ending_last.avi"));
         }
 
         /// <summary>

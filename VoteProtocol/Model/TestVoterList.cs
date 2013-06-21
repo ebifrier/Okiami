@@ -267,9 +267,11 @@ namespace VoteSystem.Protocol.Model
                 TotalLiveVisitorCount = 1000,
                 TotalLiveCommentCount = 120000,
             };
-            voterList.JoinedVoterList.AddRange(list);
+            var x = new List<VoterInfo>(list);
+            x.AddRange(list);
+            voterList.JoinedVoterList.AddRange(x);
 
-            voterList.DonorList.AddRange(
+            voterList.DonorViewList.AddRange(
                 list.OrderBy(_ => Guid.NewGuid())
                     .Take(20).Select(_ => _.Name));
 

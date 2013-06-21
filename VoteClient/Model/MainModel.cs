@@ -227,6 +227,7 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// 一つでも放送に接続していれば真を返します。
         /// </summary>
+        [DependOnProperty(typeof(LiveClient), "IsConnected")]
         public bool IsConnectedToLive
         {
             get { return LiveClientList.Any(_ => _.IsConnected); }
@@ -486,6 +487,7 @@ namespace VoteSystem.Client.Model
 
             this.AddDependModel(this.nicoClient);
             this.AddDependModel(this.voteClient);
+            LiveClientList.ForEach(_ => this.AddDependModel(_));
         }
     }
 }

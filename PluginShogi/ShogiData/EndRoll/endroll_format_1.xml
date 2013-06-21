@@ -1,14 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
-<FormatRoot MovieUrl="http://garnet-alice.net/shogi/tmp/ending4.wmv"
-            MovieExt=".wmv">
+<FormatRoot MovieUrl="https://s3-ap-northeast-1.amazonaws.com/ending/ending_last.wmv">
 	<MovieTimeline FadeInStartTime="00:00:10"
 				   FadeInSpan="00:00:10"
-				   FadeOutStartTime="00:06:26"
+				   FadeOutStartTime="00:06:30"
 				   FadeOutSpan="00:00:10" />
 	<EndRollTimeline FadeInStartTime="00:00:26"
 					 FadeInSpan="00:00:00"
-					 FadeOutStartTime="00:05:42"
+					 FadeOutStartTime="00:05:47"
 					 FadeOutSpan="00:00:00" />
 	<ShogiTimeline FadeInStartTime="00:00:20"
 				   FadeInSpan="00:00:05"
@@ -56,7 +55,7 @@
 		</Line>
 	</Lines>
 
-	<Line Count="10" />
+	<Line Count="6" />
 
 	<!-- 使用ツールの素材など -->
 	<Line>
@@ -146,8 +145,17 @@
 		<Format Column="1" Text="Marc Gravell" Alignment="Left" />
 	</Line>
 	<Line>
-		<Format Column="1" Text="CookieGetterSharp製作者" Alignment="Left" />
+		<Format Column="1" Text="炬燵犬" Alignment="Left" />
 	</Line>
+  <Line>
+    <Format Column="1" Text="halxxxx" Alignment="Left" />
+  </Line>
+  <Line>
+    <Format Column="1" Text="にょんにょん" Alignment="Left" />
+  </Line>
+  <Line>
+    <Format Column="1" Text="うつろ" Alignment="Left" />
+  </Line>
 	<Line>
 		<Format Column="1" Text="Ambiera" Alignment="Left" />
 	</Line>
@@ -182,10 +190,6 @@
 	<Line>
 		<Format Column="0" Text="作詞・作曲" Alignment="Right" />
 		<Format Column="1" Text="スマイルＰ" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="0" Text="イラスト・動画" Alignment="Right" />
-		<Format Column="1" Text="―――" Alignment="Left" />
 	</Line>
 	<Line>
 		<Format Column="0" Text="歌" Alignment="Right" />
@@ -228,19 +232,31 @@
     <Format ColumnSpan="2" Text="すたすた" />
   </Line>
 
-  <Line Count="7" />
+  <Line Count="3" />
 
   <!-- 寄付者一覧とその人数などを表示 -->
   <Line>
     <Format ColumnSpan="2" Text="寄付者一覧" FontWeight="Bold" />
   </Line>
   <Line />
-  <Lines Data="$DonorList">
+  <Lines Data="$DonorViewList">
     <Line>
       <Format ColumnSpan="2" Text="$()" />
     </Line>
   </Lines>
   <Line />
+  <Lines Data="$DonorViewCount">
+    <Line>
+      <Format Column="0" Text="以上" FontWeight="Bold" Alignment="Right" />
+      <Format Column="1" Text="$()名" FontWeight="Bold" Alignment="Left" />
+    </Line>
+  </Lines>
+  <Lines Data="$DonorOtherCount">
+    <Line>
+      <Format Column="0" Text="その他" FontWeight="Bold" Alignment="Right" />
+      <Format Column="1" Text="$()名" FontWeight="Bold" Alignment="Left" />
+    </Line>
+  </Lines>
   <Lines Data="$DonorCount">
     <Line>
       <Format Column="0" Text="合計" FontWeight="Bold" Alignment="Right" />
@@ -287,19 +303,19 @@
     <Format ColumnSpan="2" Text="アナロ熊" />
   </Line>
 
-	<Line Count="4" />
+	<Line Count="3" />
 
 	<!-- 放送主一覧とその人数などを表示 -->
 	<Line>
 		<Format ColumnSpan="2" Text="放送主一覧" FontWeight="Bold" />
 	</Line>
   <Line />
-	<Lines Data="$LiveOwnerList">
+	<Lines Data="$LiveOwnerViewList">
 		<!--<Line>
 			<Format ColumnSpan="2" Text=" " />
 		</Line>-->
 		<Line>
-			<Format ColumnSpan="2" Text="$Name" Color="$Color" />
+			<Format ColumnSpan="2" Text="$Name" />
 		</Line>
 	</Lines>
 	<Line />
@@ -347,7 +363,7 @@
   <Lines Data="$TotalLiveVisitorCountText">
     <Line>
 		  <Format Column="0" Text="来場者数合計" Alignment="Right" />
-		  <Format Column="1" Text="$()" Alignment="Left" />
+		  <Format Column="1" Text="$()名" Alignment="Left" />
 	  </Line>
   </Lines>
   <Lines Data="$TotalLiveCommentCountText">
@@ -399,9 +415,11 @@
 	<Line>
 		<Format ColumnSpan="2" Text="放送主" FontWeight="Bold" />
 	</Line>
-	<Line>
-		<Format ColumnSpan="2" Text="誰か" />
-	</Line>
+  <Lines Data="$NickName">
+    <Line>
+      <Format ColumnSpan="2" Text="$()" />
+    </Line>
+  </Lines>
 
 	<Line Count="11" />
 

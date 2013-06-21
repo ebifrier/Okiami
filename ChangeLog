@@ -1,3 +1,12 @@
+2013-06-22  - Ver 1.5.0.0
+
+	* PluginShogi/Effects/EffectManager.cs: 囲いエフェクトの音量を設定から
+	調整できるようにしました。
+	* PluginShogi/ShogiData/Effect/Other/CastleEffect: 穴熊レベル２、レベル
+	３のエフェクトを追加しました。
+	* VoteProtocol/Vote/VoterList.cs: 寄付者のその他の人数を保存するように
+	しました。
+
 2013-06-20  - Ver 1.4.0.1
 
 	* PluginShogi/ShogiData/Effect/Other/CastleEffect: 新しい囲い用の画像を

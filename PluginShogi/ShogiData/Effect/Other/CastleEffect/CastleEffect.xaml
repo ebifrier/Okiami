@@ -127,7 +127,7 @@
                             MaterialType="Diffuse"
                             Coord="{StaticResource castleBackCoord}"
                             Scale="430,380,1"
-                            StartSoundVolume="0.5"
+                            StartSoundVolume="0.4"
                             StartSoundPath="Bom.wav">
                 <r:EffectObject.Scenario>
                     <r:Scenario>
@@ -189,7 +189,7 @@
 
             <!-- 囲いの名前のＳＥ -->
             <r:EffectObject WaitTime="0:0:2.0"
-                            StartSoundVolume="1.0"
+                            StartSoundVolume="0.8"
                             StartSoundPath="Voice/${CastleId}.wav">
             </r:EffectObject>
 

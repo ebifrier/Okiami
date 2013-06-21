@@ -18,6 +18,23 @@ namespace VoteSystem.PluginShogi.ViewModel
     public sealed class EndRollViewModel : DynamicViewModel
     {
         /// <summary>
+        /// 自分の名前を取得します。
+        /// </summary>
+        public string NickName
+        {
+            get
+            {
+                var model = ShogiGlobal.ClientModel;
+                if (model == null)
+                {
+                    return "名無し";
+                }
+
+                return model.NickName;
+            }
+        }
+
+        /// <summary>
         /// 参加者リストを取得します。
         /// </summary>
         public VoterList VoterList
@@ -80,6 +97,22 @@ namespace VoteSystem.PluginShogi.ViewModel
         public int LiveOwnerOtherCount
         {
             get { return (VoterList.LiveOwnerCount - LiveOwnerViewCount); }
+        }
+
+        /// <summary>
+        /// 寄付者数を取得します。
+        /// </summary>
+        public int DonorViewCount
+        {
+            get { return VoterList.DonorViewList.Count(); }
+        }
+
+        /// <summary>
+        /// その他の寄付者人数を取得します。
+        /// </summary>
+        public int DonorOtherCount
+        {
+            get { return (VoterList.DonorCount - DonorViewCount); }
         }
 
         private static string[] UnitTable = new string[]
@@ -206,14 +239,14 @@ namespace VoteSystem.PluginShogi.ViewModel
             // 参加者は一度指定条件でソートし、カットした後、
             // ランダムに並び替えます。
             JoinedVoterViewList = SortJoinedVoterList()
-                .Take(210)
+                .Take(150)
                 .OrderBy(_ => Guid.NewGuid())
                 .ToList();
 
             // 放送主はランダムに並び替えます。
             LiveOwnerViewList = GetLiveOwnerList()
                 .OrderBy(_ => Guid.NewGuid())
-                .Take(20)
+                .Take(10)
                 .ToList();
         }
     }
