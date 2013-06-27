@@ -326,6 +326,31 @@ namespace VoteSystem.Client.Model.Live
             }
         }
 
+        /// <summary>
+        /// ニコ生アラートへの接続を行います。
+        /// </summary>
+        /// <remarks>
+        /// ネットワーク制限がある場合などは、
+        /// 接続に失敗することがあります。
+        /// </remarks>
+        private AlertClient ConnectAlert()
+        {
+            try
+            {
+                var alert = new AlertClient();
+                alert.LiveAlerted += alert_LiveAlerted;
+                alert.Connect();
+                return alert;
+            }
+            catch (Exception ex)
+            {
+                Log.ErrorException(ex,
+                    "アラートへの接続に失敗しました。");
+            }
+
+            return null;
+        }
+
         void alert_LiveAlerted(object sender, LiveAlertedEventArgs e)
         {
             if (e.ProviderData.ProviderType != ProviderType.Community ||
@@ -382,9 +407,7 @@ namespace VoteSystem.Client.Model.Live
                 (sender, e) => HandleComment(e.RoomIndex, e.Comment);
             this.AddDependModel(this.commentClient);
 
-            this.alert = new AlertClient();
-            this.alert.LiveAlerted += alert_LiveAlerted;
-            this.alert.Connect();
+            this.alert = ConnectAlert();
 
             this.heartbeatTimer = new Timer(
                 Heartbeat_Callback,

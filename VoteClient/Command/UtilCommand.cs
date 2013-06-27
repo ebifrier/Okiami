@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -253,7 +254,7 @@ namespace VoteSystem.Client.Command
 
             foreach (var filepath in dialog.FileNames)
             {
-                SendNcvLog(filepath);
+                SendAnkoLog(filepath);
             }
 
             DialogUtil.Show(
@@ -300,6 +301,47 @@ namespace VoteSystem.Client.Command
             catch (Exception ex)
             {
                 MessageUtil.ErrorMessage(ex,
+                    "ログ送信に失敗しました。");
+                return;
+            }
+        }
+
+        /// <summary>
+        /// アンコちゃんのログファイルの変化を読み込みます。
+        /// </summary>
+        private static void SendAnkoLog(string filepath)
+        {
+            try
+            {
+                using (var stream = new FileStream(filepath, FileMode.Open))
+                {
+                    var lines = Util
+                        .ReadLines(stream, Encoding.UTF8)
+                        .Where(_ => !string.IsNullOrEmpty(_));
+
+                    foreach (var line in lines)
+                    {
+                        var m = System.Text.RegularExpressions.Regex.Match(
+                            line, @"(\d+)\s+([\w_\-]+)\s+([\d\-:]+)\s+(.+)$");
+                        if (!m.Success)
+                        {
+                            continue;
+                        }
+
+                        Global.VoteClient.SendNotification(
+                            new Protocol.Notification
+                            {
+                                Text = m.Groups[4].Value,
+                                VoterId = m.Groups[2].Value,
+                                Timestamp = Ragnarok.Net.NtpClient.GetTime(),
+                            },
+                            false);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                DialogUtil.ShowError(ex,
                     "ログ送信に失敗しました。");
                 return;
             }

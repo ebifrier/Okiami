@@ -237,7 +237,7 @@ namespace VoteSystem.PluginShogi.View
         /// <summary>
         /// 投票者リストを更新します。
         /// </summary>
-        public static object GetVoterList()
+        public static EndRollViewModel GetVoterList()
         {
             try
             {
@@ -399,12 +399,31 @@ namespace VoteSystem.PluginShogi.View
             Ending.StartPrepare(MovieUrl, MovieExt, startTimeNtp);
         }
 
+        private void SaveData(EndRollViewModel model)
+        {
+            using (var writer = new System.IO.StreamWriter(
+                "data.txt", false, Encoding.UTF8))
+            {
+                writer.WriteLine("参加者");
+                model.VoterList.JoinedVoterList
+                    .ForEach(_ => writer.WriteLine("{0,24}　{1}", _.Name, _.Skill));
+
+                writer.WriteLine("参加者数: {0}",
+                    model.VoterList.JoinedVoterList.Count());
+                writer.WriteLine("その他: {0}",
+                    model.VoterList.UnjoinedVoterCount);
+            }
+        }
+
         /// <summary>
         /// エンディングの再生を開始します。
         /// </summary>
         private void Play()
         {
             // エンドロール用の参加者一覧は動画再生直前に取得します。
+            //var obj = GetVoterList();
+            //SaveData(obj);
+
             this.endRollData = GetVoterList();
 
             Ending.PlayMovie();

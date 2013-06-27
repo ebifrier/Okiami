@@ -1,3 +1,12 @@
+2013-06-27  - Ver 1.5.0.1
+
+	* PluginShogi/ShogiData/Effect/Other/CastleEffect/Image/Anaguma2.png: 
+	穴熊用の画像を追加しました。（追加し忘れていたため）
+	* VoteClient/Command/UtilCommand.cs: アンコちゃんのログファイル送信用コ
+	マンドを追加しました。
+	* VoteClient/Model/Live/LiveNicoClient.cs: ニコ生アラートへの接続に失敗
+	しても、アプリが落ちないようにしました。
+
 2013-06-22  - Ver 1.5.0.0
 
 	* PluginShogi/Effects/EffectManager.cs: 囲いエフェクトの音量を設定から

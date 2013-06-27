@@ -227,6 +227,10 @@ namespace VoteSystem.PluginShogi.ViewModel
                     ShowEndingSettingWindow,
                     ExecuteShowEndingSettingWindow, CanExecute));
 
+            /*bindings.Add(
+                new CommandBinding(
+                    ReadNcvLog,
+                    ExecuteReadNcvLog, CanExecute));*/
             bindings.Add(
                 new CommandBinding(
                     ReadNcvLog,
