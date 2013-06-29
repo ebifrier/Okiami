@@ -140,7 +140,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// コンストラクタ
         /// </summary>
         public AutoPlayEx(Variation variation)
-            : this(variation.Board, variation.BoardMoveList)
+            : this(variation.Board.Clone(), variation.BoardMoveList)
         {
             var sb = new StringBuilder();
             sb.AppendFormat("{1}{0}{0}",

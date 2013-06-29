@@ -116,7 +116,7 @@ namespace VoteSystem.PluginShogi.Model
             IsOriginal = true;
 
             Label = string.Join("",
-                        MoveList.Select(move => move.ToString()).ToArray());
+                MoveList.Select(_ => _.ToString()).ToArray());
         }
 
         /// <summary>

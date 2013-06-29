@@ -19,9 +19,10 @@ using Ragnarok.Presentation.Shogi;
 
 namespace VoteSystem.PluginShogi.ViewModel
 {
-    using VoteSystem.Protocol;
-    using VoteSystem.PluginShogi.Model;
-    using VoteSystem.PluginShogi.View;
+    using Protocol;
+    using Protocol.Vote;
+    using PluginShogi.Model;
+    using PluginShogi.View;
 
     /// <summary>
     /// 変化の再生状態を示します。
@@ -272,13 +273,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         public VariationState VariationState
         {
             get { return GetValue<VariationState>("VariationState"); }
-            set
-            {
-                SetValue("VariationState", value);
-
-                // TODO: ウィンドウのボタン状態を変更するため。
-                WPFUtil.InvalidateCommand();
-            }
+            set { SetValue("VariationState", value); }
         }
 
         /// <summary>
@@ -443,6 +438,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 // クラス外から局面が設定されたときは、
                 // 自動再生用の変化をすべて消去します。
                 ClearAutoPlay();
+                StopAutoPlay();
 
                 Board = board;
                 CloneOnWriteBoard();
@@ -578,12 +574,15 @@ namespace VoteSystem.PluginShogi.ViewModel
                 // ウィンドウが非表示なら変化を表示しません。
                 if (ShogiGlobal.MainWindow == null)
                 {
+                    ClearAutoPlay();
                     return null;
                 }
 
                 // 投票残り時間が短い場合は、自動再生を行いません。
-                if (VoteClient.VoteLeaveTime < AutoPlayMinimumLeaveTime)
+                if (VoteClient.VoteState == VoteState.Voting &&
+                    VoteClient.VoteLeaveTime < AutoPlayMinimumLeaveTime)
                 {
+                    ClearAutoPlay();
                     return null;
                 }
 
@@ -599,7 +598,8 @@ namespace VoteSystem.PluginShogi.ViewModel
                     dialog.ShowDialog();
                     if (dialog.ResultButton != MessageBoxResult.Yes)
                     {
-                        return null;
+                        this.isCheckingAutoPlay = false;
+                        return GetNextAutoPlay();
                     }
                 }
 
@@ -631,8 +631,13 @@ namespace VoteSystem.PluginShogi.ViewModel
             autoPlay.Stopped += (_, __) => StopAutoPlay();
             this.currentAutoPlay = autoPlay;
 
+            VariationState = VariationState.Playing;
             Board = autoPlay.Board;
-            shogi.StartAutoPlay(autoPlay);
+
+            // 変化停止時の処理
+            WPFUtil.InvalidateCommand();
+
+            shogi.StartAutoPlay(autoPlay);            
         }
 
         /// <summary>
@@ -646,6 +651,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             }
 
             this.currentAutoPlay = null;
+            VariationState = VariationState.None;
 
             // 変化停止時の処理
             WPFUtil.InvalidateCommand();
@@ -660,8 +666,6 @@ namespace VoteSystem.PluginShogi.ViewModel
         public void ClearAutoPlay()
         {
             this.autoPlayList.Clear();
-
-            StopAutoPlay();
         }
 
         void board_BoardChanged(object sender, BoardChangedEventArgs e)
