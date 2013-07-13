@@ -134,6 +134,8 @@ namespace VoteSystem.PluginShogi.View
             Commands.Binding(InputBindings);
             ShogiControl.InitializeBindings(this);
 
+            //RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.HighQuality);
+
             this.voteResultControl.InitializeBindings(this);
             this.voteResultControl.SettingUpdated +=
                 (_, __) => ShogiGlobal.Settings.Save();

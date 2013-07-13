@@ -2,7 +2,7 @@
 
 <!--http://garnet-alice.net/shogi/tmp/ending_test.wmv -->
 
-<FormatRoot MovieUrl="https://s3-ap-northeast-1.amazonaws.com/ending-movie-test/ending_test.wmv"
+<FormatRoot MovieUrl="https://s3-ap-northeast-1.amazonaws.com/ending/ending_test.wmv"
 			MovieExt=".wmv">
 	<MovieTimeline FadeInStartTime="00:00:05"
 				   FadeInSpan="00:00:05"

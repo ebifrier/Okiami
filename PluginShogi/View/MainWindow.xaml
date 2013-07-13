@@ -11,7 +11,7 @@
         mc:Ignorable="d" x:Name="window"
         Title="将棋盤ちゃん" Height="560" Width="666"
         AllowDrop="True"
-        Background="{x:Static Brushes.Black}">
+        Background="{x:Static Brushes.White}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

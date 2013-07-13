@@ -21,19 +21,19 @@ namespace VoteSystem.PluginShogi
         /// <summary>
         /// 最高品質です。
         /// </summary>
-        [LabelDescription(Label = "最高品質")]
+        [LabelDescription(Label = "映像重視")]
         Best,
         
         /// <summary>
         /// 通常品質です。
         /// </summary>
-        [LabelDescription(Label = "通常品質")]
+        [LabelDescription(Label = "バランス")]
         Normal,
 
         /// <summary>
         /// 処理が重い場合に使います。
         /// </summary>
-        [LabelDescription(Label = "低品質")]
+        [LabelDescription(Label = "速度重視")]
         Poor,
     }
 

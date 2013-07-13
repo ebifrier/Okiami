@@ -291,7 +291,7 @@ namespace VoteSystem.PluginShogi.View
             DataContext = ShogiGlobal.ShogiModel;
 
             // プロパティ設定
-            FormatFilePath = @"ShogiData/EndRoll/endroll_format_1.xml";
+            FormatFilePath = @"ShogiData/EndRoll/endroll_format.xml";
             IsMovieMute = false;
             MovieVolume = 50;
 
