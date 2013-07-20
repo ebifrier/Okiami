@@ -16,5 +16,6 @@ TestResults/
 TimeController/dist/TimeController_1_0_0
 TimeController/dist/TimeController_1_1_0
 TimeController/dist/TimeController_1_2_0/
+TimeController/dist/TimeController_1_3_0/
 syntax: regexp
 dist/VoteClient_[0-9_]+
