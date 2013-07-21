@@ -4,37 +4,11 @@ using System.Linq;
 using System.Text;
 
 using Ragnarok;
-using Ragnarok.Net;
-using Ragnarok.Utility;
-using Ragnarok.ObjectModel;
 
 namespace VoteSystem.Server
 {
     using Protocol;
     using Protocol.Vote;
-
-    /// <summary>
-    /// Unixシステムのシグナル処理に使うイベント引数です。
-    /// </summary>
-    public class SignalEventArgs : EventArgs
-    {
-        /// <summary>
-        /// 受信したシグナル番号を取得します。
-        /// </summary>
-        public int Signal
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// コンストラクタ
-        /// </summary>
-        public SignalEventArgs(int signal)
-        {
-            Signal = signal;
-        }
-    }
 
     /// <summary>
     /// サーバーの全体に影響するオブジェクトなどを保持します。
@@ -50,10 +24,7 @@ namespace VoteSystem.Server
         /// </summary>
         public static GlobalControl Instance
         {
-            get
-            {
-                return instance;
-            }
+            get { return instance; }
         }
 
         #region 投票ルーム
@@ -186,27 +157,6 @@ namespace VoteSystem.Server
                 }
 
                 return this.voteRoomList[roomId];
-            }
-        }
-        #endregion
-
-        #region シグナル処理
-        /// <summary>
-        /// シグナル受信時に呼ばれるイベントハンドラです。
-        /// </summary>
-        public event EventHandler<SignalEventArgs> SignalReceived;
-
-        /// <summary>
-        /// 登録されたシグナル処理ハンドラを呼び出します。
-        /// </summary>
-        public void OnSignal(int signal)
-        {
-            var handler = SignalReceived;
-
-            if (handler != null)
-            {
-                Util.SafeCall(() =>
-                    handler(null, new SignalEventArgs(signal)));
             }
         }
         #endregion

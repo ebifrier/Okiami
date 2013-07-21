@@ -750,10 +750,10 @@ namespace VoteSystem.Server.VoteStrategy
         {
             this.voteRoom = voteRoom;
 
-            GlobalControl.Instance.SignalReceived +=
+            Signal.SignalReceived +=
                 Util.MakeWeak<SignalEventArgs>(
                     OnSignalReceived,
-                    _ => GlobalControl.Instance.SignalReceived -= _);
+                    _ => Signal.SignalReceived -= _);
         }
     }
 }

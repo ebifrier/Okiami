@@ -2,6 +2,7 @@
 
 	* VoteServer/GlobalControl.cs: シグナルハンドラを登録制にしました。これ
 	で任意のオブジェクトがシグナル受信を処理できるようになりました。
+	* VoteServer/Program.cs: シグナル処理プログラムをRagnarokに移動しました。
 
 2013-07-14  - Ver 1.6.0.0
 
