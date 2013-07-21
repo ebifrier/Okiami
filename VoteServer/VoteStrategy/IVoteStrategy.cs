@@ -52,10 +52,5 @@ namespace VoteSystem.Server.VoteStrategy
         /// 投票結果をクリアします。
         /// </summary>
         void ClearVote();
-
-        /// <summary>
-        /// シグナル受信時に呼ばれます。
-        /// </summary>
-        void SignalReceived(int signum);
     }
 }

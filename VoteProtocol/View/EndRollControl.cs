@@ -940,8 +940,7 @@ namespace VoteSystem.Protocol.View
 
             // Unloadedはアプリ終了時には呼ばれませんが
             // この場合は問題ありません。
-            Unloaded += (_, __) =>
-                CompositionTarget.Rendering -= CompositionTarget_Rendering;
+            Unloaded += (_, __) => UpdateAutoUpdate(false);
 
             UpdateAutoUpdate(AutoUpdate);
         }

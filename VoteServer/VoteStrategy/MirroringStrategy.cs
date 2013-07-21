@@ -48,14 +48,6 @@ namespace VoteSystem.Server.VoteStrategy
         }
 
         /// <summary>
-        /// シグナル受信時に呼ばれます。
-        /// </summary>
-        public void SignalReceived(int signum)
-        {
-            // 何もしません。
-        }
-
-        /// <summary>
         /// 各通知のハンドラを接続します。
         /// </summary>
         public void ConnectHandlers(PbConnection connection)

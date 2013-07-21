@@ -82,31 +82,6 @@ namespace VoteSystem.Server.VoteStrategy
         }
 
         /// <summary>
-        /// シグナル受信時に呼ばれます。
-        /// </summary>
-        public void SignalReceived(int signum)
-        {
-            try
-            {
-                Log.Info("将棋) シグナル処理を開始しました。");
-
-                var command = GetWhaleInfo();
-                if (command == null)
-                {
-                    return;
-                }
-
-                // 大合神クジラちゃんのクライアントリストを送信します。
-                this.voteRoom.BroadcastCommand(command);
-            }
-            catch (Exception ex)
-            {
-                Log.ErrorException(ex,
-                    "大合神クジラちゃんの名前一覧の取得に失敗しました。");
-            }
-        }
-
-        /// <summary>
         /// 各通知のハンドラを接続します。
         /// </summary>
         public void ConnectHandlers(PbConnection connection)
@@ -744,11 +719,41 @@ namespace VoteSystem.Server.VoteStrategy
         }
 
         /// <summary>
+        /// シグナル受信時に呼ばれます。
+        /// </summary>
+        private void OnSignalReceived(object sender, SignalEventArgs e)
+        {
+            try
+            {
+                Log.Info("将棋) シグナル処理を開始しました。");
+
+                var command = GetWhaleInfo();
+                if (command == null)
+                {
+                    return;
+                }
+
+                // 大合神クジラちゃんのクライアントリストを送信します。
+                this.voteRoom.BroadcastCommand(command);
+            }
+            catch (Exception ex)
+            {
+                Log.ErrorException(ex,
+                    "大合神クジラちゃんの名前一覧の取得に失敗しました。");
+            }
+        }
+
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         public ShogiVoteStrategy(VoteRoom voteRoom)
         {
             this.voteRoom = voteRoom;
+
+            GlobalControl.Instance.SignalReceived +=
+                Util.MakeWeak<SignalEventArgs>(
+                    OnSignalReceived,
+                    _ => GlobalControl.Instance.SignalReceived -= _);
         }
     }
 }

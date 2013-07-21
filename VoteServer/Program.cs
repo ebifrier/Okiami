@@ -19,7 +19,7 @@ namespace VoteSystem.Server
             try
             {
                 // Ragnarokの初期化処理を行います。
-                Ragnarok.Initializer.Initialize();
+                Initializer.Initialize();
 
 #if MONO
                 StartSignalThread();
@@ -86,11 +86,7 @@ namespace VoteSystem.Server
                 var signal = signals[index].Signum;
                 Log.Info("シグナルを受信しました。({0})", signal);
 
-                var voteRoomList = GlobalControl.Instance.VoteRoomList;
-                foreach (var voteRoom in voteRoomList.Where(room => room != null))
-                {
-                    voteRoom.SignalReceived((int)signal);
-                }
+                GlobalControl.Instance.OnSignal((int)signal);
             }
             catch (Exception ex)
             {

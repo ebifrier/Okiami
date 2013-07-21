@@ -371,18 +371,6 @@ namespace VoteSystem.Server
         }
 
         /// <summary>
-        /// シグナル受信時に呼ばれます。
-        /// </summary>
-        public void SignalReceived(int signum)
-        {
-            var voteModel = this.voteModel;
-            if (voteModel != null)
-            {
-                voteModel.SignalReceived(signum);
-            }
-        }
-
-        /// <summary>
         /// 投票ルームを閉じます。
         /// </summary>
         public void Close()

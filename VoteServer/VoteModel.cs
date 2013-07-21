@@ -194,18 +194,6 @@ namespace VoteSystem.Server
                 "投票結果がすべてクリアされました。");
         }
 
-        /// <summary>
-        /// シグナル受信時に呼ばれます。
-        /// </summary>
-        public void SignalReceived(int signum)
-        {
-            var strategy = this.voteStrategy;
-            if (strategy != null)
-            {
-                strategy.SignalReceived(signum);
-            }
-        }
-
         #region 通知処理
         /// <summary>
         /// 投票ルームにたいする各種操作を行います。
