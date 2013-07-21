@@ -260,12 +260,8 @@ namespace VoteSystem.Server
                     TotalVoteSpan -= diff;
                 }
 
-                // GUIの表示タイミングを合わせるため、
-                // ミリ秒以下をカットします。
-                // GUI側で合わせると、一時停止時に時刻が
-                // 増えたり減ったりしてしまいます。
-                ProgressSpan = TimeSpan.FromSeconds(
-                    Math.Ceiling((ProgressSpan + diff).TotalSeconds));
+                // 一時停止前の経過時刻を設定します。
+                ProgressSpan += diff;
 
                 // 投票停止時間を検出するタイマを停止します。
                 AdjustTimer();

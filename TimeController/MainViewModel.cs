@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -17,8 +18,8 @@ namespace TimeController
 
     public sealed class MainViewModel : NotifyObject
     {
+        private FileSystemWatcher fileWatcher;
         private DispatcherTimer leaveTimeTimer;
-        private DispatcherTimer syncTimeTimer;
         private DateTime prevFrameTime = DateTime.Now;
 
         /// <summary>
@@ -203,9 +204,55 @@ namespace TimeController
         }
 
         /// <summary>
-        /// VoteClientとの時刻同期のためのコールバックです。
+        /// VoteClientとの時刻同期用ファイルの監視を開始します。
         /// </summary>
-        private void OnSyncTimeTimer(object sender, EventArgs e)
+        public void StartToObserveSyncFile()
+        {
+            try
+            {
+                if (this.fileWatcher != null)
+                {
+                    return;
+                }
+
+                var filepath = ProtocolUtil.TotalVoteSpanFilePath;
+                var watcher = new FileSystemWatcher()
+                {
+                    Path = Path.GetDirectoryName(filepath),
+                    NotifyFilter = NotifyFilters.LastAccess |
+                                   NotifyFilters.LastWrite |
+                                   NotifyFilters.FileName,
+                    Filter = Path.GetFileName(filepath),
+                };
+
+                watcher.Changed += watcher_FileChanged;
+                watcher.Created += watcher_FileChanged;
+                watcher.Deleted += watcher_FileChanged;
+
+                watcher.EnableRaisingEvents = true;
+                this.fileWatcher = watcher;
+
+                // 時刻の同期を開始します。
+                WPFUtil.UIProcess(() => SyncTime());
+            }
+            catch (Exception ex)
+            {
+                Util.ThrowIfFatal(ex);
+            }
+        }
+
+        /// <summary>
+        /// 時刻同期ファイルの更新時に呼ばれます。
+        /// </summary>
+        private void watcher_FileChanged(object sender, FileSystemEventArgs e)
+        {
+            WPFUtil.UIProcess(() => SyncTime());
+        }
+
+        /// <summary>
+        /// 時刻同期ファイルから時刻を同期します。
+        /// </summary>
+        private void SyncTime()
         {
             VoteState state;
             DateTime startTime;
@@ -248,15 +295,12 @@ namespace TimeController
                 "MoveCount",
                 (_, __) => OnMoveCountChanged());
 
+            StartToObserveSyncFile();
+
             this.leaveTimeTimer = new DispatcherTimer(
                 TimeSpan.FromMilliseconds(1000.0 / 60),
                 DispatcherPriority.Normal,
                 OnLeaveTimeTimer,
-                WPFUtil.UIDispatcher);
-            this.syncTimeTimer = new DispatcherTimer(
-                TimeSpan.FromSeconds(3.0),
-                DispatcherPriority.Normal,
-                OnSyncTimeTimer,
                 WPFUtil.UIDispatcher);
         }
     }

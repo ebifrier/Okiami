@@ -33,7 +33,7 @@ namespace TimeController
 
         #region Play
         /// <summary>
-        /// 先手番の残り時間を再設定します。
+        /// 対局の開始・中断などを行います。
         /// </summary>
         public static readonly RelayCommand Play =
             new RelayCommand(ExecutePlay);
@@ -43,6 +43,7 @@ namespace TimeController
             var model = Global.MainViewModel;
 
             model.IsPlaying = (model.IsPlaying == null || model.IsPlaying == false);
+            model.StartToObserveSyncFile();
         }
         #endregion
 
@@ -92,7 +93,7 @@ namespace TimeController
         }
         #endregion
 
-        #region SetBlackUsedTime
+        #region Set BlackUsedTime
         /// <summary>
         /// 先手番の思考時間を再設定します。
         /// </summary>
@@ -132,7 +133,7 @@ namespace TimeController
         }
         #endregion
 
-        #region SetWhiteUsedTime
+        #region Set WhiteUsedTime
         /// <summary>
         /// 後手番の思考時間を再設定します。
         /// </summary>

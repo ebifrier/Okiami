@@ -3,6 +3,14 @@
 	* VoteServer/GlobalControl.cs: シグナルハンドラを登録制にしました。これ
 	で任意のオブジェクトがシグナル受信を処理できるようになりました。
 	* VoteServer/Program.cs: シグナル処理プログラムをRagnarokに移動しました。
+	* TimeController/MainViewModel.cs: VoteClientとの時刻同期用ファイルを監
+	視するようにし、ファイルの変更をすぐにGUIに反映させるようにしました。
+	* TimeController/Commands.cs: 対局の開始・中断・再開時に時刻同期ファイ
+	ルの監視オブジェクトが正しく作られたか調べるようにしました。これは
+	VoteClientが起動していない場合、オブジェクトの作成に失敗することがある
+	ためです。
+	* VoteServer/VoteTimeKeeper.cs: 一時停止時の経過時間調整方法を修正し、
+	より正しく時刻が反映されるようにしました。
 
 2013-07-14  - Ver 1.6.0.0
 

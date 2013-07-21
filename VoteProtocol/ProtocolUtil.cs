@@ -352,7 +352,7 @@ namespace VoteSystem.Protocol
 
             // 投票残り時間とミリ秒以下の端数を合わせます。
             // 
-            // 投票時間は減る、思考時間は増えるため、
+            // 投票時間は減り、思考時間は増えるため、
             // "ミリ秒の最大値 - ミリ秒" を思考時間に加算します。
             var millis = TimeSpan.FromMilliseconds(
                 voteSpan == TimeSpan.MinValue || voteSpan == TimeSpan.MaxValue ?
