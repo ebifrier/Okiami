@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<project name="VoteProtocol" default="build">
+  <property name="project.name" value="${project::get-name()}" />
+  <property name="output.dir" value="../bin" />
+  <property name="output" value="${output.dir}/${project.name}.dll" />
+  <property name="ragnarok.dir" value="../../Ragnarok" />
+  <property name="ragnarok.build" value="${ragnarok.dir}/Ragnarok/Ragnarok.build" />
+  <property name="ragnarok.shogi.build" value="${ragnarok.dir}/Ragnarok.Shogi/Ragnarok.Shogi.build" />
+
+  <property name="define" value="MONO" />
+  <property name="debug" value="true" overwrite="false" />
+  <property name="optimize" value="true" overwrite="false" />
+
+  <target name="clean">
+    <nant buildfile="${ragnarok.shogi.build}" target="clean" />
+    <delete failonerror="false">
+      <fileset>
+	<include name="${output.dir}/*.dll" />
+	<include name="${output.dir}/${project.name}.dll*" />
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="rebuild">
+    <call target="clean" />
+    <call target="build" />
+  </target>
+
+  <target name="build">
+    <nant buildfile="${ragnarok.shogi.build}" target="build" />
+    <mkdir dir="${output.dir}" />
+    <copy todir="${output.dir}">
+      <fileset>
+	<include name="${ragnarok.dir}/bin/*.dll" />
+      </fileset>
+    </copy>
+    <csc target="library" output="${output}" debug="${debug}"
+	 define="${define}" optimize="${optimize}" warninglevel="4"
+	 keyfile="${project.name}.snk">
+      <sources>
+	<include name="*.cs" />
+	<include name="Properties/*.cs" />
+	<include name="Commenter/*.cs" />
+	<include name="Vote/*.cs" />
+      </sources>
+      <references>
+	<include name="System.Runtime.Serialization.dll" />
+	<include name="WindowsBase.dll" />
+	<include name="${output.dir}/protobuf-net.dll" />
+	<include name="${output.dir}/Ragnarok.dll" />
+	<include name="${output.dir}/Ragnarok.Shogi.dll" />
+      </references>
+    </csc>
+  </target>
+</project>
