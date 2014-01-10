@@ -1,3 +1,8 @@
+2014-01-11  - Ver 1.6.0.3
+
+	* PluginShogi/View/ShogiEndRollControl.xaml.cs: エンドロール再生時に棋
+	譜再生を行うようにしました。
+
 2013-10-18  - Ver 1.6.0.2
 
 	* プロジェクトのプラットフォームをAnyCPUからx86に変更しました。

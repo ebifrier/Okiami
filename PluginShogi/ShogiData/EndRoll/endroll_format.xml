@@ -12,6 +12,10 @@
 					 FadeInSpan="00:00:00"
 					 FadeOutStartTime="00:01:32"
 					 FadeOutSpan="00:00:00" />
+  <ShogiTimeline FadeInStartTime="00:00:10"
+				   FadeInSpan="00:00:05"
+				   FadeOutStartTime="00:01:20"
+				   FadeOutSpan="00:00:05" />
 
 	<ColumnDefinitions>
 		<ColumnDefinition Width="1" />
@@ -36,19 +40,7 @@
 			<Format Column="1" Text="$()人" Alignment="Left" />
 		</Line>
 	</Lines>
-
-  <Line Count="2" />
-	<Line>
-		<Format ColumnSpan="2" Text="クジラちゃん参加ＰＣ一覧" />
-	</Line>
-	
-	<Lines Data="$ModeCustomJoinerList">
-		<Line>
-			<Format ColumnSpan="2"
-					Text="$" Alignment="Center" />
-		</Line>
-	</Lines>
-
+  
 	<Line Count="2" />
 	<Line>
 		<Format ColumnSpan="2" Text="放送主一覧" />

@@ -432,6 +432,7 @@ namespace VoteSystem.PluginShogi.View
             // エンディングの前に現局面を設定します。
             var board = ShogiGlobal.ShogiModel.CurrentBoard.Clone();
             board.UndoAll();
+            ShogiControl.Board = board;
 
             /*var board = new Board();
             var moveList = BoardExtension.MakeMoveList(SampleMove.Tsume);
@@ -515,7 +516,7 @@ namespace VoteSystem.PluginShogi.View
 
             // 指し手の自動再生を開始
             if (this.autoPlay != null &&
-                position > ShogiTimeline.FadeInEndTime + TimeSpan.FromSeconds(3))
+                position > ShogiTimeline.FadeInEndTime + TimeSpan.FromSeconds(1))
             {
                 ShogiControl.StartAutoPlay(this.autoPlay);
                 this.autoPlay = null;

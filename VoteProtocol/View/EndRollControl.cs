@@ -952,7 +952,7 @@ namespace VoteSystem.Protocol.View
         {
             var now = DateTime.Now;
             var diff = now - this.prevUpdateTime;
-            if (diff < TimeSpan.FromMilliseconds(30))
+            if (diff < TimeSpan.FromMilliseconds(20))
             {
                 return;
             }
