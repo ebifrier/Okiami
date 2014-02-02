@@ -536,15 +536,28 @@ namespace VoteSystem.Server.VoteStrategy
                 return null;
             }
 
-            // 現局面から指せるかどうか調べます。
-            if (this.board != null && !move.IsResigned &&
-                this.board.ConvertMove(move) == null)
+            // 投了は常にさせることにします。
+            if (this.board == null || move.IsResigned)
             {
-                // 投了は常にさせることにします。
+                return move;
+            }
+
+            // 現局面から指せるかどうか調べます。
+            var bm = this.board.ConvertMove(move);
+            if (bm == null)
+            {
                 return null;
             }
 
-            return move;
+            // 指し手の正規化を行います（打を消したり、左を追加するなど）
+            var newMove = this.board.ConvertMove(bm, false);
+            if (newMove == null)
+            {
+                return null;
+            }
+
+            newMove.OriginalText = move.OriginalText;
+            return newMove;
         }
 
         /// <summary>

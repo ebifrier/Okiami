@@ -31,8 +31,8 @@ namespace VoteSystem.Server
             new Dictionary<VoteMode, VoteStrategy.IVoteStrategy>();
         private VoteStrategy.IVoteStrategy voteStrategy;
         private TimeSpan voteExtendTime = TimeSpan.FromSeconds(60);
-        private readonly Dictionary<string, TimeExtendKind> timeExtendDic =
-            new Dictionary<string, TimeExtendKind>();
+        private readonly Dictionary<string, int> timeExtendDic =
+            new Dictionary<string, int>();
         private bool isVoteResultChanged = true;
 
         /// <summary>
@@ -40,10 +40,7 @@ namespace VoteSystem.Server
         /// </summary>
         public string LogName
         {
-            get
-            {
-                return "投票オブジェクト";
-            }
+            get { return "投票オブジェクト"; }
         }
 
         /// <summary>
@@ -455,8 +452,8 @@ namespace VoteSystem.Server
             {
                 lock (this.timeExtendDic)
                 {
-                    return this.timeExtendDic.Count(
-                        _ => _.Value == TimeExtendKind.Extend);
+                    return this.timeExtendDic.Sum(
+                        _ => Math.Max(0, _.Value));
                 }
             }
         }
@@ -470,8 +467,8 @@ namespace VoteSystem.Server
             {
                 lock (this.timeExtendDic)
                 {
-                    return this.timeExtendDic.Count(
-                        _ => _.Value == TimeExtendKind.Stable);
+                    return -this.timeExtendDic.Sum(
+                        _ => Math.Min(0, _.Value));
                 }
             }
         }
@@ -550,15 +547,19 @@ namespace VoteSystem.Server
             lock (this.timeExtendDic)
             {
                 // 嵐対策として、時間短縮は一人一回とします。
-                TimeExtendKind value;
+                /*TimeExtendKind value;
                 if (kind == TimeExtendKind.Stable &&
                     this.timeExtendDic.TryGetValue(voterId, out value) &&
                     value == TimeExtendKind.Stable)
                 {
                     return false;
                 }
+                
+                this.timeExtendDic[voterId] = kind;*/
 
-                this.timeExtendDic[voterId] = kind;
+                this.timeExtendDic[voterId] =
+                    this.timeExtendDic.GetValue(voterId) +
+                    (kind == TimeExtendKind.Extend ? +1 : -1);                
             }
 
             OnVoteResultChanged();

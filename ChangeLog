@@ -1,4 +1,13 @@
+2014-02-02  - Ver 1.6.0.7
+
+	* VoteServer/VoteModel.cs: 時間延長を一人何度でも行えるようにしました。
+	* VoteServer/VoteStrategy/ShogiVoteStrategy.cs: 指し手の正規化を行うよ
+	うにし、例えば不要な打つなどを削除するようにしました。
+
 2014-02-02  - Ver 1.6.0.6
+
+	* VoteServer/VoteTimeKeeper.cs: 経過時間を投票終了時にリセットしないよ
+	うにし、またミリ秒以下の調整を行うようにしました。(TODO)
 
 2014-02-02  - Ver 1.6.0.5
 
