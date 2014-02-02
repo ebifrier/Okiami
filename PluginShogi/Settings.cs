@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.ComponentModel;
 using System.Reflection;
 
@@ -24,6 +23,27 @@ namespace VoteSystem.PluginShogi
             }
 
             return ((SD_EffectFlag & flag) != 0);
+        }
+
+        protected override void OnSettingsLoaded(object sender, SettingsLoadedEventArgs e)
+        {
+            base.OnSettingsLoaded(sender, e);
+        }
+
+        protected override void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(sender, e);
+
+            if (e.PropertyName == "SD_RenderingQuality")
+            {
+                // ここでFPSを変更します。
+                var timer = ShogiGlobal.FrameTimer;
+                if (timer != null)
+                {
+                    timer.TargetFPS = RenderingQualityUtil.GetFPS(
+                        SD_RenderingQuality);
+                }
+            }
         }
 
         /// <summary>

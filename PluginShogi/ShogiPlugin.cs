@@ -90,11 +90,7 @@ namespace VoteSystem.PluginShogi
         {
             try
             {
-                ShogiGlobal.Initialize(this);
-
-                ShogiGlobal.ClientWindow = host.Window;
-                ShogiGlobal.VoteClient = host.VoteClient;
-                ShogiGlobal.ClientModel = host.MainModel;
+                ShogiGlobal.Initialize(this, host);
 
                 // ログイン時に現局面を取得するようにします。
                 host.VoteClient.PropertyChanged += VoteClient_PropertyChanged;

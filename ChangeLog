@@ -1,3 +1,12 @@
+2014-02-02  - Ver 1.6.0.4
+
+	* PluginShogi/View/EndingSettingWindow.xaml: エンディング設定ウィンドウ
+	にエンディングモードの設定を追加し、メインメニューからは削除しました。
+	* PluginShogi/Settings.part.cs: エンディング用の設定は設定オブジェクト
+	に保存しないようにしました。
+	* PluginShogi/ViewModel/GlobalModel.cs: グローバルな設定を保存するため
+	のモデルオブジェクトを追加しました。
+
 2014-01-11  - Ver 1.6.0.3
 
 	* PluginShogi/View/ShogiEndRollControl.xaml.cs: エンドロール再生時に棋

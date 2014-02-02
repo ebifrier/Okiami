@@ -1465,8 +1465,6 @@ namespace VoteSystem.Client.Model
 
             OnNotificationReceived(notification);
         }
-
-        
         #endregion
 
         /// <summary>

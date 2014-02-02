@@ -48,7 +48,7 @@
                 <Separator />
                 <MenuItem Header="エンディングモード(_M)"
                           IsCheckable="True"
-                          IsChecked="{Binding Settings.AS_IsEndingMode}" />
+                          IsChecked="{Binding GlobalModel.IsEndingMode}" />
             </ContextMenu>
         </ResourceDictionary>
     </Window.Resources>
@@ -66,7 +66,7 @@
               VerticalAlignment="Top"
               HorizontalAlignment="Stretch"
               HorizontalContentAlignment="Stretch"
-              Visibility="{Binding Settings.IsNormalMode, Mode=OneWay,
+              Visibility="{Binding GlobalModel.IsNormalMode, Mode=OneWay,
                                    Converter={StaticResource visibilityConverterCollapsed}}">
             <MenuItem Header="ファイル(_F)">
                 <MenuItem Header="棋譜の読み込み(_O)"
@@ -114,11 +114,7 @@
                 <Separator />
                 <MenuItem Header="変化ウィンドウ(_V)"
                           Command="{x:Static svm:Commands.ShowMoveManageView}" />
-                <Separator />
-                <MenuItem Header="エンディングモード(_M)"
-                          IsCheckable="True"
-                          IsChecked="{Binding Settings.AS_IsEndingMode}" />
-                <MenuItem Header="エンディング設定(_E)"
+                <MenuItem Header="エンディングウィンドウ(_E)"
                           Command="{x:Static svm:Commands.ShowEndingSettingWindow}" />
             </MenuItem>
         </Menu>
@@ -126,7 +122,7 @@
         <!-- ToolBarTrayの中に入れるとStretchしなくなります。-->
         <StackPanel Grid.Row="1"
                     Orientation="Vertical"
-                    Visibility="{Binding Settings.IsNormalMode, Mode=OneWay,
+                    Visibility="{Binding GlobalModel.IsNormalMode, Mode=OneWay,
                                          Converter={StaticResource visibilityConverterCollapsed}}">
             <ToolBarTray>
                 <StaticResource ResourceKey="toolBar" />

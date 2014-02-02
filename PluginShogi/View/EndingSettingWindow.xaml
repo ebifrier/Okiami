@@ -41,28 +41,48 @@
         </ResourceDictionary>
     </Window.Resources>
     
-    <StackPanel Orientation="Horizontal"
-                Margin="5">
-        <Button Style="{StaticResource ToolBarButtonStyle}"
-                Content="pack://application:,,,/VoteProtocol;component/Resources/Image/endroll_play.png"
-                ToolTip="エンディングの開始準備を行います。"
-                Command="{x:Static vm:Commands.PlayEndRoll}" />
-        <Button Style="{StaticResource ToolBarButtonStyle}"
-                Content="pack://application:,,,/VoteProtocol;component/Resources/Image/endroll_pause.png"
-                ToolTip="エンディングを一時停止します。"
-                IsEnabled="False" />
-        <Button Style="{StaticResource ToolBarButtonStyle}"
-                Content="pack://application:,,,/VoteProtocol;component/Resources/Image/endroll_stop.png"
-                ToolTip="エンディングを停止します。"
-                Command="{x:Static vm:Commands.StopEndRoll}" />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <StackPanel Orientation="Horizontal"
+                    Margin="5">
+            <Button Style="{StaticResource ToolBarButtonStyle}"
+                    Content="pack://application:,,,/VoteProtocol;component/Resources/Image/endroll_play.png"
+                    ToolTip="エンディングの開始準備を行います。"
+                    Command="{x:Static vm:Commands.PlayEndRoll}" />
+            <Button Style="{StaticResource ToolBarButtonStyle}"
+                    Content="pack://application:,,,/VoteProtocol;component/Resources/Image/endroll_pause.png"
+                    ToolTip="エンディングを一時停止します。"
+                    IsEnabled="False" />
+            <Button Style="{StaticResource ToolBarButtonStyle}"
+                    Content="pack://application:,,,/VoteProtocol;component/Resources/Image/endroll_stop.png"
+                    ToolTip="エンディングを停止します。"
+                    Command="{x:Static vm:Commands.StopEndRoll}" />
 
-        <Button Style="{StaticResource soundButtonStyle}"
-                Margin="10,0,0,0"
-                Click="MuteButton_Click" />
-        <Slider Width="150"
-                IsSnapToTickEnabled="True"
-                Minimum="0" Maximum="100" SmallChange="1"
-                AutoToolTipPlacement="TopLeft"
-                Value="{Binding Volume, ElementName=window}" />
-    </StackPanel>
+            <Button Style="{StaticResource soundButtonStyle}"
+                    Margin="10,0,0,0"
+                    Click="MuteButton_Click" />
+            <Slider Width="150"
+                    IsSnapToTickEnabled="True"
+                    Minimum="0" Maximum="100" SmallChange="1"
+                    AutoToolTipPlacement="TopLeft"
+                    Value="{Binding Volume, ElementName=window}" />
+        </StackPanel>
+        
+        <GroupBox Grid.Row="1"
+                  Header="エンディングモード"
+                  Padding="5">
+            <StackPanel Orientation="Vertical">
+                <CheckBox IsChecked="{Binding IsEndingMode, ElementName=window}"
+                          Content="エンディングモード状態にする。" />
+                <TextBlock Margin="5,5,5,0" Foreground="Gray">
+                    ※ チェックすると画面をフルスクリーンで表示するために<LineBreak />
+                    　一部のメニューやバーなどを隠します。
+                </TextBlock>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
 </Window>

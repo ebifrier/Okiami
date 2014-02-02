@@ -59,19 +59,29 @@ namespace VoteSystem.PluginShogi.ViewModel
         private readonly CommentClient commentClient;
 
         /// <summary>
+        /// 設定オブジェクトを取得します。
+        /// </summary>
+        public Settings Settings
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// グローバルモデルを取得します。
+        /// </summary>
+        public GlobalModel GlobalModel
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// 投票クライアントを取得します。
         /// </summary>
         public Client.Model.VoteClient VoteClient
         {
             get { return ShogiGlobal.VoteClient; }
-        }
-
-        /// <summary>
-        /// 設定オブジェクトを取得します。
-        /// </summary>
-        public Settings Settings
-        {
-            get { return ShogiGlobal.Settings; }
         }
 
         /// <summary>
@@ -694,7 +704,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public ShogiWindowViewModel(Board board)
+        public ShogiWindowViewModel(Settings settings, GlobalModel globalModel, Board board)
         {
             this.commentCandidates = new NotifyCollection<string>(
                 new []
@@ -703,6 +713,9 @@ namespace VoteSystem.PluginShogi.ViewModel
                     "どやあああ",
                     "う～ん",
                 });
+
+            Settings = settings;
+            GlobalModel = globalModel;
 
             VariationState = VariationState.None;
 
@@ -727,7 +740,8 @@ namespace VoteSystem.PluginShogi.ViewModel
                 "Board",
                 (_, __) => UpdateMoveTextFromCurrentBoard());
 
-            this.AddDependModel(ShogiGlobal.Settings);
+            this.AddDependModel(settings);
+            this.AddDependModel(globalModel);
         }
     }
 }

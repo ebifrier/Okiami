@@ -28,14 +28,17 @@ namespace VoteSystem.PluginShogi
         /// <summary>
         /// 静的コンストラクタ
         /// </summary>
-        public static void Initialize(ShogiPlugin plugin)
+        public static void Initialize(ShogiPlugin plugin, Client.PluginHost host)
         {
             WPFUtil.Init();
-
             FlintSharp.Utils.ScreenSize = new Size(640, 480);
 
-            // FrameTimerはSettingsの前に初期化します。
+            ClientWindow = host.Window;
+            VoteClient = host.VoteClient;
+            ClientModel = host.MainModel;
             ShogiPlugin = plugin;
+
+            // FrameTimerはSettingsの前に初期化します。
             FrameTimer = new FrameTimer()
             {
                 TargetFPS = 30.0,
@@ -44,7 +47,8 @@ namespace VoteSystem.PluginShogi
 
             // FrameTimerはSettingsの前に初期化します。
             Settings = Settings.CreateSettings<Settings>();
-            ShogiModel = new ShogiWindowViewModel(new Board());
+            GlobalModel = new GlobalModel();
+            ShogiModel = new ShogiWindowViewModel(Settings, GlobalModel, new Board());
             StartEndrollTimeNtp = DateTime.MinValue;
 
             EffectManager = new Effects.EffectManager()
@@ -88,7 +92,7 @@ namespace VoteSystem.PluginShogi
         public static Client.View.MainWindow ClientWindow
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
@@ -97,7 +101,7 @@ namespace VoteSystem.PluginShogi
         public static Client.Model.VoteClient VoteClient
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
@@ -106,7 +110,7 @@ namespace VoteSystem.PluginShogi
         public static Client.Model.MainModel ClientModel
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
@@ -178,7 +182,16 @@ namespace VoteSystem.PluginShogi
         }
 
         /// <summary>
-        /// 将棋用のビューモデルを取得または設定します。
+        /// 全体的な設定を保持するモデルを取得します。
+        /// </summary>
+        public static GlobalModel GlobalModel
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 将棋用のビューモデルを取得します。
         /// </summary>
         public static ShogiWindowViewModel ShogiModel
         {

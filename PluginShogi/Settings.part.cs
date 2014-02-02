@@ -52,18 +52,6 @@ namespace VoteSystem.PluginShogi
             get { return GetValue<string>("AS_EvaluationImageSetTitle"); }
             set { SetValue("AS_EvaluationImageSetTitle", value); }
         }
-
-        [DefaultValue(false)]
-        public bool AS_IsEndingMode
-        {
-            get { return GetValue<bool>("AS_IsEndingMode"); }
-            set { SetValue("AS_IsEndingMode", value); }
-        }
-
-        public bool IsNormalMode
-        {
-            get { return !AS_IsEndingMode; }
-        }
         #endregion
 
         #region 現局面設定ダイアログ
@@ -328,31 +316,5 @@ namespace VoteSystem.PluginShogi
             set { this["VR_StrokeThicknessInternal"] = value; }
         }
         #endregion
-
-        protected override void OnSettingsLoaded(object sender, SettingsLoadedEventArgs e)
-        {
-            base.OnSettingsLoaded(sender, e);
-        }
-
-        protected override void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            base.OnPropertyChanged(sender, e);
-
-            if (e.PropertyName == "SD_RenderingQuality")
-            {
-                // ここでFPSを変更します。
-                var timer = ShogiGlobal.FrameTimer;
-                if (timer != null)
-                {
-                    timer.TargetFPS = RenderingQualityUtil.GetFPS(
-                        SD_RenderingQuality);
-                }
-            }
-            else if (e.PropertyName == "AS_IsEndingMode")
-            {
-                NotifyPropertyChanged(
-                    new PropertyChangedEventArgs("IsNormalMode"));
-            }
-        }
     }
 }

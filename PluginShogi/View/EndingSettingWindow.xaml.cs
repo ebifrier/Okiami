@@ -73,6 +73,31 @@ namespace VoteSystem.PluginShogi.View
             }
         }
 
+        /// <summary>
+        /// エンディングモードかどうかを扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty IsEndingModeProperty =
+            DependencyProperty.Register(
+                "IsEndingMode", typeof(bool), typeof(EndingSettingWindow),
+                new FrameworkPropertyMetadata(false, OnEndingModeChanged));
+
+        /// <summary>
+        /// エンディングモードかどうかを取得または設定します。
+        /// </summary>
+        public bool IsEndingMode
+        {
+            get { return (bool)GetValue(IsEndingModeProperty); }
+            set { SetValue(IsEndingModeProperty, value); }
+        }
+
+        private static void OnEndingModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (ShogiGlobal.GlobalModel != null)
+            {
+                ShogiGlobal.GlobalModel.IsEndingMode = (bool)e.NewValue;
+            }
+        }
+
         private ShogiEndRollControl model;
         
         /// <summary>
@@ -87,9 +112,10 @@ namespace VoteSystem.PluginShogi.View
             if (window != null)
             {
                 this.model = window.ShogiEndRoll;
-
                 IsMute = this.model.IsMovieMute;
                 Volume = this.model.MovieVolume;
+
+                IsEndingMode = ShogiGlobal.GlobalModel.IsEndingMode;
             }
         }
 
