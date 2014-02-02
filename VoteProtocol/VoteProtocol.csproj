@@ -122,12 +122,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vote\VoteState.cs" />
     <Compile Include="Vote\VoteResult.cs" />
-    <Compile Include="Xaml\VoteLeaveTimeConverter.cs" />
     <Compile Include="Xaml\TotalVoteLeaveTimeConverter.cs" />
+    <Compile Include="Xaml\VoteLeaveTimeConverter.cs" />
     <Compile Include="Xaml\VoteStateConverter.cs" />
     <Compile Include="Xaml\VoteBackgroundConverter.cs" />
-    <Compile Include="Xaml\VoteLeaveTimeConverter2.cs" />
-    <Compile Include="Xaml\TotalVoteLeaveTimeConverter2.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Presentation\Ragnarok.Presentation.csproj">

@@ -23,7 +23,7 @@ namespace VoteSystem.Server
     /// <remarks>
     /// 条件）
     /// ・投票時間は全投票時間（持ち時間）以上に設定できません。
-    /// ・投票時間は停止時に秒の小数点数が.3に設定されます。
+    /// ・投票時間は停止時に秒の小数点数が.5に設定されます。
     /// ・投票時間／全投票時間は秒の単位でしか、追加・設定できません。
     /// 
     /// 理由）
@@ -48,7 +48,7 @@ namespace VoteSystem.Server
         /// <summary>
         /// 投票時間の既定の端数です。
         /// </summary>
-        private static readonly double Fraction = 0.3;
+        private static readonly double Fraction = 0.5;
 
         private readonly VoteRoom voteRoom;
         private DateTime votePauseTimeNtp = DateTime.MinValue;
@@ -208,11 +208,16 @@ namespace VoteSystem.Server
                         VoteSpan = MathEx.Max(
                             TimeSpan.Zero,
                             MathEx.Min(voteSpan, TotalVoteSpan));
-                        ProgressSpan = TimeSpan.Zero;
-                        VoteState = VoteState.Voting;
+
+                        // 経過時間は停止状態のときのみ初期化します。
+                        if (VoteState == VoteState.Stop)
+                        {
+                            ProgressSpan = TimeSpan.Zero;
+                        }
 
                         // 開始前にも投票時間を正規化しておきます。
                         NormalizeVoteSpan();
+                        VoteState = VoteState.Voting;
                         break;
 
                     case VoteState.Pause:
@@ -261,7 +266,9 @@ namespace VoteSystem.Server
                 }
 
                 // 一時停止前の経過時刻を設定します。
-                ProgressSpan += diff;
+                var millis = TimeSpan.FromMilliseconds(
+                    999 - VoteSpan.Milliseconds);
+                ProgressSpan += diff + millis;
 
                 // 投票停止時間を検出するタイマを停止します。
                 AdjustTimer();
@@ -305,6 +312,13 @@ namespace VoteSystem.Server
 
                     TotalVoteSpan = TimeSpan.FromSeconds(seconds);
                 }
+
+                /*{
+                    var seconds = ProgressSpan.TotalSeconds;
+                    seconds = Math.Floor(seconds);// +(1.0 - Fraction);
+
+                    ProgressSpan = TimeSpan.FromSeconds(seconds);
+                }*/
             }
         }
 
@@ -318,15 +332,27 @@ namespace VoteSystem.Server
                 // 全投票の残り時間は状態変更前に取得します。
                 var leaveTime = CalcTotalLeaveTime(TotalVoteSpan);
 
-                VoteSpan = TimeSpan.Zero;
-                ProgressSpan = TimeSpan.Zero;
-                VoteState = state;
+                // 経過時間は停止状態のときのみ初期化します。
+                // 投票終了後に投票を再度行う場合があるためです。
+                if (state == VoteState.Stop)
+                {
+                    ProgressSpan = TimeSpan.Zero;
+                }
+                else
+                {
+                    // 投票状態をVotingにしないと、経過時間が正しく計算されません。
+                    ProgressSpan = ProtocolUtil.CalcThinkTime(
+                        VoteState, VoteStartTimeNtp, ProgressSpan, VoteSpan);
+                }
 
                 // 全投票時間は減ります。
                 if (!IsTotalVoteNoLimit)
                 {
                     TotalVoteSpan = leaveTime;
                 }
+
+                VoteSpan = TimeSpan.Zero;
+                VoteState = state;
 
                 // 全投票時間の秒数を合わせます。
                 //NormalizeVoteSpan();

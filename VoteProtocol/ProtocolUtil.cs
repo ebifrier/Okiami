@@ -336,6 +336,7 @@ namespace VoteSystem.Protocol
         {
             var nowTimeNtp = NtpClient.GetTime();
             var span = TimeSpan.Zero;
+
             switch (state)
             {
                 case VoteState.Voting:
@@ -343,10 +344,10 @@ namespace VoteSystem.Protocol
                     span = progressSpan + (nowTimeNtp - startTimeNtp);
                     break;
                 case VoteState.Pause:
+                case VoteState.End:
                     span = progressSpan;
                     break;
                 case VoteState.Stop:
-                case VoteState.End:
                     return TimeSpan.Zero;
             }
 
