@@ -17,8 +17,8 @@
 
     <px:VoteStateConverter x:Key="voteStateConverter" />
     <px:VoteBackgroundConverter x:Key="voteBackgroundConverter" />
-    <px:VoteLeaveTimeConverter2 x:Key="voteLeaveTimeConverter" />
-    <px:TotalVoteLeaveTimeConverter2 x:Key="totalVoteLeaveTimeConverter" />
+    <px:VoteLeaveTimeConverter x:Key="voteLeaveTimeConverter" ConvertToType="Time" />
+    <px:TotalVoteLeaveTimeConverter x:Key="totalVoteLeaveTimeConverter" ConvertToType="Time" />
 
     <!-- 縁取り付き文字 -->
     <Style x:Key="decoratedTextStyle" TargetType="r:DecoratedTextBase">
