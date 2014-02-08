@@ -113,7 +113,7 @@ namespace VoteSystem.PluginShogi.View
         public static readonly DependencyProperty ShogiOpacityProperty =
             DependencyProperty.Register(
                 "ShogiOpacity", typeof(double), typeof(ShogiEndRollControl),
-                new FrameworkPropertyMetadata(0.4));
+                new FrameworkPropertyMetadata(0.3));
 
         /// <summary>
         /// 将棋盤の不透明度を取得または設定します。
