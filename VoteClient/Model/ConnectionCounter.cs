@@ -44,7 +44,7 @@ namespace VoteSystem.Client.Model
             {
                 for (var n = 101; n <= 104; ++n)
                 {
-                    var address = NicoString.GetMessageServerAddress(n);
+                    var address = NicoString.GetCommunityMessageServerAddress(n);
                     var ips = Dns.GetHostAddresses(address);
 
                     foreach (var ip in ips)
