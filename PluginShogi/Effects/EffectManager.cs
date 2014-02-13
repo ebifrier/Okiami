@@ -529,22 +529,29 @@ namespace VoteSystem.PluginShogi.Effects
                     return;
                 }
 
-                var Unit = 30;
-                if (this.moveCount >= Unit * 3)
+                if (Client.Global.IsOfficial)
                 {
-                    TrySetBackgroundKey("WinterEffect");
-                }
-                else if (this.moveCount >= Unit * 2)
-                {
-                    TrySetBackgroundKey("AutumnEffect");
-                }
-                else if (this.moveCount >= Unit)
-                {
-                    TrySetBackgroundKey("SummerEffect");
+                    TrySetBackgroundKey("OfficialEffect");
                 }
                 else
                 {
-                    TrySetBackgroundKey("SpringEffect");
+                    var Unit = 30;
+                    if (this.moveCount >= Unit * 3)
+                    {
+                        TrySetBackgroundKey("WinterEffect");
+                    }
+                    else if (this.moveCount >= Unit * 2)
+                    {
+                        TrySetBackgroundKey("AutumnEffect");
+                    }
+                    else if (this.moveCount >= Unit)
+                    {
+                        TrySetBackgroundKey("SummerEffect");
+                    }
+                    else
+                    {
+                        TrySetBackgroundKey("SpringEffect");
+                    }
                 }
             });
         }

@@ -89,7 +89,14 @@ namespace VoteSystem.PluginShogi.View
         {
             if (ShogiGlobal.Settings.HasEffectFlag(EffectFlag.Background))
             {
-                AddEffectKey("SpringEffect");
+                if (VoteSystem.Client.Global.IsOfficial)
+                {
+                    AddEffectKey("OfficialEffect");
+                }
+                else
+                {
+                    AddEffectKey("SpringEffect");
+                }
             }
         }
 
