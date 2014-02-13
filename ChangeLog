@@ -5,6 +5,8 @@
 	* PluginShogi/View/MainWindow.xaml: メニュー項目を修正しました。
 	* VoteClient/Model/CommenterManager.cs: コメンターによるコメント中継機
 	能を一時停止しました。
+	* VoteClient/Model/Live/LiveNicoClient.cs: 公式生放送への接続に対応する
+	ようにしました。
 
 2014-02-14  - Ver 1.6.0.8
 

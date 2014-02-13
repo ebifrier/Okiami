@@ -134,24 +134,29 @@ namespace VoteSystem.Client.Model.Live
                         "ログインしていません (-ω-｡)");
                 }
 
+#if !OFFICIAL
                 // コメントサーバーに接続する前に、それが自分の放送か確認し、
                 // もしそうならサーバーに接続します。
                 var playerStatus = PlayerStatus.Create(
                     liveUrl,
                     this.nicoClient.CookieContainer);
 
-#if PUBLISHED
-            if (playerStatus == null || !playerStatus.Stream.IsOwner)
-            {
-                throw new VoteClientException(
-                    "放送主ではありません。m(-_-)m");
-            }
-#endif
+    #if PUBLISHED
+                if (playerStatus == null || !playerStatus.Stream.IsOwner)
+                {
+                    throw new VoteClientException(
+                        "放送主ではありません。m(-_-)m");
+                }
+    #endif
 
                 this.commentClient.Connect(
                     playerStatus,
-                    this.nicoClient.CookieContainer,
-                    TimeSpan.FromSeconds(30));
+                    this.nicoClient.CookieContainer);
+#else // !OFFICIAL
+                this.commentClient.ConnectToOfficial(
+                    liveUrl, 
+                    this.nicoClient.CookieContainer);
+#endif
 
                 // メッセージの受信を開始します。
                 this.commentClient.StartReceiveMessage(1);
@@ -384,10 +389,18 @@ namespace VoteSystem.Client.Model.Live
             this.commentClient.Connected += (sender, e) =>
             {
                 var cc = (CommentClient)sender;
+
+#if !OFFICIAL
+                var liveIdString = cc.LiveIdString;
                 var title = (
                     cc.LiveInfo != null ?
                     cc.LiveInfo.Title :
                     "");
+#else
+                var liveIdString = "lv2525";
+                var title = "公式生放送";
+#endif
+
                 var ownerId = (
                     cc.PlayerStatus != null ?
                     cc.PlayerStatus.Stream.OwnerId :
@@ -397,7 +410,7 @@ namespace VoteSystem.Client.Model.Live
                 LiveConnected(
                     new LiveData(
                         LiveSite.NicoNama,
-                        cc.LiveIdString,
+                        liveIdString,
                         title,
                         ownerId.ToString()));
             };

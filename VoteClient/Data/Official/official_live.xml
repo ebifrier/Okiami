@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<live>
+<ms>
+	<addr>omsg101.live.nicovideo.jp</addr>
+	<port>2813</port>
+	<thread>1331012596</thread>
+</ms>
+<tid_list>
+	<tid>1331012596</tid>
+	<tid>1331012597</tid>
+	<tid>1331012598</tid>
+	<tid>1331012599</tid>
+	<tid>1331012600</tid>
+	<tid>1331012601</tid>
+	<tid>1331012602</tid>
+	<tid>1331012603</tid>
+	<tid>1331012604</tid>
+	<tid>1331012605</tid>
+	<tid>1331012606</tid>
+	<tid>1331012607</tid>
+	<tid>1331012608</tid>
+	<tid>1331012609</tid>
+	<tid>1331012610</tid>
+	<tid>1331012611</tid>
+	<tid>1331012612</tid>
+	<tid>1331012613</tid>
+	<tid>1331012614</tid>
+	<tid>1331012615</tid>
+	<tid>1331012616</tid>
+	<tid>1331012617</tid>
+	<tid>1331012618</tid>
+	<tid>1331012619</tid>
+	<tid>1331012620</tid>
+	<tid>1331012621</tid>
+	<tid>1331012622</tid>
+	<tid>1331012623</tid>
+	<tid>1331012624</tid>
+	<tid>1331012625</tid>
+	<tid>1331012626</tid>
+	<tid>1331012627</tid>
+	<tid>1331012628</tid>
+	<tid>1331012629</tid>
+	<tid>1331012630</tid>
+	<tid>1331012631</tid>
+	<tid>1331012632</tid>
+	<tid>1331012633</tid>
+	<tid>1331012634</tid>
+	<tid>1331012635</tid>
+	<tid>1331012640</tid>
+</tid_list>
+</live>
