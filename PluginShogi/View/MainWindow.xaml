@@ -36,15 +36,14 @@
             <ContextMenu x:Key="contextMenu">
                 <!-- CommandTargetの指定はwpfのバグを避けるために必要。
                      http://social.msdn.microsoft.com/forums/en-US/wpf/thread/7bd75a7c-eab4-4f3a-967b-94a9534a7455/ -->
-                <MenuItem Header="投票結果の設定(_R)"
-                          Command="{x:Static s:VoteResultControl.OpenSettingDialog}"
-                          CommandTarget="{Binding PlacementTarget,
-                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
-                <Separator />
                 <MenuItem Header="評価値表示の設定(_E)"
                           Command="{x:Static r:EvaluationControl.OpenSettingDialog}"
                           CommandTarget="{Binding PlacementTarget,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                <MenuItem Header="投票結果の設定(_R)"
+                          Command="{x:Static s:VoteResultControl.OpenSettingDialog}"
+                          CommandTarget="{Binding PlacementTarget,
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}" />                
                 <Separator />
                 <MenuItem Header="エンディングモード(_M)"
                           IsCheckable="True"
@@ -91,13 +90,13 @@
             </MenuItem>
 
             <MenuItem Header="設定(_S)">
-                <MenuItem Header="設定(_S)"
-                          Command="{x:Static svm:Commands.ShowSettingDialog}" />
-                <Separator />
-                <MenuItem Header="投票結果の設定(_R)"
-                          Command="{x:Static s:VoteResultControl.OpenSettingDialog}" />
                 <MenuItem Header="評価値の設定(_R)"
                           Command="{x:Static r:EvaluationControl.OpenSettingDialog}" />
+                <MenuItem Header="投票結果の設定(_R)"
+                          Command="{x:Static s:VoteResultControl.OpenSettingDialog}" />
+                <Separator />
+                <MenuItem Header="設定(_S)"
+                          Command="{x:Static svm:Commands.ShowSettingDialog}" />
             </MenuItem>
 
             <MenuItem Header="表示(_V)">
@@ -105,12 +104,12 @@
                           IsCheckable="True" x:Name="boardReverse"
                           Command="{x:Static r:ShogiCommands.SetReverseBoard}"
                           CommandParameter="{Binding IsChecked, ElementName=boardReverse}" />
-                <MenuItem Header="投票結果の表示(_E)"
-                          IsCheckable="True"
-                          IsChecked="{Binding Settings.AS_IsShowVoteResult}" />
-                <MenuItem Header="評価値の表示(_E)"
+                <MenuItem Header="評価値を表示(_E)"
                           IsCheckable="True"
                           IsChecked="{Binding Settings.AS_IsShowEvaluationValue}" />
+                <MenuItem Header="投票結果を表示(_E)"
+                          IsCheckable="True"
+                          IsChecked="{Binding Settings.AS_IsShowVoteResult}" />
                 <Separator />
                 <MenuItem Header="変化ウィンドウ(_V)"
                           Command="{x:Static svm:Commands.ShowMoveManageView}" />

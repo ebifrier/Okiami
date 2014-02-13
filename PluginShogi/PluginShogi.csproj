@@ -123,6 +123,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ShogiData\Background\OfficialEffect\Official.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ShogiData\Effect\Other\CastleEffect\Image\Anaguma1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -135,7 +138,7 @@
     <Content Include="ShogiData\Effect\Other\CastleEffect\Image\Ginkan.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ShogiData\EndRoll\endroll_format_1.xml">
+    <Content Include="ShogiData\EndRoll\endroll_format.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ShogiData\Effect\Other\CastleEffect\Image\Mino.png">
@@ -150,7 +153,7 @@
     <Content Include="ShogiData\Effect\Other\CastleEffect\Image\Yagura.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ShogiData\EndRoll\endroll_format.xml">
+    <Content Include="ShogiData\EndRoll\endroll_format_2.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
@@ -438,7 +441,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ShogiData\Background\SpringEffect\SpringEffect.xaml">
+    <Content Include="ShogiData\Background\OfficialEffect\OfficialEffect.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -489,6 +492,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ShogiData\Effect\Variation\CutInEffect2\CutInEffect2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ShogiData\Background\SpringEffect\SpringEffect.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
