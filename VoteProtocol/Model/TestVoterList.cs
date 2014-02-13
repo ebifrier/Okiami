@@ -269,11 +269,16 @@ namespace VoteSystem.Protocol.Model
             };
             var x = new List<VoterInfo>(list);
             x.AddRange(list);
+            x.AddRange(list);
+            x.AddRange(list);
+            x.AddRange(list);
+            x.AddRange(list);
+            x.AddRange(list);
             voterList.JoinedVoterList.AddRange(x);
 
             voterList.DonorViewList.AddRange(
                 list.OrderBy(_ => Guid.NewGuid())
-                    .Take(20).Select(_ => _.Name));
+                    .Select(_ => _.Name));
 
             voterList.LiveOwnerList.AddRange(
                 from name in liveOwnerList

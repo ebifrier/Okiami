@@ -1,3 +1,13 @@
+2014-02-14  - Ver 1.6.0.9
+
+	* PluginShogi/ShogiData/EndRoll/endroll_format.xml: エンドロールを公式
+	配信用に修正しました。
+
+2014-02-14  - Ver 1.6.0.8
+
+	* PluginShogi/ShogiData/Background/OfficialEffect: 公式配信用の背景エフ
+	ェクトを追加しました。
+
 2014-02-02  - Ver 1.6.0.7
 
 	* VoteServer/VoteModel.cs: 時間延長を一人何度でも行えるようにしました。

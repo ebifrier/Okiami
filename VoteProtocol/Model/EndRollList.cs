@@ -539,7 +539,8 @@ namespace VoteSystem.Protocol.Model
         /// <summary>
         /// 情報を持つデータオブジェクトを取得します。
         /// </summary>
-        private List<object> GetDataObject(object dataContext, string propertyName)
+        private List<object> GetDataObject(object dataContext, string propertyName,
+                                           int maxCount)
         {
             var m = PropertyRegex.Match(propertyName);
             if (!m.Success)
@@ -566,7 +567,7 @@ namespace VoteSystem.Protocol.Model
             var edata = data as IEnumerable;
             if (!(data is string) && edata != null)
             {
-                return edata.Cast<object>().ToList();
+                return edata.Cast<object>().Take(maxCount).ToList();
             }
 
             return new List<object> { data };
@@ -588,7 +589,11 @@ namespace VoteSystem.Protocol.Model
                     "LineFormatタグにData属性がありません。", elem);
             }
 
-            var dataList = GetDataObject(dataContext, dataAttr.Value);
+            /*var maxCountAttr = elem.Attribute("MaxCount");
+            var maxCount = (maxCountAttr == null ?
+                int.MaxValue : int.Parse(maxCountAttr.Value));*/
+
+            var dataList = GetDataObject(dataContext, dataAttr.Value, int.MaxValue);
             if (dataList == null)
             {
                 throw new EndRollListException(

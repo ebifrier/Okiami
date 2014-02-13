@@ -469,10 +469,13 @@ namespace VoteSystem.Protocol.View
             {
                 Downloader.CancelAll();
 
-                Downloader.BeginDownload(
-                    movieUri,
-                    (_, __) => WPFUtil.UIProcess(
-                        () => OnMovieDownloaded(_, __)));
+                if (!movieUri.IsFile)
+                {
+                    Downloader.BeginDownload(
+                        movieUri,
+                        (_, __) => WPFUtil.UIProcess(
+                            () => OnMovieDownloaded(_, __)));
+                }
             }
 
             // ダウンロードが残っていたらダウンロード中止とし、
@@ -502,7 +505,11 @@ namespace VoteSystem.Protocol.View
             MoviePlayer.Stop();
             MoviePlayer.Position = TimeSpan.Zero;
 
-            //OpenMedia(new Uri("file://E:/movies/ending/ending5/ending_last.avi"));
+            if (movieUri.IsFile)
+            {
+                OpenMedia(movieUri);
+            }
+            //OpenMedia(new Uri("file://E:/movies/alice/alice.wav"));
         }
 
         /// <summary>
