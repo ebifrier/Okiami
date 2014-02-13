@@ -9,6 +9,7 @@ using Ragnarok;
 using Ragnarok.Net.ProtoBuf;
 using Ragnarok.ObjectModel;
 
+#if false
 namespace VoteSystem.Client.Model
 {
     using VoteSystem.Protocol;
@@ -547,3 +548,4 @@ namespace VoteSystem.Client.Model
         }
     }
 }
+#endif

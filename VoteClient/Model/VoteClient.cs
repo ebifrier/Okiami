@@ -33,7 +33,7 @@ namespace VoteSystem.Client.Model
     {
         private readonly ReentrancyLock leaveTimeTimerLock = new ReentrancyLock();
         private Timer leaveTimeTimer;
-        private readonly CommenterManager commenterManager;
+        //private readonly CommenterManager commenterManager;
         private PbConnection conn;
         private bool showErrorMessage = true;        
         private VoteRoomInfo voteRoomInfo;
@@ -65,7 +65,7 @@ namespace VoteSystem.Client.Model
             }
         }
 
-        /// <summary>
+        /*/// <summary>
         /// コメンターの管理用オブジェクトを取得します。
         /// </summary>
         public CommenterManager CommenterManager
@@ -74,7 +74,7 @@ namespace VoteSystem.Client.Model
             {
                 return this.commenterManager;
             }
-        }
+        }*/
 
         /// <summary>
         /// エラーメッセージを表示するかどうかを取得または設定します。
@@ -1597,10 +1597,10 @@ namespace VoteSystem.Client.Model
             conn.AddCommandHandler<SendVoteResultCommand>(HandleVoteResultCommand);
             conn.AddCommandHandler<NotificationCommand>(HandleNotificationCommand);
 
-            if (this.commenterManager != null)
+            /*if (this.commenterManager != null)
             {
                 this.commenterManager.Attach(conn);
-            }
+            }*/
 
             Plugin_ConnectHandlers(conn);
             return conn;
@@ -1659,12 +1659,12 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public VoteClient(CommenterManager commenterManager)
+        public VoteClient(object commenterManager)
         {
             Global.PluginLoaded +=
                 (sender, e) => Plugin_ConnectHandlers(this.conn);
             
-            this.commenterManager = commenterManager;
+            //this.commenterManager = commenterManager;
         }
 
         /// <summary>

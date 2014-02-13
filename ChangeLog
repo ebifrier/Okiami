@@ -2,6 +2,9 @@
 
 	* PluginShogi/ShogiData/EndRoll/endroll_format.xml: エンドロールを公式
 	配信用に修正しました。
+	* PluginShogi/View/MainWindow.xaml: メニュー項目を修正しました。
+	* VoteClient/Model/CommenterManager.cs: コメンターによるコメント中継機
+	能を一時停止しました。
 
 2014-02-14  - Ver 1.6.0.8
 

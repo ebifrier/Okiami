@@ -9,6 +9,7 @@ using Ragnarok.NicoNico;
 using Ragnarok.NicoNico.Live;
 using Ragnarok.ObjectModel;
 
+#if false
 namespace VoteSystem.Client.Model
 {
     using VoteSystem.Protocol;
@@ -517,3 +518,4 @@ namespace VoteSystem.Client.Model
         }
     }
 }
+#endif

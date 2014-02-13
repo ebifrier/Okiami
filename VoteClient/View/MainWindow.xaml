@@ -103,9 +103,9 @@
                 <vc:LiveOwnerControl />
             </TabItem>
 
-            <TabItem Header="コメント中継">
+            <!--<TabItem Header="コメント中継">
                 <vc:CommenterSettingControl />
-            </TabItem>
+            </TabItem>-->
         </TabControl>
 
         <!-- ステータスバーです。-->

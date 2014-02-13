@@ -222,7 +222,7 @@ namespace VoteSystem.Client.ViewModel
 
             this.AddDependModel(model.NicoClient);
             this.AddDependModel(model.VoteClient);
-            this.AddDependModel(model.CommenterManager);
+            //this.AddDependModel(model.CommenterManager);
         }
     }
 }

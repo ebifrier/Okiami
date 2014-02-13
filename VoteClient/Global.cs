@@ -37,6 +37,23 @@ namespace VoteSystem.Client
         public static event EventHandler PluginLoaded;
 
         /// <summary>
+        /// バージョン情報を取得します。
+        /// </summary>
+        public static string Version
+        {
+            get
+            {
+                var asm = Assembly.GetExecutingAssembly();
+                var version = FileVersionInfo.GetVersionInfo(asm.Location);
+
+                return string.Format("{0}.{1}.{2}",
+                    version.ProductMajorPart,
+                    version.ProductMinorPart,
+                    version.ProductBuildPart);
+            }
+        }
+
+        /// <summary>
         /// 公開用プログラムかどうかを取得します。
         /// </summary>
         public static bool IsPublished
@@ -74,19 +91,17 @@ namespace VoteSystem.Client
         }
 
         /// <summary>
-        /// バージョン情報を取得します。
+        /// 公式放送用のプログラムかどうかを取得します。
         /// </summary>
-        public static string Version
+        public static bool IsOfficial
         {
             get
             {
-                var asm = Assembly.GetExecutingAssembly();
-                var version = FileVersionInfo.GetVersionInfo(asm.Location);
-
-                return string.Format("{0}.{1}.{2}",
-                    version.ProductMajorPart,
-                    version.ProductMinorPart,
-                    version.ProductBuildPart);
+#if OFFICIAL
+                return true;
+#else
+                return false;
+#endif
             }
         }
 

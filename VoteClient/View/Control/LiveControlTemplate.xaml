@@ -206,14 +206,16 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="3" />
                             <ColumnDefinition Width="40" />
                         </Grid.ColumnDefinitions>
                         <Label Grid.Row="2" Grid.Column="0"
                                Content="URL:" />
                         <r:BindOnEnterTextBox
                             Grid.Row="2" Grid.Column="1" AcceptsReturn="False"
+                            VerticalContentAlignment="Center"
                             Text="{Binding LiveUrlText}" />
-                        <Button Grid.Row="2" Grid.Column="2"
+                        <Button Grid.Row="2" Grid.Column="3"
                                 Style="{StaticResource toggleConnectButtonStyle}" />
                     </Grid>
 
