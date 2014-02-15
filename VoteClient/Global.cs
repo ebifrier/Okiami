@@ -106,6 +106,17 @@ namespace VoteSystem.Client
         }
 
         /// <summary>
+        /// オフィシャル時に表示するかどうかを取得します。
+        /// </summary>
+        public static Visibility IsNonOfficialVisibility
+        {
+            get
+            {
+                return (IsOfficial ? Visibility.Collapsed : Visibility.Visible);
+            }
+        }
+
+        /// <summary>
         /// 各モードのプラグインの一覧を取得します。
         /// </summary>
         public static List<IPlugin> PluginList
