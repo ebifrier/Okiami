@@ -15,7 +15,6 @@ namespace VoteSystem.Server
 {
     using VoteSystem.Protocol;
     using VoteSystem.Protocol.Vote;
-    using VoteSystem.Protocol.Commenter;
 
     /// <summary>
     /// クライアント側との通信を担当します。
@@ -189,10 +188,6 @@ namespace VoteSystem.Server
                     VoteRoom.ConnectHandlers(this.connection);
                 }
 
-                // 投票ルームが変わったときは、投票ルーム内の参加者から
-                // 選ばれているコメンターをすべて削除します。
-                this.liveRoomManager.OnVoteRoomChanged(voteRoom);
-
                 // 放送主として参加者リストに追加します。
                 AddLiveOwnerVoter();
             }
@@ -302,14 +297,6 @@ namespace VoteSystem.Server
                                             bool sendToLiveRoom,
                                             bool isOutLog)
         {
-            // 放送ルームにもコメントを投稿するなら、
-            // それ用の通知を送ります。
-            if (sendToLiveRoom)
-            {
-                this.liveRoomManager.BroadcastNotificationForPost(
-                    notification);
-            }
-
             if (sendAsNotification)
             {
                 var command = new NotificationCommand()
@@ -738,13 +725,6 @@ namespace VoteSystem.Server
             // コマンド
             connection.AddCommandHandler<GetVoteRoomInfoCommand>(
                 HandleGetVoteRoomInfoCommand);
-
-            connection.AddCommandHandler<LiveConnectedCommand>(
-                this.liveRoomManager.HandleLiveConnectedAsCommenterCommand);
-            connection.AddCommandHandler<LiveDisconnectedCommand>(
-                this.liveRoomManager.HandleLiveDisconnectedAsCommenterCommand);
-            connection.AddCommandHandler<CommenterStateChangedCommand>(
-                this.liveRoomManager.HandleCommenterStateChangedCommand);
 
             return connection;
         }

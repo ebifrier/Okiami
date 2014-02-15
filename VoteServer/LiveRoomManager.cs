@@ -12,7 +12,6 @@ namespace VoteSystem.Server
 {
     using VoteSystem.Protocol;
     using VoteSystem.Protocol.Vote;
-    using VoteSystem.Protocol.Commenter;
 
     /// <summary>
     /// 放送ルームを管理します。
@@ -59,20 +58,6 @@ namespace VoteSystem.Server
         {
             this.RaisePropertyChanged("HasLiveRoom");
             this.RaisePropertyChanged("LiveDataList");
-        }
-        
-        /// <summary>
-        /// 投票ルームが変更されたときに呼ばれます。
-        /// </summary>
-        internal void OnVoteRoomChanged(VoteRoom voteRoom)
-        {
-            using (LazyLock())
-            {
-                foreach (var liveRoom in this.liveRoomDic.Values)
-                {
-                    liveRoom.OnVoteRoomChanged(voteRoom);
-                }
-            }
         }
         
         /// <summary>
@@ -177,20 +162,6 @@ namespace VoteSystem.Server
 
                 this.liveRoomDic.Clear();
                 OnLiveChanged();
-            }
-        }
-        
-        /// <summary>
-        /// コメント投稿用の通知を送信します。
-        /// </summary>
-        public void BroadcastNotificationForPost(Notification notification)
-        {
-            using (LazyLock())
-            {
-                foreach (var pair in this.liveRoomDic)
-                {
-                    pair.Value.SendNotificationForPost(notification);
-                }
             }
         }
 
@@ -391,126 +362,6 @@ namespace VoteSystem.Server
                 LiveData = liveData,
                 Attribute = live.Attribute,
             };
-        }
-        #endregion
-
-        #region コメンターコマンド
-        /// <summary>
-        /// コメンターとして放送に接続した際に送られるコマンドを処理します。
-        /// </summary>
-        public void HandleLiveConnectedAsCommenterCommand(
-            object sender,
-            PbCommandEventArgs<LiveConnectedCommand> e)
-        {
-            if (e.Command.Live == null || !e.Command.Live.Validate())
-            {
-                return;
-            }
-
-            if (e.Command.Live.Site != LiveSite.NicoNama)
-            {
-                return;
-            }
-
-            var voteRoom = this.liveOwner.VoteRoom;
-            if (voteRoom == null)
-            {
-                throw new InvalidOperationException(
-                    "投票ルームに入室していません。");
-            }
-
-            // 対象となる放送オブジェクトを取得します。
-            var liveRoom = voteRoom.GetLiveRoom(e.Command.Live);
-            if (liveRoom == null)
-            {
-                Log.Error(
-                    "放送[{0}]は放送リストに存在しません。",
-                    e.Command.Live);
-                return;
-            }
-
-            liveRoom.AddCommenter(this.liveOwner, e.Command.LiveRoom);
-            Log.Debug(
-                "放送[{0}]のコメンターに追加しました。",
-                liveRoom.LiveData);
-        }
-
-        /// <summary>
-        /// コメンターとして接続していた放送から切断されたことを処理します。
-        /// </summary>
-        public void HandleLiveDisconnectedAsCommenterCommand(
-            object sender,
-            PbCommandEventArgs<LiveDisconnectedCommand> e)
-        {
-            if (e.Command.Live == null || !e.Command.Live.Validate())
-            {
-                return;
-            }
-
-            if (e.Command.Live.Site != LiveSite.NicoNama)
-            {
-                return;
-            }
-
-            var voteRoom = this.liveOwner.VoteRoom;
-            if (voteRoom == null)
-            {
-                return;
-            }
-
-            // コメンターとして追加された放送を取得します。
-            var liveRoom = voteRoom.GetLiveRoom(e.Command.Live);
-            if (liveRoom == null)
-            {
-                return;
-            }
-
-            // 放送自体が消えたわけではなく、コメンターの接続が切れた
-            // だけなので、放送終了の通知は送りません。
-            liveRoom.RemoveCommenter(this.liveOwner);
-            Log.Debug(
-                "放送[{0}]のコメンターから削除しました。",
-                liveRoom.LiveData);
-        }
-
-        /// <summary>
-        /// コメンターを投稿可能状態にします。
-        /// </summary>
-        public void HandleCommenterStateChangedCommand(
-            object sender,
-            PbCommandEventArgs<CommenterStateChangedCommand> e)
-        {
-            if (e.Command.Live == null || !e.Command.Live.Validate())
-            {
-                return;
-            }
-
-            if (e.Command.Live.Site != LiveSite.NicoNama)
-            {
-                return;
-            }
-
-            var voteRoom = this.liveOwner.VoteRoom;
-            if (voteRoom == null)
-            {
-                throw new InvalidOperationException(
-                    "投票ルームに入室していません。");
-            }
-
-            // コメンターとして追加された放送を取得します。
-            var liveRoom = voteRoom.GetLiveRoom(e.Command.Live);
-            if (liveRoom == null)
-            {
-                return;
-            }
-
-            liveRoom.SetState(this.liveOwner,
-                e.Command.CanPostComment,
-                e.Command.IsWatching);
-            Log.Debug(
-                "放送[{0}]のコメンター[{1}]の状態を更新しました。",
-                liveRoom.LiveData,
-                this.liveOwner.LogName);
         }
         #endregion
 

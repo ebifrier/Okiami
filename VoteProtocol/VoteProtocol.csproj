@@ -86,7 +86,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorConverter.cs" />
-    <Compile Include="Commenter\CommenterProtocol.cs" />
     <Compile Include="LiveAttribute.cs" />
     <Compile Include="LiveInfoData.cs" />
     <Compile Include="Model\EndRollList.cs" />

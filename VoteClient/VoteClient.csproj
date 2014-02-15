@@ -37,7 +37,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;OFFICIAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>VoteClient.xml</DocumentationFile>
@@ -115,8 +115,6 @@
     <Compile Include="Command\VoteCommands.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="Model\AddressPort.cs" />
-    <Compile Include="Model\CommenterCommentClient.cs" />
-    <Compile Include="Model\CommenterManager.cs" />
     <Compile Include="Model\ConnectionCounter.cs" />
     <Compile Include="Model\Live\LiveClient.cs" />
     <Compile Include="Model\Live\LiveNicoClient.cs" />
@@ -132,9 +130,6 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\VoteRoomInfoViewModel.cs" />
     <Compile Include="View\Control\BoolToSignConverter.cs" />
-    <Compile Include="View\Control\CommenterSettingControl.xaml.cs">
-      <DependentUpon>CommenterSettingControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MessageUtil.cs" />
     <Compile Include="View\Control\LiveOwnerControl.xaml.cs">
       <DependentUpon>LiveOwnerControl.xaml</DependentUpon>
@@ -212,10 +207,6 @@
     <Resource Include="View\CommonDictionary.xaml">
       <SubType>Designer</SubType>
     </Resource>
-    <Page Include="View\Control\CommenterSettingControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\Control\LiveOwnerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

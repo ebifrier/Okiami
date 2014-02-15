@@ -18,7 +18,6 @@ namespace VoteSystem.Client.Model
 {
     using Protocol;
     using Protocol.Vote;
-    using Protocol.Commenter;
 
     /// <summary>
     /// 各リクエストのリスポンスを受け取ったときに使われます。
@@ -33,7 +32,6 @@ namespace VoteSystem.Client.Model
     {
         private readonly ReentrancyLock leaveTimeTimerLock = new ReentrancyLock();
         private Timer leaveTimeTimer;
-        //private readonly CommenterManager commenterManager;
         private PbConnection conn;
         private bool showErrorMessage = true;        
         private VoteRoomInfo voteRoomInfo;
@@ -64,17 +62,6 @@ namespace VoteSystem.Client.Model
                 Util.CallEvent(() => handler(this, e));
             }
         }
-
-        /*/// <summary>
-        /// コメンターの管理用オブジェクトを取得します。
-        /// </summary>
-        public CommenterManager CommenterManager
-        {
-            get
-            {
-                return this.commenterManager;
-            }
-        }*/
 
         /// <summary>
         /// エラーメッセージを表示するかどうかを取得または設定します。
@@ -1596,11 +1583,6 @@ namespace VoteSystem.Client.Model
             conn.AddCommandHandler<ChangeParticipantInfoCommand>(HandleChangeParticipantInfoCommand);
             conn.AddCommandHandler<SendVoteResultCommand>(HandleVoteResultCommand);
             conn.AddCommandHandler<NotificationCommand>(HandleNotificationCommand);
-
-            /*if (this.commenterManager != null)
-            {
-                this.commenterManager.Attach(conn);
-            }*/
 
             Plugin_ConnectHandlers(conn);
             return conn;
