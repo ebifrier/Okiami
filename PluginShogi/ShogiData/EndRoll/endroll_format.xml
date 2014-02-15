@@ -35,7 +35,7 @@
   </Line>
 	<Lines Data="$JoinedVoterViewList">
     <Line>
-      <Format Column="0" Text="$Name" Color="$Color" Alignment="Right" />
+      <Format Column="0" Text="$Name" Alignment="Right" />
       <Format Column="1" Text="$Skill" Alignment="Left" />
     </Line>
 	</Lines>

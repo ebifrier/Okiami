@@ -183,18 +183,10 @@ namespace VoteSystem.Client.Model
 
                     var ip = IPAddress.Parse(m.Groups[3].Value);
                     var port = int.Parse(m.Groups[4].Value);
-                    var obj = new AddressPort(ip, port);
-                    var count = 0;
 
                     // 指定のアドレスとポートの接続数を一つ増やします。
-                    if (dic.TryGetValue(obj, out count))
-                    {
-                        dic[obj] = count + 1;
-                    }
-                    else
-                    {
-                        dic[obj] = 1;
-                    }
+                    var obj = new AddressPort(ip, port);
+                    dic[obj] = dic.GetValue(obj) + 1;
                 }
 
                 return dic;

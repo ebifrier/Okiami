@@ -25,7 +25,10 @@
 	<Line>
 		<Format ColumnSpan="2" Text="参加者一覧" />
 	</Line>
-
+  <Line>
+    <Format Column="0" Text="名前" Alignment="Right" />
+    <Format Column="1" Text="メッセージ" Alignment="Left" />
+  </Line>
 	<Lines Data="$JoinedVoterList">
 		<Line>
 			<Format Column="0" Text="$Name" Alignment="Right" />

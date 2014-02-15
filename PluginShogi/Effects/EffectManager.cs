@@ -188,13 +188,6 @@ namespace VoteSystem.PluginShogi.Effects
         /// </summary>
         private bool HasEffectFlag(EffectFlag flag)
         {
-            /*if (!SD_IsUseEffect)
-            {
-                return false;
-            }
-
-            return ((SD_EffectFlag & flag) != 0);*/
-
             if (Settings == null)
             {
                 return false;
