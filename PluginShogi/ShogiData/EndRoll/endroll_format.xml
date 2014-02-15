@@ -29,6 +29,10 @@
 		<Format ColumnSpan="2" Text="参加者一覧" FontWeight="Bold" />
 	</Line>
 	<Line />
+  <Line>
+    <Format Column="0" Text="名前" Alignment="Right" />
+    <Format Column="1" Text="メッセージ" Alignment="Left" />
+  </Line>
 	<Lines Data="$JoinedVoterViewList">
     <Line>
       <Format Column="0" Text="$Name" Color="$Color" Alignment="Right" />
@@ -79,10 +83,9 @@
 	<Line>
 		<Format ColumnSpan="2" Text="ツール素材提供" FontWeight="Bold" />
 	</Line>
-  <Line />
 	<Line>
 		<Format Column="0" Text="イラスト素材" Alignment="Right" />
-		<Format Column="1" Text="梔子こみゅにてぃ" Alignment="Left" />0
+		<Format Column="1" Text="梔子こみゅにてぃ" Alignment="Left" />
 	</Line>
 	<Line>
 		<Format Column="1" Text="famfamfam" Alignment="Left" />
@@ -215,16 +218,6 @@
 
   <Line Count="2" />
 
-  <!-- 特別出演 -->
-  <Line>
-    <Format ColumnSpan="2" Text="特別出演" FontWeight="Bold" />
-  </Line>
-  <Line>
-    <Format ColumnSpan="2" Text="アナロ熊" />
-  </Line>
-
-	<Line Count="2" />
-
 	<!-- 当日のデータなど -->
 	<Line>
 		<Format ColumnSpan="2" Text="今日の来場者数など" FontWeight="Bold" />
@@ -246,20 +239,20 @@
 
 	<!-- 記録係を表示 -->
 	<Line>
-		<Format ColumnSpan="2" Text="記録係" FontWeight="Bold" />
+		<Format ColumnSpan="2" Text="聞き手" FontWeight="Bold" />
 	</Line>
 	<Line>
-		<Format ColumnSpan="2" Text="中村桃子女流初段" />
+		<Format ColumnSpan="2" Text="△△△女流初段" />
 	</Line>
 
   <Line />
 
 	<!-- 盤代理操作人を表示 -->
 	<Line>
-		<Format ColumnSpan="2" Text="盤代理操作人" FontWeight="Bold" />
+		<Format ColumnSpan="2" Text="解説者" FontWeight="Bold" />
 	</Line>
 	<Line>
-		<Format ColumnSpan="2" Text="知花賢三段" />
+		<Format ColumnSpan="2" Text="○○○五段" />
 	</Line>
 
   <Line />
@@ -274,16 +267,16 @@
 
 	<Line Count="11" />
 
-	<Line>
-		<Format ColumnSpan="2" Text="最後までおつきあい頂き" FontWeight="Bold" />
-	</Line>
-	<Line>
-		<Format ColumnSpan="2" Text="どうもありがとうございました" FontWeight="Bold" />
-	 </Line>
+  <Line>
+    <Format ColumnSpan="2" FontSize="16" Text="ニコニコ生放送特別企画" FontWeight="Bold" />
+  </Line>
 
   <Line Count="14" />
 
   <Line>
-    <Format ColumnSpan="2" FontSize="16" Text="ニコニコ生放送特別企画" FontWeight="Bold" />
+    <Format ColumnSpan="2" Text="最後までおつきあい頂き" FontWeight="Bold" />
+  </Line>
+  <Line>
+    <Format ColumnSpan="2" Text="どうもありがとうございました" FontWeight="Bold" />
   </Line>
 </FormatRoot>

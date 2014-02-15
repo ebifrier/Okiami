@@ -371,7 +371,8 @@ namespace VoteSystem.Server.VoteStrategy
         /// 参加コマンドの正規表現です。
         /// </summary>
         private static readonly Regex JoinRegex = new Regex(
-            @"^(join|sanka|参加|さんか)(\s+|@|＠)",
+            //@"^(join|sanka|参加|さんか)(\s+|@|＠)",
+            @"^参加\s+",
             RegexOptions.IgnoreCase);
 
         /// <summary>
@@ -384,9 +385,7 @@ namespace VoteSystem.Server.VoteStrategy
             var m = JoinRegex.Match(notification.Text);
             if (m.Success)
             {
-                // ＠マークは残します。スペースもついでに残ってしまいますが、
-                // ParsePlayerメソッドで削除されるので問題ありません。
-                var text = notification.Text.Substring(m.Groups[1].Length);
+                var text = notification.Text.Substring(m.Value.Length);
 
                 var player = ShogiParser.ParsePlayer(text);
                 if (player != null)
@@ -401,7 +400,7 @@ namespace VoteSystem.Server.VoteStrategy
             }
 
             // 変化コマンドを処理します。
-            var note = string.Empty;
+            /*var note = string.Empty;
             var id = -1;
             var nextId = -1;
             var moveList = ParseVariation(notification.Text, out note,
@@ -417,7 +416,7 @@ namespace VoteSystem.Server.VoteStrategy
                 command.MoveList.AddRange(moveList);
 
                 this.voteRoom.BroadcastCommand(command);
-            }
+            }*/
 
             if (IsMirrorMode)
             {
@@ -549,15 +548,15 @@ namespace VoteSystem.Server.VoteStrategy
                 return null;
             }
 
-            // 指し手の正規化を行います（打を消したり、左を追加するなど）
+            /*// 指し手の正規化を行います（打を消したり、左を追加するなど）
             var newMove = this.board.ConvertMove(bm, false);
             if (newMove == null)
             {
                 return null;
             }
 
-            newMove.OriginalText = move.OriginalText;
-            return newMove;
+            newMove.OriginalText = move.OriginalText;*/
+            return move;
         }
 
         /// <summary>

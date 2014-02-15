@@ -30,6 +30,7 @@ namespace VoteSystem.Server
         private readonly Dictionary<VoteMode, VoteStrategy.IVoteStrategy> strategyList =
             new Dictionary<VoteMode, VoteStrategy.IVoteStrategy>();
         private VoteStrategy.IVoteStrategy voteStrategy;
+        private int voteEndCount = 1;
         private TimeSpan voteExtendTime = TimeSpan.FromSeconds(60);
         private readonly Dictionary<string, int> timeExtendDic =
             new Dictionary<string, int>();
@@ -477,14 +478,15 @@ namespace VoteSystem.Server
         /// 延長要求コマンドの正規表現です。
         /// </summary>
         private static Regex ExtendRegex = new Regex(
-            @"^(MOTTOMOTTO|MOTMOT|HOTTOMOTTO|HOTMOT|もっともっと|ほっともっと)(!|！)*",
+            //@"^(MOTTOMOTTO|MOTMOT|HOTTOMOTTO|HOTMOT|もっともっと|ほっともっと)(!|！)*",
+            @"^もっともっと",
             RegexOptions.IgnoreCase);
 
         /// <summary>
         /// 時間短縮要求コマンドの正規表現です。
         /// </summary>
         private static Regex StableRegex = new Regex(
-            @"^(あ|あっ)?(、)?(もう)?(、)?(けっこうです|かっこうです|結構です|いりません|格好です|月光です)(。)?",
+            @"^もうけっこう",
             RegexOptions.IgnoreCase);
 
         /// <summary>
@@ -523,8 +525,8 @@ namespace VoteSystem.Server
                 return TimeExtendKind.Extend;
             }
 
-            if (StableRegex.IsMatch(normalizedText) ||
-                StableRegex2.IsMatch(normalizedText))
+            if (StableRegex.IsMatch(normalizedText)/* ||
+                StableRegex2.IsMatch(normalizedText)*/)
             {
                 return TimeExtendKind.Stable;
             }
@@ -557,9 +559,12 @@ namespace VoteSystem.Server
                 
                 this.timeExtendDic[voterId] = kind;*/
 
-                this.timeExtendDic[voterId] =
+                var count =
                     this.timeExtendDic.GetValue(voterId) +
-                    (kind == TimeExtendKind.Extend ? +1 : -1);                
+                    (kind == TimeExtendKind.Extend ? +1 : -1);
+
+                this.timeExtendDic[voterId] =
+                    Math.Sign(count) * Math.Min(Math.Abs(count), 1);
             }
 
             OnVoteResultChanged();
@@ -708,19 +713,19 @@ namespace VoteSystem.Server
         private void HandleSetTimeExtendSettingCommand(
             object sender, PbCommandEventArgs<SetTimeExtendSettingCommand> e)
         {
-            //var voteEndCount = e.Command.VoteEndCount;
+            var voteEndCount = e.Command.VoteEndCount;
             var voteExtendTime = e.Command.VoteExtendTimeSeconds;
 
             using (LazyLock())
             {
-                /*if (voteEndCount > 0)
+                if (voteEndCount > 0)
                 {
                     this.voteEndCount = voteEndCount;
 
                     Log.Info(
                         "投票打ち切りのカウントを設定しました: {0}",
                         voteEndCount);
-                }*/
+                }
 
                 if (voteExtendTime >= 0)
                 {

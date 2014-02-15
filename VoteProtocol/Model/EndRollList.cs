@@ -589,10 +589,6 @@ namespace VoteSystem.Protocol.Model
                     "LineFormatタグにData属性がありません。", elem);
             }
 
-            /*var maxCountAttr = elem.Attribute("MaxCount");
-            var maxCount = (maxCountAttr == null ?
-                int.MaxValue : int.Parse(maxCountAttr.Value));*/
-
             var dataList = GetDataObject(dataContext, dataAttr.Value, int.MaxValue);
             if (dataList == null)
             {
@@ -605,18 +601,18 @@ namespace VoteSystem.Protocol.Model
             // 各行の情報をデータの数分だけ作成します。
             return dataList.SelectMany(data =>
                 lines.Select(line =>
+                {
+                    if (line.Name.LocalName != "Line")
                     {
-                        if (line.Name.LocalName != "Line")
-                        {
-                            throw new EndRollListException(
-                                string.Format(
-                                    "{0}タグには対応していません。",
-                                    line.Name.LocalName),
-                                line);
-                        }
+                        throw new EndRollListException(
+                            string.Format(
+                                "{0}タグには対応していません。",
+                                line.Name.LocalName),
+                            line);
+                    }
 
-                        return ProcessLineTag(line, data);
-                    }))
+                    return ProcessLineTag(line, data);
+                }))
                 .Where(_ => _.ElementList.Any());
         }
 

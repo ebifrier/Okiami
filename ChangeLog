@@ -1,3 +1,11 @@
+2014-02-15  - Ver 1.6.1.0
+
+	* VoteProtocol/Model/TestVoterList.cs: テスト用の参加者一覧を修正し、以
+	前より分かりやすいものにしました。
+	* VoteServer/VoteModel.cs: 時間延長コメントをより厳密なものにしました。
+	* VoteServer/VoteStrategy/ShogiVoteStrategy.cs: 参加コメントをより厳密
+	なものにしました。
+
 2014-02-14  - Ver 1.6.0.9
 
 	* PluginShogi/ShogiData/EndRoll/endroll_format.xml: エンドロールを公式
