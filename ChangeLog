@@ -4,6 +4,10 @@
 	て削除しました。
 	* VoteClient/View/MainWindow.xaml: 投票テストのための機能を追加しました
 	。
+	* VoteClient/Properties/AssemblyInfo.cs: プロジェクトタイトルを変更しま
+	した。
+	* PluginShogi/View/MainWindow.xaml: 将棋盤の画面サイズを640x360固定にし、
+	レイアウトなどを変更できるようにしました。(まだ変更していません)
 	* 
 
 2014-02-15  - Ver 1.6.1.0

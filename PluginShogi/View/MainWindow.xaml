@@ -9,8 +9,8 @@
         xmlns:v="clr-namespace:VoteSystem.PluginShogi.View"
         xmlns:svm="clr-namespace:VoteSystem.PluginShogi.ViewModel"
         mc:Ignorable="d" x:Name="window"
-        Title="将棋盤ちゃん" Height="560" Width="666"
-        AllowDrop="True"
+        Title="将棋盤ちゃん" SizeToContent="WidthAndHeight"
+        AllowDrop="True" ResizeMode="CanMinimize"
         Background="{x:Static Brushes.White}">
     <Window.Resources>
         <ResourceDictionary>
@@ -135,7 +135,8 @@
         </StackPanel>
 
         <Grid Grid.Row="2" Grid.RowSpan="2"
-              ContextMenu="{DynamicResource contextMenu}">
+              ContextMenu="{DynamicResource contextMenu}"
+              Width="640" Height="360">
             <!-- 背景 -->
             <r:VisualBackground x:Name="background"
                                 FadeElement="{Binding ElementName=ShogiControl}" />
