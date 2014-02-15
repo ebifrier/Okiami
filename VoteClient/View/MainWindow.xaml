@@ -8,7 +8,7 @@
         xmlns:c="clr-namespace:VoteSystem.Client.Command"
         xmlns:vc="clr-namespace:VoteSystem.Client.View.Control"
         mc:Ignorable="d"
-        Title="2525投票将棋" Height="470" Width="380">
+        Title="おきあみちゃん" Height="470" Width="380">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -77,12 +77,12 @@
             </MenuItem>
 
             <MenuItem Header="ヘルプ(_H)">
-                <MenuItem Header="ネットワークテスト"
-                          Command="{x:Static c:Commands.NetworkProfile}"
+                <MenuItem Header="投票テスト"
+                          Command="{x:Static c:Commands.VoteTest}"
                           Visibility="{x:Static l:Global.IsNonPublishedVisibility}" />
-                <MenuItem Header="ログの転送"
+                <!--<MenuItem Header="ログの転送"
                           Command="{x:Static c:Commands.PostComments}"
-                          Visibility="{x:Static l:Global.IsNonPublishedVisibility}" />
+                          Visibility="{x:Static l:Global.IsNonPublishedVisibility}" />-->
 
                 <MenuItem Header="エラー報告・要望など(_R)"
                           Command="{x:Static p:RagnarokCommands.SendErrorLog}"
@@ -102,10 +102,6 @@
             <TabItem Header="放送主設定">
                 <vc:LiveOwnerControl />
             </TabItem>
-
-            <!--<TabItem Header="コメント中継">
-                <vc:CommenterSettingControl />
-            </TabItem>-->
         </TabControl>
 
         <!-- ステータスバーです。-->

@@ -12,7 +12,7 @@ using System.Windows.Markup;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("co516151")]
 [assembly: AssemblyProduct("PluginShogi")]
-[assembly: AssemblyCopyright("Copyright © えびふらい 2012")]
+[assembly: AssemblyCopyright("Copyright © えびふらい 2012 - 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
