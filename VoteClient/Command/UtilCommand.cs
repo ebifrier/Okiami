@@ -25,6 +25,14 @@ namespace VoteSystem.Client.Command
                 "NetworkProfile",
                 typeof(Window));
         /// <summary>
+        /// 投票テストを行います。
+        /// </summary>
+        public readonly static ICommand VoteTest =
+            new RoutedUICommand(
+                "投票テストを行います。",
+                "VoteTest",
+                typeof(Window));
+        /// <summary>
         /// NCVのログを投票サーバーに送ります。
         /// </summary>
         public readonly static ICommand PostComments =
@@ -99,6 +107,10 @@ namespace VoteSystem.Client.Command
                     ExecuteNetworkProfile));
             element.CommandBindings.Add(
                 new CommandBinding(
+                    Commands.VoteTest,
+                    ExecuteVoteTest));
+            element.CommandBindings.Add(
+                new CommandBinding(
                     Commands.PostComments,
                     ExecutePostComments));
             element.CommandBindings.Add(
@@ -165,61 +177,38 @@ namespace VoteSystem.Client.Command
                         }
                     });
             }
-#if false
-            const int MaxCount = 50;
-            DateTime startTime;
-            var count = 0;
+        }
 
-            using (var voteClient = new Model.VoteClient(false))
+        /// <summary>
+        /// 投票テストを行います。
+        /// </summary>
+        private static void ExecuteVoteTest(object sender,
+                                            ExecutedRoutedEventArgs e)
+        {
+            const int MaxCount = 2000;
+
+            try
             {
-                try
-                {
-                    voteClient.Connect(
-                        Protocol.ServerSettings.VoteAddress,
-                        Protocol.ServerSettings.VotePort);
-
-                    startTime = DateTime.Now;
-
-                    System.Threading.Tasks.Parallel.For(
-                        0, MaxCount,
-                        (index) =>
-                        {
-                            voteClient.GetVoteRoomCount(
-                                (sender_, e_) =>
-                                {
-                                    System.Threading.Interlocked.Increment(ref count);
-                                });
-                        });
-
-                    while (true)
+                System.Threading.Tasks.Parallel.For(
+                    0, MaxCount,
+                    (index) =>
                     {
-                        if (count != MaxCount)
-                        {
-                            System.Threading.Thread.Yield();
-                            continue;
-                        }
-
-                        break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageUtil.ErrorMessage(ex,
-                        "ネットワークテストに失敗しました。");
-                    return;
-                }
+                        Global.VoteClient.SendNotification(
+                            new Protocol.Notification
+                            {
+                                Text = string.Format("{0}6歩", MathEx.RandInt(1, 10)),
+                                VoterId = Guid.NewGuid().ToString(),
+                                Timestamp = Ragnarok.Net.NtpClient.GetTime(),
+                            },
+                            false);
+                    });
             }
-
-            var ellapse = DateTime.Now - startTime;
-            MessageBox.Show(
-                string.Format(
-                    "ネットワーク経過時間\n" +
-                    "    {0}回 {1}ms\n" +
-                    "       1回 {2}ms",
-                    MaxCount,
-                    ellapse.TotalMilliseconds,
-                    ellapse.TotalMilliseconds / MaxCount));
-#endif
+            catch (Exception ex)
+            {
+                MessageUtil.ErrorMessage(ex,
+                    "ネットワークテストに失敗しました。");
+                return;
+            }
         }
 
         /// <summary>

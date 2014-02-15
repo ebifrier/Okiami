@@ -1,3 +1,11 @@
+2014-02-16  - Ver 1.6.1.1
+
+	* VoteClient/Model/CommenterManager.cs: コメンター関係のファイルをすべ
+	て削除しました。
+	* VoteClient/View/MainWindow.xaml: 投票テストのための機能を追加しました
+	。
+	* 
+
 2014-02-15  - Ver 1.6.1.0
 
 	* VoteProtocol/Model/TestVoterList.cs: テスト用の参加者一覧を修正し、以
