@@ -112,7 +112,7 @@
                             Content="pack://application:,,,/Resources/Image/vote_create_network.png"
                             Command="{x:Static c:Commands.CreateVoteRoom}"
                             ToolTip="サーバーに投票ルームを作ります。"
-                            Visibility="{x:Static t:Global.IsNonOfficialVisibility}" />
+                            Visibility="{x:Static t:Global.NonOfficialVisibility}" />
                     <Button Style="{StaticResource voteButtonStyle}"
                             Content="pack://application:,,,/Resources/Image/vote_enter_network.png"
                             Command="{x:Static c:Commands.EnterVoteRoom}"

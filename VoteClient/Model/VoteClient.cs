@@ -1523,7 +1523,7 @@ namespace VoteSystem.Client.Model
                 conn.Connect(address, port);
 
                 var result = conn.CheckProtocolVersion(
-                    TimeSpan.FromSeconds(30));
+                    TimeSpan.FromSeconds(20));
                 if (result != PbVersionCheckResult.Ok)
                 {
                     conn.Shutdown();

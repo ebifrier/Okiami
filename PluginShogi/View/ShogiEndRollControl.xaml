@@ -4,6 +4,7 @@
              xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
              xmlns:s="http://schemas.garnet-alice.net/votesystem/xaml/presentation"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:ct="clr-namespace:VoteSystem.Client;assembly=VoteClient"
              xmlns:t="clr-namespace:VoteSystem.PluginShogi"
              xmlns:v="clr-namespace:VoteSystem.PluginShogi.View"
              Name="control" Width="554" Height="424">
@@ -77,8 +78,10 @@
                                   IsUpdateBackground="False"
                                   AutoUpdate="False" />
 
-                <s:EndingControl Width="640" Height="360"
-                                 x:Name="Ending" />
+                <Grid Visibility="{x:Static ct:Global.NonOfficialVisibility}">
+                    <s:EndingControl Width="640" Height="360"
+                                     x:Name="Ending" />
+                </Grid>
             </Canvas>
         </Viewbox>
     </Grid>

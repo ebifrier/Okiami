@@ -106,9 +106,9 @@ namespace VoteSystem.Client
         }
 
         /// <summary>
-        /// オフィシャル時に表示するかどうかを取得します。
+        /// 非オフィシャル時に表示するかどうかを取得します。
         /// </summary>
-        public static Visibility IsNonOfficialVisibility
+        public static Visibility NonOfficialVisibility
         {
             get
             {
@@ -332,11 +332,7 @@ namespace VoteSystem.Client
             if (e.Reason == DisconnectReason.DisconnectedByOpposite)
             {
                 Ragnarok.Log.Error(
-                    "コメンターがコメントサーバーから切断されました。");
-                /*Global.UIProcess(() =>
-                    MessageUtil.Confirm(
-                        "コメントサーバーから切断されました。",
-                        "確認"));*/
+                    "コメントサーバーから切断されました。");
             }
         }
 
@@ -385,7 +381,9 @@ namespace VoteSystem.Client
             VoteRoomInfoModel = new ViewModel.VoteRoomInfoViewModel();
 
             Updater = new PresentationUpdater(UpdateUrl);
+#if !OFFICIAL
             Updater.Start();
+#endif
         }
 
         /// <summary>

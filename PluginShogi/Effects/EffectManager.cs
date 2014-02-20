@@ -86,7 +86,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 投票エフェクトの最短表示インターバルです。
         /// </summary>
-        private readonly TimeSpan VoteInterval = TimeSpan.FromMilliseconds(200);
+        private readonly TimeSpan VoteInterval = TimeSpan.FromMilliseconds(100);
 
         private HashSet<string> castleEffectedBag = new HashSet<string>();
         private int moveCount;
