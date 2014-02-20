@@ -9,7 +9,7 @@
         xmlns:v="clr-namespace:VoteSystem.PluginShogi.View"
         xmlns:svm="clr-namespace:VoteSystem.PluginShogi.ViewModel"
         mc:Ignorable="d" x:Name="window"
-        Title="将棋盤ちゃん" SizeToContent="WidthAndHeight"
+        Title="将棋盤ちゃん" Width="646" Height="461"
         AllowDrop="True" ResizeMode="CanMinimize"
         Background="{x:Static Brushes.White}">
     <Window.Resources>
@@ -209,18 +209,6 @@
                             PieceBoxBrush="{StaticResource komadaiBrush}"
                             BlackPlayerName="{Binding Settings.SD_BlackPlayerName}"
                             WhitePlayerName="{Binding Settings.SD_WhitePlayerName}" />
-
-            <!-- エンドロールです。-->
-            <!--<s:EndRollControl x:Name="endRoll"
-                              Background="#A0000000"
-                              RollTimeSeconds="30"
-                              LineHeight="30.0"
-                              OpacityLineCount="3"
-                              IsHitTestVisible="False"
-                              AutoUpdate="True"
-                              IsUpdateBackground="True" />-->
-                
-                <!--<Border Width="64" Height="48" Background="Red" />-->
 
             <Viewbox Stretch="UniformToFill"
                      HorizontalAlignment="Center"

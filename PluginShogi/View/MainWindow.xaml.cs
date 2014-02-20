@@ -141,8 +141,6 @@ namespace VoteSystem.PluginShogi.View
             Commands.Binding(InputBindings);
             ShogiControl.InitializeBindings(this);
 
-            //RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.HighQuality);
-
             this.voteResultControl.InitializeBindings(this);
             this.voteResultControl.SettingUpdated +=
                 (_, __) => ShogiGlobal.Settings.Save();
@@ -157,6 +155,7 @@ namespace VoteSystem.PluginShogi.View
                 var fpsCounter = new FpsCounter();
                 fpsCounter.FpsChanged += (_, __) =>
                     Title = string.Format("FPS: {0:0.00}", fpsCounter.Fps, 30);
+                    //Title = string.Format("{0}, {1}", Width, Height);
                 ShogiControl.AddEffect(fpsCounter);
             }
 

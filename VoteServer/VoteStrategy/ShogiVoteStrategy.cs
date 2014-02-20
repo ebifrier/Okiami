@@ -542,21 +542,21 @@ namespace VoteSystem.Server.VoteStrategy
             }
 
             // 現局面から指せるかどうか調べます。
-            var bm = this.board.ConvertMove(move);
+            var bm = this.board.ConvertMove(move, true);
             if (bm == null)
             {
                 return null;
             }
 
-            /*// 指し手の正規化を行います（打を消したり、左を追加するなど）
+            // 指し手の正規化を行います（打を消したり、左を追加するなど）
             var newMove = this.board.ConvertMove(bm, false);
             if (newMove == null)
             {
                 return null;
             }
 
-            newMove.OriginalText = move.OriginalText;*/
-            return move;
+            newMove.OriginalText = move.OriginalText;
+            return newMove;
         }
 
         /// <summary>

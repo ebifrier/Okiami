@@ -51,7 +51,7 @@
                     </Border.Background>
                 </Border>
 
-                <Grid Canvas.Left="310" Canvas.Top="185"
+                <Grid Canvas.Left="370" Canvas.Top="185"
                       Width="250" Height="160"
                       Opacity="0.0" HorizontalAlignment="Center"
                       x:Name="ShogiGrid">

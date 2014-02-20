@@ -817,7 +817,7 @@ namespace VoteSystem.Protocol.View
             {
                 // 左に合わせる
                 case HorizontalAlignment.Left:
-                    return (columnLeft + 10);
+                    return columnLeft;
 
                 // 中心
                 case HorizontalAlignment.Center:
@@ -827,11 +827,11 @@ namespace VoteSystem.Protocol.View
 
                 // 右に合わせる
                 case HorizontalAlignment.Right:
-                    return (columnRight - 10 - decoratedText.ActualWidth);
+                    return (columnRight - decoratedText.ActualWidth);
             }
 
             // 不明なので適当に。
-            return (columnLeft + 10);
+            return columnLeft;
         }
 
         /// <summary>

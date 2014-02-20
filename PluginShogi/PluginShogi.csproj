@@ -140,6 +140,7 @@
     </Content>
     <Content Include="ShogiData\EndRoll\endroll_format.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="ShogiData\Effect\Other\CastleEffect\Image\Mino.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
