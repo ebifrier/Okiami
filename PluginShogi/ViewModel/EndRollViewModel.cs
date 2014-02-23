@@ -239,7 +239,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             // 参加者は一度指定条件でソートし、カットした後、
             // ランダムに並び替えます。
             JoinedVoterViewList = SortJoinedVoterList()
-                .Take(400)
+                .Take(300)
                 .OrderBy(_ => Guid.NewGuid())
                 .ToList();
 

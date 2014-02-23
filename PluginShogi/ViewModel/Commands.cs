@@ -741,10 +741,15 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             try
             {
-                var timeSpan = GetTimeSpan(TimeSpan.FromMinutes(20));
-                if (timeSpan == null)
+                TimeSpan? timeSpan = TimeSpan.Zero;
+
+                if (!Client.Global.IsOfficial)
                 {
-                    return;
+                    timeSpan = GetTimeSpan(TimeSpan.FromMinutes(20));
+                    if (timeSpan == null)
+                    {
+                        return;
+                    }
                 }
 
                 // 動画の開始時間を設定します。

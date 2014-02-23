@@ -29,8 +29,6 @@ namespace VoteSystem.Server
         {
             get
             {
-                //var test = Protocol.Model.TestVoterList.GetTestVoterList();
-
                 lock (this.joinedVoterDic)
                 lock (this.unjoinedVoterDic)
                 lock (this.liveOwnerDic)

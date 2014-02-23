@@ -50,8 +50,10 @@ namespace VoteSystem.Protocol.Vote
             get { return this.name; }
             set
             {
-                // 名前は全角で12文字までとします。
-                this.name = value.HankakuSubstring(12 * 2);
+                // 名前は12文字までとします。
+                this.name = (string.IsNullOrEmpty(value) ?
+                    string.Empty :
+                    value.Substring(0, Math.Min(12, value.Length)));
             }
         }
 
@@ -64,8 +66,10 @@ namespace VoteSystem.Protocol.Vote
             get { return this.skill; }
             set
             {
-                // 強さは全角で20文字までとします。
-                this.skill = value.HankakuSubstring(20 * 2);
+                // 強さは26文字までとします。
+                this.skill = (string.IsNullOrEmpty(value) ?
+                    string.Empty :
+                    value.Substring(0, Math.Min(26, value.Length)));
             }
         }
 

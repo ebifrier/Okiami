@@ -1,3 +1,13 @@
+2014-02-24  - Ver 1.7.0.1
+
+	* PluginShogi/View/MainWindow.xaml: 将棋盤の縦横比が変わったため、それ
+	に付随する更新を行いました。
+	* PluginShogi/ShogiData/Effect: エフェクトの画面サイズを変更しました。
+	* PluginShogi/ViewModel/Commands.cs: 公式放送の場合はエンディング開始ま
+	での時間を設定しないようにしました。
+	* VoteProtocol/Vote/VoterInfo.cs: エンディングの名前とメッセージの文字
+	数制限を調節しました。
+
 2014-02-16  - Ver 1.6.1.1
 
 	* VoteClient/Model/CommenterManager.cs: コメンター関係のファイルをすべ

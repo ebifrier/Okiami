@@ -67,6 +67,8 @@
                     Click="MuteButton_Click" />
             <Slider Width="150"
                     IsSnapToTickEnabled="True"
+                    IsMoveToPointEnabled="True"
+                    VerticalAlignment="Center"
                     Minimum="0" Maximum="100" SmallChange="1"
                     AutoToolTipPlacement="TopLeft"
                     Value="{Binding Volume, ElementName=window}" />
