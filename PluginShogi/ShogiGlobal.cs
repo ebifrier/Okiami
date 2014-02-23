@@ -31,7 +31,7 @@ namespace VoteSystem.PluginShogi
         public static void Initialize(ShogiPlugin plugin, Client.PluginHost host)
         {
             WPFUtil.Init();
-            FlintSharp.Utils.ScreenSize = new Size(640, 480);
+            FlintSharp.Utils.ScreenSize = new Size(620, 360);
 
             ClientWindow = host.Window;
             VoteClient = host.VoteClient;

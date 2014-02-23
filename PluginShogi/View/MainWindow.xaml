@@ -9,7 +9,7 @@
         xmlns:v="clr-namespace:VoteSystem.PluginShogi.View"
         xmlns:svm="clr-namespace:VoteSystem.PluginShogi.ViewModel"
         mc:Ignorable="d" x:Name="window"
-        Title="将棋盤ちゃん" Width="656" Height="480"
+        Title="将棋盤ちゃん" SizeToContent="WidthAndHeight"
         AllowDrop="True" ResizeMode="CanResize"
         Background="{x:Static Brushes.White}">
     <Window.Resources>
@@ -136,7 +136,7 @@
 
         <Grid Grid.Row="2" Grid.RowSpan="2"
               ContextMenu="{DynamicResource contextMenu}"
-              Width="640" Height="360">
+              Width="732" Height="432">
             <!-- 背景 -->
             <r:VisualBackground x:Name="background"
                                 FadeElement="{Binding ElementName=ShogiControl}" />
@@ -145,21 +145,22 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*" />
-                    <RowDefinition Height="101*" />
-                    <RowDefinition Height="100*" />
+                    <RowDefinition Height="99*" />
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="99*" />
                     <RowDefinition Height="2*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*" />
-                    <ColumnDefinition Width="129*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="113*" />
                     <ColumnDefinition Width="300*" />
-                    <ColumnDefinition Width="129*" />
-                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="113*" />
+                    <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Row="2" Grid.Column="1">
+                <Grid Grid.Row="2" Grid.RowSpan="2" Grid.Column="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1.0*" />
                         <ColumnDefinition Width="10*" />
                     </Grid.ColumnDefinitions>
                     <s:VoteResultControl
@@ -190,10 +191,10 @@
                         IsDisplayPointFullWidth="{Binding Settings.VR_IsDisplayPointFullWidth}" />
                 </Grid>
 
-                <Grid Grid.Row="1" Grid.Column="3">
+                <Grid Grid.Row="1" Grid.RowSpan="2" Grid.Column="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="10*" />
-                        <ColumnDefinition Width="0.4*" />
+                        <ColumnDefinition Width="0.2*" />
                     </Grid.ColumnDefinitions>
                     <Viewbox Stretch="Uniform"
                              VerticalAlignment="Top">

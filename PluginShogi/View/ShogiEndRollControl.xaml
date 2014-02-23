@@ -52,8 +52,8 @@
                     </Border.Background>
                 </Border>
 
-                <Grid Canvas.Left="370" Canvas.Top="185"
-                      Width="250" Height="160"
+                <Grid Canvas.Left="360" Canvas.Top="195"
+                      Width="250" Height="148"
                       Opacity="0.0" HorizontalAlignment="Center"
                       x:Name="ShogiGrid">
                     <p:VisualBackground x:Name="ShogiBackground" />

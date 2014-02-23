@@ -3,63 +3,12 @@
                     xmlns:f="http://schemas.flint-sharp/xaml"
                     xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation">
 
-    <!--<Vector3D x:Key="foregroundCoord"
-              X="320" Y="240" Z="{x:Static r:ShogiControl.PostEffectZ}" />
-    
-    <r:EffectObject x:Key="Effect"
-                    Coord="{StaticResource foregroundCoord}">
-        <r:EffectObject ImageUri="Back.jpg"
-                        MaterialType="Diffuse"
-                        Duration="0:0:2.0"
-                        BaseScale="240,480,1"
-                        Coord="0,0,0"
-                        Opacity="1.0"
-                        Color="White">
-            <r:EffectObject.Scenario>
-                <r:Scenario>
-                    <Vector3DAnimationUsingKeyFrames
-                        r:Scenario.TargetProperty="Coord">
-                        <LinearVector3DKeyFrame KeyTime="0:0:0.0" Value="0,160,0" />
-                        <LinearVector3DKeyFrame KeyTime="0:0:2.0" Value="0,-80,0" />
-                    </Vector3DAnimationUsingKeyFrames>
-                    <DoubleAnimationUsingKeyFrames
-                        r:Scenario.TargetProperty="Opacity">
-                        <LinearDoubleKeyFrame KeyTime="0:0:0.0" Value="0.0" />
-                        <LinearDoubleKeyFrame KeyTime="0:0:0.6" Value="0.7" />
-                        <LinearDoubleKeyFrame KeyTime="0:0:0.8" Value="0.7" />
-                        <LinearDoubleKeyFrame KeyTime="0:0:2.0" Value="0.0" />
-                    </DoubleAnimationUsingKeyFrames>
-                </r:Scenario>
-            </r:EffectObject.Scenario>
-        </r:EffectObject>
-    </r:EffectObject>-->
-
     <r:CellMeshConverter x:Key="cellMeshConv" />
 
     <Vector3D x:Key="backgroundCoord"
-              X="160" Y="240" Z="{x:Static r:ShogiControl.PreEffectZ}" />
+              X="310" Y="180" Z="{x:Static r:ShogiControl.PreEffectZ}" />
 
     <r:EffectObject x:Key="Effect">
-        <!-- カットイン背景 -->
-        <!--<r:EffectObject Coord="{StaticResource backgroundCoord}"
-                        MaterialType="Diffuse"
-                        Color="Black"
-                        Duration="0:0:2.0"
-                        BaseScale="240,480,1"
-                        Mesh="{p:MakeMesh}">
-            <r:EffectObject.Scenario>
-                <p:Scenario>
-                    <DoubleAnimationUsingKeyFrames
-                        p:Scenario.TargetProperty="Opacity">
-                        <LinearDoubleKeyFrame KeyTime="0:0:0.0" Value="0.0" />
-                        <LinearDoubleKeyFrame KeyTime="0:0:0.3" Value="0.8" />
-                        <LinearDoubleKeyFrame KeyTime="0:0:1.4" Value="0.8" />
-                        <LinearDoubleKeyFrame KeyTime="0:0:1.9" Value="0.0" />
-                    </DoubleAnimationUsingKeyFrames>
-                </r:Scenario>
-            </r:EffectObject.Scenario>
-        </r:EffectObject>-->
-
         <!-- カットイン画像 -->
         <r:EffectObject Coord="{StaticResource backgroundCoord}">
             <r:EffectObject ImageUri="Back.jpg"

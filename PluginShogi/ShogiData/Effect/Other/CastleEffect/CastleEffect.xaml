@@ -9,15 +9,15 @@
     <f:TextZone x:Key="targetZone" Text="${CastleName}"
                 FontSize="10" FontFamily="ＭＳ 明朝"
                 ScaleX="{r:Calc 'min(14.0, 4.0 + 23.0 / ${CastleNameLen})'}"
-                ScaleY="{r:Calc 'min(18.0, 7.0 + 30.0 / ${CastleNameLen})'}"
+                ScaleY="{r:Calc 'min(15.0, 5.0 + 25.0 / ${CastleNameLen})'}"
                 DivideX="{r:IntCalc '2.0 + 2.0 / ${CastleNameLen}', Mode=Floor}"
                 DivideY="{r:IntCalc '2.0 + 2.0 / ${CastleNameLen}', Mode=Floor}"
-                OffsetX="320" OffsetY="360" />
+                OffsetX="310" OffsetY="270" />
     
     <Vector3D x:Key="backgroundCoord"
-              X="320" Y="240" Z="{x:Static r:ShogiControl.PreEffectZ}" />
+              X="310" Y="180" Z="{x:Static r:ShogiControl.PreEffectZ}" />
     <Vector3D x:Key="castleBackCoord"
-              X="320" Y="200" Z="{x:Static r:ShogiControl.PreEffectZ}" />
+              X="310" Y="140" Z="{x:Static r:ShogiControl.PreEffectZ}" />
 
     <r:CellMeshConverter x:Key="cellMeshConv" />
     <r:CellMeshConverter x:Key="cellMeshWideConv" Widen="0.2" />
@@ -29,14 +29,14 @@
                         Mesh="{r:MakeMesh}"
                         Duration="0:0:5"
                         MaterialType="Diffuse"
-                        BaseScale="640,480,1"
+                        BaseScale="620,380,1"
                         Coord="{StaticResource backgroundCoord}">
             <r:EffectObject.Scenario>
                 <r:Scenario>
                     <DoubleAnimationUsingKeyFrames r:Scenario.TargetProperty="Opacity">
                         <LinearDoubleKeyFrame KeyTime="0:0:0" Value="0.0" />
-                        <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="0.6" />
-                        <LinearDoubleKeyFrame KeyTime="0:0:4.5" Value="0.6" />
+                        <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="0.7" />
+                        <LinearDoubleKeyFrame KeyTime="0:0:4.5" Value="0.7" />
                         <LinearDoubleKeyFrame KeyTime="0:0:5.0" Value="0.0" />
                     </DoubleAnimationUsingKeyFrames>
                 </r:Scenario>
@@ -126,7 +126,7 @@
                             ImageUri="Image/${CastleImage}"
                             MaterialType="Diffuse"
                             Coord="{StaticResource castleBackCoord}"
-                            Scale="430,380,1"
+                            Scale="340,280,1"
                             StartSoundVolume="0.4"
                             StartSoundPath="Bom.wav">
                 <r:EffectObject.Scenario>
@@ -145,7 +145,7 @@
             <r:EffectObject Duration="0:0:1.2"
                             ImageUri="ExplosionWhite.png"
                             Coord="{StaticResource backgroundCoord}"
-                            Scale="640,640,1">
+                            Scale="620,620,1">
                 <r:EffectObject.Scenario>
                     <r:Scenario>
                         <DoubleAnimationUsingKeyFrames r:Scenario.TargetProperty="Opacity">
