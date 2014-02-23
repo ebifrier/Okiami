@@ -541,14 +541,13 @@ namespace VoteSystem.Server.VoteStrategy
                 return move;
             }
 
-            // 現局面から指せるかどうか調べます。
+            // 一度、指し手の正規化を行います（打を消したり、左を追加するなど）
             var bm = this.board.ConvertMove(move, true);
-            if (bm == null)
+            if (bm == null /*|| !this.board.CanMove(bm)*/)
             {
                 return null;
             }
 
-            // 指し手の正規化を行います（打を消したり、左を追加するなど）
             var newMove = this.board.ConvertMove(bm, false);
             if (newMove == null)
             {
