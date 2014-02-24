@@ -947,6 +947,9 @@ namespace VoteSystem.Client.Command
             {
                 var parameter = (SendNotificationParameter)e.Parameter;
 
+                // 時間が更新されていないと指し手などが受理されません。
+                parameter.Notification.Timestamp = DateTime.Now;
+
                 Global.VoteClient.SendNotification(
                     parameter.Notification,
                     parameter.IsFromLiveOwner);

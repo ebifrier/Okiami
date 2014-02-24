@@ -138,17 +138,19 @@
               ContextMenu="{DynamicResource contextMenu}"
               Width="732" Height="432">
             <!-- 背景 -->
+            <!--<r:VisualBackground x:Name="background"
+                                FadeElement="{Binding ElementName=ShogiControl}"> -->
             <r:VisualBackground x:Name="background"
-                                FadeElement="{Binding ElementName=ShogiControl}" />
+                                FadeDuration="00:00:01" />
 
             <!-- 投票結果など -->
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="3*" />
                     <RowDefinition Height="99*" />
                     <RowDefinition Height="2*" />
                     <RowDefinition Height="99*" />
-                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="3*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*" />
@@ -226,7 +228,7 @@
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center">
                 <v:ShogiEndRollControl x:Name="ShogiEndRoll"
-                                       Width="640" Height="360"
+                                       Width="620" Height="360"
                                        IsHitTestVisible="False" />
             </Viewbox>
         </Grid>
