@@ -247,8 +247,8 @@ namespace VoteSystem.PluginShogi.View
                 }
 
                 return new EndRollViewModel(
-                    ShogiGlobal.VoteClient.GetVoterList());
-                    //Protocol.Model.TestVoterList.GetTestVoterList());
+                    //ShogiGlobal.VoteClient.GetVoterList());
+                    Protocol.Model.TestVoterList.GetTestVoterList());
             }
             catch (Exception ex)
             {
@@ -446,6 +446,9 @@ namespace VoteSystem.PluginShogi.View
                 IsChangeMoveCount = true,
                 Interval = TimeSpan.FromSeconds(interval.TotalSeconds / count),
             };
+
+            // 将棋盤の背景画像を更新しておきます。
+            this.effectManager.ChangeMoveCount(0);
         }
 
         /// <summary>

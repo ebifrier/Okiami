@@ -212,6 +212,7 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             return
                 from voter in VoterList.JoinedVoterList
+                    .OrderBy(_ => Guid.NewGuid())
                 where voter != null
                 orderby HasLiveRoom(voter.LiveData) descending/*,
                         IsAnonymous(voter.Id) ascending*/
@@ -239,14 +240,14 @@ namespace VoteSystem.PluginShogi.ViewModel
             // 参加者は一度指定条件でソートし、カットした後、
             // ランダムに並び替えます。
             JoinedVoterViewList = SortJoinedVoterList()
-                .Take(300)
+                .Take(ShogiGlobal.EndRollMaxVoterCount)
                 .OrderBy(_ => Guid.NewGuid())
                 .ToList();
 
             // 放送主はランダムに並び替えます。
             LiveOwnerViewList = GetLiveOwnerList()
                 .OrderBy(_ => Guid.NewGuid())
-                //.Take(10)
+                .Take(ShogiGlobal.EndRollMaxLiveOwnerCount)
                 .ToList();
         }
     }

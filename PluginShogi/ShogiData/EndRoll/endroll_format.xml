@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
-<FormatRoot MovieUrl="file:///E:/movies/alice/alice.wav">
-	<MovieTimeline FadeInStartTime="00:00:10"
+<FormatRoot MovieUrl="file:///E:/movies/ending/singur.mp3">
+	<MovieTimeline FadeInStartTime="00:00:05"
 				   FadeInSpan="00:00:10"
-				   FadeOutStartTime="00:05:30"
-				   FadeOutSpan="00:00:10" />
-	<EndRollTimeline FadeInStartTime="00:00:26"
+				   FadeOutStartTime="00:03:56"
+				   FadeOutSpan="00:00:08" />
+	<EndRollTimeline FadeInStartTime="00:00:21"
 					 FadeInSpan="00:00:00"
-					 FadeOutStartTime="00:05:30"
+					 FadeOutStartTime="00:03:56"
 					 FadeOutSpan="00:00:00" />
-	<ShogiTimeline FadeInStartTime="00:00:20"
+	<ShogiTimeline FadeInStartTime="00:00:15"
 				   FadeInSpan="00:00:05"
-				   FadeOutStartTime="00:05:10"
+				   FadeOutStartTime="00:03:43"
 				   FadeOutSpan="00:00:10" />
 	
 	<ColumnDefinitions>
@@ -19,7 +19,7 @@
 		<ColumnDefinition Width="70" />
 		<ColumnDefinition Width="3" />
     <ColumnDefinition Width="70" />
-    <ColumnDefinition Width="30" />
+    <ColumnDefinition Width="25" />
 	</ColumnDefinitions>
 	
 	<Line>
@@ -31,11 +31,11 @@
 	<Line>
     <Format Column="1" ColumnSpan="3" Text="参加者一覧" FontWeight="Bold" />
 	</Line>
-	<Line />
   <Line>
-    <Format Column="1" Text="名前" Alignment="Right" />
-    <Format Column="3" Text="メッセージ" Alignment="Left" />
+    <Format Column="1" Text="名前" Color="Gray" Alignment="Right" />
+    <Format Column="3" Text="メッセージ" Color="Gray" Alignment="Left" />
   </Line>
+  <Line />
 	<Lines Data="$JoinedVoterViewList">
     <Line>
       <Format Column="1" Text="$Name" Alignment="Right" />
@@ -69,22 +69,17 @@
     <Format Column="1" ColumnSpan="3" Text="エンディング動画" />
   </Line>
   <Line>
-    <Format Column="1" ColumnSpan="3" Text="『アリスに花束』" FontWeight="Bold" />
+    <Format Column="1" ColumnSpan="3" Text="『Inní mér syngur vitleysingur』" FontWeight="Bold" />
   </Line>
   <Line>
-    <Format Column="1" Text="作詞・作曲" Alignment="Right" />
-    <Format Column="3" Text="スマイルＰ" Alignment="Left" />
-  </Line>
-  <Line>
-    <Format Column="1" Text="歌" Alignment="Right" />
-    <Format Column="3" Text="香月ゆか" Alignment="Left" />
+    <Format Column="1" ColumnSpan="3" Text="Sigur Rós" />
   </Line>
 
   <Line Count="2" />
 
 	<!-- 使用ツールの素材など -->
 	<Line>
-		<Format Column="1" ColumnSpan="3" Text="ツール素材提供" FontWeight="Bold" />
+		<Format Column="1" ColumnSpan="3" Text="おきあみちゃん素材提供" FontWeight="Bold" />
 	</Line>
 	<Line>
 		<Format Column="1" Text="イラスト素材" Alignment="Right" />
@@ -105,36 +100,11 @@
 	</Line>
 	<Line>
 		<Format Column="1" Text="評価値画像" Alignment="Right" />
-		<Format Column="3" Text="希祥" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="1" Text="カットイン画像" Alignment="Right" />
-		<Format Column="3" Text="ザビ山" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="MAXみちこFEVER" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="1" Text="囲い画像" Alignment="Right" />
-		<Format Column="3" Text="さまんさ" Alignment="Left" />
+		<Format Column="3" Text="○○○" Alignment="Left" />
 	</Line>
 	<Line>
 		<Format Column="1" Text="エフェクト素材" Alignment="Right" />
 		<Format Column="3" Text="ぴぽや" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="1" Text="背景画像" Alignment="Right" />
-		<Format Column="3" Text="とりのあくあ" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="伍長" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="yoshi" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="1" Text="音声素材" Alignment="Right" />
-		<Format Column="3" Text="あみたろ" Alignment="Left" />
 	</Line>
 	<Line>
 		<Format Column="1" Text="効果音素材" Alignment="Right" />
@@ -195,18 +165,30 @@
 
 	<Line Count="2" />
 
+  <Line>
+    <Format Column="1" ColumnSpan="3" Text="おきあみちゃん制作者" FontWeight="Bold" />
+  </Line>
+  <Line>
+    <Format Column="1" ColumnSpan="3" Text="えびふらい" />
+  </Line>
+
+  <Line Count="2" />
+
   <!-- 企画スタッフ一覧 -->
   <Line>
     <Format Column="1" ColumnSpan="3" Text="運営スタッフ" FontWeight="Bold" />
   </Line>
   <Line>
-    <Format Column="1" ColumnSpan="3" Text="○○○" />
+    <Format Column="1" Text="音声" Alignment="Right" />
+    <Format Column="3" Text="×××" Alignment="Left" />
   </Line>
   <Line>
-    <Format Column="1" ColumnSpan="3" Text="×××" />
+    <Format Column="1" Text="ディレクター" Alignment="Right" />
+    <Format Column="3" Text="○○○" Alignment="Left" />
   </Line>
   <Line>
-    <Format Column="1" ColumnSpan="3" Text="△△△" />
+    <Format Column="1" Text="プロデューサー" Alignment="Right" />
+    <Format Column="3" Text="■■■" Alignment="Left" />
   </Line>
 
   <Line Count="2" />
@@ -216,7 +198,7 @@
     <Format Column="1" ColumnSpan="3" Text="将棋連盟協力" FontWeight="Bold" />
   </Line>
   <Line>
-    <Format Column="1" ColumnSpan="3" Text="将棋兄さん" />
+    <Format Column="1" ColumnSpan="3" Text="○○○" />
   </Line>
 
   <Line Count="2" />
@@ -245,7 +227,7 @@
 		<Format Column="1" ColumnSpan="3" Text="聞き手" FontWeight="Bold" />
 	</Line>
 	<Line>
-		<Format Column="1" ColumnSpan="3" Text="△△△女流初段" />
+		<Format Column="1" ColumnSpan="3" Text="飯野愛女流２級" />
 	</Line>
 
   <Line />
@@ -255,8 +237,18 @@
 		<Format Column="1" ColumnSpan="3" Text="解説者" FontWeight="Bold" />
 	</Line>
 	<Line>
-		<Format Column="1" ColumnSpan="3" Text="○○○五段" />
+		<Format Column="1" ColumnSpan="3" Text="西尾明六段" />
 	</Line>
+
+  <Line />
+
+  <!-- 特別出演 -->
+  <Line>
+    <Format Column="1" ColumnSpan="3" Text="特別出演" FontWeight="Bold" />
+  </Line>
+  <Line>
+    <Format Column="1" ColumnSpan="3" Text="山本一成" />
+  </Line>
 
   <Line />
 
@@ -271,7 +263,10 @@
 	<Line Count="11" />
 
   <Line>
-    <Format Column="1" ColumnSpan="3" FontSize="16" Text="ニコニコ生放送特別企画" FontWeight="Bold" />
+    <Format Column="1" ColumnSpan="3" Text="～ドスパラPresents～" FontWeight="Bold" />
+  </Line>
+  <Line>
+    <Format Column="1" ColumnSpan="3" Text="力を合わせて電王を倒そう！ 全視聴者 vs ponanza" />
   </Line>
 
   <Line Count="14" />

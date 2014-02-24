@@ -599,8 +599,16 @@ namespace VoteSystem.Protocol.View
         {
             try
             {
+                // メディアを一度閉じてから再度開かないと
+                // 2度目の読み込み時にMediaOpenedが呼ばれません。
+                var volume = MoviePlayer.Volume;
+                var isMuted = MoviePlayer.IsMuted;
+                MoviePlayer.Close();
+
                 MoviePlayer.Open(localMoviePath);
                 MoviePlayer.Position = TimeSpan.Zero;
+                MoviePlayer.Volume = volume;
+                MoviePlayer.IsMuted = isMuted;
 
                 State = EndingState.Loading;
             }

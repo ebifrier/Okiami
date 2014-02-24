@@ -4,6 +4,13 @@
 	ードから変更できるようにしました。
 	* PluginShogi/ViewModel/Commands.cs: 公式放送用の背景変更コマンドを追加
 	しました。
+	* PluginShogi/ShogiData/EndRoll/endroll_format.xml: エンドロールの調整
+	を行いました。
+	* PluginShogi/ViewModel/EndRollViewModel.cs: エンドロールに表示する視聴
+	者数をShogiGlobalで設定するようにしました。また、視聴者の表示選択を優先
+	順からランダムに変更しました。
+	* VoteProtocol/View/EndingControl.cs: エンディング動画の再読み込み時に、
+	音量やミュートかどうかなどの設定が引き継がれるようにしました。
 
 2014-02-24  - Ver 1.7.0.1
 
