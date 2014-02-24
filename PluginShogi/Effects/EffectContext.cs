@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Media.Media3D;
 
 using Ragnarok.Shogi;
+using Ragnarok.ObjectModel;
 
 namespace VoteSystem.PluginShogi.Effects
 {
@@ -80,6 +81,15 @@ namespace VoteSystem.PluginShogi.Effects
         /// 各マスの位置を取得または設定します。
         /// </summary>
         public Position[] CellPositions
+        {
+            get;
+            set;
+        }
+    }
+
+    public sealed class OfficialBackgroundContext
+    {
+        public string ImageUri
         {
             get;
             set;

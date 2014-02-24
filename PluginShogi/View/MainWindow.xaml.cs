@@ -40,7 +40,7 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         static MainWindow()
         {
-            FlintSharp.Utils.ScreenSize = new Size(640, 480);
+            FlintSharp.Utils.ScreenSize = new Size(620, 360);
         }
 
         protected override void OnDragOver(DragEventArgs e)
@@ -87,16 +87,10 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         private void InitBackground()
         {
-            if (ShogiGlobal.Settings.HasEffectFlag(EffectFlag.Background))
+            if (ShogiGlobal.Settings.HasEffectFlag(EffectFlag.Background) &&
+                ShogiGlobal.EffectManager != null)
             {
-                if (VoteSystem.Client.Global.IsOfficial)
-                {
-                    AddEffectKey("OfficialEffect");
-                }
-                else
-                {
-                    AddEffectKey("SpringEffect");
-                }
+                ShogiGlobal.EffectManager.UpdateBackground();
             }
         }
 
@@ -140,6 +134,9 @@ namespace VoteSystem.PluginShogi.View
             Commands.Binding(CommandBindings);
             Commands.Binding(InputBindings);
             ShogiControl.InitializeBindings(this);
+
+            Loaded += (_, __) =>
+                SizeToContent = SizeToContent.Manual;
 
             this.voteResultControl.InitializeBindings(this);
             this.voteResultControl.SettingUpdated +=

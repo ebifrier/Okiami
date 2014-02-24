@@ -210,6 +210,15 @@ namespace VoteSystem.PluginShogi.ViewModel
                 typeof(Window));
 
         /// <summary>
+        /// 公式放送用の背景画像を更新します。
+        /// </summary>
+        public static readonly ICommand NextOfficialBackground =
+            new RoutedUICommand(
+                "公式放送用の背景画像を次の画像にします。",
+                "NextOfficialBackground",
+                typeof(Window));
+
+        /// <summary>
         /// コマンドをバインディングします。
         /// </summary>
         public static void Binding(CommandBindingCollection bindings)
@@ -306,6 +315,11 @@ namespace VoteSystem.PluginShogi.ViewModel
                 new CommandBinding(
                     Resign,
                     ExecuteResign, CanExecute));
+
+            bindings.Add(
+                new CommandBinding(
+                    NextOfficialBackground,
+                    ExecuteNextOfficialBackground, CanExecute));            
         }
 
         /// <summary>
@@ -326,6 +340,10 @@ namespace VoteSystem.PluginShogi.ViewModel
             inputs.Add(
                 new KeyBinding(CopyKifFile,
                     new KeyGesture(Key.C, ModifierKeys.Control)));
+
+            inputs.Add(
+                new KeyBinding(NextOfficialBackground,
+                    new KeyGesture(Key.N, ModifierKeys.Control | ModifierKeys.Shift)));
         }
 
         /// <summary>
@@ -1265,6 +1283,29 @@ namespace VoteSystem.PluginShogi.ViewModel
             {
                 ShogiGlobal.ErrorMessage(ex,
                     "投了に失敗しました (T∇T)");
+            }
+        }
+
+         /// <summary>
+        /// 公式用の背景画像を次の画像に変更します。
+        /// </summary>
+        private static void ExecuteNextOfficialBackground(object sender, ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                var manager = ShogiGlobal.EffectManager;
+                if (manager == null)
+                {
+                    return;
+                }
+
+                Effects.EffectManager.OfficialBackgroundImageIndex += 1;
+                manager.UpdateBackground();
+            }
+            catch (Exception ex)
+            {
+                ShogiGlobal.ErrorMessage(ex,
+                    "公式放送の背景画像の更新に失敗しました (T∇T)");
             }
         }
     }

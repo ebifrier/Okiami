@@ -524,7 +524,8 @@ namespace VoteSystem.PluginShogi.Effects
 
                 if (Client.Global.IsOfficial)
                 {
-                    TrySetBackgroundKey("OfficialEffect");
+                    UpdateOfficialBackground();
+                    //TrySetBackgroundKey("OfficialEffect");
                 }
                 else
                 {
@@ -546,6 +547,77 @@ namespace VoteSystem.PluginShogi.Effects
                         TrySetBackgroundKey("SpringEffect");
                     }
                 }
+            });
+        }
+
+        private static List<string> officialBackgroundImageList;
+        private static List<string> GetOfficialBackgroundImageList()
+        {
+            if (officialBackgroundImageList == null)
+            {
+                try
+                {
+                    string[] extensions = { ".png", ".jpg", ".tif", ".bmp" };
+
+                    officialBackgroundImageList = System.IO.Directory
+                        .EnumerateFiles("ShogiData/Background/OfficialEffect", "*.*")
+                        .Select(_ => System.IO.Path.GetFileName(_))
+                        .Where(_ => extensions.Contains(System.IO.Path.GetExtension(_)))
+                        .OrderBy(_ => _)
+                        .ToList();
+                }
+                catch (Exception ex)
+                {
+                    Log.ErrorException(ex,
+                        "公式放送用の画像リストの取得に失敗しました。");
+
+                    officialBackgroundImageList = new List<string>();
+                }
+            }
+
+            return officialBackgroundImageList;
+        }
+
+        /// <summary>
+        /// 公式放送の背景イメージのインデックスを取得または設定します。
+        /// </summary>
+        public static int OfficialBackgroundImageIndex
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 公式放送用の背景エフェクトを更新します。
+        /// </summary>
+        public void UpdateOfficialBackground()
+        {
+            if (Background == null)
+            {
+                return;
+            }
+
+            var imageList = GetOfficialBackgroundImageList();
+            if (imageList == null || !imageList.Any())
+            {
+                return;
+            }
+
+            WPFUtil.UIProcess(() =>
+            {
+                OfficialBackgroundImageIndex %= imageList.Count();
+
+                var data = new OfficialBackgroundContext();
+                data.ImageUri = imageList[OfficialBackgroundImageIndex];
+
+                // 背景エフェクトの作成。
+                // エフェクト名を変えないとエフェクト自体が更新されません。
+                var effectInfo = new EffectInfo("OfficialEffect", null);
+                var effect = effectInfo.LoadBackground();
+                effect.Name = effect.Name + OfficialBackgroundImageIndex;
+                effect.DataContext = data;
+
+                Background.AddEntity(effect);
             });
         }
 

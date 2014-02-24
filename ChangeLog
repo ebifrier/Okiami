@@ -1,3 +1,10 @@
+2014-02-25  - Ver 1.7.0.2
+
+	* PluginShogi/Effects/EffectManager.cs: 公式生放送用に背景画像をキーボ
+	ードから変更できるようにしました。
+	* PluginShogi/ViewModel/Commands.cs: 公式放送用の背景変更コマンドを追加
+	しました。
+
 2014-02-24  - Ver 1.7.0.1
 
 	* PluginShogi/View/MainWindow.xaml: 将棋盤の縦横比が変わったため、それ

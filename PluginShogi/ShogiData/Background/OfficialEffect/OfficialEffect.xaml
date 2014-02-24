@@ -1,14 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:f="http://schemas.flint-sharp/xaml"
-                    xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation">
-    <r:EffectObject x:Key="Effect">
-        <r:EffectObject ImageUri="Official.png"
-                        Opacity="1.0"
-                        MaterialType="Diffuse"
-                        Duration="Forever"
-                        Coord="320,240,0"
-                        BaseScale="640,480,1"
-                        Color="White" />
-    </r:EffectObject>
+                    xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <r:EffectObject x:Key="Effect"
+                    Opacity="1.0"
+                    MaterialType="Diffuse"
+                    Duration="Forever"
+                    Coord="310,180,0"
+                    BaseScale="620,360,1"
+                    ImageUri="{r:Binding ImageUri}" />
 </ResourceDictionary>
