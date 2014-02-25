@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
-<FormatRoot MovieUrl="file:///E:/movies/ending/singur.mp3">
-	<MovieTimeline FadeInStartTime="00:00:05"
+<FormatRoot MovieUrl="file:///E:/movies/ending/ending.wav">
+	<!--<MovieTimeline FadeInStartTime="00:00:05"
 				   FadeInSpan="00:00:10"
 				   FadeOutStartTime="00:03:56"
 				   FadeOutSpan="00:00:08" />
@@ -12,6 +12,19 @@
 	<ShogiTimeline FadeInStartTime="00:00:15"
 				   FadeInSpan="00:00:05"
 				   FadeOutStartTime="00:03:43"
+				   FadeOutSpan="00:00:10" />-->
+
+  <MovieTimeline FadeInStartTime="00:00:05"
+				   FadeInSpan="00:00:10"
+				   FadeOutStartTime="00:06:05"
+				   FadeOutSpan="00:00:10" />
+  <EndRollTimeline FadeInStartTime="00:00:21"
+					 FadeInSpan="00:00:00"
+					 FadeOutStartTime="00:06:05"
+					 FadeOutSpan="00:00:00" />
+  <ShogiTimeline FadeInStartTime="00:00:15"
+				   FadeInSpan="00:00:05"
+				   FadeOutStartTime="00:05:54"
 				   FadeOutSpan="00:00:10" />
 	
 	<ColumnDefinitions>
@@ -43,12 +56,6 @@
     </Line>
 	</Lines>
 	<Line />
-  <Lines Data="$JoinedVoterViewCount">
-    <Line>
-      <Format Column="1" Text="以上" Alignment="Right" />
-      <Format Column="3" Text="$()名" Alignment="Left" />
-    </Line>
-  </Lines>
 	<Lines Data="$VoterOtherCount">
 		<Line>
 			<Format Column="1" Text="その他" Alignment="Right" />
@@ -170,35 +177,6 @@
   </Line>
   <Line>
     <Format Column="1" ColumnSpan="3" Text="えびふらい" />
-  </Line>
-
-  <Line Count="2" />
-
-  <!-- 企画スタッフ一覧 -->
-  <Line>
-    <Format Column="1" ColumnSpan="3" Text="運営スタッフ" FontWeight="Bold" />
-  </Line>
-  <Line>
-    <Format Column="1" Text="音声" Alignment="Right" />
-    <Format Column="3" Text="×××" Alignment="Left" />
-  </Line>
-  <Line>
-    <Format Column="1" Text="ディレクター" Alignment="Right" />
-    <Format Column="3" Text="○○○" Alignment="Left" />
-  </Line>
-  <Line>
-    <Format Column="1" Text="プロデューサー" Alignment="Right" />
-    <Format Column="3" Text="■■■" Alignment="Left" />
-  </Line>
-
-  <Line Count="2" />
-
-  <!-- 将棋連盟協力 -->
-  <Line>
-    <Format Column="1" ColumnSpan="3" Text="将棋連盟協力" FontWeight="Bold" />
-  </Line>
-  <Line>
-    <Format Column="1" ColumnSpan="3" Text="○○○" />
   </Line>
 
   <Line Count="2" />
