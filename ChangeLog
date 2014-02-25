@@ -11,6 +11,9 @@
 	順からランダムに変更しました。
 	* VoteProtocol/View/EndingControl.cs: エンディング動画の再読み込み時に、
 	音量やミュートかどうかなどの設定が引き継がれるようにしました。
+	* PluginShogi/View/MainWindow.xaml: 将棋盤のレイアウトを少し変更しまし
+	た。
+	* PluginShogi/ShogiData/Background: 背景サイズを変更しました。
 
 2014-02-24  - Ver 1.7.0.1
 
