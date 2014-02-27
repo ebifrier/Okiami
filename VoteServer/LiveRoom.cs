@@ -48,7 +48,6 @@ namespace VoteSystem.Server
         /// </summary>
         public const string MirrorCommentPrefix = "! ";
 
-        private readonly object SyncRoot = new object();
         private readonly LiveData liveData;
         private readonly VoteParticipant liveOwner;
         private LiveAttribute attribute;
@@ -104,7 +103,12 @@ namespace VoteSystem.Server
                 // 全コメントをミラーするモードなら
                 // コメントの最初にミラーコメントのマークである'!'をつけません。
                 var voteRoom = this.liveOwner.VoteRoom;
-                return (voteRoom != null && voteRoom.VoteModel.IsMirrorMode);
+                if (voteRoom == null)
+                {
+                    return false;
+                }
+
+                return voteRoom.VoteModel.IsMirrorMode;
             }
         }
 
