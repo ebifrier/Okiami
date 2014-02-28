@@ -97,6 +97,77 @@ namespace VoteSystem.Protocol.View
                 get;
                 set;
             }
+
+            /// <summary>
+            /// プリレンダリングされたビットマップイメージを取得します。
+            /// </summary>
+            public Image Image
+            {
+                get;
+                private set;
+            }
+
+            /// <summary>
+            /// 実際の文字列幅を取得します。
+            /// </summary>
+            public double ActualWidth
+            {
+                get
+                {
+                    return (Image == null ? 0.0 : Image.ActualWidth);
+                }
+            }
+
+            /// <summary>
+            /// 実際の文字列の高さを取得します。
+            /// </summary>
+            public double ActualHeight
+            {
+                get
+                {
+                    return (Image == null ? 0.0 : Image.ActualHeight);
+                }
+            }
+
+            /// <summary>
+            /// プリレンダリングされたビットマップイメージの初期化を行います。
+            /// </summary>
+            public void Setup()
+            {
+                if (DecoratedText == null || Image != null)
+                {
+                    return;
+                }
+
+                // 字形の作成を行います。
+                DecoratedText.IsUpdateVisual = true;
+
+                // WPFは描画スレッドで描画用オブジェクトの構築が行われるため、
+                // この時点ではDecoratedTextが完成していない。
+                // そのため、Geometryを使った原始的な描画を行っている。
+                var visual = new DrawingVisual();
+                var context = visual.RenderOpen();
+                context.DrawGeometry(
+                    DecoratedText.Foreground,
+                    new Pen(DecoratedText.Stroke, DecoratedText.StrokeThickness),
+                    DecoratedText.FormattedText.BuildGeometry(new Point()));
+                context.Close();
+
+                // 文字イメージの作成
+                var bitmap = new RenderTargetBitmap(
+                    (int)Math.Ceiling(DecoratedText.FormattedText.Width),
+                    (int)Math.Ceiling(DecoratedText.FormattedText.Height),
+                    96, 96, PixelFormats.Pbgra32);
+                bitmap.Render(visual);
+                bitmap.Freeze();
+
+                var image = new Image();
+                image.BeginInit();
+                image.Source = bitmap;
+                image.EndInit();
+
+                Image = image;
+            }
         }
 
         /// <summary>
@@ -487,7 +558,7 @@ namespace VoteSystem.Protocol.View
                 FontWeight = elem.FontWeight,
                 Stroke = Brushes.Black,
                 StrokeThickness = 0.1,
-                Effect = new DropShadowEffect() {Opacity = 0.6},
+                Effect = new DropShadowEffect() { Opacity = 0.6 },
             };
 
             return new TextInfo
@@ -717,7 +788,7 @@ namespace VoteSystem.Protocol.View
         /// <summary>
         /// 文字の不透明度を計算します。
         /// </summary>
-        private double GetOpacity(DecoratedText element, double posY)
+        private double GetOpacity(FrameworkElement element, double posY)
         {
             if (element == null)
             {
@@ -775,8 +846,6 @@ namespace VoteSystem.Protocol.View
         /// </summary>
         private double GetTextTop(TextInfo textInfo, double posY, FormattedText ft)
         {
-            var decoratedText = textInfo.DecoratedText;
-
             // FormattedTextからパスに変換したとき、文字列に空白部分があると
             // その部分が消えてしまいます。
             // 文字列の位置はbaselineでそろえる必要があるため、
@@ -784,7 +853,7 @@ namespace VoteSystem.Protocol.View
             // この分をFormattedTextで計算されたY位置に加算することで、
             // 正しい位置が計算できます。
             var overhangBefore = (
-                (ft.Height - decoratedText.ActualHeight) + ft.OverhangAfter);
+                (ft.Height - textInfo.ActualHeight) + ft.OverhangAfter);
 
             return (posY - ft.Baseline + overhangBefore);
         }
@@ -795,7 +864,6 @@ namespace VoteSystem.Protocol.View
         private double GetTextLeft(TextInfo textInfo)
         {
             var elem = textInfo.Element;
-            var decoratedText = textInfo.DecoratedText;
 
             // 列番号を取得します。
             var column = MathEx.Between(0, this.columnList.Count - 1, elem.Column);
@@ -823,11 +891,11 @@ namespace VoteSystem.Protocol.View
                 case HorizontalAlignment.Center:
                     return
                         ((columnLeft + columnRight) / 2) -
-                        (decoratedText.ActualWidth / 2);
+                        (textInfo.ActualWidth / 2);
 
                 // 右に合わせる
                 case HorizontalAlignment.Right:
-                    return (columnRight - decoratedText.ActualWidth);
+                    return (columnRight - textInfo.ActualWidth);
             }
 
             // 不明なので適当に。
@@ -848,34 +916,35 @@ namespace VoteSystem.Protocol.View
             {
                 foreach (var textInfo in this.lineList[line].Texts)
                 {
-                    var decoratedText = textInfo.DecoratedText;
+                    var image = textInfo.Image;
 
                     // 消しておきます。
-                    decoratedText.IsUpdateVisual = false;
-                    this.textPanel.Children.Remove(decoratedText);                    
+                    if (image != null && this.textPanel.Children.Contains(image))
+                    {
+                        this.textPanel.Children.Remove(image);
+                    }
                 }
-
-                return;
             }
-
-            // 表示されるなら、指定の表示位置に文字オブジェクトを表示します。
-            for (var i = 0; i < this.lineList[line].Texts.Count(); ++i)
+            else
             {
-                var textInfo = this.lineList[line].Texts[i];
-                var decoratedText = textInfo.DecoratedText;
-
-                // FormattedTextの作成を行います。
-                decoratedText.IsUpdateVisual = true;
-                var ft = decoratedText.FormattedText;
-
-                decoratedText.Opacity = GetOpacity(decoratedText, posY);
-                Canvas.SetLeft(decoratedText, GetTextLeft(textInfo));
-                Canvas.SetTop(decoratedText, GetTextTop(textInfo, posY, ft));
-
-                // 追加しておきます。
-                if (!this.textPanel.Children.Contains(decoratedText))
+                // 表示されるなら、指定の表示位置に文字オブジェクトを表示します。
+                for (var i = 0; i < this.lineList[line].Texts.Count(); ++i)
                 {
-                    this.textPanel.Children.Add(decoratedText);
+                    var textInfo = this.lineList[line].Texts[i];
+                    textInfo.Setup();
+
+                    var image = textInfo.Image;
+                    var ft = textInfo.DecoratedText.FormattedText;
+
+                    image.Opacity = GetOpacity(image, posY);
+                    Canvas.SetLeft(image, GetTextLeft(textInfo));
+                    Canvas.SetTop(image, GetTextTop(textInfo, posY, ft));
+
+                    // 追加しておきます。
+                    if (!this.textPanel.Children.Contains(image))
+                    {
+                        this.textPanel.Children.Add(image);
+                    }
                 }
             }
         }
@@ -952,10 +1021,10 @@ namespace VoteSystem.Protocol.View
         {
             var now = DateTime.Now;
             var diff = now - this.prevUpdateTime;
-            if (diff < TimeSpan.FromMilliseconds(20))
+            /*if (diff < TimeSpan.FromMilliseconds(20))
             {
                 return;
-            }
+            }*/
 
             if (UpdateScreen(TimeSpan.FromSeconds(CurrentPos) + diff))
             {

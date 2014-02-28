@@ -20,6 +20,33 @@ namespace VoteSystem.PluginShogi.View
     public partial class EndingSettingWindow : Window
     {
         /// <summary>
+        /// 映像品質を扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty EndRollQualityProperty =
+            DependencyProperty.Register(
+                "EndRollQuality", typeof(EndRollQuality), typeof(EndingSettingWindow),
+                new FrameworkPropertyMetadata(EndRollQuality.Best, OnEndRollQualityChanged));
+
+        /// <summary>
+        /// 映像品質を取得または設定します。
+        /// </summary>
+        public EndRollQuality EndRollQuality
+        {
+            get { return (EndRollQuality)GetValue(EndRollQualityProperty); }
+            set { SetValue(EndRollQualityProperty, value); }
+        }
+
+        private static void OnEndRollQualityChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var self = (EndingSettingWindow)d;
+
+            if (self.model != null)
+            {
+                self.model.EndRollQuality = (EndRollQuality)e.NewValue;
+            }
+        }
+
+        /// <summary>
         /// 音量ミュートかどうかを扱う依存プロパティです。
         /// </summary>
         public static readonly DependencyProperty IsMuteProperty =
@@ -103,7 +130,7 @@ namespace VoteSystem.PluginShogi.View
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public EndingSettingWindow(MainWindow window)
+        public EndingSettingWindow(ShogiEndRollControl control)
         {
             InitializeComponent();
             ViewModel.Commands.Binding(CommandBindings);
@@ -111,9 +138,10 @@ namespace VoteSystem.PluginShogi.View
 
             if (window != null)
             {
-                this.model = window.ShogiEndRoll;
+                this.model = control;
                 IsMute = this.model.IsMovieMute;
                 Volume = this.model.MovieVolume;
+                EndRollQuality = this.model.EndRollQuality;
 
                 IsEndingMode = ShogiGlobal.GlobalModel.IsEndingMode;
             }

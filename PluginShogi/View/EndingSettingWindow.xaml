@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+        xmlns:t="clr-namespace:VoteSystem.PluginShogi"
         xmlns:l="clr-namespace:VoteSystem.PluginShogi.View"
         xmlns:vm="clr-namespace:VoteSystem.PluginShogi.ViewModel"
         mc:Ignorable="d" x:Name="window"
@@ -45,6 +46,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
         <StackPanel Orientation="Horizontal"
@@ -73,8 +75,32 @@
                     AutoToolTipPlacement="TopLeft"
                     Value="{Binding Volume, ElementName=window}" />
         </StackPanel>
-        
+
         <GroupBox Grid.Row="1"
+                  Header="設定"
+                  Padding="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                
+                <Label Content="映像品質:" />
+                <ComboBox Grid.Row="0" Grid.Column="1"
+                          HorizontalAlignment="Left"
+                          ItemsSource="{r:EnumList EnumType={x:Type t:EndRollQuality}}"
+                          DisplayMemberPath="Label"
+                          SelectedValuePath="Value"
+                          SelectedValue="{Binding EndRollQuality, ElementName=window}"
+                          ToolTip="処理落ちしたり、画面がカクカクする場合は更新してみてください。" />
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="2"
                   Header="エンディングモード"
                   Padding="5">
             <StackPanel Orientation="Vertical">

@@ -1,3 +1,12 @@
+2014-03-01  - Ver 1.7.0.4
+
+	* VoteProtocol/View/EndRollControl.cs: エンドロールの文字をビットマップ
+	にプリレンダリングするようにし、処理速度を上げました。
+	* PluginShogi/View/EndingSettingWindow.xaml: 描画品質の設定を追加しまし
+	た。
+	* PluginShogi/View/ShogiEndRollControl.xaml.cs: 描画品質の設定からエン
+	ドロールの滑らかさを調整できるようにしました。
+
 2014-03-01  - Ver 1.7.0.3
 
 	* VoteProtocol/ServerSettings.cs: サーバーアドレスが変更になりました。

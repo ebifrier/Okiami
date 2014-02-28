@@ -36,12 +36,38 @@ namespace VoteSystem.PluginShogi.View
     public partial class ShogiEndRollControl : UserControl
     {
         private EffectManager effectManager;
-        private DispatcherTimer timer;
         private AutoPlayEx autoPlay;
         private object endRollData;
         private TimeSpan prevPosition = TimeSpan.Zero;
+        private TimeSpan interval = TimeSpan.Zero;
 
         #region 基本プロパティ
+        /// <summary>
+        /// 映像品質を扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty EndRollQualityProperty =
+            DependencyProperty.Register(
+                "EndRollQuality", typeof(EndRollQuality), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(EndRollQuality.Poor, OnEndRollQualityChanged));
+
+        /// <summary>
+        /// 映像品質を取得または設定します。
+        /// </summary>
+        public EndRollQuality EndRollQuality
+        {
+            get { return (EndRollQuality)GetValue(EndRollQualityProperty); }
+            set { SetValue(EndRollQualityProperty, value); }
+        }
+
+        private static void OnEndRollQualityChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var self = (ShogiEndRollControl)d;
+            var quality = (EndRollQuality)e.NewValue;
+
+            // 映像の更新間隔を設定します。
+            self.interval = TimeSpan.FromSeconds(1.0 / EndRollQualityUtil.GetFPS(quality));
+        }
+
         /// <summary>
         /// フォーマットファイルのパスを扱う依存プロパティです。
         /// </summary>
@@ -294,16 +320,7 @@ namespace VoteSystem.PluginShogi.View
             FormatFilePath = @"ShogiData/EndRoll/endroll_format.xml";
             IsMovieMute = false;
             MovieVolume = 50;
-
-            if (!Ragnarok.Presentation.WPFUtil.IsInDesignMode)
-            {
-                this.timer = new DispatcherTimer(
-                    TimeSpan.FromMilliseconds(50),
-                    DispatcherPriority.Normal,
-                    (_, __) => Update(),
-                    Dispatcher);
-                this.timer.Start();
-            }
+            EndRollQuality = EndRollQuality.Best;
         }
 
         private void OnLoaded(object sender, EventArgs e)
@@ -315,17 +332,18 @@ namespace VoteSystem.PluginShogi.View
             {
                 StartPrepare(ShogiGlobal.StartEndrollTimeNtp);
             }
+
+            if (!Ragnarok.Presentation.WPFUtil.IsInDesignMode)
+            {
+                CompositionTarget.Rendering += (_, __) => Update();
+            }
         }
 
         private void OnUnloaded(object sender, EventArgs e)
         {
-            Stop();
+            CompositionTarget.Rendering -= (_, __) => Update();
 
-            if (this.timer != null)
-            {
-                this.timer.Stop();
-                this.timer = null;
-            }
+            Stop();
         }
 
         /// <summary>
@@ -495,12 +513,12 @@ namespace VoteSystem.PluginShogi.View
         {
             var elapsed = MathEx.Max(
                 TimeSpan.Zero, position - this.prevPosition);
-            this.prevPosition = position;
-
-            if (elapsed == TimeSpan.Zero)
+            if (elapsed < this.interval)
             {
                 return;
             }
+
+            this.prevPosition = position;
 
             // スタッフロールの更新
             if (position > EndRollTimeline.FadeInStartTime &&
