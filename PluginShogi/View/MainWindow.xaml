@@ -134,104 +134,108 @@
             <ToolBar Template="{StaticResource variationToolBar}" />
         </StackPanel>
 
-        <Grid Grid.Row="2" Grid.RowSpan="2"
-              ContextMenu="{DynamicResource contextMenu}"
-              Width="732" Height="432">
+        <Grid Grid.Row="2" Grid.RowSpan="2">
             <!-- 背景 -->
             <!--<r:VisualBackground x:Name="background"
-                                FadeElement="{Binding ElementName=ShogiControl}"> -->
+                                    FadeElement="{Binding ElementName=ShogiControl}"> -->
             <r:VisualBackground x:Name="background"
-                                FadeDuration="00:00:01" />
-
-            <!-- 投票結果など -->
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="5*" />
-                    <RowDefinition Height="174*" />
-                    <RowDefinition Height="2*" />
-                    <RowDefinition Height="174*" />
-                    <RowDefinition Height="5*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*" />
-                    <ColumnDefinition Width="130*" />
-                    <ColumnDefinition Width="350*" />
-                    <ColumnDefinition Width="130*" />
-                    <ColumnDefinition Width="5*" />
-                </Grid.ColumnDefinitions>
-
-                <Grid Grid.Row="2" Grid.RowSpan="2" Grid.Column="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10*" />
-                        <ColumnDefinition Width="120*" />
-                    </Grid.ColumnDefinitions>
-                    <s:VoteResultControl
-                        Grid.Column="1"
-                        x:Name="voteResultControl"
-                        Visibility="{Binding Settings.AS_IsShowVoteResult,
-                                             Converter={StaticResource visibilityConverterHidden}}"
-                        VoteResult="{Binding VoteClient.VoteResult}"
-                        VoteState="{Binding VoteClient.VoteState}"
-                        TotalVoteLeaveTime="{Binding VoteClient.TotalVoteLeaveTime}"
-                        VoteLeaveTime="{Binding VoteClient.VoteLeaveTime}"
-                        ThinkTime="{Binding VoteClient.ThinkTime}"
-                        IsConnectedToLive="{Binding ClientModel.IsConnectedToLive}"
-                        IsUseLiveNotConnectWarning="{Binding Settings.SD_IsUseLiveNotConnectWarning}"
-                        Foreground="{Binding Settings.VR_FontColor,
-                                             Converter={StaticResource brushConverter}}"
-                        Background="{Binding Settings.VR_BackgroundColor,
-                                             Converter={StaticResource brushConverter}}"
-                        Stroke="{Binding Settings.VR_StrokeColor,
-                                         Converter={StaticResource brushConverter}}"
-                        FontFamily="{Binding Settings.VR_FontFamilyName,
-                                             Converter={StaticResource fontFamilyConverter}}"
-                        FontWeight="{Binding Settings.VR_FontWeight}"
-                        FontStyle="{Binding Settings.VR_FontStyle}"
-                        IsShowStroke="{Binding Settings.VR_IsShowStroke}"
-                        StrokeThicknessInternal="{Binding Settings.VR_StrokeThicknessInternal}"
-                        DisplayCandidateCount="{Binding Settings.VR_DisplayResultCount}"
-                        IsDisplayPointFullWidth="{Binding Settings.VR_IsDisplayPointFullWidth}" />
-                </Grid>
-
-                <Grid Grid.Row="1" Grid.RowSpan="2" Grid.Column="3">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="127*" />
-                        <ColumnDefinition Width="3*" />
-                    </Grid.ColumnDefinitions>
-                    <Viewbox Stretch="Uniform"
-                             VerticalAlignment="Top">
-                        <r:EvaluationControl x:Name="evaluationControl"
-                                             ImageSetList="{r:ImageSetList Data/Image}"
-                                             Visibility="{Binding Settings.AS_IsShowEvaluationValue,
-                                                                  Converter={StaticResource visibilityConverterHidden}}"
-                                             SelectedImageSetTitle="{Binding AS_EvaluationImageSetTitle,
-                                                                             Source={x:Static l:ShogiGlobal.Settings}}"
-                                             UserPoint="{Binding VoteResult.EvaluationPoint,
-                                                                 Source={x:Static l:ShogiGlobal.VoteClient}}" />
-                    </Viewbox>
-                </Grid>
-            </Grid>
-
-            <!-- 将棋盤 -->
-            <r:ShogiControl x:Name="ShogiControl"
-                            IsLeaveTimeVisible="False"
-                            Board="{Binding Board}"
-                            EditMode="{Binding EditMode}"
-                            EffectManager="{x:Static l:ShogiGlobal.EffectManager}"
-                            PieceImage="{Binding KomaImage}"
-                            BanBrush="{StaticResource banBrush}"
-                            PieceBoxBrush="{StaticResource komadaiBrush}"
-                            BlackPlayerName="{Binding Settings.SD_BlackPlayerName}"
-                            WhitePlayerName="{Binding Settings.SD_WhitePlayerName}" />
-
-            <Viewbox Stretch="UniformToFill"
-                     HorizontalAlignment="Center"
-                     VerticalAlignment="Center">
-                <v:ShogiEndRollControl x:Name="ShogiEndRoll"
-                                       Width="620" Height="360"
-                                       IsHitTestVisible="False" />
-            </Viewbox>
+                                FadeDuration="00:00:04" />
         </Grid>
+
+        <Viewbox Grid.Row="2" Grid.RowSpan="2"
+                 ContextMenu="{DynamicResource contextMenu}"
+                 Stretch="Uniform">
+            <Grid Width="732" Height="432">
+                <!-- 投票結果など -->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="174*" />
+                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="174*" />
+                        <RowDefinition Height="5*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="130*" />
+                        <ColumnDefinition Width="350*" />
+                        <ColumnDefinition Width="130*" />
+                        <ColumnDefinition Width="5*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Row="2" Grid.RowSpan="2" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10*" />
+                            <ColumnDefinition Width="120*" />
+                        </Grid.ColumnDefinitions>
+                        <s:VoteResultControl
+                            Grid.Column="1"
+                            x:Name="voteResultControl"
+                            Visibility="{Binding Settings.AS_IsShowVoteResult,
+                                                 Converter={StaticResource visibilityConverterHidden}}"
+                            VoteResult="{Binding VoteClient.VoteResult}"
+                            VoteState="{Binding VoteClient.VoteState}"
+                            TotalVoteLeaveTime="{Binding VoteClient.TotalVoteLeaveTime}"
+                            VoteLeaveTime="{Binding VoteClient.VoteLeaveTime}"
+                            ThinkTime="{Binding VoteClient.ThinkTime}"
+                            IsConnectedToLive="{Binding ClientModel.IsConnectedToLive}"
+                            IsUseLiveNotConnectWarning="{Binding Settings.SD_IsUseLiveNotConnectWarning}"
+                            Foreground="{Binding Settings.VR_FontColor,
+                                                 Converter={StaticResource brushConverter}}"
+                            Background="{Binding Settings.VR_BackgroundColor,
+                                                 Converter={StaticResource brushConverter}}"
+                            Stroke="{Binding Settings.VR_StrokeColor,
+                                             Converter={StaticResource brushConverter}}"
+                            FontFamily="{Binding Settings.VR_FontFamilyName,
+                                                 Converter={StaticResource fontFamilyConverter}}"
+                            FontWeight="{Binding Settings.VR_FontWeight}"
+                            FontStyle="{Binding Settings.VR_FontStyle}"
+                            IsShowStroke="{Binding Settings.VR_IsShowStroke}"
+                            StrokeThicknessInternal="{Binding Settings.VR_StrokeThicknessInternal}"
+                            DisplayCandidateCount="{Binding Settings.VR_DisplayResultCount}"
+                            IsDisplayPointFullWidth="{Binding Settings.VR_IsDisplayPointFullWidth}" />
+                    </Grid>
+
+                    <Grid Grid.Row="1" Grid.RowSpan="2" Grid.Column="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="127*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+                        <Viewbox Stretch="Uniform"
+                                 VerticalAlignment="Top">
+                            <r:EvaluationControl x:Name="evaluationControl"
+                                                 ImageSetList="{r:ImageSetList Data/Image}"
+                                                 Visibility="{Binding Settings.AS_IsShowEvaluationValue,
+                                                                      Converter={StaticResource visibilityConverterHidden}}"
+                                                 SelectedImageSetTitle="{Binding AS_EvaluationImageSetTitle,
+                                                                                 Source={x:Static l:ShogiGlobal.Settings}}"
+                                                 UserPoint="{Binding VoteResult.EvaluationPoint,
+                                                                     Source={x:Static l:ShogiGlobal.VoteClient}}" />
+                        </Viewbox>
+                    </Grid>
+                </Grid>
+
+                <!-- 将棋盤 -->
+                <r:ShogiControl x:Name="ShogiControl"
+                                IsLeaveTimeVisible="False"
+                                Board="{Binding Board}"
+                                EditMode="{Binding EditMode}"
+                                EffectManager="{x:Static l:ShogiGlobal.EffectManager}"
+                                PieceImage="{Binding KomaImage}"
+                                BanBrush="{StaticResource banBrush}"
+                                PieceBoxBrush="{StaticResource komadaiBrush}"
+                                BlackPlayerName="{Binding Settings.SD_BlackPlayerName}"
+                                WhitePlayerName="{Binding Settings.SD_WhitePlayerName}" />
+
+                <Viewbox Stretch="UniformToFill"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center">
+                    <v:ShogiEndRollControl x:Name="ShogiEndRoll"
+                                           Width="620" Height="360"
+                                           IsHitTestVisible="False" />
+                </Viewbox>
+            </Grid>
+        </Viewbox>
 
         <!-- ステータスバーです。-->
         <r:MessageStatusBar Grid.Row="3"

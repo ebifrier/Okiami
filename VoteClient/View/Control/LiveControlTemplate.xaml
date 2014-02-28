@@ -39,7 +39,7 @@
     <!-- 接続/切断ボタンの切換を行うスタイルです。-->
     <Style x:Key="toggleConnectButtonStyle" TargetType="Button">
         <Setter Property="Content" Value="切断" />
-        <Setter Property="VerticalAlignment" Value="Center" />
+        <!--<Setter Property="VerticalAlignment" Value="Center" />-->
         <Setter Property="Command" Value="{x:Static c:Commands.DisconnectToLive}" />
         <Setter Property="CommandParameter" Value="{Binding}" />
         
@@ -188,7 +188,7 @@
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
-                        <RowDefinition />
+                        <RowDefinition Height="10" />
                         <RowDefinition Height="*"  />
                     </Grid.RowDefinitions>
 
@@ -201,36 +201,38 @@
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
-                            <RowDefinition />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="3" />
-                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Row="2" Grid.Column="0"
+                        
+                        <Label Grid.Row="0" Grid.Column="0"
                                Content="URL:" />
                         <r:BindOnEnterTextBox
-                            Grid.Row="2" Grid.Column="1" AcceptsReturn="False"
+                            Grid.Row="0" Grid.Column="1" AcceptsReturn="False"
                             VerticalContentAlignment="Center"
-                            Text="{Binding LiveUrlText}" />
-                        <Button Grid.Row="2" Grid.Column="3"
+                            Text="{Binding LiveUrlText}" 
+                            ToolTip="放送URLまたは、コミュニティ番号を指定してください。" />
+                        <Button Grid.Row="0" Grid.Column="2"
+                                Margin="3,0,0,0"
+                                Padding="4,0,4,0"
                                 Style="{StaticResource toggleConnectButtonStyle}" />
-                    </Grid>
 
-                    <!-- 放送タイトルなど -->
-                    <StackPanel Grid.Row="2" Orientation="Horizontal">
-                        <TextBlock>
-                            <TextBlock Text="放送:" />
+                        <!-- 放送タイトルなど -->
+                        <Label Grid.Row="1" Grid.Column="0"
+                               Content="放送:" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                   VerticalAlignment="Center">
                             <Hyperlink NavigateUri="{Binding LiveData.Url}"
                                        Command="{x:Static r:RagnarokCommands.NavigateUrl}"
                                        CommandParameter="{Binding LiveData.Url}">
                                 <TextBlock Text="{Binding LiveTitle}"
-                                           ToolTip="{Binding LiveData.Url}"/>
+                                           ToolTip="{Binding LiveData.Url}" />
                             </Hyperlink>
                         </TextBlock>
-                    </StackPanel>
+                    </Grid>
 
                     <Separator Grid.Row="3" />
 

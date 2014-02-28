@@ -23,24 +23,13 @@ namespace VoteSystem.Protocol
         /// 投票サーバーのアドレスです。
         /// </summary>
         public static readonly string VoteAddress =
-            "garnet-alice.net";
-            //"localhost";
-
-        /// <summary>
-        /// コメンターサーバーのアドレスです。
-        /// </summary>
-        public static readonly string CommenterAddress =
-            "garnet-alice.net";
+            "133.242.205.114";
+            //"garnet-alice.net";
             //"localhost";
 
         /// <summary>
         /// 投票サーバーのポート番号です。
         /// </summary>
         public static readonly int VotePort = 38780;
-
-        /// <summary>
-        /// コメンターサーバーのポート番号です。
-        /// </summary>
-        public static readonly int CommenterPort = 38790;
     }
 }

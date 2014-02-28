@@ -400,7 +400,7 @@ namespace VoteSystem.Server.VoteStrategy
             }
 
             // 変化コマンドを処理します。
-            /*var note = string.Empty;
+            var note = string.Empty;
             var id = -1;
             var nextId = -1;
             var moveList = ParseVariation(notification.Text, out note,
@@ -416,7 +416,7 @@ namespace VoteSystem.Server.VoteStrategy
                 command.MoveList.AddRange(moveList);
 
                 this.voteRoom.BroadcastCommand(command);
-            }*/
+            }
 
             if (IsMirrorMode)
             {
@@ -618,13 +618,6 @@ namespace VoteSystem.Server.VoteStrategy
                 // lockはしません。
                 // 個々で使われている各オブジェクトはスレッドセーフです。
                 var oldMove = this.moveStatistics.GetVote(source.VoterId);
-
-                // 実際に可能な指し手か調べます。
-                /*var boardMove = this.board.ConvertMove(move);
-                if (boardMove == null)
-                {
-                    return;
-                }*/
 
                 // 二重投票をさけるため、投票された時刻を見ています。
                 // また投票がクリアされた時刻よりも新しい指し手のみを採用します。

@@ -342,6 +342,19 @@ namespace VoteSystem.PluginShogi.ViewModel
                     new KeyGesture(Key.C, ModifierKeys.Control)));
 
             inputs.Add(
+                new KeyBinding(ShowSettingDialog,
+                    new KeyGesture(Key.D, ModifierKeys.Control | ModifierKeys.Shift)));
+            inputs.Add(
+                new KeyBinding(ShowEndingSettingWindow,
+                    new KeyGesture(Key.E, ModifierKeys.Control | ModifierKeys.Shift)));
+            inputs.Add(
+                new KeyBinding(Ragnarok.Presentation.Control.EvaluationControl.OpenSettingDialog,
+                    new KeyGesture(Key.L, ModifierKeys.Control | ModifierKeys.Shift)));
+            inputs.Add(
+                new KeyBinding(Protocol.View.VoteResultControl.OpenSettingDialog,
+                    new KeyGesture(Key.V, ModifierKeys.Control | ModifierKeys.Shift)));
+
+            inputs.Add(
                 new KeyBinding(NextOfficialBackground,
                     new KeyGesture(Key.N, ModifierKeys.Control | ModifierKeys.Shift)));
         }
@@ -453,7 +466,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             try
             {
                 var window = ShogiGlobal.MainWindow;
-                var dialog = new EndingSettingWindow(window)
+                var dialog = new EndingSettingWindow(window.ShogiEndRoll)
                 {
                     Owner = window,
                 };
@@ -467,7 +480,6 @@ namespace VoteSystem.PluginShogi.ViewModel
             {
                 ShogiGlobal.ErrorMessage(ex,
                     "エンディングの設定用コントロールの表示に失敗しました(￣ω￣;)");
-                return;
             }
         }
 
@@ -763,7 +775,7 @@ namespace VoteSystem.PluginShogi.ViewModel
 
                 if (!Client.Global.IsOfficial)
                 {
-                    timeSpan = GetTimeSpan(TimeSpan.FromMinutes(20));
+                    timeSpan = GetTimeSpan(TimeSpan.FromMinutes(0));
                     if (timeSpan == null)
                     {
                         return;
@@ -774,7 +786,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 var startTimeNtp = NtpClient.GetTime() + timeSpan.Value;
 
                 // 念のため、確認ダイアログを出します。
-                var result = DialogUtil.Show(
+                var dialog = DialogUtil.CreateDialog(
                     ShogiGlobal.MainWindow,
                     string.Format(
                         @"{1:HH時mm分}{0}{0}この時刻に開始しますがよろしいですか？",
@@ -783,7 +795,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                     "時刻確認",
                     MessageBoxButton.YesNo,
                     MessageBoxResult.No);
-                if (result != MessageBoxResult.Yes)
+                if (dialog.ShowDialogCenterMouse() != true)
                 {
                     return;
                 }

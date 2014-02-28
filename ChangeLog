@@ -1,3 +1,15 @@
+2014-03-01  - Ver 1.7.0.3
+
+	* VoteProtocol/ServerSettings.cs: サーバーアドレスが変更になりました。
+	* VoteServer/VoteStrategy/ShogiVoteStrategy.cs: 変化コメントを復活させ
+	ました。
+	* VoteClient/View/Control/LiveControlTemplate.xaml: ログイン時の画面を
+	修正しました。
+	* PluginShogi/ViewModel/Commands.cs: 放送中不要なものを画面に入れないよ
+	うにするため、ショートカットキーを追加しました。
+	* PluginShogi/View/MainWindow.xaml: 縦横比固定で画面の拡大縮小を行うよ
+	うにしました。
+
 2014-02-25  - Ver 1.7.0.2
 
 	* PluginShogi/Effects/EffectManager.cs: 公式生放送用に背景画像をキーボ

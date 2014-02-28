@@ -159,7 +159,7 @@ namespace VoteSystem.Client.Model.Live
 #endif
 
                 // メッセージの受信を開始します。
-                this.commentClient.StartReceiveMessage(1);
+                this.commentClient.StartReceiveMessage(100);
             }
         }
 
@@ -395,7 +395,7 @@ namespace VoteSystem.Client.Model.Live
                 var title = (
                     cc.LiveInfo != null ?
                     cc.LiveInfo.Title :
-                    "");
+                    string.Empty);
 #else
                 var liveIdString = "lv2525";
                 var title = "公式生放送";
