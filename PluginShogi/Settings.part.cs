@@ -112,7 +112,7 @@ namespace VoteSystem.PluginShogi
             set { SetValue("SD_BlackPlayerName", value); }
         }
 
-        [DefaultValue("西尾明六段")]
+        [DefaultValue("ボナンザ")]
         public string SD_WhitePlayerName
         {
             get { return GetValue<string>("SD_WhitePlayerName"); }
@@ -145,6 +145,20 @@ namespace VoteSystem.PluginShogi
         {
             get { return GetValue<bool>("SD_IsUseLiveNotConnectWarning"); }
             set { SetValue("SD_IsUseLiveNotConnectWarning", value); }
+        }
+
+        [DefaultValue(true)]
+        public bool SD_IsUseVariation
+        {
+            get { return GetValue<bool>("SD_IsUseVariation"); }
+            set { SetValue("SD_IsUseVariation", value); }
+        }
+
+        [DefaultValue(true)]
+        public bool SD_IsPostCurrentBoardComment
+        {
+            get { return GetValue<bool>("SD_IsPostCurrentBoardComment"); }
+            set { SetValue("SD_IsPostCurrentBoardComment", value); }
         }
         #endregion
 

@@ -2,6 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
                     xmlns:t="clr-namespace:VoteSystem.PluginShogi">
+    <Style x:Key="checkBoxStyle" TargetType="CheckBox">
+        <Setter Property="Margin" Value="0,5,0,0" />
+    </Style>
+    
     <Grid x:Key="generalSettingControl">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -69,15 +73,25 @@
                               ToolTip="エフェクトなどの品質を調整します。ソフトが重い場合などに変更してください。" />
                 </Grid>
 
-                <CheckBox Margin="0,10,0,0"
+                <CheckBox Style="{StaticResource checkBoxStyle}"
                           Content="放送未接続のエラーを出す"
                           IsChecked="{Binding Settings.SD_IsUseLiveNotConnectWarning}"
                           ToolTip="放送主でない場合はチェックを外してください。" />
 
-                <CheckBox Margin="0,10,0,0"
+                <CheckBox Style="{StaticResource checkBoxStyle}"
+                          Content="変化を盤上で再生する"
+                          IsChecked="{Binding Settings.SD_IsUseVariation}"
+                          ToolTip="コメントによる変化を再生しない場合はチェックを外してください。" />
+
+                <CheckBox Style="{StaticResource checkBoxStyle}"
                           Content="現局面を自動的に更新する"
                           IsChecked="{Binding Settings.SD_IsAutoUpdateCurrentBoard}"
                           ToolTip="チェックした場合は局面が自動的に更新されます。" />
+
+                <CheckBox Style="{StaticResource checkBoxStyle}"
+                          Content="現局面の変更を運営コメントで通知する"
+                          IsChecked="{Binding Settings.SD_IsPostCurrentBoardComment}"
+                          ToolTip="放送主でない場合は無視されます。" />
             </StackPanel>
         </GroupBox>
     </Grid>

@@ -1,3 +1,9 @@
+2014-03-04  - Ver 1.7.0.5
+
+	* PluginShogi/View/Detail/GeneralSettingControl.xaml: 設定ダイアログに
+	変化コメントを使うかどうかや局面変化を運営コメントで通知するかどうかを
+	決めるチェックボックスを追加しました。
+
 2014-03-01  - Ver 1.7.0.4
 
 	* VoteProtocol/View/EndRollControl.cs: エンドロールの文字をビットマップ

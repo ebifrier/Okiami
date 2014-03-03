@@ -38,10 +38,7 @@ namespace VoteSystem.PluginShogi
         /// </summary>
         public string Name
         {
-            get
-            {
-                return "将棋";
-            }
+            get { return "将棋"; }
         }
 
 #if false
@@ -324,6 +321,12 @@ namespace VoteSystem.PluginShogi
                 return;
             }
 
+            // 変化を再生しない場合もあります。
+            if (!ShogiGlobal.Settings.SD_IsUseVariation)
+            {
+                return;
+            }
+
             WPFUtil.UIProcess(() =>
             {
                 var model = ShogiGlobal.ShogiModel;
@@ -458,18 +461,21 @@ namespace VoteSystem.PluginShogi
             WPFUtil.UIProcess(() => UpdateBoard(board));
 
             // 重要メッセージとして差し手を表示します。
-            var moveList = GetMoveListFrom(oldBoard, board);
-            var messageList = MakeBoardChangedMessageList(moveList, oldBoard);
-            foreach (var message in messageList)
+            if (ShogiGlobal.Settings.SD_IsPostCurrentBoardComment)
             {
-                ShogiGlobal.VoteClient.OnNotificationReceived(
-                    new Notification()
-                    {
-                        Type = NotificationType.Important,
-                        Text = message,
-                        VoterId = "$system$",
-                        Timestamp = Ragnarok.Net.NtpClient.GetTime(),
-                    });
+                var moveList = GetMoveListFrom(oldBoard, board);
+                var messageList = MakeBoardChangedMessageList(moveList, oldBoard);
+                foreach (var message in messageList)
+                {
+                    ShogiGlobal.VoteClient.OnNotificationReceived(
+                        new Notification()
+                        {
+                            Type = NotificationType.Important,
+                            Text = message,
+                            VoterId = "$system$",
+                            Timestamp = Ragnarok.Net.NtpClient.GetTime(),
+                        });
+                }
             }
 
             // エフェクトの表示を行います。
