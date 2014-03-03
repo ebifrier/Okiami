@@ -132,41 +132,59 @@ namespace VoteSystem.Protocol.View
             /// <summary>
             /// プリレンダリングされたビットマップイメージの初期化を行います。
             /// </summary>
-            public void Setup()
+            public Image Setup()
             {
                 if (DecoratedText == null || Image != null)
                 {
-                    return;
+                    return Image;
                 }
 
-                // 字形の作成を行います。
-                DecoratedText.IsUpdateVisual = true;
+                try
+                {
+                    // 字形の作成を行います。
+                    DecoratedText.IsUpdateVisual = true;
 
-                // WPFは描画スレッドで描画用オブジェクトの構築が行われるため、
-                // この時点ではDecoratedTextが完成していない。
-                // そのため、Geometryを使った原始的な描画を行っている。
-                var visual = new DrawingVisual();
-                var context = visual.RenderOpen();
-                context.DrawGeometry(
-                    DecoratedText.Foreground,
-                    new Pen(DecoratedText.Stroke, DecoratedText.StrokeThickness),
-                    DecoratedText.FormattedText.BuildGeometry(new Point()));
-                context.Close();
+                    // WPFは描画スレッドで描画用オブジェクトの構築が行われるため、
+                    // この時点ではDecoratedTextが完成していない。
+                    // そのため、Geometryを使った原始的な描画を行っている。
+                    var visual = new DrawingVisual();
+                    var context = visual.RenderOpen();
+                    context.DrawGeometry(
+                        DecoratedText.Foreground,
+                        new Pen(DecoratedText.Stroke, DecoratedText.StrokeThickness),
+                        DecoratedText.FormattedText.BuildGeometry(new Point()));
+                    context.Close();
 
-                // 文字イメージの作成
-                var bitmap = new RenderTargetBitmap(
-                    (int)Math.Ceiling(DecoratedText.FormattedText.Width),
-                    (int)Math.Ceiling(DecoratedText.FormattedText.Height),
-                    96, 96, PixelFormats.Pbgra32);
-                bitmap.Render(visual);
-                bitmap.Freeze();
+                    // 文字イメージの作成
+                    var bitmap = new RenderTargetBitmap(
+                        (int)Math.Ceiling(DecoratedText.FormattedText.Width),
+                        (int)Math.Ceiling(DecoratedText.FormattedText.Height),
+                        96, 96, PixelFormats.Pbgra32);
+                    bitmap.Render(visual);
+                    bitmap.Freeze();
 
-                var image = new Image();
-                image.BeginInit();
-                image.Source = bitmap;
-                image.EndInit();
+                    var image = new Image();
+                    image.BeginInit();
+                    image.Source = bitmap;
+                    image.EndInit();
 
-                Image = image;
+                    Image = image;
+                    return image;
+                }
+                catch (Exception ex)
+                {
+                    Log.ErrorException(ex,
+                        "エンドロールの文字列作成中にエラーが発生しました。");
+                    return null;
+                }                
+            }
+
+            /// <summary>
+            /// Imageを削除します。
+            /// </summary>
+            public void RemoveImage()
+            {
+                Image = null;
             }
         }
 
@@ -922,6 +940,10 @@ namespace VoteSystem.Protocol.View
                     if (image != null && this.textPanel.Children.Contains(image))
                     {
                         this.textPanel.Children.Remove(image);
+
+                        // Imageオブジェクトを適時消していかないと
+                        // Imageの新規作成に失敗することがあります。
+                        textInfo.RemoveImage();
                     }
                 }
             }
@@ -931,19 +953,21 @@ namespace VoteSystem.Protocol.View
                 for (var i = 0; i < this.lineList[line].Texts.Count(); ++i)
                 {
                     var textInfo = this.lineList[line].Texts[i];
-                    textInfo.Setup();
+                    var image = textInfo.Setup();
 
-                    var image = textInfo.Image;
-                    var ft = textInfo.DecoratedText.FormattedText;
-
-                    image.Opacity = GetOpacity(image, posY);
-                    Canvas.SetLeft(image, GetTextLeft(textInfo));
-                    Canvas.SetTop(image, GetTextTop(textInfo, posY, ft));
-
-                    // 追加しておきます。
-                    if (!this.textPanel.Children.Contains(image))
+                    if (image != null)
                     {
-                        this.textPanel.Children.Add(image);
+                        var ft = textInfo.DecoratedText.FormattedText;
+
+                        image.Opacity = GetOpacity(image, posY);
+                        Canvas.SetLeft(image, GetTextLeft(textInfo));
+                        Canvas.SetTop(image, GetTextTop(textInfo, posY, ft));
+
+                        // 追加しておきます。
+                        if (!this.textPanel.Children.Contains(image))
+                        {
+                            this.textPanel.Children.Add(image);
+                        }
                     }
                 }
             }

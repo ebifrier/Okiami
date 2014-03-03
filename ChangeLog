@@ -5,6 +5,9 @@
 	決めるチェックボックスを追加しました。
 	* PluginShogi/View/MainWindow.xaml, PluginShogi/ShogiData/Background: 
 	画面比を31:18から5:3に変更しました。
+	* VoteProtocol/View/EndRollControl.cs: 文字数が多いときでもビットマップ
+	の作成に失敗しないよう、不要になったビットマップは削除するようにしまし
+	た。
 
 2014-03-01  - Ver 1.7.0.4
 

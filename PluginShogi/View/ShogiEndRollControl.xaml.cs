@@ -273,8 +273,8 @@ namespace VoteSystem.PluginShogi.View
                 }
 
                 return new EndRollViewModel(
-                    //ShogiGlobal.VoteClient.GetVoterList());
-                    Protocol.Model.TestVoterList.GetTestVoterList());
+                    ShogiGlobal.VoteClient.GetVoterList());
+                    //Protocol.Model.TestVoterList.GetTestVoterList());
             }
             catch (Exception ex)
             {

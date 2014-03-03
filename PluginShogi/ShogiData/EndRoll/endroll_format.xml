@@ -1,258 +1,80 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
-<FormatRoot MovieUrl="file:///E:/movies/ending/ending.wav">
-	<!--<MovieTimeline FadeInStartTime="00:00:05"
-				   FadeInSpan="00:00:10"
-				   FadeOutStartTime="00:03:56"
-				   FadeOutSpan="00:00:08" />
-	<EndRollTimeline FadeInStartTime="00:00:21"
-					 FadeInSpan="00:00:00"
-					 FadeOutStartTime="00:03:56"
-					 FadeOutSpan="00:00:00" />
-	<ShogiTimeline FadeInStartTime="00:00:15"
-				   FadeInSpan="00:00:05"
-				   FadeOutStartTime="00:03:43"
-				   FadeOutSpan="00:00:10" />-->
+<!--http://garnet-alice.net/shogi/tmp/ending_test.wmv -->
 
-  <MovieTimeline FadeInStartTime="00:00:05"
+<FormatRoot MovieUrl="https://s3-ap-northeast-1.amazonaws.com/ending/ending.wmv"
+			MovieExt=".wmv">
+	<MovieTimeline FadeInStartTime="00:00:00"
 				   FadeInSpan="00:00:10"
-				   FadeOutStartTime="00:06:05"
-				   FadeOutSpan="00:00:10" />
-  <EndRollTimeline FadeInStartTime="00:00:21"
+				   FadeOutStartTime="00:01:28"
+				   FadeOutSpan="00:00:02" />
+	<EndRollTimeline FadeInStartTime="00:00:10"
 					 FadeInSpan="00:00:00"
-					 FadeOutStartTime="00:06:05"
+					 FadeOutStartTime="00:01:30"
 					 FadeOutSpan="00:00:00" />
-  <ShogiTimeline FadeInStartTime="00:00:15"
+  <ShogiTimeline FadeInStartTime="00:00:10"
 				   FadeInSpan="00:00:05"
-				   FadeOutStartTime="00:05:54"
-				   FadeOutSpan="00:00:10" />
-	
+				   FadeOutStartTime="00:01:23"
+				   FadeOutSpan="00:00:03" />
+
 	<ColumnDefinitions>
-    <ColumnDefinition Width="0" />
-		<ColumnDefinition Width="70" />
-		<ColumnDefinition Width="3" />
-    <ColumnDefinition Width="70" />
-    <ColumnDefinition Width="25" />
+		<ColumnDefinition Width="1" />
+		<ColumnDefinition Width="1" />
 	</ColumnDefinitions>
-	
-	<Line>
-		<Format Column="1" ColumnSpan="3" Text="参加者 ＆ スタッフ一覧（順不同）" FontWeight="Bold" />
-	</Line>
-	<Line Count="3" />
 
-	<!-- 参加者一覧とその人数などを表示 -->
 	<Line>
-    <Format Column="1" ColumnSpan="3" Text="参加者一覧" FontWeight="Bold" />
+		<Format ColumnSpan="2" Text="参加者一覧" />
 	</Line>
-  <Line>
-    <Format Column="1" Text="名前" Color="Gray" Alignment="Right" />
-    <Format Column="3" Text="メッセージ" Color="Gray" Alignment="Left" />
-  </Line>
-  <Line />
-	<Lines Data="$JoinedVoterViewList">
-    <Line>
-      <Format Column="1" Text="$Name" Alignment="Right" />
-      <Format Column="3" ColumnSpan="2" Text="$Skill" Alignment="Left" />
-    </Line>
+
+	<Lines Data="$JoinedVoterList">
+		<Line>
+			<Format Column="0" Text="$Name" Alignment="Right" />
+			<Format Column="1" Text="$Skill" Alignment="Left" />
+		</Line>
 	</Lines>
+
 	<Line />
-	<Lines Data="$VoterOtherCount">
+	<Lines Data="$UnjoinedVoterCount">
 		<Line>
-			<Format Column="1" Text="その他" Alignment="Right" />
-			<Format Column="3" Text="$()名" Alignment="Left" />
+			<Format Column="0" Text="その他" Alignment="Right" />
+			<Format Column="1" Text="$()人" Alignment="Left" />
 		</Line>
 	</Lines>
-	<Lines Data="$VoterCount">
-		<Line>
-			<Format Column="1" Text="合計" Alignment="Right" />
-			<Format Column="3" Text="$()名" Alignment="Left" />
-		</Line>
-	</Lines>
-
+  
 	<Line Count="2" />
+	<Line>
+		<Format ColumnSpan="2" Text="放送主一覧" />
+	</Line>
 
-  <!-- 動画製作者 -->
-  <Line>
-    <Format Column="1" ColumnSpan="3" Text="エンディング動画" />
-  </Line>
-  <Line>
-    <Format Column="1" ColumnSpan="3" Text="『Inní mér syngur vitleysingur』" FontWeight="Bold" />
-  </Line>
-  <Line>
-    <Format Column="1" ColumnSpan="3" Text="Sigur Rós" />
-  </Line>
-
+  <!-- 放送主一覧とその人数などを表示 -->
   <Line Count="2" />
-
-	<!-- 使用ツールの素材など -->
-	<Line>
-		<Format Column="1" ColumnSpan="3" Text="おきあみちゃん素材提供" FontWeight="Bold" />
-	</Line>
-	<Line>
-		<Format Column="1" Text="イラスト素材" Alignment="Right" />
-		<Format Column="3" Text="梔子こみゅにてぃ" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="famfamfam" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="イラスト・フリー素材" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="フリー素材の来夢来人" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="1" Text="将棋盤・駒素材" Alignment="Right" />
-		<Format Column="3" Text="mind＆2ちゃんねるの方々" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="1" Text="評価値画像" Alignment="Right" />
-		<Format Column="3" Text="○○○" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="1" Text="エフェクト素材" Alignment="Right" />
-		<Format Column="3" Text="ぴぽや" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="1" Text="効果音素材" Alignment="Right" />
-		<Format Column="3" Text="Senses Circuit" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="AFFEXCEED (自遊素材)" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="ザ・マッチメイカァズ" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="369" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="1" Text="ソースコード" Alignment="Right" />
-		<Format Column="3" Text="Jaroslaw Kowalski" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="Mike Krueger" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="Marc Gravell" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="炬燵犬" Alignment="Left" />
-	</Line>
   <Line>
-    <Format Column="3" Text="halxxxx" Alignment="Left" />
+    <Format ColumnSpan="2" Text="今日の来場者数など" FontWeight="Bold" />
   </Line>
-  <Line>
-    <Format Column="3" Text="にょんにょん" Alignment="Left" />
-  </Line>
-  <Line>
-    <Format Column="3" Text="うつろ" Alignment="Left" />
-  </Line>
-	<Line>
-		<Format Column="3" Text="Ambiera" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="Marc Gravell" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="Dirk Eisenberg" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="Codehaus" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="Richard Lord" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="Ben Baker" Alignment="Left" />
-	</Line>
-	<Line>
-		<Format Column="3" Text="Ury Jamshy" Alignment="Left" />
-	</Line>
-
-	<Line Count="2" />
-
-  <Line>
-    <Format Column="1" ColumnSpan="3" Text="おきあみちゃん制作者" FontWeight="Bold" />
-  </Line>
-  <Line>
-    <Format Column="1" ColumnSpan="3" Text="えびふらい" />
-  </Line>
-
-  <Line Count="2" />
-
-	<!-- 当日のデータなど -->
-	<Line>
-		<Format Column="1" ColumnSpan="3" Text="今日の来場者数など" FontWeight="Bold" />
-	</Line>
+  <Lines Data="$TotalLiveCountText">
+    <Line>
+      <Format Column="0" Text="全放送数" Alignment="Right" />
+      <Format Column="1" Text="$()" Alignment="Left" />
+    </Line>
+  </Lines>
   <Lines Data="$TotalLiveVisitorCountText">
     <Line>
-		  <Format Column="1" Text="来場者数合計" Alignment="Right" />
-		  <Format Column="3" Text="$()名" Alignment="Left" />
-	  </Line>
+      <Format Column="0" Text="来場者数合計" Alignment="Right" />
+      <Format Column="1" Text="$()" Alignment="Left" />
+    </Line>
   </Lines>
   <Lines Data="$TotalLiveCommentCountText">
-	  <Line>
-		  <Format Column="1" Text="コメント数合計" Alignment="Right" />
-		  <Format Column="3" Text="$()" Alignment="Left" />
-	  </Line>
+    <Line>
+      <Format Column="0" Text="コメント数合計" Alignment="Right" />
+      <Format Column="1" Text="$()" Alignment="Left" />
+    </Line>
   </Lines>
-
+	
 	<Line Count="2" />
-
-	<!-- 記録係を表示 -->
 	<Line>
-		<Format Column="1" ColumnSpan="3" Text="聞き手" FontWeight="Bold" />
+		<Format ColumnSpan="2" Text="最後までおつきあい頂き" />
 	</Line>
 	<Line>
-		<Format Column="1" ColumnSpan="3" Text="飯野愛女流２級" />
-	</Line>
-
-  <Line />
-
-	<!-- 盤代理操作人を表示 -->
-	<Line>
-		<Format Column="1" ColumnSpan="3" Text="解説者" FontWeight="Bold" />
-	</Line>
-	<Line>
-		<Format Column="1" ColumnSpan="3" Text="西尾明六段" />
-	</Line>
-
-  <Line />
-
-  <!-- 特別出演 -->
-  <Line>
-    <Format Column="1" ColumnSpan="3" Text="特別出演" FontWeight="Bold" />
-  </Line>
-  <Line>
-    <Format Column="1" ColumnSpan="3" Text="山本一成" />
-  </Line>
-
-  <Line />
-
-	<!-- 対局相手を表示 -->
-	<Line>
-		<Format Column="1" ColumnSpan="3" Text="対局者" FontWeight="Bold" />
-	</Line>
-	<Line>
-		<Format Column="1" ColumnSpan="3" Text="電王ponanza" />
-	</Line>
-
-	<Line Count="11" />
-
-  <Line>
-    <Format Column="1" ColumnSpan="3" Text="～ドスパラPresents～" FontWeight="Bold" />
-  </Line>
-  <Line>
-    <Format Column="1" ColumnSpan="3" Text="力を合わせて電王を倒そう！ 全視聴者 vs ponanza" />
-  </Line>
-
-  <Line Count="14" />
-
-  <Line>
-    <Format Column="1" ColumnSpan="3" Text="最後までおつきあい頂き" FontWeight="Bold" />
-  </Line>
-  <Line>
-    <Format Column="1" ColumnSpan="3" Text="どうもありがとうございました" FontWeight="Bold" />
-  </Line>
+		<Format ColumnSpan="2" Text="どうもありがとうございました" />
+	 </Line>
 </FormatRoot>
