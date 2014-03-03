@@ -1,8 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:f="http://schemas.flint-sharp/xaml"
-                    xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                    xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation">
     <r:EffectObject x:Key="Effect"
                     Opacity="1.0"
                     MaterialType="Diffuse"

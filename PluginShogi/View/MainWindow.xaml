@@ -9,7 +9,7 @@
         xmlns:v="clr-namespace:VoteSystem.PluginShogi.View"
         xmlns:svm="clr-namespace:VoteSystem.PluginShogi.ViewModel"
         mc:Ignorable="d" x:Name="window"
-        Title="将棋盤ちゃん" Height="440" SizeToContent="Width"
+        Title="将棋盤ちゃん" Width="720" Height="530"
         AllowDrop="True" ResizeMode="CanResize"
         Background="{x:Static Brushes.White}">
     <Window.Resources>

@@ -123,9 +123,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ShogiData\Background\OfficialEffect\Official.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="ShogiData\Effect\Other\CastleEffect\Image\Anaguma1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
