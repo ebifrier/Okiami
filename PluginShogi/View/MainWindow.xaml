@@ -9,7 +9,7 @@
         xmlns:v="clr-namespace:VoteSystem.PluginShogi.View"
         xmlns:svm="clr-namespace:VoteSystem.PluginShogi.ViewModel"
         mc:Ignorable="d" x:Name="window"
-        Title="将棋盤ちゃん" SizeToContent="WidthAndHeight"
+        Title="将棋盤ちゃん" Height="440" SizeToContent="Width"
         AllowDrop="True" ResizeMode="CanResize"
         Background="{x:Static Brushes.White}">
     <Window.Resources>
@@ -136,16 +136,15 @@
 
         <Grid Grid.Row="2" Grid.RowSpan="2">
             <!-- 背景 -->
-            <!--<r:VisualBackground x:Name="background"
-                                    FadeElement="{Binding ElementName=ShogiControl}"> -->
             <r:VisualBackground x:Name="background"
-                                FadeDuration="00:00:04" />
+                                Viewport="0,0,600,360"
+                                FadeElement="{Binding ElementName=ShogiControl}" />
         </Grid>
 
         <Viewbox Grid.Row="2" Grid.RowSpan="2"
                  ContextMenu="{DynamicResource contextMenu}"
                  Stretch="Uniform">
-            <Grid Width="732" Height="432">
+            <Grid Width="720" Height="432">
                 <!-- 投票結果など -->
                 <Grid>
                     <Grid.RowDefinitions>
@@ -155,17 +154,18 @@
                         <RowDefinition Height="174*" />
                         <RowDefinition Height="5*" />
                     </Grid.RowDefinitions>
+                    <!-- 5 120 5 340 5 120 5 -->
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="5*" />
-                        <ColumnDefinition Width="130*" />
+                        <ColumnDefinition Width="0*" />
+                        <ColumnDefinition Width="125*" />
                         <ColumnDefinition Width="350*" />
-                        <ColumnDefinition Width="130*" />
-                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="125*" />
+                        <ColumnDefinition Width="0*" />
                     </Grid.ColumnDefinitions>
 
                     <Grid Grid.Row="2" Grid.RowSpan="2" Grid.Column="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="10*" />
+                            <ColumnDefinition Width="5*" />
                             <ColumnDefinition Width="120*" />
                         </Grid.ColumnDefinitions>
                         <s:VoteResultControl
@@ -198,8 +198,8 @@
 
                     <Grid Grid.Row="1" Grid.RowSpan="2" Grid.Column="3">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="127*" />
-                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="120*" />
+                            <ColumnDefinition Width="5*" />
                         </Grid.ColumnDefinitions>
                         <Viewbox Stretch="Uniform"
                                  VerticalAlignment="Top">
@@ -226,15 +226,16 @@
                                 PieceBoxBrush="{StaticResource komadaiBrush}"
                                 BlackPlayerName="{Binding Settings.SD_BlackPlayerName}"
                                 WhitePlayerName="{Binding Settings.SD_WhitePlayerName}" />
-
-                <Viewbox Stretch="UniformToFill"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center">
-                    <v:ShogiEndRollControl x:Name="ShogiEndRoll"
-                                           Width="620" Height="360"
-                                           IsHitTestVisible="False" />
-                </Viewbox>
             </Grid>
+        </Viewbox>
+
+        <Viewbox Grid.Row="2" Grid.RowSpan="2"
+                 Stretch="UniformToFill"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center">
+            <v:ShogiEndRollControl x:Name="ShogiEndRoll"
+                                   Width="640" Height="360"
+                                   IsHitTestVisible="False" />
         </Viewbox>
 
         <!-- ステータスバーです。-->

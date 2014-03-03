@@ -12,12 +12,12 @@
                 ScaleY="{r:Calc 'min(15.0, 5.0 + 25.0 / ${CastleNameLen})'}"
                 DivideX="{r:IntCalc '2.0 + 2.0 / ${CastleNameLen}', Mode=Floor}"
                 DivideY="{r:IntCalc '2.0 + 2.0 / ${CastleNameLen}', Mode=Floor}"
-                OffsetX="310" OffsetY="270" />
+                OffsetX="300" OffsetY="270" />
     
     <Vector3D x:Key="backgroundCoord"
-              X="310" Y="180" Z="{x:Static r:ShogiControl.PreEffectZ}" />
+              X="300" Y="180" Z="{x:Static r:ShogiControl.PreEffectZ}" />
     <Vector3D x:Key="castleBackCoord"
-              X="310" Y="140" Z="{x:Static r:ShogiControl.PreEffectZ}" />
+              X="300" Y="140" Z="{x:Static r:ShogiControl.PreEffectZ}" />
 
     <r:CellMeshConverter x:Key="cellMeshConv" />
     <r:CellMeshConverter x:Key="cellMeshWideConv" Widen="0.2" />
@@ -29,7 +29,7 @@
                         Mesh="{r:MakeMesh}"
                         Duration="0:0:5"
                         MaterialType="Diffuse"
-                        BaseScale="620,380,1"
+                        BaseScale="600,360,1"
                         Coord="{StaticResource backgroundCoord}">
             <r:EffectObject.Scenario>
                 <r:Scenario>
@@ -145,7 +145,7 @@
             <r:EffectObject Duration="0:0:1.2"
                             ImageUri="ExplosionWhite.png"
                             Coord="{StaticResource backgroundCoord}"
-                            Scale="620,620,1">
+                            Scale="600,600,1">
                 <r:EffectObject.Scenario>
                     <r:Scenario>
                         <DoubleAnimationUsingKeyFrames r:Scenario.TargetProperty="Opacity">

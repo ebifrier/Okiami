@@ -7,7 +7,7 @@
                     Opacity="1.0"
                     MaterialType="Diffuse"
                     Duration="Forever"
-                    Coord="310,180,0"
-                    BaseScale="620,360,1"
+                    Coord="300,180,0"
+                    BaseScale="600,360,1"
                     ImageUri="{r:Binding ImageUri}" />
 </ResourceDictionary>

@@ -3,6 +3,8 @@
 	* PluginShogi/View/Detail/GeneralSettingControl.xaml: 設定ダイアログに
 	変化コメントを使うかどうかや局面変化を運営コメントで通知するかどうかを
 	決めるチェックボックスを追加しました。
+	* PluginShogi/View/MainWindow.xaml, PluginShogi/ShogiData/Background: 
+	画面比を31:18から5:3に変更しました。
 
 2014-03-01  - Ver 1.7.0.4
 

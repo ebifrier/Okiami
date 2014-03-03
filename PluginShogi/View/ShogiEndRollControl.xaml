@@ -53,10 +53,11 @@
                 </Border>
 
                 <Grid Canvas.Left="350" Canvas.Top="195"
-                      Width="250" Height="148"
+                      Width="250" Height="150"
                       Opacity="0.0" HorizontalAlignment="Center"
                       x:Name="ShogiGrid">
-                    <p:VisualBackground x:Name="ShogiBackground" />
+                    <p:VisualBackground x:Name="ShogiBackground"
+                                        Viewport="0,0,600,360" />
                 
                     <p:ShogiControl x:Name="ShogiControl"
                                     PieceImage="{Binding KomaImage}"
