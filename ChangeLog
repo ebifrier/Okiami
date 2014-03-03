@@ -1,3 +1,12 @@
+2014-03-04  - Ver 1.7.0.6
+
+	* PluginShogi/ViewModel/EndRollViewModel.cs: 参加者一覧の並びをランダム
+	に変更しました。
+	* VoteClient/Model/Live/LiveNicoClient.cs: 公式放送での使用時にはアラー
+	トへの接続を行わないようにしました。
+	* VoteClient/Properties/AssemblyInfo.cs: アセンブリ名をアルファベットに
+	変更しました。
+
 2014-03-04  - Ver 1.7.0.5
 
 	* PluginShogi/View/Detail/GeneralSettingControl.xaml: 設定ダイアログに

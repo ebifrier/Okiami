@@ -420,7 +420,9 @@ namespace VoteSystem.Client.Model.Live
                 (sender, e) => HandleComment(e.RoomIndex, e.Comment);
             this.AddDependModel(this.commentClient);
 
+#if !OFFICIAL
             this.alert = ConnectAlert();
+#endif
 
             this.heartbeatTimer = new Timer(
                 Heartbeat_Callback,
