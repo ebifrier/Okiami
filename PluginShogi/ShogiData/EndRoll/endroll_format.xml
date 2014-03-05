@@ -2,8 +2,7 @@
 
 <!--http://garnet-alice.net/shogi/tmp/ending_test.wmv -->
 
-<FormatRoot MovieUrl="https://s3-ap-northeast-1.amazonaws.com/ending/ending.wmv"
-			MovieExt=".wmv">
+<FormatRoot MovieUrl="https://s3-ap-northeast-1.amazonaws.com/ending/ending.wmv">
 	<MovieTimeline FadeInStartTime="00:00:00"
 				   FadeInSpan="00:00:10"
 				   FadeOutStartTime="00:01:28"
@@ -17,64 +16,67 @@
 				   FadeOutStartTime="00:01:23"
 				   FadeOutSpan="00:00:03" />
 
-	<ColumnDefinitions>
-		<ColumnDefinition Width="1" />
-		<ColumnDefinition Width="1" />
-	</ColumnDefinitions>
+  <ColumnDefinitions>
+    <ColumnDefinition Width="0" />
+    <ColumnDefinition Width="70" />
+    <ColumnDefinition Width="3" />
+    <ColumnDefinition Width="70" />
+    <ColumnDefinition Width="25" />
+  </ColumnDefinitions>
 
 	<Line>
-		<Format ColumnSpan="2" Text="参加者一覧" />
+		<Format Column="1" ColumnSpan="3" Text="参加者一覧" />
 	</Line>
 
-	<Lines Data="$JoinedVoterList">
+	<Lines Data="$JoinedVoterViewList">
 		<Line>
-			<Format Column="0" Text="$Name" Alignment="Right" />
-			<Format Column="1" Text="$Skill" Alignment="Left" />
+			<Format Column="1" Text="$Name" Alignment="Right" />
+			<Format Column="3" Text="$Skill" Alignment="Left" />
 		</Line>
 	</Lines>
 
 	<Line />
 	<Lines Data="$UnjoinedVoterCount">
 		<Line>
-			<Format Column="0" Text="その他" Alignment="Right" />
-			<Format Column="1" Text="$()人" Alignment="Left" />
+			<Format Column="1" Text="その他" Alignment="Right" />
+			<Format Column="3" Text="$()人" Alignment="Left" />
 		</Line>
 	</Lines>
   
-	<Line Count="2" />
+	<!--<Line Count="2" />
 	<Line>
-		<Format ColumnSpan="2" Text="放送主一覧" />
-	</Line>
+		<Format Column="1" ColumnSpan="3" Text="放送主一覧" />
+	</Line>-->
 
   <!-- 放送主一覧とその人数などを表示 -->
   <Line Count="2" />
   <Line>
-    <Format ColumnSpan="2" Text="今日の来場者数など" FontWeight="Bold" />
+    <Format Column="1" ColumnSpan="3" Text="今日の来場者数など" FontWeight="Bold" />
   </Line>
   <Lines Data="$TotalLiveCountText">
     <Line>
-      <Format Column="0" Text="全放送数" Alignment="Right" />
-      <Format Column="1" Text="$()" Alignment="Left" />
+      <Format Column="1" Text="全放送数" Alignment="Right" />
+      <Format Column="3" Text="$()" Alignment="Left" />
     </Line>
   </Lines>
   <Lines Data="$TotalLiveVisitorCountText">
     <Line>
-      <Format Column="0" Text="来場者数合計" Alignment="Right" />
-      <Format Column="1" Text="$()" Alignment="Left" />
+      <Format Column="1" Text="来場者数合計" Alignment="Right" />
+      <Format Column="3" Text="$()" Alignment="Left" />
     </Line>
   </Lines>
   <Lines Data="$TotalLiveCommentCountText">
     <Line>
-      <Format Column="0" Text="コメント数合計" Alignment="Right" />
-      <Format Column="1" Text="$()" Alignment="Left" />
+      <Format Column="1" Text="コメント数合計" Alignment="Right" />
+      <Format Column="3" Text="$()" Alignment="Left" />
     </Line>
   </Lines>
 	
 	<Line Count="2" />
 	<Line>
-		<Format ColumnSpan="2" Text="最後までおつきあい頂き" />
+		<Format Column="1" ColumnSpan="3" Text="最後までおつきあい頂き" />
 	</Line>
 	<Line>
-		<Format ColumnSpan="2" Text="どうもありがとうございました" />
+		<Format Column="1" ColumnSpan="3" Text="どうもありがとうございました" />
 	 </Line>
 </FormatRoot>

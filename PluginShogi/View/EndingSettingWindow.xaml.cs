@@ -20,87 +20,6 @@ namespace VoteSystem.PluginShogi.View
     public partial class EndingSettingWindow : Window
     {
         /// <summary>
-        /// 映像品質を扱う依存プロパティです。
-        /// </summary>
-        public static readonly DependencyProperty EndRollQualityProperty =
-            DependencyProperty.Register(
-                "EndRollQuality", typeof(EndRollQuality), typeof(EndingSettingWindow),
-                new FrameworkPropertyMetadata(EndRollQuality.Best, OnEndRollQualityChanged));
-
-        /// <summary>
-        /// 映像品質を取得または設定します。
-        /// </summary>
-        public EndRollQuality EndRollQuality
-        {
-            get { return (EndRollQuality)GetValue(EndRollQualityProperty); }
-            set { SetValue(EndRollQualityProperty, value); }
-        }
-
-        private static void OnEndRollQualityChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var self = (EndingSettingWindow)d;
-
-            if (self.model != null)
-            {
-                self.model.EndRollQuality = (EndRollQuality)e.NewValue;
-            }
-        }
-
-        /// <summary>
-        /// 音量ミュートかどうかを扱う依存プロパティです。
-        /// </summary>
-        public static readonly DependencyProperty IsMuteProperty =
-            DependencyProperty.Register(
-                "IsMute", typeof(bool), typeof(EndingSettingWindow),
-                new FrameworkPropertyMetadata(false, OnIsMuteChanged));
-
-        /// <summary>
-        /// 音量ミュートかどうかを取得または設定します。
-        /// </summary>
-        public bool IsMute
-        {
-            get { return (bool)GetValue(IsMuteProperty); }
-            set { SetValue(IsMuteProperty, value); }
-        }
-
-        private static void OnIsMuteChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var self = (EndingSettingWindow)d;
-
-            if (self.model != null)
-            {
-                self.model.IsMovieMute = (bool)e.NewValue;
-            }
-        }
-
-        /// <summary>
-        /// 音量を扱う依存プロパティです。
-        /// </summary>
-        public static readonly DependencyProperty VolumeProperty =
-            DependencyProperty.Register(
-                "Volume", typeof(int), typeof(EndingSettingWindow),
-                new FrameworkPropertyMetadata(100, OnVolumeChanged));
-
-        /// <summary>
-        /// 音量を取得または設定します。
-        /// </summary>
-        public int Volume
-        {
-            get { return (int)GetValue(VolumeProperty); }
-            set { SetValue(VolumeProperty, value); }
-        }
-
-        private static void OnVolumeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var self = (EndingSettingWindow)d;
-
-            if (self.model != null)
-            {
-                self.model.MovieVolume = (int)e.NewValue;
-            }
-        }
-
-        /// <summary>
         /// エンディングモードかどうかを扱う依存プロパティです。
         /// </summary>
         public static readonly DependencyProperty IsEndingModeProperty =
@@ -136,20 +55,20 @@ namespace VoteSystem.PluginShogi.View
             ViewModel.Commands.Binding(CommandBindings);
             ViewModel.Commands.Binding(InputBindings);
 
-            if (window != null)
-            {
-                this.model = control;
-                IsMute = this.model.IsMovieMute;
-                Volume = this.model.MovieVolume;
-                EndRollQuality = this.model.EndRollQuality;
-
-                IsEndingMode = ShogiGlobal.GlobalModel.IsEndingMode;
-            }
+            this.model = control;
+            DataContext = control;
         }
 
         private void MuteButton_Click(object sender, RoutedEventArgs e)
         {
-            IsMute = !IsMute;
+            this.model.IsMovieMute = !this.model.IsMovieMute;
+        }
+
+        private void PositionSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var position = TimeSpan.FromSeconds(e.NewValue);
+
+            this.model.ResetPosition(position);
         }
     }
 }

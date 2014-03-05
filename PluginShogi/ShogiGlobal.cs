@@ -25,9 +25,6 @@ namespace VoteSystem.PluginShogi
     /// </summary>
     public static class ShogiGlobal
     {
-        public readonly static int EndRollMaxVoterCount = 400;
-        public readonly static int EndRollMaxLiveOwnerCount = 10;
-
         /// <summary>
         /// 静的コンストラクタ
         /// </summary>

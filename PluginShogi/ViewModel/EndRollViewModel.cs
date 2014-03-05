@@ -39,8 +39,26 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// </summary>
         public VoterList VoterList
         {
-            get;
-            private set;
+            get { return GetValue<VoterList>("VoterList"); }
+            private set { SetValue("VoterList", value); }
+        }
+
+        /// <summary>
+        /// 参加した参加者リストを取得します。
+        /// </summary>
+        public List<VoterInfo> JoinedVoterList
+        {
+            get { return GetValue<List<VoterInfo>>("JoinedVoterList"); }
+            private set { SetValue("JoinedVoterList", value); }
+        }
+
+        /// <summary>
+        /// 最大表示参加者数を取得します。
+        /// </summary>
+        public int JoinedVoterViewMaximumCount
+        {
+            get { return GetValue<int>("JoinedVoterViewMaximumCount"); }
+            set { SetValue("JoinedVoterViewMaximumCount", value); }
         }
 
         /// <summary>
@@ -48,13 +66,14 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// </summary>
         public List<VoterInfo> JoinedVoterViewList
         {
-            get;
-            private set;
+            get { return GetValue<List<VoterInfo>>("JoinedVoterViewList"); }
+            private set { SetValue("JoinedVoterViewList", value); }
         }
 
         /// <summary>
         /// 表示用の参加者人数を取得します。
         /// </summary>
+        [DependOnProperty("JoinedVoterViewList")]
         public int JoinedVoterViewCount
         {
             get { return JoinedVoterViewList.Count; }
@@ -63,6 +82,8 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// その他の参加者人数を取得します。
         /// </summary>
+        [DependOnProperty("VoterList")]
+        [DependOnProperty("JoinedVoterViewCount")]
         public int VoterOtherCount
         {
             get
@@ -75,17 +96,36 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
-        /// 表示用の生主一覧を取得します。
+        /// 生主一覧を取得します。
         /// </summary>
-        public List<VoterInfo> LiveOwnerViewList
+        public List<VoterInfo> LiveOwnerList
         {
-            get;
-            private set;
+            get { return GetValue<List<VoterInfo>>("LiveOwnerList"); }
+            private set { SetValue("LiveOwnerList", value); }
         }
 
         /// <summary>
         /// 表示用の生主人数を取得します。
         /// </summary>
+        public int LiveOwnerViewMaximumCount
+        {
+            get { return GetValue<int>("LiveOwnerViewMaximumCount"); }
+            set { SetValue("LiveOwnerViewMaximumCount", value); }
+        }
+
+        /// <summary>
+        /// 表示用の生主一覧を取得します。
+        /// </summary>
+        public List<VoterInfo> LiveOwnerViewList
+        {
+            get { return GetValue<List<VoterInfo>>("LiveOwnerViewList"); }
+            private set { SetValue("LiveOwnerViewList", value); }
+        }
+
+        /// <summary>
+        /// 表示用の生主人数を取得します。
+        /// </summary>
+        [DependOnProperty("LiveOwnerViewList")]
         public int LiveOwnerViewCount
         {
             get { return LiveOwnerViewList.Count(); }
@@ -94,6 +134,8 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// その他の生主人数を取得します。
         /// </summary>
+        [DependOnProperty("VoterList")]
+        [DependOnProperty("LiveOwnerViewCount")]
         public int LiveOwnerOtherCount
         {
             get { return (VoterList.LiveOwnerCount - LiveOwnerViewCount); }
@@ -102,6 +144,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// 寄付者数を取得します。
         /// </summary>
+        [DependOnProperty("VoterList")]
         public int DonorViewCount
         {
             get { return VoterList.DonorViewList.Count(); }
@@ -110,6 +153,8 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// その他の寄付者人数を取得します。
         /// </summary>
+        [DependOnProperty("VoterList")]
+        [DependOnProperty("DonorViewCount")]
         public int DonorOtherCount
         {
             get { return (VoterList.DonorCount - DonorViewCount); }
@@ -180,7 +225,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// 参加者が参加した放送があれば１を返します。
         /// </summary>
-        int HasLiveRoom(LiveData liveData)
+        private int IsMyLiveRoom(LiveData liveData)
         {
             if (liveData == null || !liveData.Validate())
             {
@@ -193,7 +238,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// ニコニコの184IDかどうか調べます。
         /// </summary>
-        int IsAnonymous(string id)
+        private int IsAnonymous(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -203,7 +248,7 @@ namespace VoteSystem.PluginShogi.ViewModel
             return (id.All(_ => char.IsNumber(_)) ? 0 : 1);
         }
 
-        IEnumerable<VoterInfo> SortJoinedVoterList()
+        private IEnumerable<VoterInfo> GetJoinedVoterList()
         {
             if (VoterList.JoinedVoterList == null)
             {
@@ -214,12 +259,12 @@ namespace VoteSystem.PluginShogi.ViewModel
                 from voter in VoterList.JoinedVoterList
                 where voter != null
                 orderby Guid.NewGuid()
-                /*orderby HasLiveRoom(voter.LiveData) descending/*,
+                orderby IsMyLiveRoom(voter.LiveData) descending/*,
                         IsAnonymous(voter.Id) ascending*/
                 select voter;
         }
 
-        IEnumerable<VoterInfo> GetLiveOwnerList()
+        private IEnumerable<VoterInfo> GetLiveOwnerList()
         {
             if (VoterList.LiveOwnerList == null)
             {
@@ -230,25 +275,46 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// 参加者は一度ランダムに並び替えた後、指定条件でカットします。
+        /// </summary>
+        private void JoinedVoterViewMaximumCountChanged()
+        {
+            JoinedVoterViewList = JoinedVoterList
+                .Take(JoinedVoterViewMaximumCount)
+                .OrderBy(_ => Guid.NewGuid())
+                .ToList();
+        }
+
+        /// <summary>
+        /// 放送主はランダムに並び替えます。
+        /// </summary>
+        private void LiveOwnerViewMaximumCountChanged()
+        {
+            LiveOwnerViewList = LiveOwnerList
+                .OrderBy(_ => Guid.NewGuid())
+                .Take(LiveOwnerViewMaximumCount)
+                .ToList();
+        }
+
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         public EndRollViewModel(VoterList voterList)
             : base(voterList)
         {
             VoterList = voterList;
+            JoinedVoterList = GetJoinedVoterList().ToList();
+            LiveOwnerList = GetLiveOwnerList().ToList();
 
-            // 参加者は一度指定条件でソートし、カットした後、
-            // ランダムに並び替えます。
-            JoinedVoterViewList = SortJoinedVoterList()
-                .Take(ShogiGlobal.EndRollMaxVoterCount)
-                //.OrderBy(_ => Guid.NewGuid())
-                .ToList();
+            JoinedVoterViewMaximumCountChanged();
+            LiveOwnerViewMaximumCountChanged();
 
-            // 放送主はランダムに並び替えます。
-            LiveOwnerViewList = GetLiveOwnerList()
-                .OrderBy(_ => Guid.NewGuid())
-                .Take(ShogiGlobal.EndRollMaxLiveOwnerCount)
-                .ToList();
+            AddPropertyChangedHandler(
+                "JoinedVoterViewMaximumCount",
+                (_, __) => JoinedVoterViewMaximumCountChanged());
+            AddPropertyChangedHandler(
+                "LiveOwnerViewMaximumCount",
+                (_, __) => LiveOwnerViewMaximumCountChanged());
         }
     }
 }

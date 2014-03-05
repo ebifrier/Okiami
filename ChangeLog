@@ -1,3 +1,16 @@
+2014-03-06  - Ver 1.7.0.7
+
+	* PluginShogi/ShogiData/EndRoll/endroll_format.xml: エンドロールのフォ
+	ーマットを修正し、カラムを分けるようにしました。
+	* PluginShogi/View/EndingSettingWindow.xaml: エンドロール再生用の設定を
+	追加しました。
+	* PluginShogi/View/ShogiEndRollControl.xaml.cs: エンドロールの表示など
+	を外部から設定可能にしました。
+	* PluginShogi/ViewModel/Commands.cs: エンドロール停止時のダイアログ表示
+	位置がメインウィンドウと被らないようにしました。
+	* PluginShogi/ViewModel/EndRollViewModel.cs: 視聴者や放送主の最大表示数
+	を外部から設定できるようにしました。
+
 2014-03-04  - Ver 1.7.0.6
 
 	* PluginShogi/ViewModel/EndRollViewModel.cs: 参加者一覧の並びをランダム

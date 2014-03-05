@@ -37,37 +37,12 @@ namespace VoteSystem.PluginShogi.View
     {
         private EffectManager effectManager;
         private AutoPlayEx autoPlay;
-        private object endRollData;
+        private EndRollViewModel endRollData;
         private TimeSpan prevPosition = TimeSpan.Zero;
         private TimeSpan interval = TimeSpan.Zero;
+        private ReentrancyLock positionLock = new ReentrancyLock();
 
         #region 基本プロパティ
-        /// <summary>
-        /// 映像品質を扱う依存プロパティです。
-        /// </summary>
-        public static readonly DependencyProperty EndRollQualityProperty =
-            DependencyProperty.Register(
-                "EndRollQuality", typeof(EndRollQuality), typeof(ShogiEndRollControl),
-                new FrameworkPropertyMetadata(EndRollQuality.Poor, OnEndRollQualityChanged));
-
-        /// <summary>
-        /// 映像品質を取得または設定します。
-        /// </summary>
-        public EndRollQuality EndRollQuality
-        {
-            get { return (EndRollQuality)GetValue(EndRollQualityProperty); }
-            set { SetValue(EndRollQualityProperty, value); }
-        }
-
-        private static void OnEndRollQualityChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var self = (ShogiEndRollControl)d;
-            var quality = (EndRollQuality)e.NewValue;
-
-            // 映像の更新間隔を設定します。
-            self.interval = TimeSpan.FromSeconds(1.0 / EndRollQualityUtil.GetFPS(quality));
-        }
-
         /// <summary>
         /// フォーマットファイルのパスを扱う依存プロパティです。
         /// </summary>
@@ -99,6 +74,102 @@ namespace VoteSystem.PluginShogi.View
             }
         }
 
+        /// <summary>
+        /// テスト用の参加者を表示するかどうかを扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty IsTestProperty =
+            DependencyProperty.Register(
+                "IsTest", typeof(bool), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(false));
+
+        /// <summary>
+        /// テスト用の参加者を表示するかどうかを取得または設定します。
+        /// </summary>
+        public bool IsTest
+        {
+            get { return (bool)GetValue(IsTestProperty); }
+            set { SetValue(IsTestProperty, value); }
+        }
+
+        /// <summary>
+        /// 映像品質を扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty EndRollQualityProperty =
+            DependencyProperty.Register(
+                "EndRollQuality", typeof(EndRollQuality), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(EndRollQuality.Poor, OnEndRollQualityChanged));
+
+        /// <summary>
+        /// 映像品質を取得または設定します。
+        /// </summary>
+        public EndRollQuality EndRollQuality
+        {
+            get { return (EndRollQuality)GetValue(EndRollQualityProperty); }
+            set { SetValue(EndRollQualityProperty, value); }
+        }
+
+        private static void OnEndRollQualityChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var self = (ShogiEndRollControl)d;
+            var quality = (EndRollQuality)e.NewValue;
+
+            // 映像の更新間隔を設定します。
+            self.interval = TimeSpan.FromSeconds(1.0 / EndRollQualityUtil.GetFPS(quality));
+        }
+
+        /// <summary>
+        /// 最大表示視聴者数を扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty MaximumDisplayListenersProperty =
+            DependencyProperty.Register(
+                "MaximumDisplayListeners", typeof(int), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(100));
+
+        /// <summary>
+        /// 最大表示視聴者数を取得または設定します。
+        /// </summary>
+        public int MaximumDisplayListeners
+        {
+            get { return (int)GetValue(MaximumDisplayListenersProperty); }
+            set { SetValue(MaximumDisplayListenersProperty, value); }
+        }
+
+        /// <summary>
+        /// 最大表示生主数を扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty MaximumDisplayLiveOwnersProperty =
+            DependencyProperty.Register(
+                "MaximumDisplayLiveOwners", typeof(int), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(100));
+
+        /// <summary>
+        /// 最大表示生主数を取得または設定します。
+        /// </summary>
+        public int MaximumDisplayLiveOwners
+        {
+            get { return (int)GetValue(MaximumDisplayLiveOwnersProperty); }
+            set { SetValue(MaximumDisplayLiveOwnersProperty, value); }
+        }
+
+        /// <summary>
+        /// 将棋盤の不透明度を扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty ShogiOpacityProperty =
+            DependencyProperty.Register(
+                "ShogiOpacity", typeof(double), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(0.3));
+
+        /// <summary>
+        /// 将棋盤の不透明度を取得または設定します。
+        /// </summary>
+        public double ShogiOpacity
+        {
+            get { return (double)GetValue(ShogiOpacityProperty); }
+            set { SetValue(ShogiOpacityProperty, value); }
+        }
+        #endregion
+
+        #region 動画
         /// <summary>
         /// 動画のダウンロード先URLを扱う依存プロパティです。
         /// </summary>
@@ -134,20 +205,71 @@ namespace VoteSystem.PluginShogi.View
         }
 
         /// <summary>
-        /// 将棋盤の不透明度を扱う依存プロパティです。
+        /// 動画の長さを扱う依存プロパティです。
         /// </summary>
-        public static readonly DependencyProperty ShogiOpacityProperty =
+        public static readonly DependencyProperty MovieDurationProperty =
             DependencyProperty.Register(
-                "ShogiOpacity", typeof(double), typeof(ShogiEndRollControl),
-                new FrameworkPropertyMetadata(0.3));
+                "MovieDuration", typeof(TimeSpan), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(TimeSpan.Zero));
 
         /// <summary>
-        /// 将棋盤の不透明度を取得または設定します。
+        /// 動画の長さを取得または設定します。
         /// </summary>
-        public double ShogiOpacity
+        public TimeSpan MovieDuration
         {
-            get { return (double)GetValue(ShogiOpacityProperty); }
-            set { SetValue(ShogiOpacityProperty, value); }
+            get { return (TimeSpan)GetValue(MovieDurationProperty); }
+            private set { SetValue(MovieDurationProperty, value); }
+        }
+
+        /// <summary>
+        /// 動画の再生位置を扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty PositionProperty =
+            DependencyProperty.Register(
+                "Position", typeof(TimeSpan), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(TimeSpan.Zero, OnPositionChanged));
+
+        /// <summary>
+        /// 動画の再生位置を取得または設定します。
+        /// </summary>
+        public TimeSpan Position
+        {
+            get { return (TimeSpan)GetValue(PositionProperty); }
+            set { SetValue(PositionProperty, value); }
+        }
+
+        private static void OnPositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var self = (ShogiEndRollControl)d;
+            var position = (TimeSpan)e.NewValue;
+
+            self.PositionSeconds = position.TotalSeconds;
+            self.ResetPosition(position);
+        }
+
+        /// <summary>
+        /// 動画の再生位置を扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty PositionSecondsProperty =
+            DependencyProperty.Register(
+                "PositionSeconds", typeof(double), typeof(ShogiEndRollControl),
+                new FrameworkPropertyMetadata(0.0, OnPositionDoubleChanged));
+
+        /// <summary>
+        /// 動画の再生位置を取得または設定します。
+        /// </summary>
+        public double PositionSeconds
+        {
+            get { return (double)GetValue(PositionSecondsProperty); }
+            set { SetValue(PositionSecondsProperty, value); }
+        }
+
+        private static void OnPositionDoubleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var self = (ShogiEndRollControl)d;
+            var seconds = (double)e.NewValue;
+
+            self.Position = TimeSpan.FromSeconds(seconds);
         }
         #endregion
 
@@ -263,7 +385,7 @@ namespace VoteSystem.PluginShogi.View
         /// <summary>
         /// 投票者リストを更新します。
         /// </summary>
-        public static EndRollViewModel GetVoterList()
+        public EndRollViewModel GetVoterList()
         {
             try
             {
@@ -273,8 +395,9 @@ namespace VoteSystem.PluginShogi.View
                 }
 
                 return new EndRollViewModel(
+                    IsTest ?
+                    Protocol.Model.TestVoterList.GetTestVoterList() :
                     ShogiGlobal.VoteClient.GetVoterList());
-                    //Protocol.Model.TestVoterList.GetTestVoterList());
             }
             catch (Exception ex)
             {
@@ -312,6 +435,7 @@ namespace VoteSystem.PluginShogi.View
             EndRoll.DataGetter = GetVoterList;
             ShogiControl.EffectManager = this.effectManager;
 
+            Ending.MoviePlayer.MediaOpened += MoviePlayer_MediaOpened;
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
             DataContext = ShogiGlobal.ShogiModel;
@@ -321,6 +445,27 @@ namespace VoteSystem.PluginShogi.View
             IsMovieMute = false;
             MovieVolume = 50;
             EndRollQuality = EndRollQuality.Best;
+        }
+
+        void MoviePlayer_MediaOpened(object sender, EventArgs e)
+        {
+            try
+            {
+                var player = (MediaPlayer)sender;
+                var duration = player.NaturalDuration;
+                var span =
+                    duration.HasTimeSpan ?
+                    duration.TimeSpan : TimeSpan.Zero;
+
+                Ragnarok.Presentation.WPFUtil.UIProcess(() =>
+                    MovieDuration = span);
+            }
+            catch (Exception ex)
+            {
+                Util.ThrowIfFatal(ex);
+                Log.ErrorException(ex,
+                    "動画の長さの取得に失敗しました。");
+            }
         }
 
         private void OnLoaded(object sender, EventArgs e)
@@ -439,19 +584,21 @@ namespace VoteSystem.PluginShogi.View
         private void Play()
         {
             // エンドロール用の参加者一覧は動画再生直前に取得します。
-            //var obj = GetVoterList();
-            //SaveData(obj);
+            var data = GetVoterList();
+            data.JoinedVoterViewMaximumCount = MaximumDisplayListeners;
+            data.LiveOwnerViewMaximumCount = MaximumDisplayLiveOwners;
+            this.endRollData = data;
 
-            this.endRollData = GetVoterList();
-
+            this.prevPosition = TimeSpan.Zero;
+            Position = TimeSpan.Zero;
             Ending.PlayMovie();
-            //Ending.MoviePlayer.Position = TimeSpan.FromSeconds(300);
 
             // エンディングの前に現局面を設定します。
             var board = ShogiGlobal.ShogiModel.CurrentBoard.Clone();
             board.UndoAll();
             ShogiControl.Board = board;
 
+            // 指し手の設定を行います。
             /*var board = new Board();
             var moveList = BoardExtension.MakeMoveList(SampleMove.Tsume);
             var bmList = board.ConvertMove(moveList);*/
@@ -480,6 +627,10 @@ namespace VoteSystem.PluginShogi.View
             ShogiControl.StopAutoPlay();
             ShogiGrid.Opacity = 0.0;
             MovieBrush.Opacity = 0.0;
+            Position = TimeSpan.Zero;
+
+            this.prevPosition = TimeSpan.Zero;
+            this.autoPlay = null;
             this.endRollData = null;
         }
 
@@ -511,50 +662,82 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         private void UpdatePosition(TimeSpan position)
         {
-            var elapsed = MathEx.Max(
-                TimeSpan.Zero, position - this.prevPosition);
-            if (elapsed < this.interval)
+            using (var result = this.positionLock.Lock())
+            {
+                if (result == null) return;
+
+                var absElapsed = MathEx.Abs(position - this.prevPosition);
+                if (absElapsed < this.interval)
+                {
+                    return;
+                }
+                this.prevPosition = position;
+
+                // スタッフロールの更新
+                if (position < EndRollTimeline.FadeInStartTime ||
+                    position > EndRollTimeline.FadeOutEndTime)
+                {
+                    EndRoll.Stop();
+                }
+                else
+                {
+                    if (EndRoll.State == EndRollState.Stop)
+                    {
+                        var span = EndRollTimeline.VisibleSpan;
+
+                        EndRoll.RollTimeSeconds = (int)Math.Ceiling(span.TotalSeconds);
+                        EndRoll.Play(this.endRollData);
+                    }
+
+                    EndRoll.UpdateScreen(position - EndRollTimeline.FadeInStartTime);
+                }
+
+                // 指し手の自動再生を開始
+                if (position < ShogiTimeline.FadeInEndTime + TimeSpan.FromSeconds(1))
+                {
+                    ShogiControl.StopAutoPlay();
+                }
+                else
+                {
+                    if (ShogiControl.AutoPlayState == AutoPlayState.None)
+                    {
+                        ShogiControl.StartAutoPlay(this.autoPlay);
+                    }
+                }
+
+                // 長い時間でコントロールの更新を行うと
+                // 処理に膨大な時間がかかります。
+                // 動画の途中からの再生時（テスト用）にしか
+                // こんな時間はかからないので、一部の処理をパスします。
+                if (absElapsed < TimeSpan.FromSeconds(10))
+                {
+                    ShogiControl.Render(absElapsed);
+                    ShogiBackground.Render(absElapsed);
+                }
+
+                ShogiGrid.Opacity = ShogiTimeline.GetRatio(position) * ShogiOpacity;
+                MovieBrush.Opacity = MovieTimeline.GetRatio(position);
+                Position = position;
+            }
+        }
+
+        /// <summary>
+        /// エンディングの再生位置を再設定します。
+        /// </summary>
+        public void ResetPosition(TimeSpan position)
+        {
+            if (Ending.MoviePlayer == null)
             {
                 return;
             }
 
-            this.prevPosition = position;
-
-            // スタッフロールの更新
-            if (position > EndRollTimeline.FadeInStartTime &&
-                position < EndRollTimeline.FadeOutEndTime)
+            using (var result = this.positionLock.Lock())
             {
-                if (EndRoll.State == EndRollState.Stop)
-                {
-                    var span = EndRollTimeline.VisibleSpan;
+                if (result == null) return;
 
-                    EndRoll.RollTimeSeconds = (int)Math.Ceiling(span.TotalSeconds);
-                    EndRoll.Play(this.endRollData);
-                }
-
-                EndRoll.UpdateScreen(position - EndRollTimeline.FadeInStartTime);
+                Ending.MoviePlayer.Position = position;
+                UpdatePosition(position);
             }
-
-            // 指し手の自動再生を開始
-            if (this.autoPlay != null &&
-                position > ShogiTimeline.FadeInEndTime + TimeSpan.FromSeconds(1))
-            {
-                ShogiControl.StartAutoPlay(this.autoPlay);
-                this.autoPlay = null;
-            }
-
-            // 長い時間でコントロールの更新を行うと
-            // 処理に膨大な時間がかかります。
-            // 動画の途中からの再生時（テスト用）にしか
-            // こんな時間はかからないので、一部の処理をパスします。
-            if (elapsed < TimeSpan.FromSeconds(10))
-            {
-                ShogiControl.Render(elapsed);
-                ShogiBackground.Render(elapsed);
-            }
-            
-            ShogiGrid.Opacity = ShogiTimeline.GetRatio(position) * ShogiOpacity;
-            MovieBrush.Opacity = MovieTimeline.GetRatio(position);
         }
     }
 }

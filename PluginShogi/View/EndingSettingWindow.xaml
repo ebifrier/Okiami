@@ -4,9 +4,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
+        xmlns:ct="clr-namespace:VoteSystem.Client;assembly=VoteClient"
         xmlns:t="clr-namespace:VoteSystem.PluginShogi"
         xmlns:l="clr-namespace:VoteSystem.PluginShogi.View"
         xmlns:vm="clr-namespace:VoteSystem.PluginShogi.ViewModel"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d" x:Name="window"
         Title="エンディング設定" d:DesignHeight="300" d:DesignWidth="300"
         ResizeMode="NoResize" ShowInTaskbar="False" SizeToContent="WidthAndHeight"
@@ -16,6 +18,11 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Ragnarok.Presentation;component/Themes/Common.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <r:ValueToDecimalConverter x:Key="intConverter"
+                                       SourceType="{x:Type sys:Int32}" />
+            <r:ValueToDecimalConverter x:Key="doubleConverter"
+                                       SourceType="{x:Type sys:Double}" />
 
             <ControlTemplate x:Key="soundTemplate">
                 <Image Source="pack://application:,,,/VoteProtocol;component/Resources/Image/sound_none.png"
@@ -33,7 +40,7 @@
                 <Setter Property="Template" Value="{StaticResource soundTemplate}" />
                 
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsMute, ElementName=window}"
+                    <DataTrigger Binding="{Binding IsMovieMute}"
                                  Value="True">
                         <Setter Property="Template" Value="{StaticResource soundMuteTemplate}" />
                     </DataTrigger>
@@ -42,13 +49,7 @@
         </ResourceDictionary>
     </Window.Resources>
     
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        
+    <StackPanel Orientation="Vertical">        
         <StackPanel Orientation="Horizontal"
                     Margin="5">
             <Button Style="{StaticResource ToolBarButtonStyle}"
@@ -73,14 +74,28 @@
                     VerticalAlignment="Center"
                     Minimum="0" Maximum="100" SmallChange="1"
                     AutoToolTipPlacement="TopLeft"
-                    Value="{Binding Volume, ElementName=window}" />
+                    Value="{Binding MovieVolume}" />
         </StackPanel>
 
-        <GroupBox Grid.Row="1"
-                  Header="設定"
-                  Padding="5">
+        <GroupBox Header="再生位置" Padding="5"
+                  Visibility="{x:Static ct:Global.IsNonPublishedVisibility}">
+            <Slider HorizontalAlignment="Stretch"
+                    IsSnapToTickEnabled="True"
+                    IsMoveToPointEnabled="True"
+                    VerticalAlignment="Center"
+                    Minimum="0" Maximum="{Binding MovieDuration.TotalSeconds}"
+                    SmallChange="1"
+                    AutoToolTipPlacement="TopLeft"
+                    Value="{Binding PositionSeconds}"
+                    ValueChanged="PositionSlider_ValueChanged" />
+        </GroupBox>
+
+        <GroupBox Header="設定" Padding="5">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
@@ -88,29 +103,65 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                
-                <Label Content="映像品質:" />
-                <ComboBox Grid.Row="0" Grid.Column="1"
+
+                <CheckBox Grid.Row="0" Grid.ColumnSpan="2"
+                          Margin="4"
+                          Content="テスト用の名前を流す"
+                          IsChecked="{Binding IsTest}" />
+
+                <Label Grid.Row="1" Content="映像品質:" />
+                <ComboBox Grid.Row="1" Grid.Column="1"
                           HorizontalAlignment="Left"
+                          VerticalAlignment="Center"
                           ItemsSource="{r:EnumList EnumType={x:Type t:EndRollQuality}}"
                           DisplayMemberPath="Label"
                           SelectedValuePath="Value"
-                          SelectedValue="{Binding EndRollQuality, ElementName=window}"
+                          SelectedValue="{Binding EndRollQuality}"
                           ToolTip="処理落ちしたり、画面がカクカクする場合は更新してみてください。" />
+
+                <Label Grid.Row="2" Content="将棋盤の不透明度:" />
+                <r:NumericUpDown Grid.Row="2" Grid.Column="1"
+                                 MinWidth="60"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 Minimum="0.0" Maximum="1.0"
+                                 Step="0.01"
+                                 Value="{Binding ShogiOpacity,
+                                                 Converter={StaticResource doubleConverter}}"
+                                 ToolTip="右下の将棋盤の不透明度を指定します。" />
+
+                <Label Grid.Row="3" Content="最大視聴者数:" />
+                <r:NumericUpDown Grid.Row="3" Grid.Column="1"
+                                 MinWidth="60"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 Minimum="0" Maximum="10000"
+                                 Value="{Binding MaximumDisplayListeners,
+                                                 Converter={StaticResource intConverter}}"
+                                 ToolTip="エンドロールに表示する視聴者の最大数を指定します。" />
+
+                <Label Grid.Row="4" Content="最大放送主数:" />
+                <r:NumericUpDown Grid.Row="4" Grid.Column="1"
+                                 MinWidth="60"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 Minimum="0" Maximum="10000"
+                                 Value="{Binding MaximumDisplayLiveOwners,
+                                                 Converter={StaticResource intConverter}}"
+                                 ToolTip="エンドロールに表示する放送主の最大数を指定します。" />
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="2"
-                  Header="エンディングモード"
-                  Padding="5">
+        <GroupBox Header="エンディングモード" Padding="5">
             <StackPanel Orientation="Vertical">
                 <CheckBox IsChecked="{Binding IsEndingMode, ElementName=window}"
                           Content="エンディングモード状態にする。" />
                 <TextBlock Margin="5,5,5,0" Foreground="Gray">
                     ※ チェックすると画面をフルスクリーンで表示するために<LineBreak />
-                    　一部のメニューやバーなどを隠します。
+                    　一部のメニューやバーなどを隠します。<LineBreak />
+                    　戻すときはメインウィンドウの右クリックからでもを行えます。
                 </TextBlock>
             </StackPanel>
         </GroupBox>
-    </Grid>
+    </StackPanel>
 </Window>

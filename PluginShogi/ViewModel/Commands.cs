@@ -825,13 +825,13 @@ namespace VoteSystem.PluginShogi.ViewModel
             try
             {
                 // 念のため、確認ダイアログを出します。
-                var result = DialogUtil.Show(
+                var dialog = DialogUtil.CreateDialog(
                     ShogiGlobal.MainWindow,
                     "エンディングを停止しますがよろしいですか？",
                     "停止確認",
                     MessageBoxButton.YesNo,
                     MessageBoxResult.No);
-                if (result != MessageBoxResult.Yes)
+                if (dialog.ShowDialogCenterMouse() != true)
                 {
                     return;
                 }
