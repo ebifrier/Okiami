@@ -41,5 +41,13 @@
 	<include name="${output.dir}/VoteProtocol.dll" />
       </references>
     </csc>
+
+    <copy todir="${output.dir}">
+      <fileset>
+	<include name="VoteServer.exe.nlog" />
+      </fileset>
+    </copy>
+    <copy file="app.config"
+	  tofile="${output.dir}/VoteServer.exe.config" />
   </target>
 </project>

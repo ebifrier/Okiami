@@ -14,8 +14,9 @@ test -f /usr/sbin/cron || exit 0
 #PIDFILE=/var/run/vote-server.pid
 PIDFILE=/tmp/vote-server.pid
 SERVER_DIR=/home/ebifrier/programs/VoteSystem/VoteServer
-SERVER=${SERVER_DIR}/../bin/VoteServer.exe
-DAEMON=/usr/bin/mono-service2
+BIN_DIR=${SERVER_DIR}/../bin
+SERVER=VoteServer.exe
+DAEMON="env MONO_OPTIONS=--runtime=v4.0 /usr/bin/mono-service2"
 USER=ebifrier
 
 . /lib/lsb/init-functions
@@ -24,7 +25,7 @@ start() {
     log_daemon_msg "Starting vote-system server" "Server"
 
     cd $SERVER_DIR
-    $DAEMON -l:$PIDFILE $SERVER
+    $DAEMON -d:$BIN_DIR -l:$PIDFILE $SERVER
     log_end_msg $?
 }
 
