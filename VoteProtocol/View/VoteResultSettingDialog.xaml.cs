@@ -25,7 +25,7 @@ namespace VoteSystem.Protocol.View
     /// </summary>
     public partial class VoteResultSettingDialog : Window
     {
-        private sealed class InternalModel : CloneModel
+        private sealed class InternalModel : ViewModelProxy
         {
             private Color backgroundColor;
             private Color foregroundColor;
@@ -76,14 +76,8 @@ namespace VoteSystem.Protocol.View
                 }
             }
 
-            public decimal StrokeThicknessInternal
-            {
-                get { return (decimal)this["StrokeThicknessInternal"]; }
-                set { this["StrokeThicknessInternal"] = value; }
-            }
-
-            [DependOnProperty("IsShowStroke")]
-            [DependOnProperty("StrokeThicknessInternal")]
+            [DependOnProperty(typeof(VoteResultControl), "IsShowStroke")]
+            [DependOnProperty(typeof(VoteResultControl), "StrokeThicknessInternal")]
             public decimal StrokeThickness
             {
                 get
@@ -164,9 +158,6 @@ namespace VoteSystem.Protocol.View
         /// </summary>
         private void ExecuteYes(object sender, ExecutedRoutedEventArgs e)
         {
-            // OKの場合は、プロパティ値をコントロールに設定します。
-            this.model.SetValuesToTarget(this.control);
-
             DialogResult = true;
         }
 
@@ -175,6 +166,9 @@ namespace VoteSystem.Protocol.View
         /// </summary>
         private void ExecuteNo(object sender, ExecutedRoutedEventArgs e)
         {
+            // Cancelの場合は、プロパティ値を元の状態に戻します。
+            this.model.RollbackViewModel();
+
             DialogResult = false;
         }
     }

@@ -161,12 +161,12 @@
                            Height="40" Margin="3"
                            Background="{Binding Background}">
                     <Viewbox>
-                        <r:DecoratedText Foreground="{Binding Foreground}"
-                                         Stroke="{Binding Stroke}"
-                                         StrokeThickness="{Binding StrokeThickness}"
-                                         FontFamily="{Binding FontFamily}"
-                                         FontStyle="{Binding FontStyle}"
-                                         FontWeight="{Binding FontWeight}"
+                        <r:DecoratedText Foreground="{Binding Foreground, Mode=OneWay}"
+                                         Stroke="{Binding Stroke, Mode=OneWay}"
+                                         StrokeThickness="{Binding StrokeThickness, Mode=OneWay}"
+                                         FontFamily="{Binding FontFamily, Mode=OneWay}"
+                                         FontStyle="{Binding FontStyle, Mode=OneWay}"
+                                         FontWeight="{Binding FontWeight, Mode=OneWay}"
                                          Text="サンプル ３五龍 同歩成" />
                     </Viewbox>
                 </DockPanel>
