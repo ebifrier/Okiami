@@ -96,6 +96,7 @@
                                                   Converter={StaticResource fontFamilyConverter}}"
                              FontWeight="{Binding Settings.VR_FontWeight}"
                              FontStyle="{Binding Settings.VR_FontStyle}"
+                             IsShowThinkTime="{Binding Settings.VR_IsShowThinkTime}"
                              IsShowStroke="{Binding Settings.VR_IsShowStroke}"
                              StrokeThicknessInternal="{Binding Settings.VR_StrokeThicknessInternal}"
                              DisplayCandidateCount="{Binding Settings.VR_DisplayResultCount}"

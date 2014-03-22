@@ -232,6 +232,26 @@ namespace VoteSystem.Protocol.View
         }
 
         /// <summary>
+        /// 思考時間を表示するかどうかを示す依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty IsShowThinkTimeProperty =
+            DependencyProperty.Register(
+                "IsShowThinkTime",
+                typeof(bool),
+                typeof(VoteResultControl),
+                new FrameworkPropertyMetadata(true,
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+        /// <summary>
+        /// 思考時間を表示するかどうかを取得または設定します。
+        /// </summary>
+        public bool IsShowThinkTime
+        {
+            get { return (bool)GetValue(IsShowThinkTimeProperty); }
+            set { SetValue(IsShowThinkTimeProperty, value); }
+        }
+
+        /// <summary>
         /// ポイントを全角で表示するかを扱う依存プロパティです。
         /// </summary>
         public static readonly DependencyProperty IsDisplayPointFullWidthProperty =

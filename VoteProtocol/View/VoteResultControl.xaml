@@ -179,6 +179,9 @@
                                 Content="持ち時間"
                                 HorizontalAlignment="Left" />
                 <r:TimeSpanView Grid.Row="1" Grid.Column="2"
+                                Visibility="{Binding IsShowTotalVoteTime,
+                                                     RelativeSource={RelativeSource TemplatedParent},
+                                                     Converter={StaticResource visibilityConverterCollapsed}}"
                                 Style="{StaticResource decoratedTextStyle}"
                                 MaxValueText="無制限"
                                 HorizontalAlignment="Right">
@@ -216,11 +219,17 @@
 
                 <!-- 思考時間 -->
                 <ContentControl Grid.Row="4" Grid.Column="0"
+                                Visibility="{Binding IsShowThinkTime,
+                                                     RelativeSource={RelativeSource TemplatedParent},
+                                                     Converter={StaticResource visibilityConverterCollapsed}}"
                                 ContentTemplate="{StaticResource decoratedText}"
                                 Content="思考時間"
                                 HorizontalAlignment="Left"
                                 Opacity="0.6" />
                 <r:TimeSpanView Grid.Row="4" Grid.Column="2"
+                                Visibility="{Binding IsShowThinkTime,
+                                                     RelativeSource={RelativeSource TemplatedParent},
+                                                     Converter={StaticResource visibilityConverterCollapsed}}"
                                 Style="{StaticResource decoratedTextStyle}"
                                 MinValueText=""
                                 MaxValueText="不明"

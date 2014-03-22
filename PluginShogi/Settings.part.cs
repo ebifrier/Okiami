@@ -254,6 +254,16 @@ namespace VoteSystem.PluginShogi
         }
 
         /// <summary>
+        /// 思考時間を表示するかどうかを取得または設定します。
+        /// </summary>
+        [DefaultValue(false)]
+        public bool VR_IsShowThinkTime
+        {
+            get { return (bool)this["VR_IsShowThinkTime"]; }
+            set { this["VR_IsShowThinkTime"] = value; }
+        }
+
+        /// <summary>
         /// フォントファミリ名を取得または設定します。
         /// </summary>
         [DefaultValue("ＭＳ ゴシック")]
