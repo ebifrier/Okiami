@@ -348,7 +348,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 new KeyBinding(ShowEndingSettingWindow,
                     new KeyGesture(Key.E, ModifierKeys.Control | ModifierKeys.Shift)));
             inputs.Add(
-                new KeyBinding(Ragnarok.Presentation.Control.EvaluationControl.OpenSettingDialog,
+                new KeyBinding(Protocol.View.EvaluationControl.OpenSettingDialog,
                     new KeyGesture(Key.L, ModifierKeys.Control | ModifierKeys.Shift)));
             inputs.Add(
                 new KeyBinding(Protocol.View.VoteResultControl.OpenSettingDialog,

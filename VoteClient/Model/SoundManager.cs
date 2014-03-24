@@ -6,11 +6,11 @@ using System.Linq;
 using System.Reflection;
 
 using Ragnarok;
-using Ragnarok.Presentation.Utility;
 
 namespace VoteSystem.Client.Model
 {
-    using VoteSystem.Protocol.Vote;
+    using Protocol.Vote;
+    using Protocol.Model;
 
     /// <summary>
     /// 音声ファイルを再生します。

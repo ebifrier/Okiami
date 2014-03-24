@@ -1,3 +1,8 @@
+2014-03-24  - Ver 1.8.0.2
+
+	* Ragnarok.PresentationからVoteProtocolに評価値関係のクラスやコントロー
+	ルを移動しました。
+
 2014-03-23  - Ver 1.8.0.1
 
 	* VoteProtocol/View/VoteResultControl.cs: 思考時間を表示するかどうかの

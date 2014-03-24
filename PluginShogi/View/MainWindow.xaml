@@ -37,7 +37,7 @@
                 <!-- CommandTargetの指定はwpfのバグを避けるために必要。
                      http://social.msdn.microsoft.com/forums/en-US/wpf/thread/7bd75a7c-eab4-4f3a-967b-94a9534a7455/ -->
                 <MenuItem Header="評価値表示の設定(_E)"
-                          Command="{x:Static r:EvaluationControl.OpenSettingDialog}"
+                          Command="{x:Static s:EvaluationControl.OpenSettingDialog}"
                           CommandTarget="{Binding PlacementTarget,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                 <MenuItem Header="投票結果の設定(_R)"
@@ -91,7 +91,7 @@
 
             <MenuItem Header="設定(_S)">
                 <MenuItem Header="評価値の設定(_R)"
-                          Command="{x:Static r:EvaluationControl.OpenSettingDialog}" />
+                          Command="{x:Static s:EvaluationControl.OpenSettingDialog}" />
                 <MenuItem Header="投票結果の設定(_R)"
                           Command="{x:Static s:VoteResultControl.OpenSettingDialog}" />
                 <Separator />
@@ -204,8 +204,8 @@
                         </Grid.ColumnDefinitions>
                         <Viewbox Stretch="Uniform"
                                  VerticalAlignment="Top">
-                            <r:EvaluationControl x:Name="evaluationControl"
-                                                 ImageSetList="{r:ImageSetList Data/Image}"
+                            <s:EvaluationControl x:Name="evaluationControl"
+                                                 ImageSetList="{s:ImageSetList Data/Image}"
                                                  Visibility="{Binding Settings.AS_IsShowEvaluationValue,
                                                                       Converter={StaticResource visibilityConverterHidden}}"
                                                  SelectedImageSetTitle="{Binding AS_EvaluationImageSetTitle,
