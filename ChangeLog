@@ -2,6 +2,8 @@
 
 	* VoteProtocol/View/VoteResultControl.cs: 思考時間を表示するかどうかの
 	設定用プロパティを追加しました。
+	* VoteProtocol/View/VoteResultSettingDialog.xaml.cs: 設定ダイアログによ
+	る変更が、すぐにコントロールに反映されるようにしました。
 
 2014-03-06  - Ver 1.8.0.0
 
