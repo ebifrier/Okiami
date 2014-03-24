@@ -65,7 +65,7 @@
                              Style="{StaticResource itemStyle}"
                              IsChecked="{Binding PointType,
                                                  Converter={StaticResource enumToBooleanConverter},
-                                                 ConverterParameter=ModeCustom}"
+                                                 ConverterParameter=Server}"
                              Content="評価値サーバー" />
                 <Grid IsEnabled="{Binding IsChecked, ElementName=useServerRadioButton}">
                     <Grid.RowDefinitions>
@@ -86,7 +86,7 @@
 
                     <TextBlock Grid.Row="1" Grid.Column="0"
                            HorizontalAlignment="Right"
-                           Text="ポート番号：" />
+                           Text="ポート：" />
                     <TextBox Grid.Row="1" Grid.Column="1"
                              VerticalAlignment="Center"
                              VerticalContentAlignment="Center" />

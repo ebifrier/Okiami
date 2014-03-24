@@ -32,9 +32,9 @@ namespace VoteSystem.Protocol.View
         /// </summary>
         User,
         /// <summary>
-        /// 各モード固有の値を使います。
+        /// 評価値サーバーの値を使います。
         /// </summary>
-        ModeCustom,
+        Server,
     }
 
     /// <summary>
@@ -105,22 +105,22 @@ namespace VoteSystem.Protocol.View
         }
 
         /// <summary>
-        /// 各モードに固有の評価値を扱う依存プロパティです。
+        /// 評価値サーバーの評価値を扱う依存プロパティです。
         /// </summary>
-        public static readonly DependencyProperty ModeCustomPointProperty =
+        public static readonly DependencyProperty ServerPointProperty =
             DependencyProperty.Register(
-                "ModeCustomPoint",
+                "ServerPoint",
                 typeof(double),
                 typeof(EvaluationControl),
                 new FrameworkPropertyMetadata(0.0, OnPointChanged, CoercePoint));
 
         /// <summary>
-        /// 各モードに固有の評価値を取得または設定します。
+        /// 評価値サーバーの評価値を取得または設定します。
         /// </summary>
-        public double ModeCustomPoint
+        public double ServerPoint
         {
-            get { return (double)GetValue(ModeCustomPointProperty); }
-            set { SetValue(ModeCustomPointProperty, value); }
+            get { return (double)GetValue(ServerPointProperty); }
+            set { SetValue(ServerPointProperty, value); }
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace VoteSystem.Protocol.View
         }
         #endregion
 
-        #region その他のプロパティ
+        #region 画像表示関係
         /// <summary>
         /// 画像セットのリストを扱う依存プロパティです。
         /// </summary>
@@ -259,7 +259,51 @@ namespace VoteSystem.Protocol.View
             get { return (string)GetValue(SelectedImagePathProperty); }
             private set { SetValue(SelectedImagePathProperty, value); }
         }
+        #endregion
 
+        #region 評価値サーバー関係
+        /// <summary>
+        /// 評価値サーバーのアドレスを扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty ServerAddressProperty =
+            DependencyProperty.Register(
+                "ServerAddress",
+                typeof(string),
+                typeof(EvaluationControl),
+                new FrameworkPropertyMetadata(string.Empty,
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+        /// <summary>
+        /// 評価値サーバーのアドレスを取得または設定します。
+        /// </summary>
+        public string ServerAddress
+        {
+            get { return (string)GetValue(ServerAddressProperty); }
+            set { SetValue(ServerAddressProperty, value); }
+        }
+
+        /// <summary>
+        /// 評価値サーバーのポート番号を扱う依存プロパティです。
+        /// </summary>
+        public static readonly DependencyProperty ServerPortProperty =
+            DependencyProperty.Register(
+                "ServerPort",
+                typeof(int),
+                typeof(EvaluationControl),
+                new FrameworkPropertyMetadata(4456,
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+        /// <summary>
+        /// 評価値サーバーのポート番号を取得または設定します。
+        /// </summary>
+        public int ServerPort
+        {
+            get { return (int)GetValue(ServerPortProperty); }
+            set { SetValue(ServerPortProperty, value); }
+        }
+        #endregion
+
+        #region その他のプロパティ
         /// <summary>
         /// 評価値を表示するかどうかを扱う依存プロパティです。
         /// </summary>
@@ -330,6 +374,7 @@ namespace VoteSystem.Protocol.View
         }
 
         private ReentrancyLock imageLock = new ReentrancyLock();
+        private EvaluationClient client;
 
         /// <summary>
         /// 画像セットリストを更新します。
@@ -423,12 +468,38 @@ namespace VoteSystem.Protocol.View
                 case EvaluationPointType.User:
                     EvaluationPoint = UserPoint;
                     break;
-                case EvaluationPointType.ModeCustom:
-                    EvaluationPoint = ModeCustomPoint;
+                case EvaluationPointType.Server:
+                    EvaluationPoint = ServerPoint;
                     break;
             }
 
             UpdateImage();
+        }
+
+        /// <summary>
+        /// 評価値サーバーへの接続を行います。
+        /// </summary>
+        public void Connect()
+        {
+            if (PointType != EvaluationPointType.Server)
+            {
+                this.client.Disconnect();
+                return;
+            }
+
+            this.client.Connect(
+                ServerAddress, ServerPort);
+        }
+
+        void client_CommandReceived(object sender, EvaluationEventArgs e)
+        {
+            if (e.Command != EvaluationCommand.Value)
+            {
+                return;
+            }
+
+            Ragnarok.Presentation.WPFUtil.UIProcess(() =>
+                ServerPoint = e.Value);
         }
 
         /// <summary>
@@ -458,6 +529,9 @@ namespace VoteSystem.Protocol.View
         public EvaluationControl()
         {
             InitializeBindings(this);
+
+            this.client = new EvaluationClient();
+            this.client.CommandReceived += client_CommandReceived;
         }
     }
 }

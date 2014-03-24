@@ -92,9 +92,7 @@
                                  SelectedImageSetTitle="{Binding AS_EvaluationImageSetTitle,
                                                                  Source={x:Static t:Global.Settings}}"
                                  UserPoint="{Binding VoteResult.EvaluationPoint,
-                                                     Source={x:Static t:Global.VoteClient}}"
-                                 ModeCustomPoint="{Binding ModeCustomPoint,
-                                                           Source={x:Static t:Global.MainModel}}" />
+                                                     Source={x:Static t:Global.VoteClient}}" />
         </Viewbox>
 
         <!-- 上下左右の枠 -->

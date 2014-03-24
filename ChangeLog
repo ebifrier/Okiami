@@ -1,3 +1,13 @@
+2014-03-25  - Ver 1.8.0.3
+
+	* VoteProtocol/View/EvaluationControl.cs: 各モードに固定の評価値という
+	考え方をやめ、評価値サーバーから直接評価値を取得するようにしました。
+	* VoteClient/Model/MainModel.cs: ModeCustomPointプロパティを削除しまし
+	た。
+	* VoteProtocol/View/EvaluationSettingDialog.xaml: 評価値コントロールの
+	設定ダイアログに評価値サーバーのアドレスとポートを指定できるようにしま
+	した。ここから評価値を直接取得します。
+
 2014-03-24  - Ver 1.8.0.2
 
 	* Ragnarok.PresentationからVoteProtocolに評価値関係のクラスやコントロー

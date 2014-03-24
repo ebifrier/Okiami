@@ -497,7 +497,7 @@ namespace VoteSystem.PluginShogi
             nameList = (nameList ?? new List<string>());
 
             // 投票モード固有の評価値を設定します。
-            Global.MainModel.ModeCustomPoint = e.Command.Value;
+            //Global.MainModel.ModeCustomPoint = e.Command.Value;
 
             // 初回取得時は、取得のみを行います。
             if (this.whaleNameList == null)

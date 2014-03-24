@@ -143,6 +143,13 @@ namespace VoteSystem.Protocol.Model
         {
             this.connection.Connect(address, port);
         }
+        /// <summary>
+        /// サーバーから切断します。
+        /// </summary>
+        public void Disconnect()
+        {
+            this.connection.Disconnect();
+        }
 
         /// <summary>
         /// データ受信時にコールバックされます。

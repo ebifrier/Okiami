@@ -11,9 +11,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using Ragnarok;
 using Ragnarok.ObjectModel;
 using Ragnarok.Presentation;
-using Ragnarok.Presentation.Utility;
 
 namespace VoteSystem.Protocol.View
 {
@@ -33,6 +33,10 @@ namespace VoteSystem.Protocol.View
             InitializeComponent();
             CommandBindings.Add(
                 new CommandBinding(
+                    RagnarokCommands.OK,
+                    ExecuteOK));
+            CommandBindings.Add(
+                new CommandBinding(
                     RagnarokCommands.Cancel,
                     ExecuteCancel));
 
@@ -43,11 +47,37 @@ namespace VoteSystem.Protocol.View
         }
 
         /// <summary>
+        /// OK
+        /// </summary>
+        private void ExecuteOK(object sender, ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                this.control.Connect();
+
+                DialogResult = false;
+            }
+            catch (Exception ex)
+            {
+                DialogUtil.ShowError(ex,
+                    "評価値サーバーへの接続に失敗しました。");
+            }
+        }
+
+        /// <summary>
         /// Cancel
         /// </summary>
         private void ExecuteCancel(object sender, ExecutedRoutedEventArgs e)
         {
-            this.model.RollbackViewModel();
+            try
+            {
+                this.model.RollbackViewModel();
+            }
+            catch (Exception ex)
+            {
+                Log.ErrorException(ex,
+                    "プロパティ値のロールバックに失敗しました。");
+            }
 
             DialogResult = false;
         }

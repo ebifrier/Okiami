@@ -190,23 +190,6 @@ namespace VoteSystem.Client.Model
         }
 
         /// <summary>
-        /// 投票モードごとに固有の評価値を取得または設定します。
-        /// </summary>
-        /// <remarks>
-        /// この評価値はプラグインから設定されることも想定しています。
-        /// そのため、これはグローバル変数である必要がありますが、
-        /// プロパティ変更通知が送れるグローバル変数を定義する適切な場所が
-        /// 今のシステムにはありません。
-        /// 
-        /// そのため、評価値をこのクラスで定義しています。
-        /// </remarks>
-        public double ModeCustomPoint
-        {
-            get { return GetValue<double>("ModeCustomPoint"); }
-            set { SetValue("ModeCustomPoint", value); }
-        }
-
-        /// <summary>
         /// 投票サーバーから得られたメッセージのリストを取得します。
         /// </summary>
         public ConcurrentQueue<Notification> NotificationQueue
