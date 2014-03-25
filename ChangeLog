@@ -1,3 +1,12 @@
+2014-03-25  - Ver 1.8.0.4
+
+	* VoteClient/Model/Live/LiveNicoClient.cs: リレーコメントを投票サーバー
+	に送らないように＝票としてカウントしないようにしました。
+	* VoteClient/View/Control/VoteLoginControl.xaml: ログイン画面の一部レイ
+	アウトとパスワードボックスの修正を行いました。
+	* VoteProtocol/Model/TestVoterList.cs: サンプル用の参加者リストに参加者
+	を追加しました。
+
 2014-03-25  - Ver 1.8.0.3
 
 	* VoteProtocol/View/EvaluationControl.cs: 各モードに固定の評価値という

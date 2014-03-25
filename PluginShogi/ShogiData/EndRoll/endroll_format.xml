@@ -36,17 +36,31 @@
 	</Lines>
 
 	<Line />
-	<Lines Data="$UnjoinedVoterCount">
+	<Lines Data="$VoterOtherCount">
 		<Line>
 			<Format Column="1" Text="その他" Alignment="Right" />
 			<Format Column="3" Text="$()人" Alignment="Left" />
 		</Line>
 	</Lines>
   
-	<!--<Line Count="2" />
+	<Line Count="2" />
 	<Line>
 		<Format Column="1" ColumnSpan="3" Text="放送主一覧" />
-	</Line>-->
+	</Line>
+  
+  <Lines Data="$LiveOwnerViewList">
+    <Line>
+      <Format Column="1" ColumnSpan="3" Text="$Name" />
+    </Line>
+  </Lines>
+  
+  <Line />
+  <Lines Data="$LiveOwnerOtherCount">
+    <Line>
+      <Format Column="1" Text="その他" Alignment="Right" />
+      <Format Column="3" Text="$()人" Alignment="Left" />
+    </Line>
+  </Lines>
 
   <!-- 放送主一覧とその人数などを表示 -->
   <Line Count="2" />

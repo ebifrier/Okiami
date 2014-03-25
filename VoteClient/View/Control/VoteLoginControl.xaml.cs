@@ -25,21 +25,6 @@ namespace VoteSystem.Client.View.Control
         public VoteLoginControl()
         {
             InitializeComponent();
-
-            if (Global.MainModel != null)
-            {
-                this.password.Password = Global.MainModel.VoteRoomPassword;
-            }
-        }
-
-        private void passwordBox_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            var password = (PasswordBox)sender;
-
-            if (Global.MainModel != null)
-            {
-                Global.MainModel.VoteRoomPassword = password.Password;
-            }
         }
     }
 }

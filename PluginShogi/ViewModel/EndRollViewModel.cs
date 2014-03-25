@@ -15,7 +15,7 @@ namespace VoteSystem.PluginShogi.ViewModel
     /// <summary>
     /// エンディング用のモデルオブジェクトです。
     /// </summary>
-    public sealed class EndRollViewModel : DynamicViewModel
+    public sealed class EndRollViewModel : NotifyObject
     {
         /// <summary>
         /// 自分の名前を取得します。
@@ -300,7 +300,6 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// コンストラクタ
         /// </summary>
         public EndRollViewModel(VoterList voterList)
-            : base(voterList)
         {
             VoterList = voterList;
             JoinedVoterList = GetJoinedVoterList().ToList();

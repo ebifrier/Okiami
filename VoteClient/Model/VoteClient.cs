@@ -1641,12 +1641,10 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public VoteClient(object commenterManager)
+        public VoteClient()
         {
             Global.PluginLoaded +=
                 (sender, e) => Plugin_ConnectHandlers(this.conn);
-            
-            //this.commenterManager = commenterManager;
         }
 
         /// <summary>

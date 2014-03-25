@@ -429,9 +429,7 @@ namespace VoteSystem.Client.Model
                 "IsMirrorMode",
                 (_, __) => UpdateVoteMode());
 
-            //this.commenterManager = new CommenterManager();
-
-            this.voteClient = new VoteClient(null/*this.commenterManager*/);
+            this.voteClient = new VoteClient();
             this.voteClient.NotificationReceived += HandleNotification;
             this.voteClient.PropertyChanged += voteClient_PropertyChanged;
             this.voteClient.StartLeaveTimeTimer();

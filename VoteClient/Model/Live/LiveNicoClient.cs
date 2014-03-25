@@ -266,9 +266,14 @@ namespace VoteSystem.Client.Model.Live
             }
 
             // 主コメや運コメはアリーナのものしか処理しません。
-            if ((comment.CommentType == CommentType.Owner ||
-                 comment.IsManagementComment) &&
+            if ((comment.IsOwnerComment || comment.IsManagementComment) &&
                 roomIndex != 0)
+            {
+                return;
+            }
+
+            // リレーコメントなら無視します。
+            if (comment.IsRelayComment)
             {
                 return;
             }
