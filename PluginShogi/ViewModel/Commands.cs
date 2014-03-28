@@ -1261,8 +1261,9 @@ namespace VoteSystem.PluginShogi.ViewModel
                 var autoPlay = new AutoPlayEx(variation)
                 {
                     IsChangeBackground = true,
-                    IsUseCutIn = true,
+                    IsUseCutIn = false,
                     IsConfirmPlay = false,
+                    Interval = ShogiGlobal.Settings.SD_AutoPlayInterval,
                 };
 
                 model.StartAutoPlay(autoPlay);

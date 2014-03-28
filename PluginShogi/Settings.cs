@@ -44,6 +44,12 @@ namespace VoteSystem.PluginShogi
                         SD_RenderingQuality);
                 }
             }
+
+            if (e.PropertyName == "SD_AutoPlayIntervalMS")
+            {
+                this.NotifyPropertyChanged(
+                    new PropertyChangedEventArgs("SD_AutoPlayInterval"));
+            }
         }
 
         /// <summary>

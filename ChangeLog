@@ -1,3 +1,11 @@
+2014-03-28  - Ver 1.8.0.5
+
+	* PluginShogi/Settings.part.cs: 自動再生の時間を保存するようにしました。
+	* PluginShogi/ViewModel/ShogiWindowViewModel.cs: 自動再生の再生間隔をダ
+	イアログから調整できるようにしました。
+	* PluginShogi/View/Detail/AutoPlaySettingControl.xaml: 自動再生にかかわ
+	る設定用画面を追加しました。
+
 2014-03-25  - Ver 1.8.0.4
 
 	* VoteClient/Model/Live/LiveNicoClient.cs: リレーコメントを投票サーバー

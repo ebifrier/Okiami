@@ -226,7 +226,8 @@
                                 BanBrush="{StaticResource banBrush}"
                                 PieceBoxBrush="{StaticResource komadaiBrush}"
                                 BlackPlayerName="{Binding Settings.SD_BlackPlayerName}"
-                                WhitePlayerName="{Binding Settings.SD_WhitePlayerName}" />
+                                WhitePlayerName="{Binding Settings.SD_WhitePlayerName}"
+                                AutoPlayInterval="{Binding Settings.SD_AutoPlayInterval}" />
             </Grid>
         </Viewbox>
 

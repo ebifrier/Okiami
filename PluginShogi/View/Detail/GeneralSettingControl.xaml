@@ -33,20 +33,20 @@
                        HorizontalAlignment="Right"
                        Content="先手：" />
                 <TextBox Grid.Row="0" Grid.Column="2"
-                         VerticalAlignment="Center"
+                         VerticalContentAlignment="Center"
                          Text="{Binding Settings.SD_BlackPlayerName}" />
 
                 <Label Grid.Row="2" Grid.Column="1"
                        HorizontalAlignment="Right"
                        Content="後手：" />
                 <TextBox Grid.Row="2" Grid.Column="2"
-                         VerticalAlignment="Center"
+                         VerticalContentAlignment="Center"
                          Text="{Binding Settings.SD_WhitePlayerName}" />
 
                 <Label Grid.Row="4" Grid.Column="1"
                        Content="自分の手番：" />
                 <ComboBox Grid.Row="4" Grid.Column="2"
-                          VerticalAlignment="Center"
+                          VerticalContentAlignment="Center"
                           DisplayMemberPath="Label"
                           SelectedValuePath="Value"
                           SelectedValue="{Binding Settings.SD_Teban}"
@@ -77,11 +77,6 @@
                           Content="放送未接続のエラーを出す"
                           IsChecked="{Binding Settings.SD_IsUseLiveNotConnectWarning}"
                           ToolTip="放送主でない場合はチェックを外してください。" />
-
-                <CheckBox Style="{StaticResource checkBoxStyle}"
-                          Content="変化を盤上で再生する"
-                          IsChecked="{Binding Settings.SD_IsUseVariation}"
-                          ToolTip="コメントによる変化を再生しない場合はチェックを外してください。" />
 
                 <CheckBox Style="{StaticResource checkBoxStyle}"
                           Content="現局面を自動的に更新する"

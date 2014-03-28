@@ -525,8 +525,9 @@ namespace VoteSystem.PluginShogi.ViewModel
                 {
                     EffectManager = ShogiGlobal.EffectManager,
                     IsChangeBackground = true,
-                    IsUseCutIn = true,
                     IsConfirmPlay = true,
+                    IsUseCutIn = Settings.HasEffectFlag(Effects.EffectFlag.AutoPlayCutIn),
+                    Interval = Settings.SD_AutoPlayInterval,
                 };
 
                 StartAutoPlay(autoPlay);

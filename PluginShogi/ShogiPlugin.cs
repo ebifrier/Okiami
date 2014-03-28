@@ -322,7 +322,7 @@ namespace VoteSystem.PluginShogi
             }
 
             // 変化を再生しない場合もあります。
-            if (!ShogiGlobal.Settings.SD_IsUseVariation)
+            if (!ShogiGlobal.Settings.SD_IsUseAutoPlay)
             {
                 return;
             }

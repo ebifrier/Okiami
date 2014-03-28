@@ -19,18 +19,13 @@
                   IsChecked="{Binding IsUseCastleEffect}" />
         <CheckBox Content="投票エフェクトを使用"
                   IsChecked="{Binding IsUseVoteEffect}" />
-        <CheckBox Content="自動再生時の駒エフェクトを使用"
-                  IsChecked="{Binding IsUseAutoPlayEffect}" />
-        <CheckBox Content="自動再生時のカットインエフェクトを使用"
-                  IsChecked="{Binding IsUseAutoPlayCutIn}" />
     </StackPanel>
     
     <StackPanel Orientation="Vertical"
                 x:Key="effectSettingControl">
         <CheckBox Content="エフェクトを使用する"
-                  Margin="5"
-                  Name="isUseEffectCB"
-                  IsChecked="{Binding Settings.SD_IsUseEffect}" />
+                  IsChecked="{Binding Settings.SD_IsUseEffect}"
+                  Margin="5" />
         
         <GroupBox Header="エフェクト設定"
                   IsEnabled="{Binding Settings.SD_IsUseEffect}">

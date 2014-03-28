@@ -148,13 +148,6 @@ namespace VoteSystem.PluginShogi
         }
 
         [DefaultValue(true)]
-        public bool SD_IsUseVariation
-        {
-            get { return GetValue<bool>("SD_IsUseVariation"); }
-            set { SetValue("SD_IsUseVariation", value); }
-        }
-
-        [DefaultValue(true)]
         public bool SD_IsPostCurrentBoardComment
         {
             get { return GetValue<bool>("SD_IsPostCurrentBoardComment"); }
@@ -202,6 +195,29 @@ namespace VoteSystem.PluginShogi
         {
             get { return GetValue<EffectFlag>("SD_EffectFlag"); }
             set { SetValue("SD_EffectFlag", value); }
+        }
+        #endregion
+
+        #region 自動再生
+        [DefaultValue(true)]
+        public bool SD_IsUseAutoPlay
+        {
+            get { return GetValue<bool>("SD_IsUseAutoPlay"); }
+            set { SetValue("SD_IsUseAutoPlay", value); }
+        }
+
+        [DefaultValue(1000)]
+        public int SD_AutoPlayIntervalMS
+        {
+            get { return GetValue<int>("SD_AutoPlayIntervalMS"); }
+            set { SetValue("SD_AutoPlayIntervalMS", value); }
+        }
+
+        [IgnoreSerialized()]
+        public TimeSpan SD_AutoPlayInterval
+        {
+            get { return TimeSpan.FromMilliseconds(SD_AutoPlayIntervalMS); }
+            set { SD_AutoPlayIntervalMS = (int)value.TotalMilliseconds; }
         }
         #endregion
 
