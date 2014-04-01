@@ -17,6 +17,7 @@ using System.Windows.Threading;
 using Ragnarok;
 using Ragnarok.Shogi;
 using Ragnarok.Utility;
+using Ragnarok.Presentation;
 using Ragnarok.Presentation.Shogi;
 
 namespace VoteSystem.PluginShogi.View
@@ -123,7 +124,7 @@ namespace VoteSystem.PluginShogi.View
         public static readonly DependencyProperty MaximumDisplayListenersProperty =
             DependencyProperty.Register(
                 "MaximumDisplayListeners", typeof(int), typeof(ShogiEndRollControl),
-                new FrameworkPropertyMetadata(100));
+                new FrameworkPropertyMetadata(300));
 
         /// <summary>
         /// 最大表示視聴者数を取得または設定します。
@@ -140,7 +141,7 @@ namespace VoteSystem.PluginShogi.View
         public static readonly DependencyProperty MaximumDisplayLiveOwnersProperty =
             DependencyProperty.Register(
                 "MaximumDisplayLiveOwners", typeof(int), typeof(ShogiEndRollControl),
-                new FrameworkPropertyMetadata(100));
+                new FrameworkPropertyMetadata(30));
 
         /// <summary>
         /// 最大表示生主数を取得または設定します。
@@ -457,7 +458,7 @@ namespace VoteSystem.PluginShogi.View
                     duration.HasTimeSpan ?
                     duration.TimeSpan : TimeSpan.Zero;
 
-                Ragnarok.Presentation.WPFUtil.UIProcess(() =>
+                WPFUtil.UIProcess(() =>
                     MovieDuration = span);
             }
             catch (Exception ex)
@@ -478,7 +479,7 @@ namespace VoteSystem.PluginShogi.View
                 StartPrepare(ShogiGlobal.StartEndrollTimeNtp);
             }
 
-            if (!Ragnarok.Presentation.WPFUtil.IsInDesignMode)
+            if (!WPFUtil.IsInDesignMode)
             {
                 CompositionTarget.Rendering += (_, __) => Update();
             }

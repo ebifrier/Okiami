@@ -1,3 +1,16 @@
+2014-04-01  - Ver 1.8.0.6
+
+	* PluginShogi/ShogiData/EndRoll/endroll_format.xml: 参加者一覧の後に
+	「名前　メッセージ」を表示するようにしました。
+	* PluginShogi/View/CurrentBoardSetupDialog.xaml: ラベルを一部変更しまし
+	た。
+	* PluginShogi/View/EndingSettingWindow.xaml.cs: 不要な依存プロパティを
+	削除しました。
+	* PluginShogi/View/MainWindow.xaml: メインウィンドウに現局面にかかわる
+	メニュー項目を追加しました。
+	* PluginShogi/ViewModel/Commands.cs: エンディングウィンドウを２つ以上出
+	せないようにしました。
+
 2014-03-28  - Ver 1.8.0.5
 
 	* PluginShogi/Settings.part.cs: 自動再生の時間を保存するようにしました。

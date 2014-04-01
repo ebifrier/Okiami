@@ -89,7 +89,7 @@
 
                 <RadioButton x:Name="myTurnButton"
                              Margin="0,10,0,0"
-                             Content="こちらの手番" 
+                             Content="次は相手の手番" 
                              IsChecked="{Binding SelectedRadioButton,
                                                  RelativeSource={RelativeSource AncestorType=Window},
                                                  Converter={StaticResource enumToBooleanConverter},
@@ -101,7 +101,7 @@
 
                 <RadioButton x:Name="yourTurnButton"
                              Margin="0,15,0,0"
-                             Content="相手の手番"
+                             Content="次はこちらの手番"
                              IsChecked="{Binding SelectedRadioButton,
                                                  RelativeSource={RelativeSource AncestorType=Window},
                                                  Converter={StaticResource enumToBooleanConverter},

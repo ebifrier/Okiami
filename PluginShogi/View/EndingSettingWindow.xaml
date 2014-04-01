@@ -9,10 +9,9 @@
         xmlns:l="clr-namespace:VoteSystem.PluginShogi.View"
         xmlns:vm="clr-namespace:VoteSystem.PluginShogi.ViewModel"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        mc:Ignorable="d" x:Name="window"
+        mc:Ignorable="d"
         Title="エンディング設定" d:DesignHeight="300" d:DesignWidth="300"
-        ResizeMode="NoResize" ShowInTaskbar="False" SizeToContent="WidthAndHeight"
-        WindowStyle="ToolWindow">
+        ResizeMode="NoResize" ShowInTaskbar="False" SizeToContent="WidthAndHeight">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -46,6 +45,13 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+            
+            <Style x:Key="updownStyle" TargetType="r:NumericUpDown">
+                <Setter Property="MinWidth" Value="60" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Margin" Value="0,4,0,0" />
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
     
@@ -65,9 +71,9 @@
                     ToolTip="エンディングを停止します。"
                     Command="{x:Static vm:Commands.StopEndRoll}" />
 
-            <Button Style="{StaticResource soundButtonStyle}"
+            <CheckBox Style="{StaticResource soundButtonStyle}"
                     Margin="10,0,0,0"
-                    Click="MuteButton_Click" />
+                    IsChecked="{Binding IsMovieMute}" />
             <Slider Width="150"
                     IsSnapToTickEnabled="True"
                     IsMoveToPointEnabled="True"
@@ -112,7 +118,7 @@
                 <Label Grid.Row="1" Content="映像品質:" />
                 <ComboBox Grid.Row="1" Grid.Column="1"
                           HorizontalAlignment="Left"
-                          VerticalAlignment="Center"
+                          VerticalContentAlignment="Center"
                           ItemsSource="{r:EnumList EnumType={x:Type t:EndRollQuality}}"
                           DisplayMemberPath="Label"
                           SelectedValuePath="Value"
@@ -121,20 +127,16 @@
 
                 <Label Grid.Row="2" Content="将棋盤の不透明度:" />
                 <r:NumericUpDown Grid.Row="2" Grid.Column="1"
-                                 MinWidth="60"
-                                 HorizontalAlignment="Left"
-                                 VerticalAlignment="Center"
-                                 Minimum="0.0" Maximum="1.0"
-                                 Step="0.01"
+                                 Style="{StaticResource updownStyle}"
+                                 Minimum="0.0" Maximum="1.0" Step="0.01"
                                  Value="{Binding ShogiOpacity,
                                                  Converter={StaticResource doubleConverter}}"
+                                 TextFormat="{}{0:F2}"
                                  ToolTip="右下の将棋盤の不透明度を指定します。" />
 
                 <Label Grid.Row="3" Content="最大視聴者数:" />
                 <r:NumericUpDown Grid.Row="3" Grid.Column="1"
-                                 MinWidth="60"
-                                 HorizontalAlignment="Left"
-                                 VerticalAlignment="Center"
+                                 Style="{StaticResource updownStyle}"
                                  Minimum="0" Maximum="10000"
                                  Value="{Binding MaximumDisplayListeners,
                                                  Converter={StaticResource intConverter}}"
@@ -142,9 +144,7 @@
 
                 <Label Grid.Row="4" Content="最大放送主数:" />
                 <r:NumericUpDown Grid.Row="4" Grid.Column="1"
-                                 MinWidth="60"
-                                 HorizontalAlignment="Left"
-                                 VerticalAlignment="Center"
+                                 Style="{StaticResource updownStyle}"
                                  Minimum="0" Maximum="10000"
                                  Value="{Binding MaximumDisplayLiveOwners,
                                                  Converter={StaticResource intConverter}}"
@@ -154,7 +154,8 @@
 
         <GroupBox Header="エンディングモード" Padding="5">
             <StackPanel Orientation="Vertical">
-                <CheckBox IsChecked="{Binding IsEndingMode, ElementName=window}"
+                <CheckBox IsChecked="{Binding IsEndingMode,
+                                              Source={x:Static t:ShogiGlobal.GlobalModel}}"
                           Content="エンディングモード状態にする。" />
                 <TextBlock Margin="5,5,5,0" Foreground="Gray">
                     ※ チェックすると画面をフルスクリーンで表示するために<LineBreak />

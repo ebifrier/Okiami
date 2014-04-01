@@ -40,7 +40,7 @@
         <Button Style="{StaticResource ToolBarButtonStyle}"
                 Content="pack://application:,,,/PluginShogi;component/Resources/Image/back_to_current_board.png"
                 ToolTip="現局面に戻す"
-                Command="{x:Static svm:Commands.SetBackToCurrentBoard}" />
+                Command="{x:Static svm:Commands.RefreshCurrentBoard}" />
         <Button Style="{StaticResource ToolBarButtonStyle}"
                 Content="pack://application:,,,/PluginShogi;component/Resources/Image/get_current_board.png"
                 ToolTip="現局面をサーバーから取得"
@@ -48,7 +48,7 @@
         <Button Style="{StaticResource ToolBarButtonStyle}"
                 Content="pack://application:,,,/PluginShogi;component/Resources/Image/set_current_board.png"
                 ToolTip="現局面にサーバーに設定"
-                Command="{x:Static svm:Commands.SetCurrentBoard}" />
+                Command="{x:Static svm:Commands.SetCurrentBoardToServer}" />
         
         <Separator />
 
@@ -157,11 +157,11 @@
         <Separator />
 
         <MenuItem Header="現局面に戻す"
-                  Command="{x:Static svm:Commands.SetBackToCurrentBoard}"
+                  Command="{x:Static svm:Commands.RefreshCurrentBoard}"
                   CommandTarget="{Binding PlacementTarget,
                                           RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
         <MenuItem Header="現局面に設定する"
-                  Command="{x:Static svm:Commands.SetCurrentBoard}"
+                  Command="{x:Static svm:Commands.SetCurrentBoardToServer}"
                   CommandTarget="{Binding PlacementTarget,
                                           RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
         <Separator />

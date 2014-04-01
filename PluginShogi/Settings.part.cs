@@ -238,7 +238,7 @@ namespace VoteSystem.PluginShogi
         #endregion
         #endregion
 
-        #region VoteResultWindow
+        #region VoteResult Window
         /// <summary>
         /// ウィンドウ色を取得または設定します。
         /// </summary>
@@ -354,6 +354,58 @@ namespace VoteSystem.PluginShogi
         {
             get { return (decimal)this["VR_StrokeThicknessInternal"]; }
             set { this["VR_StrokeThicknessInternal"] = value; }
+        }
+        #endregion
+
+        #region Ending Window
+        /// <summary>
+        /// エンドロールの映像品質を取得または設定します。
+        /// </summary>
+        [DefaultValue(EndRollQuality.Best)]
+        public EndRollQuality ED_EndRollQuality
+        {
+            get { return GetValue<EndRollQuality>("ED_EndRollQuality"); }
+            set { SetValue("ED_EndRollQuality", value); }
+        }
+
+        /// <summary>
+        /// 将棋盤の不透明度を取得または設定します。
+        /// </summary>
+        [DefaultValue(0.3)]
+        public double ED_ShogiOpacity
+        {
+            get { return GetValue<double>("ED_ShogiOpacity"); }
+            set { SetValue("ED_ShogiOpacity", value); }
+        }
+
+        /// <summary>
+        /// 最大視聴者数を取得または設定します。
+        /// </summary>
+        [DefaultValue(200)]
+        public int ED_MaximumDisplayListeners
+        {
+            get { return GetValue<int>("ED_MaximumDisplayListeners"); }
+            set { SetValue("ED_MaximumDisplayListeners", value); }
+        }
+
+        /// <summary>
+        /// 最大放送主数を取得または設定します。
+        /// </summary>
+        [DefaultValue(20)]
+        public int ED_MaximumDisplayLiveOwners
+        {
+            get { return GetValue<int>("ED_MaximumDisplayLiveOwners"); }
+            set { SetValue("ED_MaximumDisplayLiveOwners", value); }
+        }
+
+        /// <summary>
+        /// 動画音量を取得または設定します。
+        /// </summary>
+        [DefaultValue(50)]
+        public int ED_MovieVolume
+        {
+            get { return GetValue<int>("ED_MovieVolume"); }
+            set { SetValue("ED_MovieVolume", value); }
         }
         #endregion
     }

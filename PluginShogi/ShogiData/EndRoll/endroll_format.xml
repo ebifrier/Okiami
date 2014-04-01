@@ -27,7 +27,11 @@
 	<Line>
 		<Format Column="1" ColumnSpan="3" Text="参加者一覧" />
 	</Line>
-
+  <Line>
+    <Format Column="1" Text="名前" Alignment="Right" />
+    <Format Column="3" Text="メッセージ" Alignment="Left" />
+  </Line>
+  <Line />
 	<Lines Data="$JoinedVoterViewList">
 		<Line>
 			<Format Column="1" Text="$Name" Alignment="Right" />

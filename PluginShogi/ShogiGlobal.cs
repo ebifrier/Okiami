@@ -173,6 +173,15 @@ namespace VoteSystem.PluginShogi
         }
 
         /// <summary>
+        /// エンディングの設定ウィンドウを取得または設定します。
+        /// </summary>
+        public static View.EndingSettingWindow EndingSettingWindow
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 設定オブジェクトを取得します。
         /// </summary>
         public static Settings Settings

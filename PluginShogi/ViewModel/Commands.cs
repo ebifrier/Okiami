@@ -27,14 +27,6 @@ namespace VoteSystem.PluginShogi.ViewModel
     public static class Commands
     {
         /// <summary>
-        /// 将棋盤を表示します。
-        /// </summary>
-        public static readonly ICommand ShowBoard =
-            new RoutedUICommand(
-                "将棋盤を表示します。",
-                "ShowBoard",
-                typeof(Window));
-        /// <summary>
         /// 設定ダイアログを表示します。
         /// </summary>
         public static readonly ICommand ShowSettingDialog =
@@ -118,20 +110,20 @@ namespace VoteSystem.PluginShogi.ViewModel
                 typeof(Window));
 
         /// <summary>
-        /// 現局面を設定します。
-        /// </summary>
-        public static readonly ICommand SetCurrentBoard =
-            new RoutedUICommand(
-                "表示されている局面を現局面に設定します。",
-                "SetCurrentBoard",
-                typeof(Window));
-        /// <summary>
         /// 現局面に戻します。
         /// </summary>
-        public static readonly ICommand SetBackToCurrentBoard =
+        public static readonly ICommand RefreshCurrentBoard =
             new RoutedUICommand(
                 "表示されている局面を現局面に戻します。",
-                "SetBackToCurrentBoard",
+                "RefreshCurrentBoard",
+                typeof(Window));
+        /// <summary>
+        /// 現局面を設定します。
+        /// </summary>
+        public static readonly ICommand SetCurrentBoardToServer =
+            new RoutedUICommand(
+                "現局面をサーバーに設定します。",
+                "SetCurrentBoardToServer",
                 typeof(Window));
         /// <summary>
         /// 投票ルームから現局面を取得します。
@@ -272,11 +264,11 @@ namespace VoteSystem.PluginShogi.ViewModel
 
             bindings.Add(
                 new CommandBinding(
-                    SetCurrentBoard,
+                    SetCurrentBoardToServer,
                     ExecuteSetCurrentBoard, CanExecute));
             bindings.Add(
                 new CommandBinding(
-                    SetBackToCurrentBoard,
+                    RefreshCurrentBoard,
                     ExecuteSetBackToCurrentBoard, CanExecute));
             bindings.Add(
                 new CommandBinding(
@@ -342,17 +334,27 @@ namespace VoteSystem.PluginShogi.ViewModel
                     new KeyGesture(Key.C, ModifierKeys.Control)));
 
             inputs.Add(
+                new KeyBinding(RefreshCurrentBoard,
+                    new KeyGesture(Key.R, ModifierKeys.Control)));
+
+            inputs.Add(
                 new KeyBinding(ShowSettingDialog,
                     new KeyGesture(Key.D, ModifierKeys.Control | ModifierKeys.Shift)));
             inputs.Add(
+                new KeyBinding(SetCurrentBoardToServer,
+                    new KeyGesture(Key.C, ModifierKeys.Control | ModifierKeys.Shift)));
+            inputs.Add(
                 new KeyBinding(ShowEndingSettingWindow,
                     new KeyGesture(Key.E, ModifierKeys.Control | ModifierKeys.Shift)));
+            inputs.Add(
+                new KeyBinding(ShowMoveManageView,
+                    new KeyGesture(Key.V, ModifierKeys.Control | ModifierKeys.Shift)));
             inputs.Add(
                 new KeyBinding(Protocol.View.EvaluationControl.OpenSettingDialog,
                     new KeyGesture(Key.L, ModifierKeys.Control | ModifierKeys.Shift)));
             inputs.Add(
                 new KeyBinding(Protocol.View.VoteResultControl.OpenSettingDialog,
-                    new KeyGesture(Key.V, ModifierKeys.Control | ModifierKeys.Shift)));
+                    new KeyGesture(Key.R, ModifierKeys.Control | ModifierKeys.Shift)));
 
             inputs.Add(
                 new KeyBinding(NextOfficialBackground,
@@ -371,7 +373,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 e.CanExecute = ShogiGlobal.VoteClient.IsVoteRoomOwner;
             }
 
-            else if (e.Command == SetCurrentBoard)
+            else if (e.Command == SetCurrentBoardToServer)
             {
                 e.CanExecute = ShogiGlobal.VoteClient.IsVoteRoomOwner;
             }
@@ -419,7 +421,6 @@ namespace VoteSystem.PluginShogi.ViewModel
             {
                 ShogiGlobal.ErrorMessage(ex,
                     "設定ダイアログの表示に失敗しました(￣ω￣;)");
-                return;
             }
         }
 
@@ -438,23 +439,23 @@ namespace VoteSystem.PluginShogi.ViewModel
                 }
 
                 // 将棋コントロールを表示します。
-                var moveManageView = new MoveManageView()
+                view = new MoveManageView()
                 {
                     Owner = ShogiGlobal.MainWindow,
                     DataContext = ShogiGlobal.ShogiModel,
                 };
-                moveManageView.Closed += (sender_, e_) =>
-                {
+                view.Loaded += (_, __) =>
+                    view.AdjustInDisplay();
+                view.Closed += (sender_, e_) =>
                     ShogiGlobal.MoveManageView = null;
-                };
 
-                ShogiGlobal.MoveManageView = moveManageView;
-                moveManageView.Show();
+                view.Show();
+                ShogiGlobal.MoveManageView = view;
             }
             catch (Exception ex)
             {
                 Log.ErrorException(ex,
-                    "Failed Window_Loaded");
+                    "変化コントロールの表示に失敗しました(￣ω￣;)");
             }
         }
 
@@ -465,16 +466,25 @@ namespace VoteSystem.PluginShogi.ViewModel
         {
             try
             {
+                var dialog = ShogiGlobal.EndingSettingWindow;
+                if (dialog != null)
+                {
+                    dialog.Activate();
+                    return;
+                }
+
                 var window = ShogiGlobal.MainWindow;
-                var dialog = new EndingSettingWindow(window.ShogiEndRoll)
+                dialog = new EndingSettingWindow(window.ShogiEndRoll)
                 {
                     Owner = window,
                 };
-
                 dialog.Loaded += (_, __) =>
                     dialog.AdjustInDisplay();
+                dialog.Closed += (sender_, e_) =>
+                    ShogiGlobal.EndingSettingWindow = null;
 
                 dialog.Show();
+                ShogiGlobal.EndingSettingWindow = dialog;
             }
             catch (Exception ex)
             {
@@ -896,7 +906,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                     Topmost = true,
                 };
 
-                var result = dialog.ShowDialogCenterMouse();
+                var result = dialog.ShowDialog();
                 if (result == true)
                 {
                     if (dialog.IsClearVoteResult)

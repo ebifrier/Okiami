@@ -36,16 +36,19 @@
             <ContextMenu x:Key="contextMenu">
                 <!-- CommandTargetの指定はwpfのバグを避けるために必要。
                      http://social.msdn.microsoft.com/forums/en-US/wpf/thread/7bd75a7c-eab4-4f3a-967b-94a9534a7455/ -->
-                <MenuItem Header="評価値表示の設定(_E)"
+                <MenuItem Header="評価値表示の設定(_L)"
+                          InputGestureText="Ctrl+Shift+L"
                           Command="{x:Static s:EvaluationControl.OpenSettingDialog}"
                           CommandTarget="{Binding PlacementTarget,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                 <MenuItem Header="投票結果の設定(_R)"
+                          InputGestureText="Ctrl+Shift+R"
                           Command="{x:Static s:VoteResultControl.OpenSettingDialog}"
                           CommandTarget="{Binding PlacementTarget,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />                
                 <Separator />
-                <MenuItem Header="エンディングモード(_M)"
+                <MenuItem Header="エンディングモード(_E)"
+                          InputGestureText="Ctrl+Shift+E"
                           IsCheckable="True"
                           IsChecked="{Binding GlobalModel.IsEndingMode}" />
             </ContextMenu>
@@ -89,13 +92,28 @@
                           Command="Close" />
             </MenuItem>
 
+            <MenuItem Header="現局面(_C)">
+                <MenuItem Header="現局面に戻す(_R)"
+                          InputGestureText="Ctrl+R"
+                          Command="{x:Static svm:Commands.RefreshCurrentBoard}" />
+                <Separator />
+                <MenuItem Header="現局面をサーバーから取得(_B)"
+                          Command="{x:Static svm:Commands.GetCurrentBoardFromServer}" />
+                <MenuItem Header="現局面をサーバーに設定(_C)"
+                          InputGestureText="Ctrl+Shift+C"
+                          Command="{x:Static svm:Commands.SetCurrentBoardToServer}" />
+            </MenuItem>
+
             <MenuItem Header="設定(_S)">
-                <MenuItem Header="評価値の設定(_R)"
+                <MenuItem Header="評価値の設定(_L)"
+                          InputGestureText="Ctrl+Shift+L"
                           Command="{x:Static s:EvaluationControl.OpenSettingDialog}" />
                 <MenuItem Header="投票結果の設定(_R)"
+                          InputGestureText="Ctrl+Shift+R"
                           Command="{x:Static s:VoteResultControl.OpenSettingDialog}" />
                 <Separator />
-                <MenuItem Header="設定(_S)"
+                <MenuItem Header="設定(_D)"
+                          InputGestureText="Ctrl+Shift+D"
                           Command="{x:Static svm:Commands.ShowSettingDialog}" />
             </MenuItem>
 
@@ -104,16 +122,18 @@
                           IsCheckable="True" x:Name="boardReverse"
                           Command="{x:Static r:ShogiCommands.SetReverseBoard}"
                           CommandParameter="{Binding IsChecked, ElementName=boardReverse}" />
-                <MenuItem Header="評価値を表示(_E)"
+                <MenuItem Header="評価値を表示(_L)"
                           IsCheckable="True"
                           IsChecked="{Binding Settings.AS_IsShowEvaluationValue}" />
-                <MenuItem Header="投票結果を表示(_E)"
+                <MenuItem Header="投票結果を表示(_R)"
                           IsCheckable="True"
                           IsChecked="{Binding Settings.AS_IsShowVoteResult}" />
                 <Separator />
                 <MenuItem Header="変化ウィンドウ(_V)"
+                          InputGestureText="Ctrl+Shift+V"
                           Command="{x:Static svm:Commands.ShowMoveManageView}" />
                 <MenuItem Header="エンディングウィンドウ(_E)"
+                          InputGestureText="Ctrl+Shift+E"
                           Command="{x:Static svm:Commands.ShowEndingSettingWindow}" />
             </MenuItem>
         </Menu>
@@ -208,8 +228,7 @@
                                                  ImageSetList="{s:ImageSetList Data/Image}"
                                                  Visibility="{Binding Settings.AS_IsShowEvaluationValue,
                                                                       Converter={StaticResource visibilityConverterHidden}}"
-                                                 SelectedImageSetTitle="{Binding AS_EvaluationImageSetTitle,
-                                                                                 Source={x:Static l:ShogiGlobal.Settings}}"
+                                                 SelectedImageSetTitle="{Binding Settings.AS_EvaluationImageSetTitle}"
                                                  UserPoint="{Binding VoteResult.EvaluationPoint,
                                                                      Source={x:Static l:ShogiGlobal.VoteClient}}" />
                         </Viewbox>
@@ -237,7 +256,12 @@
                  VerticalAlignment="Center">
             <v:ShogiEndRollControl x:Name="ShogiEndRoll"
                                    Width="640" Height="360"
-                                   IsHitTestVisible="False" />
+                                   IsHitTestVisible="False"
+                                   EndRollQuality="{Binding Settings.ED_EndRollQuality}"
+                                   ShogiOpacity="{Binding Settings.ED_ShogiOpacity}"
+                                   MaximumDisplayListeners="{Binding Settings.ED_MaximumDisplayListeners}"
+                                   MaximumDisplayLiveOwners="{Binding Settings.ED_MaximumDisplayLiveOwners}"
+                                   MovieVolume="{Binding Settings.ED_MovieVolume}" />
         </Viewbox>
 
         <!-- ステータスバーです。-->
