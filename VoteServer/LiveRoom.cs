@@ -29,12 +29,8 @@ namespace VoteSystem.Server
     /// コメンターは各放送ごとにまとめられ、また各投票ルームごとにも
     /// まとめられています。
     /// </remarks>
-    public class LiveRoom : ILogObject, IDisposable
+    public class LiveRoom : ILogObject
     {
-        /// <summary>
-        /// コメンターの最大数です。全部屋の合計値がこれを超えないようにします。
-        /// </summary>
-        public const int CommenterMaxCount = 100;
         /// <summary>
         /// ミラーコメントの印（無幅空白）です。
         /// </summary>
@@ -51,7 +47,6 @@ namespace VoteSystem.Server
         private readonly LiveData liveData;
         private readonly VoteParticipant liveOwner;
         private LiveAttribute attribute;
-        private bool disposed = false;
 
         /// <summary>
         /// ログ出力用の名前を取得します。
@@ -61,7 +56,7 @@ namespace VoteSystem.Server
             get
             {
                 return string.Format(
-                    "ライブルーム[\"{0}\"]",
+                    "LiveRoom[\"{0}\"]",
                     this.liveData);
             }
         }
@@ -93,6 +88,7 @@ namespace VoteSystem.Server
             }
         }
 
+#if false
         /// <summary>
         /// 全コメントをミラーするモードかどうかを取得します。
         /// </summary>
@@ -175,6 +171,7 @@ namespace VoteSystem.Server
             return notification.Clone()
                 .Apply(_ => _.Text = text);
         }
+#endif
 
         /// <summary>
         /// 放送ルームを閉じます。
@@ -191,39 +188,6 @@ namespace VoteSystem.Server
             this.liveOwner = owner;
             this.liveData = liveData;
             this.attribute = new LiveAttribute();
-        }
-
-        /// <summary>
-        /// デストラクタ
-        /// </summary>
-        ~LiveRoom()
-        {
-            Dispose(false);
-        }
-
-        /// <summary>
-        /// オブジェクトを破棄します。
-        /// </summary>
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-            Dispose(true);
-        }
-
-        /// <summary>
-        /// オブジェクトを破棄します。
-        /// </summary>
-        protected void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    Close();
-                }
-
-                this.disposed = true;
-            }
         }
     }
 }

@@ -185,22 +185,26 @@ namespace VoteSystem.Client.Command
         private static void ExecuteVoteTest(object sender,
                                             ExecutedRoutedEventArgs e)
         {
-            const int MaxCount = 2000;
+            const int MaxCount = 200;
+            const int MaxCount2 = 10;
 
             try
             {
                 System.Threading.Tasks.Parallel.For(
                     0, MaxCount,
-                    (index) =>
+                    _ =>
                     {
-                        Global.VoteClient.SendNotification(
-                            new Protocol.Notification
-                            {
-                                Text = string.Format("{0}6歩", MathEx.RandInt(1, 10)),
-                                VoterId = Guid.NewGuid().ToString(),
-                                Timestamp = Ragnarok.Net.NtpClient.GetTime(),
-                            },
-                            false);
+                        System.Threading.Tasks.Parallel.For(
+                            0, MaxCount2,
+                            __ => Global.VoteClient.SendNotification(
+                                new Protocol.Notification
+                                {
+                                    Text = string.Format("{0}6歩", MathEx.RandInt(1, 10)),
+                                    VoterId = Guid.NewGuid().ToString(),
+                                    Timestamp = Ragnarok.Net.NtpClient.GetTime(),
+                                },
+                                false));
+                        System.Threading.Thread.Sleep(1);
                     });
             }
             catch (Exception ex)

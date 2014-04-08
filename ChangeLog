@@ -1,3 +1,21 @@
+2014-04-09  - Ver 1.8.0.7
+
+	* PluginShogi/ShogiPlugin.cs: エフェクトの表示を専用スレッドで行うよう
+	にしました。
+	* PluginShogi/View/EndingSettingWindow.xaml.cs: ウィンドウを閉じたとき
+	に設定を保存するようにしました。
+	* PluginShogi/ViewModel/Commands.cs: ショートカットキーを追加しました。
+	* VoteClient/View/Control/LiveControlTemplate.xaml: 通知コメントを☆コ
+	メントに名前変更しました。
+	* VoteProtocol/SystemNotificationType.cs: 列挙子にラベルを設定しました。
+	* VoteServer/LiveRoom.cs: コメンター機能削除で不要になったIDisposableイ
+	ンターフェースを削除しました。
+	* VoteServer/VoteModel.cs: 拡散コメントを☆コメントに修正しました。
+	* VoteClient/ViewModel/NotificationModel.cs: 通知を表示するためのモデル
+	クラスを追加しました。
+	* VoteClient/View/NotificationViewer.xaml: 受信した通知を表示するための
+	ビューワーを追加しました。
+
 2014-04-01  - Ver 1.8.0.6
 
 	* PluginShogi/ShogiData/EndRoll/endroll_format.xml: 参加者一覧の後に

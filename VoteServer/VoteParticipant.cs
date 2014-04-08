@@ -293,19 +293,14 @@ namespace VoteSystem.Server
         /// 通知をこの参加者や放送ルームに対して送信します。
         /// </summary>
         public void SendNotificationCommand(Notification notification,
-                                            bool sendAsNotification,
-                                            bool sendToLiveRoom,
                                             bool isOutLog)
         {
-            if (sendAsNotification)
+            var command = new NotificationCommand()
             {
-                var command = new NotificationCommand()
-                {
-                    Notification = notification,
-                };
+                Notification = notification,
+            };
 
-                this.connection.SendCommand(command, isOutLog);
-            }
+            this.connection.SendCommand(command, isOutLog);
         }
         #endregion
 

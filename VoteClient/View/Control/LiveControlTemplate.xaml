@@ -85,7 +85,7 @@
                                   IsExpanded="{Binding IsChecked, ElementName=isPostMirrorCommentControl}">
                         <TreeViewItem>
                             <TreeViewItem.Header>
-                                <CheckBox Content="通常メッセージ"
+                                <CheckBox Content="☆コメント"
                                           IsChecked="{Binding IsPostMirrorMessageComment}" />
                             </TreeViewItem.Header>
                         </TreeViewItem>
@@ -133,7 +133,7 @@
                                   IsExpanded="{Binding IsChecked, ElementName=isPostConfirmCommentControl}">
                         <TreeViewItem>
                             <TreeViewItem.Header>
-                                <CheckBox Content="通常メッセージ"
+                                <CheckBox Content="☆コメント"
                                           IsChecked="{Binding IsPostConfirmMessageComment}" />
                             </TreeViewItem.Header>
                         </TreeViewItem>

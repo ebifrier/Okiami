@@ -131,8 +131,8 @@ namespace VoteSystem.PluginShogi.View
         public MainWindow(ShogiWindowViewModel model)
         {
             InitializeComponent();
-            Commands.Binding(CommandBindings);
-            Commands.Binding(InputBindings);
+            Commands.BindCommands(this);
+            Commands.BindInputs(this);
             ShogiControl.InitializeBindings(this);
 
             Loaded += (_, __) =>

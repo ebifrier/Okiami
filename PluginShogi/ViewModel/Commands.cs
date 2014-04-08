@@ -213,8 +213,12 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// コマンドをバインディングします。
         /// </summary>
-        public static void Binding(CommandBindingCollection bindings)
+        public static void BindCommands(UIElement element)
         {
+            Client.Command.UtilCommand.Bind(element);
+
+            var bindings = element.CommandBindings;
+
             bindings.Add(
                 new CommandBinding(
                     ShowSettingDialog,
@@ -317,14 +321,21 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// コマンドを操作にバインディングします。
         /// </summary>
-        public static void Binding(InputBindingCollection inputs)
+        public static void BindInputs(UIElement element)
         {
+            var inputs = element.InputBindings;
+
+            inputs.Add(
+                new KeyBinding(
+                    Client.Command.Commands.OpenSettingDialog,
+                    new KeyGesture(Key.S, ModifierKeys.Control | ModifierKeys.Shift)));
+
             inputs.Add(
                 new KeyBinding(LoadKifFile,
                     new KeyGesture(Key.O, ModifierKeys.Control)));
             inputs.Add(
                 new KeyBinding(SaveKifFile,
-                    new KeyGesture(Key.A, ModifierKeys.Control)));
+                    new KeyGesture(Key.S, ModifierKeys.Control)));
 
             inputs.Add(
                 new KeyBinding(PasteKifFile,

@@ -738,8 +738,6 @@ namespace VoteSystem.Server
         /// 通知を全参加者に送ります。
         /// </summary>
         public void BroadcastNotification(Notification notification,
-                                          bool sendAsNotification,
-                                          bool sendToLiveRoom,
                                           VoteParticipant except = null)
         {
             if (notification == null || !notification.Validate())
@@ -763,10 +761,7 @@ namespace VoteSystem.Server
                     }
 
                     participant.SendNotificationCommand(
-                        newNotification,
-                        sendAsNotification,
-                        sendToLiveRoom,
-                        false);
+                        newNotification, false);
                 }
 
                 Log.Info(this,
@@ -781,8 +776,6 @@ namespace VoteSystem.Server
         /// </summary>
         public void BroadcastNotification(NotificationType type,
                                           Notification source,
-                                          bool sendAsNotification,
-                                          bool sendToLiveRoom,
                                           VoteParticipant except = null)
         {
             if (source == null || !source.Validate())
@@ -793,20 +786,15 @@ namespace VoteSystem.Server
             var newNotification = source.Clone();
             newNotification.Type = type;
 
-            BroadcastNotification(
-                newNotification,
-                sendAsNotification,
-                sendToLiveRoom,
-                except);
+            BroadcastNotification(newNotification, except);
         }
 
         /// <summary>
         /// 通知を各ルームの参加者に送信します。
         /// </summary>
-        public void BroadcastNotification(string text, NotificationType type,
+        public void BroadcastNotification(string text,
+                                          NotificationType type,
                                           Notification source,
-                                          bool sendAsNotification,
-                                          bool sendToLiveRoom,
                                           VoteParticipant except = null)
         {
             if (source == null || !source.Validate())
@@ -818,11 +806,7 @@ namespace VoteSystem.Server
             newNotification.Text = text;
             newNotification.Type = type;
 
-            BroadcastNotification(
-                newNotification,
-                sendAsNotification,
-                sendToLiveRoom,
-                except);
+            BroadcastNotification(newNotification, except);
         }
 
         /// <summary>
@@ -847,7 +831,7 @@ namespace VoteSystem.Server
                 VoterId = "$owner",
                 Timestamp = Ragnarok.Net.NtpClient.GetTime(),
             };
-            BroadcastNotification(notification, true, false);
+            BroadcastNotification(notification);
         }
 
         /// <summary>

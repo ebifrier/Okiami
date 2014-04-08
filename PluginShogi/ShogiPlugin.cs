@@ -557,7 +557,8 @@ namespace VoteSystem.PluginShogi
                 }
 
                 // エフェクトを表示します。
-                effectManager.Voted(move);
+                WPFUtil.UIProcess(() =>
+                    effectManager.Voted(move));
             }
         }
     }

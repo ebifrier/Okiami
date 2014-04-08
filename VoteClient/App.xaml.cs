@@ -47,7 +47,7 @@ namespace VoteSystem.Client
             Global.Initialize();
 
             // ウィンドウを作成します。
-            var controlWindow = new View.MainWindow();
+            var controlWindow = new View.MainWindow(Global.MainViewModel);
             controlWindow.Show();
             MainWindow = controlWindow;
 

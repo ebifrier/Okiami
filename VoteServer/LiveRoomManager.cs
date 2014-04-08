@@ -138,7 +138,7 @@ namespace VoteSystem.Server
 
                 // 放送を閉じます。
                 this.liveRoomDic.Remove(liveData);
-                liveRoom.Dispose();
+                liveRoom.Close();
                 
                 OnLiveChanged();
 
@@ -157,7 +157,7 @@ namespace VoteSystem.Server
             {
                 foreach (var pair in this.liveRoomDic)
                 {
-                    pair.Value.Dispose();
+                    pair.Value.Close();
                 }
 
                 this.liveRoomDic.Clear();

@@ -84,7 +84,7 @@ namespace VoteSystem.Server.VoteStrategy
             if (voteRoom != null)
             {
                 voteRoom.BroadcastNotification(
-                    NotificationType.Message, notification, false, true);
+                    NotificationType.Message, notification);
             }
         }
 

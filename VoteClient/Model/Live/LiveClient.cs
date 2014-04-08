@@ -164,33 +164,33 @@ namespace VoteSystem.Client.Model.Live
         /// </summary>
         public static string GetVoteSystemMessage(SystemNotificationType type)
         {
-            SystemMessage soundMessage = null;
+            SystemMessage message = null;
 
             switch (type)
             {
                 case SystemNotificationType.VoteStart:
-                    soundMessage = Global.Settings.VoteStartSystemMessage;
+                    message = Global.Settings.VoteStartSystemMessage;
                     break;
                 case SystemNotificationType.VoteEnd:
-                    soundMessage = Global.Settings.VoteEndSystemMessage;
+                    message = Global.Settings.VoteEndSystemMessage;
                     break;
                 case SystemNotificationType.VotePause:
-                    soundMessage = Global.Settings.VotePauseSystemMessage;
+                    message = Global.Settings.VotePauseSystemMessage;
                     break;
                 case SystemNotificationType.VoteStop:
-                    soundMessage = Global.Settings.VoteStopSystemMessage;
+                    message = Global.Settings.VoteStopSystemMessage;
                     break;
                 case SystemNotificationType.ChangeVoteSpan:
-                    soundMessage = Global.Settings.ChangeVoteSpanSystemMessage;
+                    message = Global.Settings.ChangeVoteSpanSystemMessage;
                     break;
             }
 
-            if (soundMessage == null || !soundMessage.IsPostComment)
+            if (message == null || !message.IsPostComment)
             {
                 return null;
             }
 
-            return soundMessage.CommentText;
+            return message.CommentText;
         }
 
         /// <summary>

@@ -132,6 +132,7 @@
     <Compile Include="Settings.part.cs" />
     <Compile Include="ViewModel\EndRollWindowViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\NotificationModel.cs" />
     <Compile Include="ViewModel\VoteRoomInfoViewModel.cs" />
     <Compile Include="View\Control\BoolToSignConverter.cs" />
     <Compile Include="MessageUtil.cs" />
@@ -166,6 +167,9 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
+    <Compile Include="View\NotificationViewer.xaml.cs">
+      <DependentUpon>NotificationViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SelectImageWindow.xaml.cs">
       <DependentUpon>SelectImageWindow.xaml</DependentUpon>
     </Compile>
@@ -197,6 +201,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\EvaluationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NotificationViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

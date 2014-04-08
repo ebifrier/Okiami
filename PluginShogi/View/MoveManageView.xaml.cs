@@ -50,8 +50,8 @@ namespace VoteSystem.PluginShogi.View
         {
             InitializeComponent();
 
-            Commands.Binding(CommandBindings);
-            Commands.Binding(InputBindings);
+            Commands.BindCommands(this);
+            Commands.BindInputs(this);
         }
     }
 }

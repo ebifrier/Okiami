@@ -15,22 +15,21 @@ namespace VoteSystem.Client.Model
     using Protocol;
     using Protocol.Vote;
     using Live;
+    using ViewModel;
 
     /// <summary>
     /// 放送主用のモデルオブジェクトです。
     /// </summary>
     /// <remarks>
-    /// このクラスの行うことは主に以下です。
-    /// １、ニコニコやUstreamなどの生放送への接続。
-    /// ２、放送主の画像や作成する投票ルームの名前、入室する投票ルーム
-    /// 　　などを管理します。
-    /// ３、投票サーバーとの接続を管理します。
+    /// このクラスの行うことは主に以下の２つです。
+    /// １、放送主の画像や作成する投票ルームの名前、入室する投票ルーム
+    /// 　　などの管理。
+    /// ２、投票サーバーとの接続の管理。
     /// </remarks>
     public class MainModel : NotifyObject
     {
         private readonly VoteClient voteClient;
         private readonly NicoClient nicoClient;
-        //private readonly CommenterManager commenterManager;
 
         /// <summary>
         /// 投票用のクライアントを取得します。
@@ -47,14 +46,6 @@ namespace VoteSystem.Client.Model
         {
             get { return this.nicoClient; }
         }
-
-        /*/// <summary>
-        /// コメンター管理用のオブジェクトを取得します。
-        /// </summary>
-        public CommenterManager CommenterManager
-        {
-            get { return this.commenterManager; }
-        }*/
 
         /// <summary>
         /// 投票ルームで使われるIDを取得または設定します。
@@ -192,10 +183,10 @@ namespace VoteSystem.Client.Model
         /// <summary>
         /// 投票サーバーから得られたメッセージのリストを取得します。
         /// </summary>
-        public ConcurrentQueue<Notification> NotificationQueue
+        public NotifyCollection<NotificationModel> NotificationList
         {
-            get { return GetValue<ConcurrentQueue<Notification>>("NotificationQueue"); }
-            set { SetValue("NotificationQueue", value); }
+            get { return GetValue<NotifyCollection<NotificationModel>>("NotificationList"); }
+            set { SetValue("NotificationList", value); }
         }
 
         /// <summary>
@@ -290,13 +281,11 @@ namespace VoteSystem.Client.Model
                 return;
             }
 
-            // 並列実行可能なコレクションを使っています。
-            NotificationQueue.Enqueue(notification);
-
             // 各放送に通知を処理させます。
             foreach (var liveClient in LiveClientList)
             {
-                liveClient.HandleNotification(notification);
+                Util.SafeCall(() =>
+                    liveClient.HandleNotification(notification));
             }
 
             // 各プラグインに処理させます。
@@ -305,6 +294,10 @@ namespace VoteSystem.Client.Model
                 Util.SafeCall(() =>
                     plugin.HandleNotification(notification));
             }
+
+            // コレクションへの操作はUIスレッド上で行います。
+            Global.UIProcess(() => NotificationList.Add(
+                new NotificationModel(notification, NotificationList.Count() + 1)));
         }
 
         /// <summary>
@@ -463,7 +456,7 @@ namespace VoteSystem.Client.Model
                     "IsConnected",
                     (__, ___) => this.RaisePropertyChanged("IsConnectedToLive")));
 
-            NotificationQueue = new ConcurrentQueue<Notification>();
+            NotificationList = new NotifyCollection<NotificationModel>();
             CurrentVoteMode = VoteMode.Shogi;
 
             this.AddDependModel(this.nicoClient);

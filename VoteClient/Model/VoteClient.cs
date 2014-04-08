@@ -53,14 +53,8 @@ namespace VoteSystem.Client.Model
         /// </summary>
         public void OnNotificationReceived(Notification notification)
         {
-            var handler = this.NotificationReceived;
-
-            if (handler != null)
-            {
-                var e = new NotificationEventArgs(notification);
-
-                Util.CallEvent(() => handler(this, e));
-            }
+            this.NotificationReceived.SafeRaiseEvent(
+                this, new NotificationEventArgs(notification));
         }
 
         /// <summary>

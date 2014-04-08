@@ -48,7 +48,6 @@
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />                
                 <Separator />
                 <MenuItem Header="エンディングモード(_E)"
-                          InputGestureText="Ctrl+Shift+E"
                           IsCheckable="True"
                           IsChecked="{Binding GlobalModel.IsEndingMode}" />
             </ContextMenu>
@@ -112,7 +111,10 @@
                           InputGestureText="Ctrl+Shift+R"
                           Command="{x:Static s:VoteResultControl.OpenSettingDialog}" />
                 <Separator />
-                <MenuItem Header="設定(_D)"
+                <MenuItem Header="投票の設定(_S)"
+                          InputGestureText="Ctrl+Shift+S"
+                          Command="{x:Static s:Commands.OpenSettingDialog}" />
+                <MenuItem Header="将棋の設定(_D)"
                           InputGestureText="Ctrl+Shift+D"
                           Command="{x:Static svm:Commands.ShowSettingDialog}" />
             </MenuItem>

@@ -27,14 +27,21 @@ namespace VoteSystem.PluginShogi.View
         public EndingSettingWindow(ShogiEndRollControl control)
         {
             InitializeComponent();
-            ViewModel.Commands.Binding(CommandBindings);
-            ViewModel.Commands.Binding(InputBindings);
+            ViewModel.Commands.BindCommands(this);
+            ViewModel.Commands.BindInputs(this);
 
             // テスト用のフラグはクリアしておきます。
             control.IsTest = false;
 
             this.model = control;
             DataContext = control;
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            ShogiGlobal.Settings.Save();
         }
 
         private void PositionSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

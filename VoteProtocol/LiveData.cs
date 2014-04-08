@@ -93,22 +93,7 @@ namespace VoteSystem.Protocol
         /// </summary>
         public string SiteName
         {
-            get
-            {
-                switch (this.Site)
-                {
-                    case LiveSite.NicoNama:
-                        return "ニコ生";
-                    case LiveSite.Ustream:
-                        return "Ustream";
-                    case LiveSite.Justin:
-                        return "Justin";
-                    case LiveSite.PeerCast:
-                        return "PeerCast";
-                }
-
-                return "不明";
-            }
+            get { return EnumEx.GetLabel(Site); }
         }
 
         /// <summary>
@@ -152,15 +137,15 @@ namespace VoteSystem.Protocol
                     case LiveSite.NicoNama:
                         return string.Format(
                             "http://live.nicovideo.jp/watch/{0}",
-                            this.LiveIdString);
+                            LiveIdString);
                     case LiveSite.Ustream:
                         return string.Format(
                             "http://www.ustream.tv/{0}",
-                            this.LiveIdString);
+                            LiveIdString);
                     case LiveSite.Justin:
                         return string.Format(
                             "http://justin.tv/{0}",
-                            this.LiveIdString);
+                            LiveIdString);
                     case LiveSite.PeerCast:
                         return "";
                 }
@@ -176,35 +161,18 @@ namespace VoteSystem.Protocol
         {
             get
             {
-                var result = "";
+                var result = SiteName;
 
-                switch (this.Site)
-                {
-                    case LiveSite.NicoNama:
-                        result = "ニコ生";
-                        break;
-                    case LiveSite.Ustream:
-                        result = "Ustream";
-                        break;
-                    case LiveSite.Justin:
-                        result = "Justin";
-                        break;
-                    case LiveSite.PeerCast:
-                        result = "PeerCast";
-                        break;
-                }
-
-                if (!string.IsNullOrEmpty(this.LiveIdString))
+                if (!string.IsNullOrEmpty(LiveIdString))
                 {
                     result += ": ";
-                    result += this.LiveIdString;
+                    result += LiveIdString;
                 }
 
-                if (!string.IsNullOrEmpty(this.LiveTitle))
+                if (!string.IsNullOrEmpty(LiveTitle))
                 {
-                    result += string.Format(
-                        " \"{0}\"",
-                        this.LiveTitle);
+                    result += " ";
+                    result += LiveTitle.Quote("\"");
                 }
 
                 return result;
@@ -216,28 +184,12 @@ namespace VoteSystem.Protocol
         /// </summary>
         public override string ToString()
         {
-            var result = "";
+            var result = SiteName;
 
-            switch (this.Site)
-            {
-                case LiveSite.NicoNama:
-                    result = "ニコ生";
-                    break;
-                case LiveSite.Ustream:
-                    result = "Ustream";
-                    break;
-                case LiveSite.Justin:
-                    result = "Justin";
-                    break;
-                case LiveSite.PeerCast:
-                    result = "PeerCast";
-                    break;
-            }
-
-            if (!string.IsNullOrEmpty(this.LiveIdString))
+            if (!string.IsNullOrEmpty(LiveIdString))
             {
                 result += ": ";
-                result += this.LiveIdString;
+                result += LiveIdString;
             }
 
             return result;

@@ -255,7 +255,7 @@ namespace VoteSystem.Server
         /// 通常メッセージの正規表現です。
         /// </summary>
         private static readonly Regex messageRegex =
-            new Regex(@"^(msg|拡散)\s*", RegexOptions.Compiled);
+            new Regex(@"^(☆|★)\s*", RegexOptions.Compiled);
 
         /// <summary>
         /// メッセージを処理します。
@@ -279,8 +279,7 @@ namespace VoteSystem.Server
 
                 var text = notification.Text.Substring(m.Length);
                 this.voteRoom.BroadcastNotification(
-                    text, NotificationType.Important, notification,
-                    true, false);
+                    text, NotificationType.Important, notification);
                 return true;
             }
 
@@ -291,8 +290,7 @@ namespace VoteSystem.Server
                 var text = notification.Text.Substring(m.Length);
 
                 this.voteRoom.BroadcastNotification(
-                    text, NotificationType.Message, notification,
-                    true, true);
+                    text, NotificationType.Message, notification);
                 return true;
             }
 
@@ -381,8 +379,7 @@ namespace VoteSystem.Server
             this.voteRoom.BroadcastNotification(
                 "評価値 " + value.Value.ToString(),
                 NotificationType.Evaluation,
-                source,
-                true, true);
+                source);
         }
 
         /// <summary>
@@ -478,7 +475,6 @@ namespace VoteSystem.Server
         /// 延長要求コマンドの正規表現です。
         /// </summary>
         private static Regex ExtendRegex = new Regex(
-            //@"^(MOTTOMOTTO|MOTMOT|HOTTOMOTTO|HOTMOT|もっともっと|ほっともっと)(!|！)*",
             @"^もっともっと",
             RegexOptions.IgnoreCase);
 
@@ -487,13 +483,6 @@ namespace VoteSystem.Server
         /// </summary>
         private static Regex StableRegex = new Regex(
             @"^もうけっこう",
-            RegexOptions.IgnoreCase);
-
-        /// <summary>
-        /// 時間短縮要求コマンドの正規表現です。
-        /// </summary>
-        private static Regex StableRegex2 = new Regex(
-            @"^(主の)?遊びは(ここ|そこ)まで(だ)?(。)?",
             RegexOptions.IgnoreCase);
 
         /// <summary>
@@ -525,8 +514,7 @@ namespace VoteSystem.Server
                 return TimeExtendKind.Extend;
             }
 
-            if (StableRegex.IsMatch(normalizedText)/* ||
-                StableRegex2.IsMatch(normalizedText)*/)
+            if (StableRegex.IsMatch(normalizedText))
             {
                 return TimeExtendKind.Stable;
             }
@@ -575,8 +563,7 @@ namespace VoteSystem.Server
 
             this.voteRoom.BroadcastNotification(
                 NotificationType.TimeExtend,
-                notification,
-                true, true);
+                notification);
 
             return true;
         }

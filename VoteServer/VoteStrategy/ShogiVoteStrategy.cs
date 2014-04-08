@@ -421,7 +421,7 @@ namespace VoteSystem.Server.VoteStrategy
             if (IsMirrorMode)
             {
                 // ミラーコメントとして各放送に送ります。
-                this.voteRoom.BroadcastNotification(notification, false, true);
+                this.voteRoom.BroadcastNotification(notification);
             }
         }
 
@@ -599,7 +599,7 @@ namespace VoteSystem.Server.VoteStrategy
                             Timestamp = source.Timestamp,
                         };
 
-                        this.voteRoom.BroadcastNotification(notification, true, true);
+                        this.voteRoom.BroadcastNotification(notification);
                     }
                 }
             }
@@ -650,7 +650,7 @@ namespace VoteSystem.Server.VoteStrategy
                             Timestamp = source.Timestamp,
                         };
 
-                        this.voteRoom.BroadcastNotification(notification, true, true);
+                        this.voteRoom.BroadcastNotification(notification);
                     }
                 }
             }
