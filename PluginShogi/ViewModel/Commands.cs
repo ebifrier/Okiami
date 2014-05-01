@@ -1333,7 +1333,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                     return;
                 }
 
-                Effects.EffectManager.OfficialBackgroundImageIndex += 1;
+                //Effects.EffectManager.OfficialBackgroundImageIndex += 1;
                 manager.UpdateBackground();
             }
             catch (Exception ex)

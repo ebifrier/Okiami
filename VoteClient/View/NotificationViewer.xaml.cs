@@ -18,6 +18,9 @@ namespace VoteSystem.Client.View
     /// </summary>
     public partial class NotificationViewer : Window
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public NotificationViewer(ViewModel.MainViewModel model)
         {
             InitializeComponent();

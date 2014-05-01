@@ -2,6 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:p="http://schemas.garnet-alice.net/ragnarok/xaml/presentation">
     
+    <Style TargetType="CheckBox">
+        <Setter Property="Margin" Value="2,2,2,2" />
+    </Style>
+    
     <StackPanel Orientation="Vertical" x:Key="mainTemplate"
                 Margin="5">
         <CheckBox Content="一手前に動かした駒を強調表示"
@@ -12,7 +16,12 @@
                   IsChecked="{Binding IsUseTebanEffect}" />
         <TextBlock />
         <CheckBox Content="背景エフェクトを使用"
+                  x:Name="useBackgroundCB"
                   IsChecked="{Binding IsUseBackgroundEffect}" />
+        <CheckBox Content="シンプルな背景エフェクトを使用"
+                  IsEnabled="{Binding IsChecked, ElementName=useBackgroundCB}"
+                  IsChecked="{Binding IsUseSimpleBackgroundEffect}"
+                  Margin="16,2,2,2" />
         <CheckBox Content="駒移動／駒打ちのエフェクトを使用"
                   IsChecked="{Binding IsUsePieceEffect}" />
         <CheckBox Content="囲いエフェクトを使用"

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -63,19 +65,24 @@ namespace VoteSystem.PluginShogi.Effects
         /// </summary>
         Vote = (1 << 11),
         /// <summary>
-        /// 自動再生エフェクトを使用します。
+        /// 自動再生の専用エフェクトを使用します。
         /// </summary>
         AutoPlay = (1 << 12),
         /// <summary>
         /// 自動再生のカットインエフェクトを使用します。
         /// </summary>
         AutoPlayCutIn = (1 << 13),
+        /// <summary>
+        /// 簡易背景を使用します。
+        /// </summary>
+        SimpleBackground = (1 << 14),
 
         /// <summary>
         /// 全フラグ
         /// </summary>
         All = (PrevCell | MovableCell | Teban |
-               Background | Piece | Castle | Vote | AutoPlay | AutoPlayCutIn),
+               Background | SimpleBackground | Piece | Castle | Vote |
+               AutoPlay | AutoPlayCutIn),
     }
 
     /// <summary>
@@ -93,7 +100,15 @@ namespace VoteSystem.PluginShogi.Effects
         private EffectObject prevMovedCell;
         private EffectObject movableCell;
         private EffectObject tebanCell;
-        private DateTime prevVotedTime = DateTime.Now;
+        private Stopwatch votedTimer = new Stopwatch();
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public EffectManager()
+        {
+            this.votedTimer.Start();
+        }
 
         /// <summary>
         /// エフェクトを表示するオブジェクトを取得または設定します。
@@ -486,21 +501,114 @@ namespace VoteSystem.PluginShogi.Effects
         #endregion
 
         #region 背景エフェクト
+        private static Dictionary<string, List<string>> backgroundImageDic =
+            new Dictionary<string, List<string>>();
+        private static List<string> GetBackgroundImageList(string key)
+        {
+            List<string> list;
+
+            if (backgroundImageDic.TryGetValue(key, out list))
+            {
+                return list;
+            }
+
+            try
+            {
+                string[] extensions = { ".png", ".jpg", ".tif", ".bmp" };
+                var path = Path.Combine(
+                    EffectInfo.BackgroundBaseDir.LocalPath, key);
+
+                list = Directory
+                    .EnumerateFiles(path, "Back*.*")
+                    .Select(_ => Path.GetFileName(_))
+                    .Where(_ => extensions.Contains(Path.GetExtension(_)))
+                    .OrderBy(_ => _)
+                    .ToList();
+
+                backgroundImageDic.Add(key, list);
+                return list;
+            }
+            catch (Exception ex)
+            {
+                Log.ErrorException(ex,
+                    "背景画像リストの取得に失敗しました。");
+
+                return new List<string>();
+            }
+        }
+
         /// <summary>
-        /// 背景の設定を行います。(キーが変わっている場合のみ設定します)
+        /// 背景ファイルの選択などを行います。
         /// </summary>
-        private void TrySetBackgroundKey(string key)
+        private BackgroundContext CreateBackgroundContext(string key)
+        {
+            var list = GetBackgroundImageList(key);
+            var imageFileName = list.FirstOrDefault();
+            if (string.IsNullOrEmpty(imageFileName))
+            {
+                return null;
+            }
+
+            var context = new BackgroundContext();
+            context.ImageUri = string.Format("../{0}/{1}", key, imageFileName);
+
+            return context;
+        }
+
+        /// <summary>
+        /// 背景選択に使うキーを取得します。
+        /// </summary>
+        private string GetBackgroundKey(int moveCount)
+        {
+            var Unit = 30;
+
+            if (moveCount >= Unit * 3)
+            {
+                return "WinterEffect";
+            }
+            else if (moveCount >= Unit * 2)
+            {
+                return "AutumnEffect";
+            }
+            else if (moveCount >= Unit)
+            {
+                return "SummerEffect";
+            }
+            else
+            {
+                return "SpringEffect";
+            }
+        }
+
+        /// <summary>
+        /// 背景の設定を行います。
+        /// </summary>
+        private void TrySetBackground(string key)
         {
             if (Background == null)
             {
                 return;
             }
 
-            // 背景エフェクトの作成。
-            var effectInfo = new EffectInfo(key, null);
-            var effect = effectInfo.LoadBackground();
+            // SimpleBackgroundの使用時のみエフェクト名を切り替えます。
+            var effectName = (
+                HasEffectFlag(EffectFlag.SimpleBackground) ?
+                "SimpleEffect" : key);
 
-            Background.AddEntity(effect);
+            // 背景エフェクトの作成。
+            var effectInfo = new EffectInfo(effectName, null);
+            var effect = effectInfo.LoadBackground();
+            if (effect != null)
+            {
+                var context = CreateBackgroundContext(key);
+                if (context != null)
+                {
+                    effect.Name += context.ImageUri;
+                    effect.DataContext = context;
+                }
+
+                Background.AddEntity(effect);
+            }
         }
 
         /// <summary>
@@ -518,106 +626,12 @@ namespace VoteSystem.PluginShogi.Effects
                 // 必要なら背景エフェクトを無効にします。
                 if (!HasEffectFlag(EffectFlag.Background))
                 {
-                    TrySetBackgroundKey(null);
+                    TrySetBackground(null);
                     return;
                 }
 
-                if (Client.Global.IsOfficial)
-                {
-                    UpdateOfficialBackground();
-                    //TrySetBackgroundKey("OfficialEffect");
-                }
-                else
-                {
-                    var Unit = 30;
-                    if (this.moveCount >= Unit * 3)
-                    {
-                        TrySetBackgroundKey("WinterEffect");
-                    }
-                    else if (this.moveCount >= Unit * 2)
-                    {
-                        TrySetBackgroundKey("AutumnEffect");
-                    }
-                    else if (this.moveCount >= Unit)
-                    {
-                        TrySetBackgroundKey("SummerEffect");
-                    }
-                    else
-                    {
-                        TrySetBackgroundKey("SpringEffect");
-                    }
-                }
-            });
-        }
-
-        private static List<string> officialBackgroundImageList;
-        private static List<string> GetOfficialBackgroundImageList()
-        {
-            if (officialBackgroundImageList == null)
-            {
-                try
-                {
-                    string[] extensions = { ".png", ".jpg", ".tif", ".bmp" };
-
-                    officialBackgroundImageList = System.IO.Directory
-                        .EnumerateFiles("ShogiData/Background/OfficialEffect", "*.*")
-                        .Select(_ => System.IO.Path.GetFileName(_))
-                        .Where(_ => extensions.Contains(System.IO.Path.GetExtension(_)))
-                        .OrderBy(_ => _)
-                        .ToList();
-                }
-                catch (Exception ex)
-                {
-                    Log.ErrorException(ex,
-                        "公式放送用の画像リストの取得に失敗しました。");
-
-                    officialBackgroundImageList = new List<string>();
-                }
-            }
-
-            return officialBackgroundImageList;
-        }
-
-        /// <summary>
-        /// 公式放送の背景イメージのインデックスを取得または設定します。
-        /// </summary>
-        public static int OfficialBackgroundImageIndex
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 公式放送用の背景エフェクトを更新します。
-        /// </summary>
-        public void UpdateOfficialBackground()
-        {
-            if (Background == null)
-            {
-                return;
-            }
-
-            var imageList = GetOfficialBackgroundImageList();
-            if (imageList == null || !imageList.Any())
-            {
-                return;
-            }
-
-            WPFUtil.UIProcess(() =>
-            {
-                OfficialBackgroundImageIndex %= imageList.Count();
-
-                var data = new OfficialBackgroundContext();
-                data.ImageUri = imageList[OfficialBackgroundImageIndex];
-
-                // 背景エフェクトの作成。
-                // エフェクト名を変えないとエフェクト自体が更新されません。
-                var effectInfo = new EffectInfo("OfficialEffect", null);
-                var effect = effectInfo.LoadBackground();
-                effect.Name = effect.Name + OfficialBackgroundImageIndex;
-                effect.DataContext = data;
-
-                Background.AddEntity(effect);
+                var key = GetBackgroundKey(this.moveCount);
+                TrySetBackground(key);
             });
         }
 
@@ -894,11 +908,11 @@ namespace VoteSystem.PluginShogi.Effects
 
             // 放送ログをまとめて読み込むと、
             // 投票エフェクトが大量に発生することがあります。
-            if (DateTime.Now < this.prevVotedTime + VoteInterval)
+            if (this.votedTimer.Elapsed < VoteInterval)
             {
                 return;
             }
-
+            
             // 投了時は玉の位置にエフェクトをかけます。
             var position =
                 ( move.IsResigned
@@ -913,9 +927,9 @@ namespace VoteSystem.PluginShogi.Effects
             if (effect != null)
             {
                 AddEffect(effect, position);
-
-                this.prevVotedTime = DateTime.Now;
             }
+
+            this.votedTimer.Reset();
         }
 
         /// <summary>

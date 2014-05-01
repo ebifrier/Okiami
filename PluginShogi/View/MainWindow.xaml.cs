@@ -135,9 +135,6 @@ namespace VoteSystem.PluginShogi.View
             Commands.BindInputs(this);
             ShogiControl.InitializeBindings(this);
 
-            Loaded += (_, __) =>
-                SizeToContent = SizeToContent.Manual;
-
             this.voteResultControl.InitializeBindings(this);
             this.voteResultControl.SettingUpdated +=
                 (_, __) => ShogiGlobal.Settings.Save();

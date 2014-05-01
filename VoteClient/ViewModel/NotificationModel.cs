@@ -3,37 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Ragnarok;
+
 namespace VoteSystem.Client.ViewModel
 {
     using Protocol;
 
+    /// <summary>
+    /// 投票サーバーからの通知をGUI上で表示するためのモデルクラスです。
+    /// </summary>
     public sealed class NotificationModel
     {
+        /// <summary>
+        /// 投票サーバーから来た通知を取得します。
+        /// </summary>
         public Notification Notification
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// 通知の番号を取得します。
+        /// </summary>
         public int No
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// 通知の内容を取得します。
+        /// </summary>
         public string Text
         {
             get
             {
                 if (Notification.Type == NotificationType.System)
                 {
-                    return Ragnarok.EnumEx.GetLabel(Notification.SystemType);
+                    return EnumEx.GetLabel(Notification.SystemType);
                 }
 
                 return Notification.Text;
             }
         }
 
+        /// <summary>
+        /// 通知を投稿した人を取得します。
+        /// </summary>
         public string VoterId
         {
             get
@@ -42,6 +59,9 @@ namespace VoteSystem.Client.ViewModel
             }
         }
 
+        /// <summary>
+        /// 通知の種類を取得します。
+        /// </summary>
         public string TypeString
         {
             get
@@ -70,6 +90,9 @@ namespace VoteSystem.Client.ViewModel
             }
         }
 
+        /// <summary>
+        /// 通知が投稿された放送を示す文字列を取得します。
+        /// </summary>
         public string FromLiveString
         {
             get
@@ -89,6 +112,9 @@ namespace VoteSystem.Client.ViewModel
             }
         }
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public NotificationModel(Notification notification, int no)
         {
             Notification = notification;

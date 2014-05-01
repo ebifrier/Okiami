@@ -89,6 +89,16 @@ namespace VoteSystem.PluginShogi.ViewModel
         }
 
         /// <summary>
+        /// シンプルな背景エフェクトの使用フラグを取得または設定します。
+        /// </summary>
+        [DependOnProperty(typeof(Settings), "SD_EffectFlag")]
+        public bool IsUseSimpleBackgroundEffect
+        {
+            get { return HasEffectFlag(EffectFlag.SimpleBackground); }
+            set { SetEffectFlag(EffectFlag.SimpleBackground, value); }
+        }
+
+        /// <summary>
         /// 駒に関するエフェクトの使用フラグを取得または設定します。
         /// </summary>
         [DependOnProperty(typeof(Settings), "SD_EffectFlag")]

@@ -1,3 +1,11 @@
+2014-05-01  - Ver 1.8.0.8
+
+	* PluginShogi/Effects/EffectManager.cs,
+	  PluginShogi/View/Detail/EffectSettingControl.xaml,
+	  PluginShogi/ViewModel/ShogiSettingDialogViewModel.cs,
+	  PluginShogi/ShogiData/Background/SimpleEffect:
+	  高速化のため、背景エフェクトを動かなくするような機能を追加しました。
+
 2014-04-09  - Ver 1.8.0.7
 
 	* PluginShogi/ShogiPlugin.cs: エフェクトの表示を専用スレッドで行うよう

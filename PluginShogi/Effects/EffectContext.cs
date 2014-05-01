@@ -87,8 +87,14 @@ namespace VoteSystem.PluginShogi.Effects
         }
     }
 
-    public sealed class OfficialBackgroundContext
+    /// <summary>
+    /// 背景用のコンテキストです。
+    /// </summary>
+    public sealed class BackgroundContext
     {
+        /// <summary>
+        /// 背景画像のパスを取得または設定します。
+        /// </summary>
         public string ImageUri
         {
             get;
