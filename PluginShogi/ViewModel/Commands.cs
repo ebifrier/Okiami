@@ -682,6 +682,10 @@ namespace VoteSystem.PluginShogi.ViewModel
 
                 // 現局面は更新しません。
                 ShogiGlobal.ShogiModel.SetBoard(board);
+
+                var model = ShogiGlobal.ShogiModel;
+                model.Settings.SD_BlackPlayerName = file.Headers["先手"];
+                model.Settings.SD_WhitePlayerName = file.Headers["後手"];
             }
             catch (Exception ex)
             {
