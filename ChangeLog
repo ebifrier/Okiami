@@ -7,6 +7,8 @@
 	  高速化のため、背景エフェクトを動かなくするような機能を追加しました。
 	* PluginShogi/ViewModel/Commands.cs: 棋譜ファイルの対局者名を盤面上に
 	反映指せるようにしました。
+	* PluginShogi/Effects/EffectManager.cs: 投票エフェクトが一度しか出ない
+	バグを修正しました。
 
 2014-04-09  - Ver 1.8.0.7
 

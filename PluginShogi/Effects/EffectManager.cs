@@ -929,7 +929,7 @@ namespace VoteSystem.PluginShogi.Effects
                 AddEffect(effect, position);
             }
 
-            this.votedTimer.Reset();
+            this.votedTimer.Restart();
         }
 
         /// <summary>
