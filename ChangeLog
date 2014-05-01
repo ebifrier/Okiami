@@ -1,3 +1,8 @@
+2014-05-01  - Ver 1.8.0.9
+
+	* ボナ子でも同様のクラスを使うため、評価値表示用のコントロールを
+	Ragnarokに移動しました。
+
 2014-05-01  - Ver 1.8.0.8
 
 	* PluginShogi/Effects/EffectManager.cs,

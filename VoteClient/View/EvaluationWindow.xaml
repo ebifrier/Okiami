@@ -34,7 +34,7 @@
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                 <Separator />
                 <MenuItem Header="設定ウィンドウを開く"
-                          Command="{x:Static s:EvaluationControl.OpenSettingDialog}"
+                          Command="{x:Static r:EvaluationControl.OpenSettingDialog}"
                           CommandTarget="{Binding PlacementTarget,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                 <Separator />
@@ -87,8 +87,8 @@
         <!-- 評価値画像と評価値 -->
         <Viewbox Grid.RowSpan="3" Grid.ColumnSpan="3"
                  Stretch="Fill">
-            <s:EvaluationControl x:Name="EvaluationControl"
-                                 ImageSetList="{s:ImageSetList Data/Image}"
+            <r:EvaluationControl x:Name="EvaluationControl"
+                                 ImageSetList="{r:ImageSetList Data/Image}"
                                  SelectedImageSetTitle="{Binding AS_EvaluationImageSetTitle,
                                                                  Source={x:Static t:Global.Settings}}"
                                  UserPoint="{Binding VoteResult.EvaluationPoint,

@@ -4,7 +4,6 @@
         <ResourceDictionary Source="/VoteProtocol;component/View/AnalogmaControl.xaml" />
         <ResourceDictionary Source="/VoteProtocol;component/View/EndingControl.xaml" />
         <ResourceDictionary Source="/VoteProtocol;component/View/EndRollControl.xaml" />
-        <ResourceDictionary Source="/VoteProtocol;component/View/EvaluationControl.xaml" />
         <ResourceDictionary Source="/VoteProtocol;component/View/VoteResultControl.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 
 using Ragnarok;
+using Ragnarok.Utility;
 
 namespace VoteSystem.Client.Model
 {
