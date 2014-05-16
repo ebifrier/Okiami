@@ -9,7 +9,7 @@ require 'kconv'
 require 'mysql'
 require 'rexml/document'
 
-$HtmlBasePath = "E:/HP/garnet-alice.net/programs/votesystem"
+$HtmlBasePath = "E:/Dropbox/NicoNico/homepage/garnet-alice.net/programs/votesystem"
 
 #
 # ビルドしたファイルを配布用ディレクトリにコピーします。

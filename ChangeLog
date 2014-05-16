@@ -6,6 +6,8 @@
 	た。
 	* VoteClient/Model/VoteClient.cs: 不要なusing宣言を削除しました。
 	* dist/history.yaml: 更新履歴を更新しました。
+	* dist/build.rb: 配布用ファイルのローカルコピー先ディレクトリを変更しま
+	した。
 	* バージョンを1.8.1に更新しました。
 
 2014-05-16  - Ver 1.8.1.0
