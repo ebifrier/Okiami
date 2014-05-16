@@ -43,7 +43,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
+    <OutputPath>..\bin\Debug\Plugin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -52,7 +52,7 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
+    <OutputPath>..\bin\Release\Plugin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -68,6 +68,7 @@
     <Reference Include="protobuf-net, Version=1.0.0.280, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Ragnarok\externals\net\protobuf-net.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -570,6 +571,7 @@
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Extra\Ragnarok.Extra.csproj">
       <Project>{8EBDC79A-607B-4B56-A298-1471CD6753DB}</Project>
       <Name>Ragnarok.Extra</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Presentation.Shogi\Ragnarok.Presentation.Shogi.csproj">
       <Project>{DDF48C77-8221-4469-8A4C-8865096AAB06}</Project>
@@ -578,6 +580,7 @@
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Presentation\Ragnarok.Presentation.csproj">
       <Project>{2E5515A8-7B34-44A2-9C50-F423C5F87798}</Project>
       <Name>Ragnarok.Presentation</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Shogi\Ragnarok.Shogi.csproj">
       <Project>{38ABBDA5-B22F-41B7-A415-2A909D0A6A35}</Project>
@@ -586,14 +589,17 @@
     <ProjectReference Include="..\..\Ragnarok\Ragnarok\Ragnarok.csproj">
       <Project>{A348968A-DD91-47B4-9420-C7D370A2BE92}</Project>
       <Name>Ragnarok</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\VoteClient\VoteClient.csproj">
       <Project>{A1036139-2DAE-4C31-9684-C5A0C5FDFC69}</Project>
       <Name>VoteClient</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\VoteProtocol\VoteProtocol.csproj">
       <Project>{06216C89-D40E-417D-847B-A4D982472D8C}</Project>
       <Name>VoteProtocol</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -612,15 +618,15 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set OUTDIR="$(SolutionDir)bin\$(ConfigurationName)"
-
-if exist "%25OUTDIR%25" goto skip
-mkdir "%25OUTDIR%25"
-
+    <PostBuildEvent>if exist "$(OutDir)Plugin" goto skip
+rem mkdir "$(OutDir)Plugin"
 :skip
-copy "$(TargetPath)" "%25OUTDIR%25\$(TargetFileName)"
-copy "$(TargetDir)Ragnarok.Presentation.Shogi.dll" "%25OUTDIR%25\"
-xcopy /s /i /y "$(TargetDir)ShogiData" "%25OUTDIR%25\ShogiData"</PostBuildEvent>
+
+rem move "$(TargetPath)" "$(OutDir)Plugin\"
+rem move "$(TargetDir)Ragnarok.Shogi.dll" "$(OutDir)Plugin\"
+rem move "$(TargetDir)Ragnarok.Presentation.Shogi.dll" "$(OutDir)Plugin\"
+rem move /Y "$(TargetDir)ShogiData" "$(ProjectDir)$(OutDir)Plugin\ShogiData"
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

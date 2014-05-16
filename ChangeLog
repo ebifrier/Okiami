@@ -1,3 +1,13 @@
+2014-05-17  - Ver 1.8.1.1
+
+	* PluginShogi/PluginShogi.csproj: プラグインファイルの出力位置をexeと同
+	じディレクトリから、Pluginディレクトリに変更しました。: 
+	* VoteClient/IPlugin.cs: プラグインをPluginフォルダに入れるようにしまし
+	た。
+	* VoteClient/Model/VoteClient.cs: 不要なusing宣言を削除しました。
+	* dist/history.yaml: 更新履歴を更新しました。
+	* バージョンを1.8.1に更新しました。
+
 2014-05-16  - Ver 1.8.1.0
 
 	* PluginShogi/Effects/EffectManager.cs: 背景エフェクトをオフにできるよ

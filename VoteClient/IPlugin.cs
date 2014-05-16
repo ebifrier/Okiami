@@ -104,6 +104,15 @@ namespace VoteSystem.Client
     internal static class PluginUtil
     {
         /// <summary>
+        /// プラグイン用Dllのプレフィックスです。
+        /// </summary>
+        public static readonly string PluginDllPrefix = "Plugin";
+        /// <summary>
+        /// プラグインのあるディレクトリです。
+        /// </summary>
+        public static readonly string PluginDirectory = "Plugin";
+
+        /// <summary>
         /// プラグインを読み込み、オブジェクトを作成します。
         /// </summary>
         internal static IPlugin LoadPlugin(Type pluginType)
@@ -187,7 +196,9 @@ namespace VoteSystem.Client
             try
             {
                 var asm = Assembly.GetExecutingAssembly();
-                var pluginPath = Path.GetDirectoryName(asm.Location);
+                var pluginPath = Path.Combine(
+                    Path.GetDirectoryName(asm.Location),
+                    PluginDirectory);
                 if (!Directory.Exists(pluginPath))
                 {
                     return new List<IPlugin>();
@@ -196,7 +207,7 @@ namespace VoteSystem.Client
                 // Plugin/xxx.dllからプラグインを読み込みます。
                 return Directory
                     .EnumerateFiles(pluginPath, "*.dll")
-                    .Where(_ => Path.GetFileName(_).StartsWith("Plugin"))
+                    .Where(_ => Path.GetFileName(_).StartsWith(PluginDllPrefix))
                     .Select(_ => LoadPlugin(_))
                     .Where(plugin => plugin != null)
                     .ToList();

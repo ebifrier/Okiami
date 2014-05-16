@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using System.Windows;
 
 using Ragnarok;
@@ -31,7 +32,13 @@ namespace VoteSystem.PluginShogi
         public static void Initialize(ShogiPlugin plugin, Client.PluginHost host)
         {
             WPFUtil.Init();
+
+            // パーティクルシステムの想定画面サイズを設定。
             FlintSharp.Utils.ScreenSize = new Size(600, 360);
+
+            EffectInfo.BaseDir = new Uri(
+                new Uri(Assembly.GetExecutingAssembly().Location),
+                "ShogiData/xxx");
 
             ClientWindow = host.Window;
             VoteClient = host.VoteClient;

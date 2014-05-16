@@ -16,19 +16,19 @@ $HtmlBasePath = "E:/HP/garnet-alice.net/programs/votesystem"
 #
 def setup_dist(appdata)
   outdir = appdata.outdir_path
-  Dir::mkdir(File.join(outdir, "Plugin"))
+  FileUtils.mkdir(File.join(outdir, "Plugin"))
   
   Dir.glob(File.join(outdir, "*")).each do |name|
-    if /\.(pdb|xml)$/i =~ name
+    if /\.(pdb|xml)$/i =~ name or
+       /nunit\.framework\./ =~ name or
+       /VoteServer\.exe.*$/i =~ name or
+       /SpeedTest\.exe.*$/i =~ name or
+       /TimeController\.exe.*$/i =~ name
       deleteall(name)
-    elsif /nunit\.framework\./ =~ name
-      deleteall(name)
-    elsif /VoteServer\.exe.*$/i =~ name
-      deleteall(name)
-    elsif /SpeedTest\.exe.*$/i =~ name
-      deleteall(name)
-    elsif /TimeController\.exe.*$/i =~ name
-      deleteall(name)
+    elsif /Plugin\w*\.dll$/i =~ name or
+          /Ragnarok.*\.Shogi\.dll$/i =~ name or
+          /ShogiData$/i =~ name
+      FileUtils.mv(name, File.join(outdir, "Plugin"))
     end
   end
   
@@ -50,10 +50,12 @@ end
 # 配布用ファイルを作成します。
 #
 def make_dist(appdata)
+  define = "CLR4_0;CLR_GE_2_0;CLR_GE_3_0;CLR_GE_3_5;CLR_GE_4_0;PUBLISHED"
+
   # アセンブリバージョンが入ったディレクトリに
   # 作成ファイルを出力します。
-  solution_path = File.join( File.dirname(appdata.dist_path), "VoteSystem.sln")
-  appdata.build(solution_path, "CLR_V4;PUBLISHED")
+  solution_path = File.join(File.dirname(appdata.dist_path), "VoteSystem.sln")
+  appdata.build(solution_path, define)
   setup_dist(appdata)
   
   # zipに圧縮します。

@@ -10,7 +10,6 @@ using Ragnarok;
 using Ragnarok.Net;
 using Ragnarok.Net.ProtoBuf;
 using Ragnarok.NicoNico.Live;
-using Ragnarok.Shogi;
 using Ragnarok.ObjectModel;
 using Ragnarok.Utility;
 

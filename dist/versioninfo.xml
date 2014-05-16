@@ -9,18 +9,18 @@
     </link>
     <description/>
     <language>ja</language>
-    <pubDate>Thu Mar 06 03:13:32 +0900 2014</pubDate>
+    <pubDate>Fri May 16 23:57:49 +0900 2014</pubDate>
     <item>
-      <title>Version 1.8.0</title>
+      <title>Version 1.8.1</title>
       <sparkle:updatePackLink>
         http://garnet-alice.net/programs/update/UpdatePack.exe
       </sparkle:updatePackLink>
       <sparkle:releaseNotesLink>
-        http://garnet-alice.net/programs/votesystem/update/release_note.html?v=35738
+        http://garnet-alice.net/programs/votesystem/update/release_note.html?v=5483
       </sparkle:releaseNotesLink>
-      <enclosure url="http://garnet-alice.net/programs/votesystem/download/Okiami_1_8_0.zip"
-                 sparkle:version="1.8.0"
-                 sparkle:md5Signature="4d5f673257a2c4c7810bd43de1e5c7f8" />
+      <enclosure url="http://garnet-alice.net/programs/votesystem/download/Okiami_1_8_1.zip"
+                 sparkle:version="1.8.1"
+                 sparkle:md5Signature="f3a4feb90a4a89e8a985fc83c92cece4" />
     </item>
   </channel>
 </rss>
