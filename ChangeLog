@@ -1,3 +1,13 @@
+2014-05-16  - Ver 1.8.1.0
+
+	* PluginShogi/Effects/EffectManager.cs: 背景エフェクトをオフにできるよ
+	うにしました。(BUG Fix)
+	* PluginShogi/View/MainWindow.xaml: 「設定」関係のメニューを一部修正し
+	ました。
+	* PluginShogi/View/ShogiSettingDialog.xaml: 選択されたタブの位置を保存
+	するようにしました。
+	* View/SettingDialog.xaml: タブの名前を修正しました。
+
 2014-05-01  - Ver 1.8.0.9
 
 	* ボナ子でも同様のクラスを使うため、評価値表示用のコントロールを

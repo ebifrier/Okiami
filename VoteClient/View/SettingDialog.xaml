@@ -28,11 +28,11 @@
                 <vc:BasicSettingControl />
             </TabItem>
             
-            <TabItem Header="システムメッセージ設定">
+            <TabItem Header="システムメッセージ">
                 <vc:SystemMessageSettingControl />
             </TabItem>
             
-            <TabItem Header="秒読み設定">
+            <TabItem Header="秒読み">
                 <vc:SoundSettingPage />
             </TabItem>            
         </TabControl>

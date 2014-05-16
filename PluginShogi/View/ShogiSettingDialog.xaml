@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:rp="http://schemas.garnet-alice.net/ragnarok/xaml/presentation"
         mc:Ignorable="d" 
-        Title="設定ダイアログ" ResizeMode="NoResize"
+        Title="将棋設定" ResizeMode="NoResize"
         d:DesignHeight="424" d:DesignWidth="342" SizeToContent="WidthAndHeight">
     
     <Window.Resources>
@@ -27,8 +27,8 @@
             <RowDefinition Height="0" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
-        <TabControl>
+
+        <TabControl SelectedIndex="{Binding SelectedTabIndex}">
             <TabItem Header="一般">
                 <StaticResource ResourceKey="generalSettingControl" />
             </TabItem>

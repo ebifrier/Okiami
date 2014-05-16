@@ -28,6 +28,16 @@ namespace VoteSystem.PluginShogi.ViewModel
             get { return ShogiGlobal.Settings; }
         }
 
+        /// <summary>
+        /// ダイアログのタブインデックスを取得または設定します。
+        /// </summary>
+        [DependOnProperty(typeof(Settings), "SD_SelectedTabIndex")]
+        public int SelectedTabIndex
+        {
+            get { return Settings.SD_SelectedTabIndex; }
+            set { Settings.SD_SelectedTabIndex = value; }
+        }
+
         #region エフェクト
         /// <summary>
         /// エフェクトの個別の使用フラグを取得します。

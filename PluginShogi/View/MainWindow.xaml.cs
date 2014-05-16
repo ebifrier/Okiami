@@ -135,6 +135,8 @@ namespace VoteSystem.PluginShogi.View
             Commands.BindInputs(this);
             ShogiControl.InitializeBindings(this);
 
+            Loaded += OnLoaded;
+
             this.voteResultControl.InitializeBindings(this);
             this.voteResultControl.SettingUpdated +=
                 (_, __) => ShogiGlobal.Settings.Save();
@@ -170,6 +172,11 @@ namespace VoteSystem.PluginShogi.View
 
             // 背景のトランジションが始まります。
             InitBackground();
+        }
+
+        void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            //Ragnarok.Presentation.WPFUtil.SetRenderMode(this, true);
         }
         
         protected override void OnClosed(EventArgs e)

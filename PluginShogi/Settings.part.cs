@@ -104,6 +104,13 @@ namespace VoteSystem.PluginShogi
         #endregion
 
         #region 設定ダイアログ
+        [DefaultValue(0)]
+        public int SD_SelectedTabIndex
+        {
+            get { return GetValue<int>("SD_SelectedTabIndex"); }
+            set { SetValue("SD_SelectedTabIndex", value); }
+        }
+
         #region 一般
         [DefaultValue("リスナー")]
         public string SD_BlackPlayerName

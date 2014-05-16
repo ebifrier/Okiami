@@ -606,9 +606,10 @@ namespace VoteSystem.PluginShogi.Effects
                     effect.Name += context.ImageUri;
                     effect.DataContext = context;
                 }
-
-                Background.AddEntity(effect);
             }
+
+            // effectはnullのことがあります。
+            Background.AddEntity(effect);
         }
 
         /// <summary>
