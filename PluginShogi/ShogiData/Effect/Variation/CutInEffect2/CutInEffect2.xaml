@@ -6,9 +6,9 @@
     <r:CellMeshConverter x:Key="cellMeshConv" />
 
     <Vector3D x:Key="backgroundCoord"
-              X="400" Y="240" Z="{x:Static r:ShogiControl.PreEffectZ}" />
+              X="400" Y="240" Z="{x:Static r:ShogiUIElement3D.PreEffectZ}" />
     <Vector3D x:Key="foregroundCoord"
-              X="400" Y="240" Z="{x:Static r:ShogiControl.PostEffectZ}" />
+              X="400" Y="240" Z="{x:Static r:ShogiUIElement3D.PostEffectZ}" />
 
     <!--<f:LineZone x:Key="particlePositionZone"
                 Point1="380,-40" Point2="580,-40" />

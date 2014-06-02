@@ -15,9 +15,9 @@
                 OffsetX="300" OffsetY="270" />
     
     <Vector3D x:Key="backgroundCoord"
-              X="300" Y="180" Z="{x:Static r:ShogiControl.PreEffectZ}" />
+              X="300" Y="180" Z="{x:Static r:ShogiUIElement3D.PreEffectZ}" />
     <Vector3D x:Key="castleBackCoord"
-              X="300" Y="140" Z="{x:Static r:ShogiControl.PreEffectZ}" />
+              X="300" Y="140" Z="{x:Static r:ShogiUIElement3D.PreEffectZ}" />
 
     <r:CellMeshConverter x:Key="cellMeshConv" />
     <r:CellMeshConverter x:Key="cellMeshWideConv" Widen="0.2" />

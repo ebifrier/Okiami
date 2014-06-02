@@ -6,7 +6,7 @@
     <r:CellMeshConverter x:Key="cellMeshConv" />
 
     <Vector3D x:Key="backgroundCoord"
-              X="300" Y="180" Z="{x:Static r:ShogiControl.PreEffectZ}" />
+              X="300" Y="180" Z="{x:Static r:ShogiUIElement3D.PreEffectZ}" />
 
     <r:EffectObject x:Key="Effect">
         <!-- カットイン画像 -->

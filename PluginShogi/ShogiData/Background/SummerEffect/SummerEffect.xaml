@@ -4,14 +4,14 @@
                     xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation">
     <f:LineZone x:Key="positionZone"
                 Point1="-40, -40"
-                Point2="640, -40" />
+                Point2="680, -40" />
     <f:DiscSectorZone x:Key="speedZone"
                       InnerRadius="60" OuterRadius="120"
                       MinAngle="100" MaxAngle="130" />
 
     <f:LineZone x:Key="positionCloudZone"
-                Point1="800, -100"
-                Point2="800, 460" />
+                Point1="840, -100"
+                Point2="840, 460" />
     <f:DiscSectorZone x:Key="speedCloudZone"
                       InnerRadius="60" OuterRadius="120"
                       MinAngle="180" MaxAngle="180" />
@@ -21,8 +21,8 @@
                         MaterialType="Diffuse"
                         Opacity="0.7"
                         Duration="Forever"
-                        Coord="300,180,0"
-                        BaseScale="600,360,1" />
+                        Coord="320,180,0"
+                        BaseScale="640,360,1" />
         
         <r:EffectObject.Emitters>
             <f:Emitter>

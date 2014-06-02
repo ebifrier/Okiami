@@ -34,7 +34,7 @@ namespace VoteSystem.PluginShogi
             WPFUtil.Init();
 
             // パーティクルシステムの想定画面サイズを設定。
-            FlintSharp.Utils.ScreenSize = new Size(600, 360);
+            FlintSharp.Utils.ScreenSize = new Size(640, 360);
 
             EffectInfo.BaseDir = new Uri(
                 new Uri(Assembly.GetExecutingAssembly().Location),
@@ -157,7 +157,7 @@ namespace VoteSystem.PluginShogi
         /// <summary>
         /// 将棋コントロールを取得または設定します。
         /// </summary>
-        public static ShogiControl ShogiControl
+        public static ShogiUIElement3D ShogiControl
         {
             get
             {

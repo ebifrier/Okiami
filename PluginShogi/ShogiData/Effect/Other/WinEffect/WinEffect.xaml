@@ -4,9 +4,9 @@
                     xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation">
 
     <Vector3D x:Key="backgroundCoord"
-              X="300" Y="180" Z="{x:Static r:ShogiControl.PreEffectZ}" />
+              X="300" Y="180" Z="{x:Static r:ShogiUIElement3D.PreEffectZ}" />
     <Vector3D x:Key="foregroundCoord"
-              X="300" Y="180" Z="{x:Static r:ShogiControl.PostEffectZ}" />
+              X="300" Y="180" Z="{x:Static r:ShogiUIElement3D.PostEffectZ}" />
     <f:DiscZone x:Key="particlePositionZone"
                 Center="0,0" InnerRadius="4.0" OuterRadius="6.0" />
 

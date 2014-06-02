@@ -4,7 +4,7 @@
                     xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation">
     <f:LineZone x:Key="positionZone"
                 Point1="-40, -40"
-                Point2="640, -40" />
+                Point2="680, -40" />
     <f:DiscSectorZone x:Key="speedZone"
                       InnerRadius="60" OuterRadius="120"
                       MinAngle="100" MaxAngle="130" />
@@ -14,8 +14,8 @@
                         Opacity="1.0"
                         MaterialType="Diffuse"
                         Duration="Forever"
-                        Coord="300,180,0"
-                        BaseScale="600,360,1"
+                        Coord="320,180,0"
+                        BaseScale="640,360,1"
                         Color="White" />
         
         <r:EffectObject.Emitters>
