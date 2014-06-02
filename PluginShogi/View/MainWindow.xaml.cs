@@ -17,6 +17,7 @@ using System.Windows.Threading;
 
 using Ragnarok;
 using Ragnarok.Shogi;
+using Ragnarok.Presentation.Control;
 using Ragnarok.Presentation.Shogi;
 using Ragnarok.Presentation.Shogi.Effects;
 using Ragnarok.Presentation.Utility;
@@ -27,6 +28,7 @@ namespace VoteSystem.PluginShogi.View
 {
     using Effects;
     using ViewModel;
+    using Protocol.View;
 
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
@@ -34,14 +36,8 @@ namespace VoteSystem.PluginShogi.View
     public partial class MainWindow : Window
     {
         private readonly ShogiWindowViewModel model;
-
-        /// <summary>
-        /// 静敵コンストラクタ
-        /// </summary>
-        static MainWindow()
-        {
-            FlintSharp.Utils.ScreenSize = new Size(620, 360);
-        }
+        private readonly VoteResultControl voteResultControl;
+        private readonly EvaluationControl evaluationControl;
 
         protected override void OnDragOver(DragEventArgs e)
         {
@@ -131,6 +127,11 @@ namespace VoteSystem.PluginShogi.View
         public MainWindow(ShogiWindowViewModel model)
         {
             InitializeComponent();
+            this.voteResultControl = (VoteResultControl)
+                Resources["voteResultControl"];
+            this.evaluationControl = (EvaluationControl)
+                Resources["evaluationControl"];
+
             Commands.BindCommands(this);
             Commands.BindInputs(this);
             ShogiControl.InitializeBindings(this);

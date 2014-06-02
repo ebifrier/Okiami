@@ -1,3 +1,21 @@
+2014-06-02  - Ver 1.8.1.4
+
+	* PluginShogi/View/MainWindow.xaml,
+	  PluginShogi/View/ShogiEndRollControl.xaml: 高速化のため、将棋盤コント
+	ロールを通常のコントロールではなく3Dで使うモデルエレメントに修正しまし
+	た。そのため、Viewport3Dなどのコントロールが新たに追加されました。
+	* PluginShogi/Effects/EffectManager.cs: ShogiControlなどのクラス名を修
+	正しました。
+	* PluginShogi/PluginShogi.csproj: Ragnarok.Shogi.dllはVoteProtocol.dll
+	と一緒にコピーされるため、プラグインであるPluginShogi.dllとは一緒にコピ
+	ーしないようにしました。
+
+2014-06-02  - Ver 1.8.1.3
+
+	* PluginShogi/ShogiData: 背景の想定画面解像度を(600x360)から(640x360)に
+	変更しました。また、将棋盤コントロールの名前をShogiControlを
+	ShogiElement3Dに変更しました。
+
 2014-05-22  - Ver 1.8.1.2
 
 	* バージョン1.8.1を少し修正しました。

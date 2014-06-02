@@ -88,7 +88,7 @@ namespace VoteSystem.PluginShogi.Effects
     /// <summary>
     /// エフェクトの管理を行います。
     /// </summary>
-    public class EffectManager : NotifyObject, IEffectManager
+    public sealed class EffectManager : NotifyObject, IEffectManager
     {
         /// <summary>
         /// 投票エフェクトの最短表示インターバルです。
@@ -113,7 +113,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// エフェクトを表示するオブジェクトを取得または設定します。
         /// </summary>
-        public ShogiControl Container
+        public ShogiUIElement3D Container
         {
             get;
             set;
@@ -122,7 +122,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 背景エフェクトを表示するコントロールを取得または設定します。
         /// </summary>
-        public VisualBackground Background
+        public BackgroundUIElement3D Background
         {
             get;
             set;
@@ -243,7 +243,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// </summary>
         private EffectContext CreateContext(
             Position position,
-            double z = ShogiControl.EffectZ)
+            double z = ShogiUIElement3D.EffectZ)
         {
             var p = Container.GetPiecePos(position);
             var s = Container.CellSize;
@@ -261,7 +261,7 @@ namespace VoteSystem.PluginShogi.Effects
         private CellEffectContext CreateCellContext(
             Position position,
             Position cellPosition = null,
-            double z = ShogiControl.BanEffectZ)
+            double z = ShogiUIElement3D.BanEffectZ)
         {
             return CreateCellContext(new[] { position }, cellPosition, z);
         }
@@ -272,7 +272,7 @@ namespace VoteSystem.PluginShogi.Effects
         private CellEffectContext CreateCellContext(
             IEnumerable<Position> positions,
             Position cellPosition = null,
-            double z = ShogiControl.BanEffectZ)
+            double z = ShogiUIElement3D.BanEffectZ)
         {
             var bp = Container.BanBounds.TopLeft;
             var bs = Container.BanBounds.Size;
@@ -457,7 +457,7 @@ namespace VoteSystem.PluginShogi.Effects
                 effect.DataContext = CreateCellContext(
                     castle.PieceList.Select(_ => ViewFlip(_.Position, side)),
                     position,
-                    ShogiControl.EffectZ);
+                    ShogiUIElement3D.EffectZ);
 
                 // 囲いエフェクト中は駒の移動を停止します。
                 var model = ShogiGlobal.ShogiModel;

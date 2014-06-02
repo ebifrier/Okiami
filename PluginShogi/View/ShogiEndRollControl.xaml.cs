@@ -433,7 +433,7 @@ namespace VoteSystem.PluginShogi.View
             };
             this.effectManager.ChangeMoveCount(1);
 
-            EndRoll.DataGetter = GetVoterList;
+            // EndRoll.DataGetter = GetVoterList;
             ShogiControl.EffectManager = this.effectManager;
 
             Ending.MoviePlayer.MediaOpened += MoviePlayer_MediaOpened;
@@ -442,7 +442,7 @@ namespace VoteSystem.PluginShogi.View
             DataContext = ShogiGlobal.ShogiModel;
 
             // プロパティ設定
-            FormatFilePath = @"ShogiData/EndRoll/endroll_format.xml";
+            FormatFilePath = @"Plugin/ShogiData/EndRoll/endroll_format.xml";
             IsMovieMute = false;
             MovieVolume = 50;
             EndRollQuality = EndRollQuality.Best;
@@ -625,7 +625,7 @@ namespace VoteSystem.PluginShogi.View
             EndRoll.Stop();
             Ending.Stop();
 
-            ShogiControl.StopAutoPlay();
+            //ShogiControl.StopAutoPlay();
             ShogiGrid.Opacity = 0.0;
             MovieBrush.Opacity = 0.0;
             Position = TimeSpan.Zero;

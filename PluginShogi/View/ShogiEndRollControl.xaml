@@ -52,21 +52,38 @@
                     </Border.Background>
                 </Border>
 
-                <Grid Canvas.Left="350" Canvas.Top="195"
-                      Width="250" Height="150"
-                      Opacity="0.0" HorizontalAlignment="Center"
-                      x:Name="ShogiGrid">
-                    <p:VisualBackground x:Name="ShogiBackground"
-                                        Viewport="0,0,600,360" />
-                
-                    <p:ShogiControl x:Name="ShogiControl"
-                                    PieceImage="{Binding KomaImage}"
-                                    BanBrush="{StaticResource banBrush}"
-                                    PieceBoxBrush="{StaticResource komadaiBrush}"
-                                    IsLeaveTimeVisible="False"
-                                    BlackPlayerName=""
-                                    WhitePlayerName="" />
-                </Grid>
+                <Viewport3D Width="250" Height="150"
+                            Canvas.Left="350" Canvas.Top="195"
+                            RenderOptions.EdgeMode="Unspecified"
+                            Opacity="0.0" HorizontalAlignment="Center"
+                            x:Name="ShogiGrid">
+                    <Viewport3D.Camera>
+                        <OrthographicCamera
+                            Width="640"
+                            LookDirection="0,0,1"
+                            Position="320,180,-500"
+                            UpDirection="0.000000,-1.000000,0.000000"
+                            NearPlaneDistance="1" FarPlaneDistance="1000" />
+                    </Viewport3D.Camera>
+                    
+                    <ModelUIElement3D IsHitTestVisible="False">
+                        <AmbientLight Color="White" />
+                    </ModelUIElement3D>
+
+                    <p:BackgroundUIElement3D x:Name="ShogiBackground" />
+
+                    <p:ShogiUIElement3D x:Name="ShogiControl"
+                                        PieceImage="{Binding KomaImage}"
+                                        BanBrush="{StaticResource banBrush}"
+                                        PieceBoxBrush="{StaticResource komadaiBrush}"
+                                        IsLeaveTimeVisible="False"
+                                        BlackPlayerName=""
+                                        WhitePlayerName="">
+                        <p:ShogiUIElement3D.Transform>
+                            <TranslateTransform3D OffsetX="20" />
+                        </p:ShogiUIElement3D.Transform>
+                    </p:ShogiUIElement3D>
+                </Viewport3D>
 
                 <!-- Canvas.Left=-80 が中心位置
                      左右に80ずつはみ出してる -->

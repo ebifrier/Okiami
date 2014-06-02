@@ -576,6 +576,7 @@
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Presentation.Shogi\Ragnarok.Presentation.Shogi.csproj">
       <Project>{DDF48C77-8221-4469-8A4C-8865096AAB06}</Project>
       <Name>Ragnarok.Presentation.Shogi</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Presentation\Ragnarok.Presentation.csproj">
       <Project>{2E5515A8-7B34-44A2-9C50-F423C5F87798}</Project>
@@ -585,6 +586,7 @@
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Shogi\Ragnarok.Shogi.csproj">
       <Project>{38ABBDA5-B22F-41B7-A415-2A909D0A6A35}</Project>
       <Name>Ragnarok.Shogi</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Ragnarok\Ragnarok\Ragnarok.csproj">
       <Project>{A348968A-DD91-47B4-9420-C7D370A2BE92}</Project>

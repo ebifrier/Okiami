@@ -9,12 +9,13 @@
         xmlns:v="clr-namespace:VoteSystem.PluginShogi.View"
         xmlns:svm="clr-namespace:VoteSystem.PluginShogi.ViewModel"
         mc:Ignorable="d" x:Name="window"
-        Title="将棋盤ちゃん" Width="720" Height="530"
+        Title="将棋盤ちゃん" Width="670" Height="480"
         AllowDrop="True" ResizeMode="CanResize"
         Background="{x:Static Brushes.White}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Ragnarok.Presentation.Shogi;component/View/ShogiUIElement3D.xaml" />
                 <ResourceDictionary Source="CommonDictionary.xaml" />
                 <ResourceDictionary Source="MainMenu.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -51,6 +52,69 @@
                           IsCheckable="True"
                           IsChecked="{Binding GlobalModel.IsEndingMode}" />
             </ContextMenu>
+
+            <!-- 右上の隙間の位置 -->
+            <Transform3DGroup x:Key="Space0Transform">
+                <ScaleTransform3D ScaleX="145" ScaleY="163" ScaleZ="1.0" />
+                <TranslateTransform3D OffsetX="{r:Calc 300+245}" OffsetY="{r:Calc (10/2+163/2)}" />
+            </Transform3DGroup>
+
+            <!-- 左下の隙間の位置 -->
+            <Transform3DGroup x:Key="Space1Transform">
+                <ScaleTransform3D ScaleX="130" ScaleY="176" ScaleZ="1.0" />
+                <TranslateTransform3D OffsetX="{r:Calc 300-240}" OffsetY="{r:Calc 360-(16/2+170/2)}" />
+            </Transform3DGroup>
+
+            <!-- 投票結果 -->
+            <s:VoteResultControl
+                x:Key="voteResultControl"
+                Visibility="{Binding Settings.AS_IsShowVoteResult,
+                                     Converter={StaticResource visibilityConverterHidden}}"
+                VoteResult="{Binding VoteClient.VoteResult}"
+                VoteState="{Binding VoteClient.VoteState}"
+                TotalVoteLeaveTime="{Binding VoteClient.TotalVoteLeaveTime}"
+                VoteLeaveTime="{Binding VoteClient.VoteLeaveTime}"
+                ThinkTime="{Binding VoteClient.ThinkTime}"
+                IsConnectedToLive="{Binding ClientModel.IsConnectedToLive}"
+                IsUseLiveNotConnectWarning="{Binding Settings.SD_IsUseLiveNotConnectWarning}"
+                Foreground="{Binding Settings.VR_FontColor,
+                                     Converter={StaticResource brushConverter}}"
+                Background="{Binding Settings.VR_BackgroundColor,
+                                     Converter={StaticResource brushConverter}}"
+                Stroke="{Binding Settings.VR_StrokeColor,
+                                 Converter={StaticResource brushConverter}}"
+                FontFamily="{Binding Settings.VR_FontFamilyName,
+                                     Converter={StaticResource fontFamilyConverter}}"
+                FontWeight="{Binding Settings.VR_FontWeight}"
+                FontStyle="{Binding Settings.VR_FontStyle}"
+                IsShowThinkTime="{Binding Settings.VR_IsShowThinkTime}"
+                IsShowStroke="{Binding Settings.VR_IsShowStroke}"
+                StrokeThicknessInternal="{Binding Settings.VR_StrokeThicknessInternal}"
+                DisplayCandidateCount="{Binding Settings.VR_DisplayResultCount}"
+                IsDisplayPointFullWidth="{Binding Settings.VR_IsDisplayPointFullWidth}" />
+
+            <DiffuseMaterial x:Key="voteResultMaterial">
+                <DiffuseMaterial.Brush>
+                    <VisualBrush Visual="{StaticResource voteResultControl}"
+                                 RenderOptions.CachingHint="Cache" />
+                </DiffuseMaterial.Brush>
+            </DiffuseMaterial>
+
+            <!-- 投票結果 -->
+            <r:EvaluationControl x:Key="evaluationControl"
+                                 ImageSetList="{r:ImageSetList Data/Image}"
+                                 Visibility="{Binding Settings.AS_IsShowEvaluationValue,
+                                                      Converter={StaticResource visibilityConverterHidden}}"
+                                 SelectedImageSetTitle="{Binding Settings.AS_EvaluationImageSetTitle}"
+                                 UserPoint="{Binding VoteResult.EvaluationPoint,
+                                                     Source={x:Static l:ShogiGlobal.VoteClient}}" />
+
+            <DiffuseMaterial x:Key="evaluationControlMaterial">
+                <DiffuseMaterial.Brush>
+                    <VisualBrush Visual="{StaticResource evaluationControl}"
+                                 RenderOptions.CachingHint="Cache" />
+                </DiffuseMaterial.Brush>
+            </DiffuseMaterial>
         </ResourceDictionary>
     </Window.Resources>
     
@@ -103,34 +167,29 @@
                           Command="{x:Static svm:Commands.SetCurrentBoardToServer}" />
             </MenuItem>
 
-            <MenuItem Header="設定(_S)">
-                <MenuItem Header="設定(_D)"
-                          InputGestureText="Ctrl+Shift+D"
-                          Command="{x:Static svm:Commands.ShowSettingDialog}" />
-                <Separator />
-                <MenuItem Header="投票設定(_S)"
-                          InputGestureText="Ctrl+Shift+S"
-                          Command="{x:Static s:Commands.OpenSettingDialog}" />
-                <Separator />
-                <MenuItem Header="評価値の設定(_L)"
-                          InputGestureText="Ctrl+Shift+L"
-                          Command="{x:Static r:EvaluationControl.OpenSettingDialog}" />
-                <MenuItem Header="投票結果の設定(_R)"
-                          InputGestureText="Ctrl+Shift+R"
-                          Command="{x:Static s:VoteResultControl.OpenSettingDialog}" />
-            </MenuItem>
-
             <MenuItem Header="表示(_V)">
                 <MenuItem Header="盤面反転(_T)"
                           IsCheckable="True" x:Name="boardReverse"
                           Command="{x:Static r:ShogiCommands.SetReverseBoard}"
                           CommandParameter="{Binding IsChecked, ElementName=boardReverse}" />
+                <Separator />
                 <MenuItem Header="評価値を表示(_L)"
                           IsCheckable="True"
                           IsChecked="{Binding Settings.AS_IsShowEvaluationValue}" />
+                <MenuItem Header="評価値の設定(_L)"
+                          InputGestureText="Ctrl+Shift+L"
+                          Command="{x:Static r:EvaluationControl.OpenSettingDialog}" />
+                
                 <MenuItem Header="投票結果を表示(_R)"
                           IsCheckable="True"
                           IsChecked="{Binding Settings.AS_IsShowVoteResult}" />
+                <MenuItem Header="投票結果の設定(_R)"
+                          InputGestureText="Ctrl+Shift+R"
+                          Command="{x:Static s:VoteResultControl.OpenSettingDialog}" />
+                <Separator />
+                <MenuItem Header="設定(_D)"
+                          InputGestureText="Ctrl+Shift+D"
+                          Command="{x:Static svm:Commands.ShowSettingDialog}" />
                 <Separator />
                 <MenuItem Header="変化ウィンドウ(_V)"
                           InputGestureText="Ctrl+Shift+V"
@@ -152,105 +211,65 @@
                 <StaticResource ResourceKey="numberToolBar" />
             </ToolBarTray>
 
-            <!--<ToolBar Template="{StaticResource nicoToolBar}" />-->
-
             <ToolBar Template="{StaticResource variationToolBar}" />
         </StackPanel>
 
-        <Grid Grid.Row="2" Grid.RowSpan="2">
-            <!-- 背景 -->
-            <r:VisualBackground x:Name="background"
-                                Viewport="0,0,600,360"
-                                FadeElement="{Binding ElementName=ShogiControl}" />
-        </Grid>
-
         <Viewbox Grid.Row="2" Grid.RowSpan="2"
-                 ContextMenu="{DynamicResource contextMenu}"
-                 Stretch="Uniform">
-            <Grid Width="720" Height="432">
-                <!-- 投票結果など -->
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="5*" />
-                        <RowDefinition Height="174*" />
-                        <RowDefinition Height="2*" />
-                        <RowDefinition Height="174*" />
-                        <RowDefinition Height="5*" />
-                    </Grid.RowDefinitions>
-                    <!-- 5 120 5 340 5 120 5 -->
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0*" />
-                        <ColumnDefinition Width="125*" />
-                        <ColumnDefinition Width="350*" />
-                        <ColumnDefinition Width="125*" />
-                        <ColumnDefinition Width="0*" />
-                    </Grid.ColumnDefinitions>
+                 Stretch="Fill"
+                 ContextMenu="{StaticResource contextMenu}">
+            <Viewport3D Width="640" Height="360"
+                        RenderOptions.EdgeMode="Unspecified">
+                <Viewport3D.Camera>
+                    <OrthographicCamera
+                        Width="640"
+                        LookDirection="0,0,1"
+                        Position="320,180,-500"
+                        UpDirection="0.000000,-1.000000,0.000000"
+                        NearPlaneDistance="1" FarPlaneDistance="1000" />
+                </Viewport3D.Camera>
 
-                    <Grid Grid.Row="2" Grid.RowSpan="2" Grid.Column="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" />
-                            <ColumnDefinition Width="120*" />
-                        </Grid.ColumnDefinitions>
-                        <s:VoteResultControl
-                            Grid.Column="1"
-                            x:Name="voteResultControl"
-                            Visibility="{Binding Settings.AS_IsShowVoteResult,
-                                                 Converter={StaticResource visibilityConverterHidden}}"
-                            VoteResult="{Binding VoteClient.VoteResult}"
-                            VoteState="{Binding VoteClient.VoteState}"
-                            TotalVoteLeaveTime="{Binding VoteClient.TotalVoteLeaveTime}"
-                            VoteLeaveTime="{Binding VoteClient.VoteLeaveTime}"
-                            ThinkTime="{Binding VoteClient.ThinkTime}"
-                            IsConnectedToLive="{Binding ClientModel.IsConnectedToLive}"
-                            IsUseLiveNotConnectWarning="{Binding Settings.SD_IsUseLiveNotConnectWarning}"
-                            Foreground="{Binding Settings.VR_FontColor,
-                                                 Converter={StaticResource brushConverter}}"
-                            Background="{Binding Settings.VR_BackgroundColor,
-                                                 Converter={StaticResource brushConverter}}"
-                            Stroke="{Binding Settings.VR_StrokeColor,
-                                             Converter={StaticResource brushConverter}}"
-                            FontFamily="{Binding Settings.VR_FontFamilyName,
-                                                 Converter={StaticResource fontFamilyConverter}}"
-                            FontWeight="{Binding Settings.VR_FontWeight}"
-                            FontStyle="{Binding Settings.VR_FontStyle}"
-                            IsShowThinkTime="{Binding Settings.VR_IsShowThinkTime}"
-                            IsShowStroke="{Binding Settings.VR_IsShowStroke}"
-                            StrokeThicknessInternal="{Binding Settings.VR_StrokeThicknessInternal}"
-                            DisplayCandidateCount="{Binding Settings.VR_DisplayResultCount}"
-                            IsDisplayPointFullWidth="{Binding Settings.VR_IsDisplayPointFullWidth}" />
-                    </Grid>
+                <r:BackgroundUIElement3D x:Name="background"
+                                         FadeElement="{Binding ElementName=ShogiControl}" />
 
-                    <Grid Grid.Row="1" Grid.RowSpan="2" Grid.Column="3">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="120*" />
-                            <ColumnDefinition Width="5*" />
-                        </Grid.ColumnDefinitions>
-                        <Viewbox Stretch="Uniform"
-                                 VerticalAlignment="Top">
-                            <r:EvaluationControl x:Name="evaluationControl"
-                                                 ImageSetList="{r:ImageSetList Data/Image}"
-                                                 Visibility="{Binding Settings.AS_IsShowEvaluationValue,
-                                                                      Converter={StaticResource visibilityConverterHidden}}"
-                                                 SelectedImageSetTitle="{Binding Settings.AS_EvaluationImageSetTitle}"
-                                                 UserPoint="{Binding VoteResult.EvaluationPoint,
-                                                                     Source={x:Static l:ShogiGlobal.VoteClient}}" />
-                        </Viewbox>
-                    </Grid>
-                </Grid>
+                <ModelUIElement3D IsHitTestVisible="False">
+                    <Model3DGroup>
+                        <AmbientLight Color="White" />
+
+                        <!-- 投票結果 -->
+                        <GeometryModel3D Geometry="{StaticResource squareMesh}"
+                                         Transform="{StaticResource Space1Transform}"
+                                         Material="{StaticResource voteResultMaterial}">
+                        </GeometryModel3D>
+
+                        <!-- 評価値 -->
+                        <GeometryModel3D Geometry="{StaticResource squareMesh}"
+                                         Transform="{StaticResource Space0Transform}"
+                                         Material="{StaticResource evaluationControlMaterial}">
+                        </GeometryModel3D>
+                        
+                        <Model3DGroup.Transform>
+                            <TranslateTransform3D OffsetX="20" />
+                        </Model3DGroup.Transform>
+                    </Model3DGroup>
+                </ModelUIElement3D>
 
                 <!-- 将棋盤 -->
-                <r:ShogiControl x:Name="ShogiControl"
-                                IsLeaveTimeVisible="False"
-                                Board="{Binding Board}"
-                                EditMode="{Binding EditMode}"
-                                EffectManager="{x:Static l:ShogiGlobal.EffectManager}"
-                                PieceImage="{Binding KomaImage}"
-                                BanBrush="{StaticResource banBrush}"
-                                PieceBoxBrush="{StaticResource komadaiBrush}"
-                                BlackPlayerName="{Binding Settings.SD_BlackPlayerName}"
-                                WhitePlayerName="{Binding Settings.SD_WhitePlayerName}"
-                                AutoPlayInterval="{Binding Settings.SD_AutoPlayInterval}" />
-            </Grid>
+                <r:ShogiUIElement3D x:Name="ShogiControl"
+                                    IsLeaveTimeVisible="False"
+                                    Board="{Binding Board}"
+                                    EditMode="{Binding EditMode}"
+                                    EffectManager="{x:Static l:ShogiGlobal.EffectManager}"
+                                    PieceImage="{Binding KomaImage}"
+                                    BanBrush="{StaticResource banBrush}"
+                                    PieceBoxBrush="{StaticResource komadaiBrush}"
+                                    BlackPlayerName="{Binding Settings.SD_BlackPlayerName}"
+                                    WhitePlayerName="{Binding Settings.SD_WhitePlayerName}"
+                                    AutoPlayInterval="{Binding Settings.SD_AutoPlayInterval}">
+                    <r:ShogiUIElement3D.Transform>
+                        <TranslateTransform3D OffsetX="20" />
+                    </r:ShogiUIElement3D.Transform>
+                </r:ShogiUIElement3D>
+            </Viewport3D>
         </Viewbox>
 
         <Viewbox Grid.Row="2" Grid.RowSpan="2"
