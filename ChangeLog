@@ -1,3 +1,9 @@
+2014-06-02  - Ver 1.8.1.5
+
+	* PluginShogi/ShogiGlobal.cs: プラグインの初期化処理を修正しました。
+	* PluginShogi/Util3D.cs: 不要なファイルを削除しました。
+	* Ragnarok側の変更に合わせて、namespaceを修正しました。
+
 2014-06-02  - Ver 1.8.1.4
 
 	* PluginShogi/View/MainWindow.xaml,

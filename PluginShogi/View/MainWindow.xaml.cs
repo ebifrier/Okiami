@@ -18,11 +18,9 @@ using System.Windows.Threading;
 using Ragnarok;
 using Ragnarok.Shogi;
 using Ragnarok.Presentation.Control;
-using Ragnarok.Presentation.Shogi;
-using Ragnarok.Presentation.Shogi.Effects;
 using Ragnarok.Presentation.Utility;
-using Ragnarok.Presentation.VisualObject;
-using Ragnarok.Presentation.VisualObject.Control;
+using Ragnarok.Presentation.Extra.Effect;
+using Ragnarok.Presentation.Extra.Entity;
 
 namespace VoteSystem.PluginShogi.View
 {

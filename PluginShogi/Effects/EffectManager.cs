@@ -14,9 +14,9 @@ using Ragnarok;
 using Ragnarok.Shogi;
 using Ragnarok.ObjectModel;
 using Ragnarok.Presentation;
-using Ragnarok.Presentation.VisualObject.Control;
+using Ragnarok.Presentation.Extra.Effect;
+using Ragnarok.Presentation.Extra.Element;
 using Ragnarok.Presentation.Shogi;
-using Ragnarok.Presentation.Shogi.Effects;
 using Ragnarok.Presentation.Shogi.View;
 
 namespace VoteSystem.PluginShogi.Effects
