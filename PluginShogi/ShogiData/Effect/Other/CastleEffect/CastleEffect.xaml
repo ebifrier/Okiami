@@ -15,9 +15,9 @@
                 OffsetX="300" OffsetY="270" />
     
     <Vector3D x:Key="backgroundCoord"
-              X="300" Y="180" Z="{x:Static r:ShogiUIElement3D.PreEffectZ}" />
+              X="320" Y="180" Z="{x:Static r:ShogiUIElement3D.PreEffectZ}" />
     <Vector3D x:Key="castleBackCoord"
-              X="300" Y="140" Z="{x:Static r:ShogiUIElement3D.PreEffectZ}" />
+              X="320" Y="140" Z="{x:Static r:ShogiUIElement3D.PreEffectZ}" />
 
     <r:CellMeshConverter x:Key="cellMeshConv" />
     <r:CellMeshConverter x:Key="cellMeshWideConv" Widen="0.2" />
@@ -29,7 +29,7 @@
                         Mesh="{r:MakeMesh}"
                         Duration="0:0:5"
                         MaterialType="Diffuse"
-                        BaseScale="600,360,1"
+                        BaseScale="640,360,1"
                         Coord="{StaticResource backgroundCoord}">
             <r:EffectObject.Scenario>
                 <r:Scenario>
@@ -145,7 +145,7 @@
             <r:EffectObject Duration="0:0:1.2"
                             ImageUri="ExplosionWhite.png"
                             Coord="{StaticResource backgroundCoord}"
-                            Scale="600,600,1">
+                            Scale="640,640,1">
                 <r:EffectObject.Scenario>
                     <r:Scenario>
                         <DoubleAnimationUsingKeyFrames r:Scenario.TargetProperty="Opacity">

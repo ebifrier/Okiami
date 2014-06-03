@@ -4,16 +4,16 @@
                     xmlns:r="http://schemas.garnet-alice.net/ragnarok/xaml/presentation">
 
     <Vector3D x:Key="backgroundCoord"
-              X="300" Y="180" Z="{x:Static r:ShogiUIElement3D.PreEffectZ}" />
+              X="320" Y="180" Z="{x:Static r:ShogiUIElement3D.PreEffectZ}" />
     <Vector3D x:Key="foregroundCoord"
-              X="300" Y="180" Z="{x:Static r:ShogiUIElement3D.PostEffectZ}" />
+              X="320" Y="180" Z="{x:Static r:ShogiUIElement3D.PostEffectZ}" />
     <f:DiscZone x:Key="particlePositionZone"
                 Center="0,0" InnerRadius="4.0" OuterRadius="6.0" />
 
     <r:EffectObject x:Key="Effect">
         <r:EffectObject Duration="0:0:6.0"
                         MaterialType="Diffuse"
-                        Scale="600,360,1"
+                        Scale="640,360,1"
                         Coord="{StaticResource backgroundCoord}"
                         Color="Black"
                         Mesh="{r:MakeMesh}">
@@ -84,7 +84,7 @@
             <r:EffectObject Duration="0:0:3"
                             Color="White"
                             MaterialType="Diffuse"
-                            Scale="600,360,1"
+                            Scale="640,360,1"
                             Coord="{StaticResource backgroundCoord}">
                 <r:EffectObject.Scenario>
                     <r:Scenario>

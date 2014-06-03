@@ -1,3 +1,8 @@
+2014-06-03  - Ver 1.8.1.6
+
+	* PluginShogi/ShogiData/Effect: 想定画面解像度を(600x360)から(640x360)
+	に変更しました。
+
 2014-06-02  - Ver 1.8.1.5
 
 	* PluginShogi/ShogiGlobal.cs: プラグインの初期化処理を修正しました。

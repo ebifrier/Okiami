@@ -13,7 +13,7 @@
     <!--<f:LineZone x:Key="particlePositionZone"
                 Point1="380,-40" Point2="580,-40" />
     <f:LineZone x:Key="particleVelocityZone"
-                Point1="0,600" Point2="0,600" />
+                Point1="0,640" Point2="0,600" />
     <f:RectangleZone x:Key="particleSafeZone"
                      Left="320" Right="640"
                      Top="-40" Bottom="480" />-->
