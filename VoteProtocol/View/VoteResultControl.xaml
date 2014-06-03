@@ -33,10 +33,8 @@
     </Style>
 
     <DataTemplate x:Key="decoratedText" DataType="sys:String">
-        <Viewbox>
-            <r:DecoratedText Style="{StaticResource decoratedTextStyle}"
-                             Text="{Binding}" />
-        </Viewbox>
+        <r:DecoratedText Style="{StaticResource decoratedTextStyle}"
+                         Text="{Binding}" />
     </DataTemplate>
 
     <!-- 投票結果の各票を表示します。-->
@@ -110,7 +108,6 @@
 
     <!-- 放送未接続時の警告スタイル -->
     <Style x:Key="liveWorningBackgroundStyle" TargetType="Border">
-        
         <Style.Triggers>
             <DataTrigger Binding="{Binding VoteState,
                                            RelativeSource={RelativeSource Mode=TemplatedParent}}"
@@ -140,135 +137,133 @@
 
     <!-- 投票結果の表示などを行います。-->
     <ControlTemplate x:Key="mainControl" TargetType="l:VoteResultControl">
-        <Viewbox Stretch="Fill">
-            <Grid Background="{TemplateBinding Background}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="3" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition MinWidth="3" />
-                    <ColumnDefinition Width="Auto" MinWidth="40" />
-                </Grid.ColumnDefinitions>
+        <Grid Background="{TemplateBinding Background}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="3" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition MinWidth="3" />
+                <ColumnDefinition Width="Auto" MinWidth="40" />
+            </Grid.ColumnDefinitions>
 
-                <!-- 投票状態 -->
-                <Grid Grid.Row="0" Grid.ColumnSpan="3">
-                    <Border Style="{StaticResource voteBackgroundStyle}" />
-                    <r:DecoratedText Style="{StaticResource decoratedTextStyle}"
-                                     HorizontalAlignment="Right"
-                                     VerticalAlignment="Center"
-                                     Text="{Binding VoteState,
-                                                    Converter={StaticResource voteStateConverter},
-                                                    RelativeSource={RelativeSource TemplatedParent}}" />
-                </Grid>
-
-                <!-- 持ち時間 -->
-                <ContentControl Grid.Row="1" Grid.Column="0"
-                                Visibility="{Binding IsShowTotalVoteTime,
-                                                     RelativeSource={RelativeSource TemplatedParent},
-                                                     Converter={StaticResource visibilityConverterCollapsed}}"
-                                ContentTemplate="{StaticResource decoratedText}"
-                                Content="持ち時間"
-                                HorizontalAlignment="Left" />
-                <r:TimeSpanView Grid.Row="1" Grid.Column="2"
-                                Visibility="{Binding IsShowTotalVoteTime,
-                                                     RelativeSource={RelativeSource TemplatedParent},
-                                                     Converter={StaticResource visibilityConverterCollapsed}}"
-                                Style="{StaticResource decoratedTextStyle}"
-                                MaxValueText="無制限"
-                                HorizontalAlignment="Right">
-                    <r:TimeSpanView.Value>
-                        <MultiBinding Converter="{StaticResource totalVoteLeaveTimeConverter}"
-                                      Mode="OneWay">
-                            <Binding Path="TotalVoteLeaveTime"
-                                     RelativeSource="{RelativeSource TemplatedParent}" />
-                            <Binding Path="VoteState"
-                                     RelativeSource="{RelativeSource TemplatedParent}" />
-                        </MultiBinding>
-                    </r:TimeSpanView.Value>
-                </r:TimeSpanView>
-
-                <!-- 投票時間 -->
-                <ContentControl Grid.Row="2" Grid.Column="0"
-                                ContentTemplate="{StaticResource decoratedText}"
-                                Content="投票時間"
-                                HorizontalAlignment="Left" />
-                <r:TimeSpanView Grid.Row="2" Grid.Column="2"
-                                Style="{StaticResource decoratedTextStyle}"
-                                MinValueText="停止中"
-                                MaxValueText="無制限"
-                                HorizontalAlignment="Right">
-                    <r:TimeSpanView.Value>
-                        <MultiBinding Converter="{StaticResource voteLeaveTimeConverter}"
-                                      Mode="OneWay">
-                            <Binding Path="VoteLeaveTime"
-                                     RelativeSource="{RelativeSource TemplatedParent}" />
-                            <Binding Path="VoteState"
-                                     RelativeSource="{RelativeSource TemplatedParent}" />
-                        </MultiBinding>
-                    </r:TimeSpanView.Value>
-                </r:TimeSpanView>
-
-                <!-- 思考時間 -->
-                <ContentControl Grid.Row="4" Grid.Column="0"
-                                Visibility="{Binding IsShowThinkTime,
-                                                     RelativeSource={RelativeSource TemplatedParent},
-                                                     Converter={StaticResource visibilityConverterCollapsed}}"
-                                ContentTemplate="{StaticResource decoratedText}"
-                                Content="思考時間"
-                                HorizontalAlignment="Left"
-                                Opacity="0.6" />
-                <r:TimeSpanView Grid.Row="4" Grid.Column="2"
-                                Visibility="{Binding IsShowThinkTime,
-                                                     RelativeSource={RelativeSource TemplatedParent},
-                                                     Converter={StaticResource visibilityConverterCollapsed}}"
-                                Style="{StaticResource decoratedTextStyle}"
-                                MinValueText=""
-                                MaxValueText="不明"
-                                HorizontalAlignment="Right"
-                                Opacity="0.6">
-                    <r:TimeSpanView.Value>
-                        <MultiBinding Converter="{StaticResource voteLeaveTimeConverter}"
-                                      Mode="OneWay">
-                            <Binding Path="ThinkTime"
-                                     RelativeSource="{RelativeSource TemplatedParent}" />
-                            <Binding Path="VoteState"
-                                     RelativeSource="{RelativeSource TemplatedParent}" />
-                        </MultiBinding>
-                    </r:TimeSpanView.Value>
-                </r:TimeSpanView>
-
-                <!-- 投票結果を表示 -->
-                <ContentControl Grid.Row="6" Grid.ColumnSpan="3"
-                                ContentTemplate="{StaticResource decoratedText}"
-                                Content="投票結果"
-                                HorizontalAlignment="Left" />
-                <ItemsControl Grid.Row="7" Grid.ColumnSpan="3"
-                              Margin="10,0,0,0"
-                              ItemsSource="{TemplateBinding DisplayCandidateList}"
-                              ItemTemplate="{StaticResource voteResultTemplate}" />
-
-                <!-- 放送未接続時の警告 -->
-                <Grid Grid.Row="8" Grid.ColumnSpan="3"
-                      Background="#80FFA500"
-                      Visibility="{Binding HasLiveNotConnectWarning,
-                                           Converter={StaticResource visibilityConverterCollapsed},
-                                           RelativeSource={RelativeSource TemplatedParent}}">
-                    <r:DecoratedText Style="{StaticResource decoratedTextStyle}"
-                                     HorizontalAlignment="Right"
-                                     VerticalAlignment="Center"
-                                     Text="放送未接続" />
-                </Grid>
+            <!-- 投票状態 -->
+            <Grid Grid.Row="0" Grid.ColumnSpan="3">
+                <Border Style="{StaticResource voteBackgroundStyle}" />
+                <r:DecoratedText Style="{StaticResource decoratedTextStyle}"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Center"
+                                 Text="{Binding VoteState,
+                                                Converter={StaticResource voteStateConverter},
+                                                RelativeSource={RelativeSource TemplatedParent}}" />
             </Grid>
-        </Viewbox>
+
+            <!-- 持ち時間 -->
+            <ContentControl Grid.Row="1" Grid.Column="0"
+                            Visibility="{Binding IsShowTotalVoteTime,
+                                                 RelativeSource={RelativeSource TemplatedParent},
+                                                 Converter={StaticResource visibilityConverterCollapsed}}"
+                            ContentTemplate="{StaticResource decoratedText}"
+                            Content="持ち時間"
+                            HorizontalAlignment="Left" />
+            <r:TimeSpanView Grid.Row="1" Grid.Column="2"
+                            Visibility="{Binding IsShowTotalVoteTime,
+                                                 RelativeSource={RelativeSource TemplatedParent},
+                                                 Converter={StaticResource visibilityConverterCollapsed}}"
+                            Style="{StaticResource decoratedTextStyle}"
+                            MaxValueText="無制限"
+                            HorizontalAlignment="Right">
+                <r:TimeSpanView.Value>
+                    <MultiBinding Converter="{StaticResource totalVoteLeaveTimeConverter}"
+                                  Mode="OneWay">
+                        <Binding Path="TotalVoteLeaveTime"
+                                 RelativeSource="{RelativeSource TemplatedParent}" />
+                        <Binding Path="VoteState"
+                                 RelativeSource="{RelativeSource TemplatedParent}" />
+                    </MultiBinding>
+                </r:TimeSpanView.Value>
+            </r:TimeSpanView>
+
+            <!-- 投票時間 -->
+            <ContentControl Grid.Row="2" Grid.Column="0"
+                            ContentTemplate="{StaticResource decoratedText}"
+                            Content="投票時間"
+                            HorizontalAlignment="Left" />
+            <r:TimeSpanView Grid.Row="2" Grid.Column="2"
+                            Style="{StaticResource decoratedTextStyle}"
+                            MinValueText="停止中"
+                            MaxValueText="無制限"
+                            HorizontalAlignment="Right">
+                <r:TimeSpanView.Value>
+                    <MultiBinding Converter="{StaticResource voteLeaveTimeConverter}"
+                                  Mode="OneWay">
+                        <Binding Path="VoteLeaveTime"
+                                 RelativeSource="{RelativeSource TemplatedParent}" />
+                        <Binding Path="VoteState"
+                                 RelativeSource="{RelativeSource TemplatedParent}" />
+                    </MultiBinding>
+                </r:TimeSpanView.Value>
+            </r:TimeSpanView>
+
+            <!-- 思考時間 -->
+            <ContentControl Grid.Row="4" Grid.Column="0"
+                            Visibility="{Binding IsShowThinkTime,
+                                                 RelativeSource={RelativeSource TemplatedParent},
+                                                 Converter={StaticResource visibilityConverterCollapsed}}"
+                            ContentTemplate="{StaticResource decoratedText}"
+                            Content="思考時間"
+                            HorizontalAlignment="Left"
+                            Opacity="0.6" />
+            <r:TimeSpanView Grid.Row="4" Grid.Column="2"
+                            Visibility="{Binding IsShowThinkTime,
+                                                 RelativeSource={RelativeSource TemplatedParent},
+                                                 Converter={StaticResource visibilityConverterCollapsed}}"
+                            Style="{StaticResource decoratedTextStyle}"
+                            MinValueText=""
+                            MaxValueText="不明"
+                            HorizontalAlignment="Right"
+                            Opacity="0.6">
+                <r:TimeSpanView.Value>
+                    <MultiBinding Converter="{StaticResource voteLeaveTimeConverter}"
+                                 Mode="OneWay">
+                        <Binding Path="ThinkTime"
+                                 RelativeSource="{RelativeSource TemplatedParent}" />
+                        <Binding Path="VoteState"
+                                 RelativeSource="{RelativeSource TemplatedParent}" />
+                    </MultiBinding>
+                </r:TimeSpanView.Value>
+            </r:TimeSpanView>
+
+            <!-- 投票結果を表示 -->
+            <ContentControl Grid.Row="6" Grid.ColumnSpan="3"
+                            ContentTemplate="{StaticResource decoratedText}"
+                            Content="投票結果"
+                            HorizontalAlignment="Left" />
+            <ItemsControl Grid.Row="7" Grid.ColumnSpan="3"
+                            Margin="10,0,0,0"
+                            ItemsSource="{TemplateBinding DisplayCandidateList}"
+                            ItemTemplate="{StaticResource voteResultTemplate}" />
+
+            <!-- 放送未接続時の警告 -->
+            <Grid Grid.Row="8" Grid.ColumnSpan="3"
+                    Background="#80FFA500"
+                    Visibility="{Binding HasLiveNotConnectWarning,
+                                         Converter={StaticResource visibilityConverterCollapsed},
+                                         RelativeSource={RelativeSource TemplatedParent}}">
+                <r:DecoratedText Style="{StaticResource decoratedTextStyle}"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Center"
+                                 Text="放送未接続" />
+            </Grid>
+        </Grid>
     </ControlTemplate>
 
     <Style TargetType="l:VoteResultControl">

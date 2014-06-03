@@ -1,3 +1,8 @@
+2014-06-03  - Ver 1.8.1.8
+
+	* VoteClient/View/VoteResultWindow.xaml: Viewboxを追加しました。
+	* VoteProtocol/View/VoteResultControl.xaml: Viewboxを削除しました。
+
 2014-06-03  - Ver 1.8.1.7
 
 	* PluginShogi/View/CurrentBoardSetupDialog.xaml: レイアウトを修正し、自

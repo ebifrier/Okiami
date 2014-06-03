@@ -78,29 +78,31 @@
     </Window.Style>
 
     <Grid>
-        <s:VoteResultControl x:Name="voteResultControl"
-                             VoteResult="{Binding VoteClient.VoteResult}"
-                             VoteState="{Binding VoteClient.VoteState}"
-                             TotalVoteLeaveTime="{Binding VoteClient.TotalVoteLeaveTime}"
-                             VoteLeaveTime="{Binding VoteClient.VoteLeaveTime}"
-                             ThinkTime="{Binding VoteClient.ThinkTime}"
-                             IsConnectedToLive="{Binding MainModel.IsConnectedToLive}"
-                             IsUseLiveNotConnectWarning="False"
-                             Foreground="{Binding Settings.VR_FontColor,
+        <Viewbox Stretch="Fill">
+            <s:VoteResultControl x:Name="voteResultControl"
+                                 VoteResult="{Binding VoteClient.VoteResult}"
+                                 VoteState="{Binding VoteClient.VoteState}"
+                                 TotalVoteLeaveTime="{Binding VoteClient.TotalVoteLeaveTime}"
+                                 VoteLeaveTime="{Binding VoteClient.VoteLeaveTime}"
+                                 ThinkTime="{Binding VoteClient.ThinkTime}"
+                                 IsConnectedToLive="{Binding MainModel.IsConnectedToLive}"
+                                 IsUseLiveNotConnectWarning="False"
+                                 Foreground="{Binding Settings.VR_FontColor,
+                                                      Converter={StaticResource brushConverter}}"
+                                 Background="{Binding Settings.VR_BackgroundColor,
+                                                      Converter={StaticResource brushConverter}}"
+                                 Stroke="{Binding Settings.VR_StrokeColor,
                                                   Converter={StaticResource brushConverter}}"
-                             Background="{Binding Settings.VR_BackgroundColor,
-                                                  Converter={StaticResource brushConverter}}"
-                             Stroke="{Binding Settings.VR_StrokeColor,
-                                              Converter={StaticResource brushConverter}}"
-                             FontFamily="{Binding Settings.VR_FontFamilyName,
-                                                  Converter={StaticResource fontFamilyConverter}}"
-                             FontWeight="{Binding Settings.VR_FontWeight}"
-                             FontStyle="{Binding Settings.VR_FontStyle}"
-                             IsShowThinkTime="{Binding Settings.VR_IsShowThinkTime}"
-                             IsShowStroke="{Binding Settings.VR_IsShowStroke}"
-                             StrokeThicknessInternal="{Binding Settings.VR_StrokeThicknessInternal}"
-                             DisplayCandidateCount="{Binding Settings.VR_DisplayResultCount}"
-                             IsDisplayPointFullWidth="{Binding Settings.VR_IsDisplayPointFullWidth}" />
+                                 FontFamily="{Binding Settings.VR_FontFamilyName,
+                                                      Converter={StaticResource fontFamilyConverter}}"
+                                 FontWeight="{Binding Settings.VR_FontWeight}"
+                                 FontStyle="{Binding Settings.VR_FontStyle}"
+                                 IsShowThinkTime="{Binding Settings.VR_IsShowThinkTime}"
+                                 IsShowStroke="{Binding Settings.VR_IsShowStroke}"
+                                 StrokeThicknessInternal="{Binding Settings.VR_StrokeThicknessInternal}"
+                                 DisplayCandidateCount="{Binding Settings.VR_DisplayResultCount}"
+                                 IsDisplayPointFullWidth="{Binding Settings.VR_IsDisplayPointFullWidth}" />
+        </Viewbox>
 
         <!-- 移動用のボタンなどを表示します。-->
         <Control Template="{StaticResource movableControlTemplate}"
