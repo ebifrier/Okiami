@@ -80,7 +80,7 @@ namespace VoteSystem.PluginShogi.View
             get
             {
                 // 相手の手番なら、投票を開始する可能性があります。
-                if (SelectedRadioButton != CBS_SelectedRadioButton.YourTurn)
+                if (SelectedRadioButton != CBS_SelectedRadioButton.MyTurn)
                 {
                     return false;
                 }
@@ -96,7 +96,7 @@ namespace VoteSystem.PluginShogi.View
         {
             get
             {
-                if (SelectedRadioButton != CBS_SelectedRadioButton.YourTurn)
+                if (SelectedRadioButton != CBS_SelectedRadioButton.MyTurn)
                 {
                     return TimeSpan.MinValue;
                 }
@@ -117,7 +117,7 @@ namespace VoteSystem.PluginShogi.View
         {
             get
             {
-                if (SelectedRadioButton != CBS_SelectedRadioButton.MyTurn)
+                if (SelectedRadioButton != CBS_SelectedRadioButton.YourTurn)
                 {
                     return false;
                 }
@@ -133,7 +133,7 @@ namespace VoteSystem.PluginShogi.View
         {
             get
             {
-                if (SelectedRadioButton != CBS_SelectedRadioButton.MyTurn)
+                if (SelectedRadioButton != CBS_SelectedRadioButton.YourTurn)
                 {
                     return TimeSpan.MinValue;
                 }
@@ -169,13 +169,10 @@ namespace VoteSystem.PluginShogi.View
                     // 前に指したのは相手の手です。
                     SelectedRadioButton =
                         (board.Turn == settings.SD_Teban ?
-                        CBS_SelectedRadioButton.YourTurn :
-                        CBS_SelectedRadioButton.MyTurn);
+                        CBS_SelectedRadioButton.MyTurn :
+                        CBS_SelectedRadioButton.YourTurn);
                 }
             }
-
-            this.settings = settings;
-            DataContext = settings;
 
             CommandBindings.Add(
                 new CommandBinding(
@@ -193,6 +190,9 @@ namespace VoteSystem.PluginShogi.View
                         this.settings.Reload();
                         DialogResult = false;
                     }));
+
+            this.settings = settings;
+            DataContext = settings;
         }
     }
 }

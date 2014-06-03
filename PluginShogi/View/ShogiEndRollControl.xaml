@@ -79,9 +79,6 @@
                                         IsLeaveTimeVisible="False"
                                         BlackPlayerName=""
                                         WhitePlayerName="">
-                        <p:ShogiUIElement3D.Transform>
-                            <TranslateTransform3D OffsetX="20" />
-                        </p:ShogiUIElement3D.Transform>
                     </p:ShogiUIElement3D>
                 </Viewport3D>
 

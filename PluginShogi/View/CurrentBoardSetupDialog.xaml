@@ -26,22 +26,9 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            
-            <!-- 相手の手番の時の更新用操作 -->
-            <StackPanel x:Key="myTurnStackPanel"
-                        Orientation="Vertical">
-                <CheckBox Content="投票を停止する"
-                          IsChecked="{Binding CBS_IsVoteStop}" />
-
-                <CheckBox Content="持ち時間を追加"
-                          IsChecked="{Binding CBS_IsUseAddLimitTime}" />
-                <r:TimeSpanEditControl IsEnabled="{Binding CBS_IsUseAddLimitTime}"
-                                       Value="{Binding CBS_AddLimitTime}"
-                                       HorizontalAlignment="Right" />
-            </StackPanel>
 
             <!-- 自分の手番の時の更新用操作 -->
-            <StackPanel x:Key="yourTurnStackPanel"
+            <StackPanel x:Key="myTurnStackPanel"
                         Orientation="Vertical">
                 <CheckBox Content="投票を開始する"
                           IsChecked="{Binding CBS_IsStartVote}" />
@@ -50,6 +37,19 @@
                           IsChecked="{Binding CBS_IsUseVoteSpan}" />
                 <r:TimeSpanEditControl IsEnabled="{Binding CBS_IsUseVoteSpan}"
                                        Value="{Binding CBS_VoteSpan}"
+                                       HorizontalAlignment="Right" />
+            </StackPanel>
+
+            <!-- 相手の手番の時の更新用操作 -->
+            <StackPanel x:Key="yourTurnStackPanel"
+                        Orientation="Vertical">
+                <CheckBox Content="投票を停止する"
+                          IsChecked="{Binding CBS_IsVoteStop}" />
+
+                <CheckBox Content="持ち時間を追加"
+                          IsChecked="{Binding CBS_IsUseAddLimitTime}" />
+                <r:TimeSpanEditControl IsEnabled="{Binding CBS_IsUseAddLimitTime}"
+                                       Value="{Binding CBS_AddLimitTime}"
                                        HorizontalAlignment="Right" />
             </StackPanel>
         </ResourceDictionary>
@@ -89,7 +89,7 @@
 
                 <RadioButton x:Name="myTurnButton"
                              Margin="0,10,0,0"
-                             Content="次は相手の手番" 
+                             Content="次はこちらの手番"
                              IsChecked="{Binding SelectedRadioButton,
                                                  RelativeSource={RelativeSource AncestorType=Window},
                                                  Converter={StaticResource enumToBooleanConverter},
@@ -98,10 +98,10 @@
                           IsEnabled="{Binding IsChecked, ElementName=myTurnButton}">
                     <StaticResource ResourceKey="myTurnStackPanel" />
                 </GroupBox>
-
+                
                 <RadioButton x:Name="yourTurnButton"
                              Margin="0,15,0,0"
-                             Content="次はこちらの手番"
+                             Content="次は相手の手番" 
                              IsChecked="{Binding SelectedRadioButton,
                                                  RelativeSource={RelativeSource AncestorType=Window},
                                                  Converter={StaticResource enumToBooleanConverter},

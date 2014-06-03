@@ -56,18 +56,24 @@
             <!-- 右上の隙間の位置 -->
             <Transform3DGroup x:Key="Space0Transform">
                 <ScaleTransform3D ScaleX="145" ScaleY="163" ScaleZ="1.0" />
-                <TranslateTransform3D OffsetX="{r:Calc 300+245}" OffsetY="{r:Calc (10/2+163/2)}" />
+                <TranslateTransform3D OffsetX="{r:Calc 320+245}" OffsetY="{r:Calc (10/2+163/2)}" />
             </Transform3DGroup>
 
             <!-- 左下の隙間の位置 -->
             <Transform3DGroup x:Key="Space1Transform">
                 <ScaleTransform3D ScaleX="130" ScaleY="176" ScaleZ="1.0" />
-                <TranslateTransform3D OffsetX="{r:Calc 300-240}" OffsetY="{r:Calc 360-(16/2+170/2)}" />
+                <TranslateTransform3D OffsetX="{r:Calc 320-240}" OffsetY="{r:Calc 360-(16/2+170/2)}" />
             </Transform3DGroup>
 
             <!-- 投票結果 -->
+            <!-- Widthを設定しないと投票結果が水平方向に拡大縮小するという
+                 バグ？に遭遇します。また、この値が大きすぎるとやっぱり
+                 拡大縮小してしまうのですが、小さいと右側が切れます。
+                 バグの発現条件が分からないので、これが正しい対応かも分かりませんが、
+                 とりあえずサイズを設定しています。-->
             <s:VoteResultControl
                 x:Key="voteResultControl"
+                Width="116"
                 Visibility="{Binding Settings.AS_IsShowVoteResult,
                                      Converter={StaticResource visibilityConverterHidden}}"
                 VoteResult="{Binding VoteClient.VoteResult}"
@@ -215,9 +221,10 @@
         </StackPanel>
 
         <Viewbox Grid.Row="2" Grid.RowSpan="2"
-                 Stretch="Fill"
+                 Stretch="Fill" AllowDrop="True"
                  ContextMenu="{StaticResource contextMenu}">
             <Viewport3D Width="640" Height="360"
+                        AllowDrop="True"
                         RenderOptions.EdgeMode="Unspecified">
                 <Viewport3D.Camera>
                     <OrthographicCamera
@@ -228,8 +235,7 @@
                         NearPlaneDistance="1" FarPlaneDistance="1000" />
                 </Viewport3D.Camera>
 
-                <r:BackgroundUIElement3D x:Name="background"
-                                         FadeElement="{Binding ElementName=ShogiControl}" />
+                <r:BackgroundUIElement3D x:Name="ShogiBackground" />
 
                 <ModelUIElement3D IsHitTestVisible="False">
                     <Model3DGroup>
@@ -246,15 +252,12 @@
                                          Transform="{StaticResource Space0Transform}"
                                          Material="{StaticResource evaluationControlMaterial}">
                         </GeometryModel3D>
-                        
-                        <Model3DGroup.Transform>
-                            <TranslateTransform3D OffsetX="20" />
-                        </Model3DGroup.Transform>
                     </Model3DGroup>
                 </ModelUIElement3D>
 
                 <!-- 将棋盤 -->
                 <r:ShogiUIElement3D x:Name="ShogiControl"
+                                    AllowDrop="True"
                                     IsLeaveTimeVisible="False"
                                     Board="{Binding Board}"
                                     EditMode="{Binding EditMode}"
@@ -265,9 +268,6 @@
                                     BlackPlayerName="{Binding Settings.SD_BlackPlayerName}"
                                     WhitePlayerName="{Binding Settings.SD_WhitePlayerName}"
                                     AutoPlayInterval="{Binding Settings.SD_AutoPlayInterval}">
-                    <r:ShogiUIElement3D.Transform>
-                        <TranslateTransform3D OffsetX="20" />
-                    </r:ShogiUIElement3D.Transform>
                 </r:ShogiUIElement3D>
             </Viewport3D>
         </Viewbox>

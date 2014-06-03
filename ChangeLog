@@ -1,3 +1,11 @@
+2014-06-03  - Ver 1.8.1.7
+
+	* PluginShogi/View/CurrentBoardSetupDialog.xaml: レイアウトを修正し、自
+	分の手番の操作と相手の手番の操作を入れ替えました。
+	* PluginShogi/View/ShogiEndRollControl.xaml: 将棋盤の位置を修正しました。
+	* PluginShogi/View/MainWindow.xaml: 将棋盤の位置を修正し、左下の投票結
+	果のサイズがなぜか変わるというバグに対応しました。(バグの理由は不明)
+
 2014-06-03  - Ver 1.8.1.6
 
 	* PluginShogi/ShogiData/Effect: 想定画面解像度を(600x360)から(640x360)

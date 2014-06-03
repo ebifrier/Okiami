@@ -73,7 +73,7 @@ namespace VoteSystem.PluginShogi.View
             var effectInfo = new EffectInfo(effectKey, null);
             var effect = effectInfo.LoadBackground();
 
-            this.background.AddEntity(effect);
+            ShogiBackground.AddEntity(effect);
         }
 
         /// <summary>
@@ -94,8 +94,7 @@ namespace VoteSystem.PluginShogi.View
         public void Render(TimeSpan elapsedTime)
         {
             ShogiControl.Render(elapsedTime);
-
-            this.background.Render(elapsedTime);
+            ShogiBackground.Render(elapsedTime);
         }
 
         /// <summary>
@@ -135,6 +134,7 @@ namespace VoteSystem.PluginShogi.View
             ShogiControl.InitializeBindings(this);
 
             Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
 
             this.voteResultControl.InitializeBindings(this);
             this.voteResultControl.SettingUpdated +=
@@ -149,15 +149,16 @@ namespace VoteSystem.PluginShogi.View
             {
                 var fpsCounter = new FpsCounter();
                 fpsCounter.FpsChanged += (_, __) =>
-                    Title = string.Format("FPS: {0:0.00}", fpsCounter.Fps, 30);
-                    //Title = string.Format("{0}, {1}", Width, Height);
+                    //Title = string.Format("FPS: {0:0.00}", fpsCounter.Fps, 30);
+                    Title = string.Format("{0} {1}", this.voteResultControl.Width,
+                        this.voteResultControl.ActualWidth);
                 ShogiControl.AddEffect(fpsCounter);
             }
 
             var manager = ShogiGlobal.EffectManager;
             if (manager != null)
             {
-                manager.Background = this.background;
+                manager.Background = ShogiBackground;
             }
 
             var timer = ShogiGlobal.FrameTimer;
@@ -176,6 +177,12 @@ namespace VoteSystem.PluginShogi.View
         void OnLoaded(object sender, RoutedEventArgs e)
         {
             //Ragnarok.Presentation.WPFUtil.SetRenderMode(this, true);
+        }
+
+        void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            ShogiControl.Unload();
+            ShogiBackground.Unload();
         }
         
         protected override void OnClosed(EventArgs e)
@@ -206,7 +213,7 @@ namespace VoteSystem.PluginShogi.View
                 // 盤上の駒20枚×２ ＋ 駒台の駒９種(玉と無も込み)×２
                 // ＋ ルート２個 ＋ 前回のマスの位置 ＋ 手番表示
                 // ＋ 背景用オブジェクト×２
-                var count = (20 * 2 + 9 * 2 + 2 + 2 + 2) * 2 + 1;
+                var count = (20 * 2 + 9 * 2 + 2 + 2 + 2) * 2 + 2;
                 if (list.Count() > count)
                 {
                     Ragnarok.Presentation.DialogUtil.ShowError(

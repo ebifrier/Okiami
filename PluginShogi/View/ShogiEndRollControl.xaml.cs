@@ -490,6 +490,8 @@ namespace VoteSystem.PluginShogi.View
             CompositionTarget.Rendering -= (_, __) => Update();
 
             Stop();
+            ShogiControl.Unload();
+            ShogiBackground.Unload();
         }
 
         /// <summary>
