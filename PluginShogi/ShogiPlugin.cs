@@ -552,7 +552,7 @@ namespace VoteSystem.PluginShogi
                     var board = ShogiGlobal.ShogiModel.CurrentBoard;
                     if (board != null)
                     {
-                        move.NewPosition = board.PrevMovedPosition;
+                        move.DstSquare = board.PrevMovedPosition;
                     }
                 }
 

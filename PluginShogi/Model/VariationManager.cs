@@ -217,7 +217,7 @@ namespace VoteSystem.PluginShogi.Model
             return variation.MoveList
                 .Select(_ => _.Clone())
                 .SelectWithIndex((_, i) =>
-                    _.Apply(__ => __.OldPosition = bmList[i].OldPosition))
+                    _.Apply(__ => __.SrcSquare = bmList[i].SrcSquare))
                 .ToList();
         }
 

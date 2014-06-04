@@ -318,7 +318,7 @@ namespace VoteSystem.PluginShogi.Effects
             var board = (Container != null ? Container.Board : null);
             if (board != null && board.LastMove != null)
             {
-                var position = board.LastMove.NewPosition;
+                var position = board.LastMove.DstSquare;
 
                 var cell = EffectTable.PrevMovedCell.LoadEffect();
                 if (cell != null)
@@ -334,7 +334,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 駒を動かせる位置を光らせます。
         /// </summary>
-        private void UpdateMovableCell(Position position, BoardPiece piece)
+        private void UpdateMovableCell(Position position, Piece piece)
         {
             if (this.movableCell != null)
             {
@@ -360,14 +360,14 @@ namespace VoteSystem.PluginShogi.Effects
                 from rank in Enumerable.Range(1, Board.BoardSize)
                 let move = new BoardMove()
                 {
-                    OldPosition = position,
-                    NewPosition = new Position(file, rank),
+                    SrcSquare = position,
+                    DstSquare = new Position(file, rank),
                     BWType = piece.BWType,
                     ActionType = (isMove ? ActionType.None : ActionType.Drop),
                     DropPieceType = (isMove ? PieceType.None : piece.PieceType),
                 }
                 where board.CanMove(move)
-                select move.NewPosition;
+                select move.DstSquare;
 
             // 移動可能なマスにエフェクトをかけます。
             var movableCell = EffectTable.MovableCell.LoadEffect();
@@ -481,13 +481,13 @@ namespace VoteSystem.PluginShogi.Effects
             }
 
             var castle = CastleInfo
-                .Detect(Container.Board, move.BWType, move.NewPosition)
+                .Detect(Container.Board, move.BWType, move.DstSquare)
                 .Where(_ => !this.castleEffectedBag.Contains(move.BWType + _.Name))
                 .FirstOrDefault();
 
             if (castle != null)
             {
-                AddCastleEffect(castle, move.NewPosition, move.BWType);
+                AddCastleEffect(castle, move.DstSquare, move.BWType);
 
                 this.castleEffectedBag.Add(move.BWType + castle.Name);
                 foreach (var name in castle.BaseCastleList)
@@ -702,26 +702,26 @@ namespace VoteSystem.PluginShogi.Effects
             {
                 AddEffect(
                     EffectTable.VariationLast,
-                    move.NewPosition);
+                    move.DstSquare);
             }
             else if (EffectMoveCount <= 3)
             {
                 AddMoveEffect(
-                    move.NewPosition,
+                    move.DstSquare,
                     move);
             }
             else if (EffectMoveCount <= 6)
             {
                 AddVariationEffect(
                     EffectTable.VariationFirst,
-                    move.NewPosition,
+                    move.DstSquare,
                     MoveCountRate(4, 6));
             }
             else
             {
                 AddVariationEffect(
                     EffectTable.VariationSecond,
-                    move.NewPosition,
+                    move.DstSquare,
                     MoveCountRate(7, 9));
             }
 
@@ -785,7 +785,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 駒取りエフェクトです。
         /// </summary>
-        private void AddTookEffect(Position position, BoardPiece tookPiece)
+        private void AddTookEffect(Position position, Piece tookPiece)
         {
             var bwType = tookPiece.BWType.Toggle();
             var bp = Container.GetPiecePos(position);
@@ -842,7 +842,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 駒の移動を開始したときに呼ばれます。
         /// </summary>
-        void IEffectManager.BeginMove(Position position, BoardPiece piece)
+        void IEffectManager.BeginMove(Position position, Piece piece)
         {
             if (Container == null)
             {
@@ -918,7 +918,7 @@ namespace VoteSystem.PluginShogi.Effects
             var position =
                 ( move.IsResigned
                 ? FindGyoku(board, board.Turn)
-                : move.NewPosition);
+                : move.DstSquare);
             if (position == null)
             {
                 return;
@@ -1008,10 +1008,10 @@ namespace VoteSystem.PluginShogi.Effects
             // アンドゥ時
             if (isUndo)
             {
-                if (move.OldPosition != null &&
+                if (move.SrcSquare != null &&
                     HasEffectFlag(EffectFlag.Piece))
                 {
-                    AddMoveEffect(move.OldPosition, move);
+                    AddMoveEffect(move.SrcSquare, move);
                 }
 
                 UpdateTeban(move.BWType);
@@ -1032,19 +1032,19 @@ namespace VoteSystem.PluginShogi.Effects
                 {
                     if (move.TookPiece != null)
                     {
-                        AddTookEffect(move.NewPosition, move.TookPiece);
+                        AddTookEffect(move.DstSquare, move.TookPiece);
                     }
 
                     if (move.ActionType == ActionType.Drop)
                     {
-                        AddEffect(EffectTable.PieceDrop, move.NewPosition);
+                        AddEffect(EffectTable.PieceDrop, move.DstSquare);
                     }
                     else if (move.ActionType == ActionType.Promote)
                     {
-                        AddEffect(EffectTable.Promote, move.NewPosition);
+                        AddEffect(EffectTable.Promote, move.DstSquare);
                     }
 
-                    AddMoveEffect(move.NewPosition, move);
+                    AddMoveEffect(move.DstSquare, move);
                 }
             }
         }
