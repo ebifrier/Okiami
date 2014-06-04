@@ -73,7 +73,7 @@ class Castle
     str << "    {\n"
     
     @piece_list.each do |piece|
-      str << "        new CastlePiece(PieceType.#{piece.type}, new Position(#{piece.file}, #{piece.rank})),\n"
+      str << "        new CastlePiece(PieceType.#{piece.type}, new Square(#{piece.file}, #{piece.rank})),\n"
     end
 
     str << "    },\n"

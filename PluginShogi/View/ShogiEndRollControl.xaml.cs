@@ -227,7 +227,7 @@ namespace VoteSystem.PluginShogi.View
         /// </summary>
         public static readonly DependencyProperty PositionProperty =
             DependencyProperty.Register(
-                "Position", typeof(TimeSpan), typeof(ShogiEndRollControl),
+                "Square", typeof(TimeSpan), typeof(ShogiEndRollControl),
                 new FrameworkPropertyMetadata(TimeSpan.Zero, OnPositionChanged));
 
         /// <summary>

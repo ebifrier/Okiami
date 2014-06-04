@@ -24,7 +24,7 @@ namespace VoteSystem.PluginShogi.Model
         /// <summary>
         /// 駒の位置を取得します。
         /// </summary>
-        public Position Position
+        public Square Square
         {
             get;
             private set;
@@ -33,18 +33,18 @@ namespace VoteSystem.PluginShogi.Model
         /// <summary>
         /// 必要なら先後の反転を行った駒の位置を取得します。
         /// </summary>
-        public Position GetViewPosition(BWType side)
+        public Square GetViewSquare(BWType side)
         {
-            return (side == BWType.Black ? Position : Position.Flip());
+            return (side == BWType.Black ? Square : Square.Flip());
         }
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public CastlePiece(PieceType type, Position position)
+        public CastlePiece(PieceType type, Square square)
         {
             PieceType = type;
-            Position = position;
+            Square = square;
         }
     }
 
@@ -149,11 +149,11 @@ namespace VoteSystem.PluginShogi.Model
         /// 囲いのある駒が適切な位置にあるか調べます。
         /// </summary>
         private static bool IsMatchPiece(Board board, BWType side,
-                                         Position movePosition,
+                                         Square square,
                                          CastlePiece pieceInfo)
         {
-            var position = pieceInfo.GetViewPosition(side);
-            var boardPiece = board[position];
+            var sq = pieceInfo.GetViewSquare(side);
+            var boardPiece = board[sq];
 
             return (
                 boardPiece != null &&
@@ -165,17 +165,17 @@ namespace VoteSystem.PluginShogi.Model
         /// <summary>
         /// 駒の位置が一致するか調べます。
         /// </summary>
-        private static bool IsMatchPosition(BWType side, Position movePosition,
-                                            CastlePiece pieceInfo)
+        private static bool IsMatchSquare(BWType side, Square square,
+                                          CastlePiece pieceInfo)
         {
-            return (pieceInfo.GetViewPosition(side) == movePosition);
+            return (pieceInfo.GetViewSquare(side) == square);
         }
 
         /// <summary>
         /// <paramref name="side"/>側の囲いを判定します。
         /// </summary>
         public static IEnumerable<CastleInfo> Detect(Board board, BWType side,
-                                                     Position movePosition)
+                                                     Square square)
         {
             if (board == null)
             {
@@ -184,9 +184,9 @@ namespace VoteSystem.PluginShogi.Model
 
             return CastleInfo.CastleTable
                 .Where(_ => _.PieceList.All(
-                    __ => IsMatchPiece(board, side, movePosition, __)))
+                    __ => IsMatchPiece(board, side, square, __)))
                 .Where(_ => _.PieceList.Any(
-                    __ => IsMatchPosition(side, movePosition, __)));
+                    __ => IsMatchSquare(side, square, __)));
         }
     }
 }

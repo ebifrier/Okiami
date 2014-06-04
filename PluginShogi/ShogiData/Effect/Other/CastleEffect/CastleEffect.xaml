@@ -50,7 +50,7 @@
             <r:EffectObject Color="Gold"
                             Duration="0:0:5"
                             ImageUri="../../Image/Cell.png"
-                            Mesh="{r:Binding CellPositions,
+                            Mesh="{r:Binding CellSquares,
                                              Converter={StaticResource cellMeshWideConv}}">
                 <r:EffectObject.Scenario>
                     <r:Scenario>
@@ -67,7 +67,7 @@
             <r:EffectObject Color="White"
                             Duration="0:0:5"
                             ImageUri="../../Image/Cell.png"
-                            Mesh="{r:Binding CellPositions,
+                            Mesh="{r:Binding CellSquares,
                                              Converter={StaticResource cellMeshConv}}">
                 <r:EffectObject.Scenario>
                     <r:Scenario>

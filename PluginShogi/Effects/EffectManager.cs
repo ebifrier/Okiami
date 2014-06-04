@@ -242,10 +242,10 @@ namespace VoteSystem.PluginShogi.Effects
         /// 通常のデータコンテキストを作成します。
         /// </summary>
         private EffectContext CreateContext(
-            Position position,
+            Square square,
             double z = ShogiUIElement3D.EffectZ)
         {
-            var p = Container.GetPiecePos(position);
+            var p = Container.GetPiecePos(square);
             var s = Container.CellSize;
 
             return new EffectContext()
@@ -259,38 +259,38 @@ namespace VoteSystem.PluginShogi.Effects
         /// セルエフェクトのコンテキストを作成します。
         /// </summary>
         private CellEffectContext CreateCellContext(
-            Position position,
-            Position cellPosition = null,
+            Square square,
+            Square cellSquare = null,
             double z = ShogiUIElement3D.BanEffectZ)
         {
-            return CreateCellContext(new[] { position }, cellPosition, z);
+            return CreateCellContext(new[] { square }, cellSquare, z);
         }
 
         /// <summary>
         /// セルエフェクトのコンテキストを作成します。
         /// </summary>
         private CellEffectContext CreateCellContext(
-            IEnumerable<Position> positions,
-            Position cellPosition = null,
+            IEnumerable<Square> squares,
+            Square cellSquare = null,
             double z = ShogiUIElement3D.BanEffectZ)
         {
             var bp = Container.BanBounds.TopLeft;
             var bs = Container.BanBounds.Size;
             var s = Container.CellSize;
 
-            var flipPosition =
-                (cellPosition == null || Container.ViewSide == BWType.Black
-                ? cellPosition
-                : cellPosition.Flip());
-            var flipPositions =
-                (positions == null || Container.ViewSide == BWType.Black
-                ? positions
-                : positions.Where(_ => _ != null).Select(_ => _.Flip()));
+            var flipSquare =
+                (cellSquare == null || Container.ViewSide == BWType.Black
+                ? cellSquare
+                : cellSquare.Flip());
+            var flipSquares =
+                (squares == null || Container.ViewSide == BWType.Black
+                ? squares
+                : squares.Where(_ => _ != null).Select(_ => _.Flip()));
 
             return new CellEffectContext()
             {
-                CellPosition = flipPosition,
-                CellPositions = flipPositions.ToArray(),
+                CellSquare = flipSquare,
+                CellSquares = flipSquares.ToArray(),
                 BanCoord = new Vector3D(bp.X, bp.Y, z),
                 BanScale = new Vector3D(bs.Width, bs.Height, 1.0),
                 BaseScale = new Vector3D(s.Width, s.Height, 1.0),
@@ -318,12 +318,12 @@ namespace VoteSystem.PluginShogi.Effects
             var board = (Container != null ? Container.Board : null);
             if (board != null && board.LastMove != null)
             {
-                var position = board.LastMove.DstSquare;
+                var square = board.LastMove.DstSquare;
 
                 var cell = EffectTable.PrevMovedCell.LoadEffect();
                 if (cell != null)
                 {
-                    cell.DataContext = CreateCellContext(position);
+                    cell.DataContext = CreateCellContext(square);
 
                     Container.AddBanEffect(cell);
                     this.prevMovedCell = cell;
@@ -334,7 +334,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 駒を動かせる位置を光らせます。
         /// </summary>
-        private void UpdateMovableCell(Position position, Piece piece)
+        private void UpdateMovableCell(Square square, Piece piece)
         {
             if (this.movableCell != null)
             {
@@ -354,14 +354,14 @@ namespace VoteSystem.PluginShogi.Effects
             }
 
             // 移動可能もしくは駒打ち可能な全マスを取得します。
-            var isMove = (position != null);
-            var movePositions =
+            var isMove = (square != null);
+            var moveSquares =
                 from file in Enumerable.Range(1, Board.BoardSize)
                 from rank in Enumerable.Range(1, Board.BoardSize)
                 let move = new BoardMove()
                 {
-                    SrcSquare = position,
-                    DstSquare = new Position(file, rank),
+                    SrcSquare = square,
+                    DstSquare = new Square(file, rank),
                     BWType = piece.BWType,
                     ActionType = (isMove ? ActionType.None : ActionType.Drop),
                     DropPieceType = (isMove ? PieceType.None : piece.PieceType),
@@ -373,7 +373,7 @@ namespace VoteSystem.PluginShogi.Effects
             var movableCell = EffectTable.MovableCell.LoadEffect();
             if (movableCell != null)
             {
-                movableCell.DataContext = CreateCellContext(movePositions, position);
+                movableCell.DataContext = CreateCellContext(moveSquares, square);
 
                 Container.AddBanEffect(movableCell);
                 this.movableCell = movableCell;
@@ -411,7 +411,7 @@ namespace VoteSystem.PluginShogi.Effects
                     teban = teban.Toggle();
                 }
 
-                tebanCell.DataContext = CreateCellContext((Position)null)
+                tebanCell.DataContext = CreateCellContext((Square)null)
                     .Apply(_ => _.BWType = teban);
 
                 Container.AddBanEffect(tebanCell);
@@ -421,20 +421,20 @@ namespace VoteSystem.PluginShogi.Effects
         #endregion
 
         #region 囲いエフェクト
-        private static Position ViewFlip(Position position, BWType side)
+        private static Square ViewFlip(Square square, BWType side)
         {
-            return (side == BWType.Black ? position : position.Flip());
+            return (side == BWType.Black ? square : square.Flip());
         }
 
         /// <summary>
         /// 囲いエフェクトを追加します。
         /// </summary>
-        private void AddCastleEffect(CastleInfo castle, Position position, BWType side)
+        private void AddCastleEffect(CastleInfo castle, Square square, BWType side)
         {
-            var p = Container.GetPiecePos(position);
+            var p = Container.GetPiecePos(square);
 
             // 字形を描くパーティクルの放出角度
-            var angle = (position.File < 5 ? 0.0 : 180.0);
+            var angle = (square.File < 5 ? 0.0 : 180.0);
 
             // 囲い画像の名前
             var imageName = (string.IsNullOrEmpty(castle.ImageName) ?
@@ -455,8 +455,8 @@ namespace VoteSystem.PluginShogi.Effects
             if (effect != null)
             {
                 effect.DataContext = CreateCellContext(
-                    castle.PieceList.Select(_ => ViewFlip(_.Position, side)),
-                    position,
+                    castle.PieceList.Select(_ => ViewFlip(_.Square, side)),
+                    square,
                     ShogiUIElement3D.EffectZ);
 
                 // 囲いエフェクト中は駒の移動を停止します。
@@ -661,7 +661,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 変化エフェクトを追加します。
         /// </summary>
-        private void AddVariationEffect(EffectInfo effectInfo, Position position,
+        private void AddVariationEffect(EffectInfo effectInfo, Square square,
                                         double rate)
         {
             var dic = new Dictionary<string, object>
@@ -678,7 +678,7 @@ namespace VoteSystem.PluginShogi.Effects
             AdjustVolume(effect);
             WPFUtil.UIProcess(() =>
             {
-                effect.DataContext = CreateContext(position);
+                effect.DataContext = CreateContext(square);
                 Container.AddEffect(effect);
             });
         }
@@ -734,7 +734,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// エフェクトを追加します。
         /// </summary>
-        private void AddEffect(EffectObject effect, Position position)
+        private void AddEffect(EffectObject effect, Square square)
         {
             if (effect == null)
             {
@@ -744,7 +744,7 @@ namespace VoteSystem.PluginShogi.Effects
             AdjustVolume(effect);
             WPFUtil.UIProcess(() =>
             {
-                effect.DataContext = CreateContext(position);
+                effect.DataContext = CreateContext(square);
 
                 Container.AddEffect(effect);
             });
@@ -753,11 +753,11 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// エフェクトを追加します。
         /// </summary>
-        private void AddEffect(EffectInfo effectInfo, Position position)
+        private void AddEffect(EffectInfo effectInfo, Square square)
         {
             var effect = effectInfo.LoadEffect();
 
-            AddEffect(effect, position);
+            AddEffect(effect, square);
         }
 
         /// <summary>
@@ -771,7 +771,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 駒を動かしたときのエフェクトです。
         /// </summary>
-        private void AddMoveEffect(Position position, BoardMove move)
+        private void AddMoveEffect(Square square, BoardMove move)
         {
             var table = new Dictionary<string, object>
             {
@@ -779,16 +779,16 @@ namespace VoteSystem.PluginShogi.Effects
             };
 
             var effect = EffectTable.PieceMove.LoadEffect(table);
-            AddEffect(effect, position);
+            AddEffect(effect, square);
         }
 
         /// <summary>
         /// 駒取りエフェクトです。
         /// </summary>
-        private void AddTookEffect(Position position, Piece tookPiece)
+        private void AddTookEffect(Square square, Piece tookPiece)
         {
             var bwType = tookPiece.BWType.Toggle();
-            var bp = Container.GetPiecePos(position);
+            var bp = Container.GetPiecePos(square);
             var ep = Container.GetCapturedPiecePos(bwType, tookPiece.PieceType);
             var d = Vector3D.Subtract(ep, bp);
             var rad = Math.Atan2(d.Y, d.X) + Math.PI;
@@ -801,7 +801,7 @@ namespace VoteSystem.PluginShogi.Effects
             };
 
             var effect = EffectTable.PieceTook.LoadEffect(table);
-            AddEffect(effect, position);
+            AddEffect(effect, square);
         }
         #endregion
 
@@ -842,14 +842,14 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 駒の移動を開始したときに呼ばれます。
         /// </summary>
-        void IEffectManager.BeginMove(Position position, Piece piece)
+        void IEffectManager.BeginMove(Square square, Piece piece)
         {
             if (Container == null)
             {
                 return;
             }
 
-            UpdateMovableCell(position, piece);
+            UpdateMovableCell(square, piece);
         }
 
         /// <summary>
@@ -868,22 +868,22 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 玉の位置を取得します。
         /// </summary>
-        private Position FindGyoku(Board board, BWType bwType)
+        private Square FindGyoku(Board board, BWType bwType)
         {
-            var positions =
+            var squares =
                 from file in Enumerable.Range(1, Board.BoardSize)
                 from rank in Enumerable.Range(1, Board.BoardSize)
                 let piece = board[file, rank]
                 where piece != null &&
                       piece.PieceType == PieceType.Gyoku &&
                       piece.BWType == bwType
-                select new Position(file, rank);
-            if (positions.Count() != 1)
+                select new Square(file, rank);
+            if (squares.Count() != 1)
             {
                 return null;
             }
 
-            return positions.FirstOrDefault();
+            return squares.FirstOrDefault();
         }
 
         /// <summary>
@@ -915,11 +915,11 @@ namespace VoteSystem.PluginShogi.Effects
             }
             
             // 投了時は玉の位置にエフェクトをかけます。
-            var position =
+            var square =
                 ( move.IsResigned
                 ? FindGyoku(board, board.Turn)
                 : move.DstSquare);
-            if (position == null)
+            if (square == null)
             {
                 return;
             }
@@ -927,7 +927,7 @@ namespace VoteSystem.PluginShogi.Effects
             var effect = EffectTable.Vote.LoadEffect();
             if (effect != null)
             {
-                AddEffect(effect, position);
+                AddEffect(effect, square);
             }
 
             this.votedTimer.Restart();
@@ -950,13 +950,13 @@ namespace VoteSystem.PluginShogi.Effects
             }
 
             // 投了時は玉の位置にエフェクトをかけます。
-            var position = FindGyoku(board, board.Turn);
-            if (position == null)
+            var square = FindGyoku(board, board.Turn);
+            if (square == null)
             {
                 return;
             }
 
-            AddEffect(EffectTable.Win, position);
+            AddEffect(EffectTable.Win, square);
         }
 
         /// <summary>
