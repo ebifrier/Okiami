@@ -281,7 +281,7 @@ namespace VoteSystem.PluginShogi
             foreach (var move in moveList)
             {
                 move.BWType = bwType;
-                bwType = bwType.Toggle();
+                bwType = bwType.Flip();
 
                 var moveText = move.ToString();
                 result.Append(moveText);

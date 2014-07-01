@@ -133,7 +133,7 @@ namespace VoteSystem.PluginShogi.Model
             foreach (var move in moveListEx)
             {
                 move.BWType = bwType;
-                bwType = bwType.Toggle();
+                bwType = bwType.Flip();
             }
 
             // 指し手は正しく動かせるところまでしか変換しないため、

@@ -264,7 +264,7 @@
                                     EffectManager="{x:Static l:ShogiGlobal.EffectManager}"
                                     PieceImage="{Binding KomaImage}"
                                     BanBrush="{StaticResource banBrush}"
-                                    PieceBoxBrush="{StaticResource komadaiBrush}"
+                                    CapturedPieceBoxBrush="{StaticResource komadaiBrush}"
                                     BlackPlayerName="{Binding Settings.SD_BlackPlayerName}"
                                     WhitePlayerName="{Binding Settings.SD_WhitePlayerName}"
                                     AutoPlayInterval="{Binding Settings.SD_AutoPlayInterval}">

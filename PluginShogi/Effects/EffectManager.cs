@@ -245,7 +245,7 @@ namespace VoteSystem.PluginShogi.Effects
             Square square,
             double z = ShogiUIElement3D.EffectZ)
         {
-            var p = Container.GetPiecePos(square);
+            var p = Container.SquareToPoint(square);
             var s = Container.CellSize;
 
             return new EffectContext()
@@ -334,7 +334,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 駒を動かせる位置を光らせます。
         /// </summary>
-        private void UpdateMovableCell(Square square, Piece piece)
+        private void UpdateMovableCell(Square square, BoardPiece piece)
         {
             if (this.movableCell != null)
             {
@@ -362,12 +362,14 @@ namespace VoteSystem.PluginShogi.Effects
                 {
                     SrcSquare = square,
                     DstSquare = new Square(file, rank),
-                    BWType = piece.BWType,
-                    ActionType = (isMove ? ActionType.None : ActionType.Drop),
+                    MovePiece = (isMove ? piece.Piece : null),
                     DropPieceType = (isMove ? PieceType.None : piece.PieceType),
+                    BWType = piece.BWType,
                 }
-                where board.CanMove(move)
-                select move.DstSquare;
+                let move2 = (Board.IsPromoteForce(move) ?
+                    move.Apply(_ => _.IsPromote = true) : move)
+                where board.CanMove(move2)
+                select move2.DstSquare;
 
             // 移動可能なマスにエフェクトをかけます。
             var movableCell = EffectTable.MovableCell.LoadEffect();
@@ -408,7 +410,7 @@ namespace VoteSystem.PluginShogi.Effects
             {
                 if (Container.ViewSide != BWType.Black)
                 {
-                    teban = teban.Toggle();
+                    teban = teban.Flip();
                 }
 
                 tebanCell.DataContext = CreateCellContext((Square)null)
@@ -431,7 +433,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// </summary>
         private void AddCastleEffect(CastleInfo castle, Square square, BWType side)
         {
-            var p = Container.GetPiecePos(square);
+            var p = Container.SquareToPoint(square);
 
             // 字形を描くパーティクルの放出角度
             var angle = (square.File < 5 ? 0.0 : 180.0);
@@ -785,11 +787,10 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 駒取りエフェクトです。
         /// </summary>
-        private void AddTookEffect(Square square, Piece tookPiece)
+        private void AddTookEffect(Square square, Piece tookPiece, BWType bwType)
         {
-            var bwType = tookPiece.BWType.Toggle();
-            var bp = Container.GetPiecePos(square);
-            var ep = Container.GetCapturedPiecePos(bwType, tookPiece.PieceType);
+            var bp = Container.SquareToPoint(square);
+            var ep = Container.CapturedPieceToPoint(tookPiece.PieceType, bwType);
             var d = Vector3D.Subtract(ep, bp);
             var rad = Math.Atan2(d.Y, d.X) + Math.PI;
 
@@ -842,7 +843,7 @@ namespace VoteSystem.PluginShogi.Effects
         /// <summary>
         /// 駒の移動を開始したときに呼ばれます。
         /// </summary>
-        void IEffectManager.BeginMove(Square square, Piece piece)
+        void IEffectManager.BeginMove(Square square, BoardPiece piece)
         {
             if (Container == null)
             {
@@ -1018,7 +1019,7 @@ namespace VoteSystem.PluginShogi.Effects
                 return;
             }
 
-            UpdateTeban(move.BWType.Toggle());
+            UpdateTeban(move.BWType.Flip());
 
             if (IsAutoPlayEffect)
             {
@@ -1032,7 +1033,7 @@ namespace VoteSystem.PluginShogi.Effects
                 {
                     if (move.TookPiece != null)
                     {
-                        AddTookEffect(move.DstSquare, move.TookPiece);
+                        AddTookEffect(move.DstSquare, move.TookPiece, move.BWType);
                     }
 
                     if (move.ActionType == ActionType.Drop)

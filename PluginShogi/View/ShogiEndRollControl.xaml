@@ -75,7 +75,7 @@
                     <p:ShogiUIElement3D x:Name="ShogiControl"
                                         PieceImage="{Binding KomaImage}"
                                         BanBrush="{StaticResource banBrush}"
-                                        PieceBoxBrush="{StaticResource komadaiBrush}"
+                                        CapturedPieceBoxBrush="{StaticResource komadaiBrush}"
                                         IsLeaveTimeVisible="False"
                                         BlackPlayerName=""
                                         WhitePlayerName="">
