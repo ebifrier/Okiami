@@ -162,7 +162,7 @@ namespace VoteSystem.PluginShogi.Model
         /// 変化ツリーに変化を登録します。
         /// </summary>
         private void AddVariationNode(MoveNode root,
-                                      IEnumerable<Move> variationMoveList)
+                                      IEnumerable<BoardMove> variationMoveList)
         {
             if (root == null)
             {
@@ -177,48 +177,27 @@ namespace VoteSystem.PluginShogi.Model
             var firstMove = variationMoveList.FirstOrDefault();
             var leaveMoveList = variationMoveList.Skip(1);
 
-            // 変化の初手が次の手と一致したら、次の手に移動します。
-            var child = root.NextChild;
-            if (child != null && child.Move == firstMove)
+            // 本譜の手を増やされても困るので、本譜がない場合は変化も追加しません。
+            if (!root.NextNodes.Any())
             {
-                AddVariationNode(child, leaveMoveList);
                 return;
             }
 
-            if (root.NextChild != null)
+            // 変化の初手が次の手と一致したら、次の手に移動します。
+            foreach (var next in root.NextNodes)
             {
-                // 次の手の変化に所望の変化があるか調べます。
-                var prevNode = child;
-                for (var next = child.NextVariation; next != null; next = next.NextVariation)
+                if (next.Move == firstMove)
                 {
-                    if (next.Move == firstMove)
-                    {
-                        AddVariationNode(next, leaveMoveList);
-                        return;
-                    }
-
-                    prevNode = next;
+                    AddVariationNode(next, leaveMoveList);
+                    return;
                 }
-
-                // 次の手を設定します。
-                prevNode.NextVariation = KifuObject.Convert2Node(
-                    variationMoveList,
-                    root.MoveCount + 1);
             }
-        }
 
-        /// <summary>
-        /// 指し手の移動前位置を設定します。
-        /// </summary>
-        private List<Move> ModifyMove(Variation variation)
-        {
-            var bmList = variation.BoardMoveList;
-
-            return variation.MoveList
-                .Select(_ => _.Clone())
-                .SelectWithIndex((_, i) =>
-                    _.Apply(__ => __.SrcSquare = bmList[i].SrcSquare))
-                .ToList();
+            // 次の手を設定します。
+            var newNode = KifuObject.Convert2Node(
+                variationMoveList,
+                root.MoveCount + 1);
+            root.NextNodes.Add(newNode);
         }
 
         /// <summary>
@@ -228,34 +207,33 @@ namespace VoteSystem.PluginShogi.Model
         {
             using (LazyLock())
             {
-                var curBoard = board.Clone();
-                var prevBoard = curBoard.Clone();
-                MoveNode root = null;
-                BoardMove move;
+                var root = new MoveNode();
+                var moveCount = 1;
+                var last = root;
 
-                while ((move = prevBoard.Undo()) != null)
+                var tmpBoard = board.Clone();
+                tmpBoard.ClearRedoList();
+                tmpBoard.UndoAll();
+
+                BoardMove move;
+                while ((move = tmpBoard.Redo()) != null)
                 {
                     var node = new MoveNode()
                     {
-                        Move = prevBoard.ConvertMove(move, true),
-                        MoveCount = curBoard.MoveCount,
+                        Move = move,
+                        MoveCount = moveCount++,
                     };
 
-                    node.NextChild = root;
-                    root = node;
-                    curBoard.Undo();
+                    last.NextNodes.Add(node);
+                    last = node;
                 }
 
-                return new MoveNode()
-                {
-                    NextChild = root,
-                    MoveCount = 0,
-                };
+                return root;
             }
         }
 
         /// <summary>
-        /// 差し手と変化を木構造で表現します。（主にファイル保存用）
+        /// 指し手と変化を木構造で表現します。（主にファイル保存用）
         /// </summary>
         public MoveNode CreateVariationNode(Board board)
         {
@@ -285,15 +263,13 @@ namespace VoteSystem.PluginShogi.Model
                     // 各変化を登録します。
                     foreach (var variation in manager.VariationList)
                     {
-                        var modifiedMoveList = ModifyMove(variation);
-
-                        AddVariationNode(currentRoot, modifiedMoveList);
+                        AddVariationNode(currentRoot, variation.BoardMoveList);
                     }
 
-                    currentRoot = currentRoot.NextChild;
+                    currentRoot = currentRoot.NextNode;
                 } while (tmpBoard.Redo() != null);
 
-                return root.NextChild;
+                return root;
             }
         }
 

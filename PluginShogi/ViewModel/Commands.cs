@@ -722,7 +722,7 @@ namespace VoteSystem.PluginShogi.ViewModel
                 using (var writer = new StreamWriter(dialog.FileName, false,
                                                      KifuObject.DefaultEncoding))
                 {
-                    SaveKif(writer);
+                    SaveKif(writer, KifuFormat.Kif);
                 }
             }
             catch (Exception ex)
@@ -739,7 +739,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         {
             using (var writer = new StringWriter())
             {
-                SaveKif(writer);
+                SaveKif(writer, KifuFormat.Kif);
 
                 Clipboard.SetText(writer.ToString());
             }
@@ -748,7 +748,7 @@ namespace VoteSystem.PluginShogi.ViewModel
         /// <summary>
         /// 棋譜ファイルの書き込みを行います。
         /// </summary>
-        public static void SaveKif(TextWriter writer)
+        public static void SaveKif(TextWriter writer, KifuFormat format)
         {
             try
             {
@@ -765,8 +765,8 @@ namespace VoteSystem.PluginShogi.ViewModel
                 headers["先手"] = model.Settings.SD_BlackPlayerName;
                 headers["後手"] = model.Settings.SD_WhitePlayerName;
 
-                var kifu = new KifuObject(headers, root);
-                KifuWriter.Save(writer, kifu);
+                var kifu = new KifuObject(headers, new Board(), root);
+                KifuWriter.Save(writer, kifu, format);
             }
             catch (Exception ex)
             {

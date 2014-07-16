@@ -1,3 +1,12 @@
+2014-07-16  - Ver 1.8.1.12
+
+	* PluginShogi/Model/VariationManager.cs: 棋譜を扱う内部形式の変更に合わ
+	せてソースを修正しました。
+	* PluginShogi/ViewModel/Commands.cs: 棋譜保存時に棋譜のフォーマットを指
+	定するようにしました。(TODO)
+	* PluginShogi/ShogiGlobal.cs: データディレクトリやベースとなるパスを明
+	示的に指定するようにしました。
+
 2014-07-01  - Ver 1.8.1.11
 
 	* Ragnarokの変更に合わせてソースを修正しました。

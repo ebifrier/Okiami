@@ -30,7 +30,9 @@ namespace VoteSystem.PluginShogi
         /// </summary>
         public static void Initialize(ShogiPlugin plugin, Client.PluginHost host)
         {
-            ShogiInitializer.Initialize();
+            ShogiInitializer.Initialize(
+                System.Reflection.Assembly.GetExecutingAssembly(),
+                "ShogiData");
 
             ClientWindow = host.Window;
             VoteClient = host.VoteClient;
