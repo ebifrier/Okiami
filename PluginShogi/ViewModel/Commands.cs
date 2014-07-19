@@ -684,8 +684,8 @@ namespace VoteSystem.PluginShogi.ViewModel
                 ShogiGlobal.ShogiModel.SetBoard(board);
 
                 var model = ShogiGlobal.ShogiModel;
-                model.Settings.SD_BlackPlayerName = file.Headers["先手"];
-                model.Settings.SD_WhitePlayerName = file.Headers["後手"];
+                model.Settings.SD_BlackPlayerName = file.Header[KifuHeaderType.BlackName];
+                model.Settings.SD_WhitePlayerName = file.Header[KifuHeaderType.WhiteName];
             }
             catch (Exception ex)
             {
@@ -761,11 +761,11 @@ namespace VoteSystem.PluginShogi.ViewModel
                 var manager = model.MoveManager;
                 var root = manager.CreateVariationNode(model.Board);
 
-                var headers = new Dictionary<string, string>();
-                headers["先手"] = model.Settings.SD_BlackPlayerName;
-                headers["後手"] = model.Settings.SD_WhitePlayerName;
+                var header = new KifuHeader();
+                header[KifuHeaderType.BlackName] = model.Settings.SD_BlackPlayerName;
+                header[KifuHeaderType.WhiteName] = model.Settings.SD_WhitePlayerName;
 
-                var kifu = new KifuObject(headers, new Board(), root);
+                var kifu = new KifuObject(header, new Board(), root);
                 KifuWriter.Save(writer, kifu, format);
             }
             catch (Exception ex)

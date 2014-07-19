@@ -1,3 +1,8 @@
+2014-07-19  - Ver 1.8.1.13
+
+	* PluginShogi/ViewModel/Commands.cs: Ragnarokの変更に合わせてファイルの
+	入出力メソッドを修正しました。
+
 2014-07-16  - Ver 1.8.1.12
 
 	* PluginShogi/Model/VariationManager.cs: 棋譜を扱う内部形式の変更に合わ
