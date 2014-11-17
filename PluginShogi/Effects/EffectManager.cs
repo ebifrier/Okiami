@@ -358,14 +358,12 @@ namespace VoteSystem.PluginShogi.Effects
             var moveSquares =
                 from file in Enumerable.Range(1, Board.BoardSize)
                 from rank in Enumerable.Range(1, Board.BoardSize)
-                let move = new BoardMove()
-                {
-                    SrcSquare = square,
-                    DstSquare = new Square(file, rank),
-                    MovePiece = (isMove ? piece.Piece : null),
-                    DropPieceType = (isMove ? PieceType.None : piece.PieceType),
-                    BWType = piece.BWType,
-                }
+                let move = (isMove ?
+                    BoardMove.CreateMove(
+                        piece.BWType, square, new Square(file, rank),
+                        piece.Piece, false) :
+                    BoardMove.CreateDrop(
+                        piece.BWType, new Square(file, rank), piece.PieceType))
                 let move2 = (Board.IsPromoteForce(move) ?
                     move.Apply(_ => _.IsPromote = true) : move)
                 where board.CanMove(move2)

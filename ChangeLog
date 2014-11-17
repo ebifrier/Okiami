@@ -1,3 +1,8 @@
+2014-11-17  - Ver 1.8.1.14
+
+	* PluginShogi/Effects/EffectManager.cs: Ragnarokの変更に合わせて、
+	BoardMoveクラスのメソッドを修正しました。
+
 2014-07-19  - Ver 1.8.1.13
 
 	* PluginShogi/ViewModel/Commands.cs: Ragnarokの変更に合わせてファイルの
