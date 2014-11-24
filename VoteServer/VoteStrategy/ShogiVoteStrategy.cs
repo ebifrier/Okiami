@@ -535,27 +535,13 @@ namespace VoteSystem.Server.VoteStrategy
                 return null;
             }
 
-            // 投了は常にさせることにします。
-            if (this.board == null || move.IsResigned)
+            // board==nullの時は指し手の管理を行いません。
+            if (this.board == null)
             {
                 return move;
             }
 
-            // 一度、指し手の正規化を行います（打を消したり、左を追加するなど）
-            var bm = this.board.ConvertMove(move, true);
-            if (bm == null /*|| !this.board.CanMove(bm)*/)
-            {
-                return null;
-            }
-
-            var newMove = this.board.ConvertMove(bm, false);
-            if (newMove == null)
-            {
-                return null;
-            }
-
-            newMove.OriginalText = move.OriginalText;
-            return newMove;
+            return this.board.NormalizeMove(move);
         }
 
         /// <summary>

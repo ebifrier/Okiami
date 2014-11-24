@@ -915,7 +915,7 @@ namespace VoteSystem.PluginShogi.Effects
             
             // 投了時は玉の位置にエフェクトをかけます。
             var square =
-                ( move.IsResigned
+                ( move.IsSpecialMove
                 ? FindGyoku(board, board.Turn)
                 : move.DstSquare);
             if (square == null)
