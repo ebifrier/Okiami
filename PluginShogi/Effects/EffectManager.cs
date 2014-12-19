@@ -462,8 +462,8 @@ namespace VoteSystem.PluginShogi.Effects
                 // 囲いエフェクト中は駒の移動を停止します。
                 var model = ShogiGlobal.ShogiModel;
                 var oldEditMode = model.EditMode;
-                effect.Terminated += (_, __) => model.EditMode = oldEditMode;
-                model.EditMode = EditMode.NoEdit;
+                //effect.Terminated += (_, __) => model.EditMode = oldEditMode;
+                //model.EditMode = EditMode.NoEdit;
 
                 AdjustVolume(effect);
                 Container.AddEffect(effect);

@@ -49,6 +49,7 @@
                         StartSoundPath="Cell.wav">
             <r:EffectObject Color="Gold"
                             Duration="0:0:5"
+                            AutoUpdateMesh="False"
                             ImageUri="../../Image/Cell.png"
                             Mesh="{r:Binding CellSquares,
                                              Converter={StaticResource cellMeshWideConv}}">
@@ -66,6 +67,7 @@
 
             <r:EffectObject Color="White"
                             Duration="0:0:5"
+                            AutoUpdateMesh="False"
                             ImageUri="../../Image/Cell.png"
                             Mesh="{r:Binding CellSquares,
                                              Converter={StaticResource cellMeshConv}}">
