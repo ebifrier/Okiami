@@ -28,7 +28,7 @@ namespace VoteSystem.Protocol.View
                 var isFullWidth = (bool)(values[1] is bool ? values[1] : false);
 
                 // 半角/全角の指定つきです。
-                return StringConverter.ConvertInt(
+                return IntConverter.Convert(
                     (isFullWidth ? NumberType.Big : NumberType.Normal),
                     ivalue);
             }

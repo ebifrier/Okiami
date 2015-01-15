@@ -5,3 +5,4 @@ VoteProtocol/bin/
 VoteProtocol/obj/
 VoteServer/obj/
 bin/
+*.userprefs
