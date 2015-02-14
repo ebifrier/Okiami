@@ -802,6 +802,46 @@ namespace VoteSystem.PluginShogi.Effects
             var effect = EffectTable.PieceTook.LoadEffect(table);
             AddEffect(effect, square);
         }
+
+        /// <summary>
+        /// 駒の移動（駒打ちや成りなど）に関わるエフェクトを追加します。
+        /// </summary>
+        private void AddPieceEffect(BoardMove move, bool isUndo)
+        {
+            if (!HasEffectFlag(EffectFlag.Piece))
+            {
+                return;
+            }
+
+            // 投了などなら何もしません。
+            if (move.IsSpecialMove)
+            {
+                return;
+            }
+
+            // アンドゥ時は移動元のマスを使います。
+            var square = (isUndo ? move.SrcSquare : move.DstSquare);
+            if (square == null)
+            {
+                return;
+            }
+
+            if (move.TookPiece != null)
+            {
+                AddTookEffect(square, move.TookPiece, move.BWType);
+            }
+
+            if (move.ActionType == ActionType.Drop)
+            {
+                AddEffect(EffectTable.PieceDrop, square);
+            }
+            else if (move.ActionType == ActionType.Promote)
+            {
+                AddEffect(EffectTable.Promote, square);
+            }
+
+            AddMoveEffect(square, move);
+        }
         #endregion
 
         #region オーバーライド
@@ -1025,25 +1065,9 @@ namespace VoteSystem.PluginShogi.Effects
             }
             else
             {
-                var castleAdded = AddCastleEffect(move);
-
-                if (!castleAdded && HasEffectFlag(EffectFlag.Piece))
+                if (!AddCastleEffect(move))
                 {
-                    if (move.TookPiece != null)
-                    {
-                        AddTookEffect(move.DstSquare, move.TookPiece, move.BWType);
-                    }
-
-                    if (move.ActionType == ActionType.Drop)
-                    {
-                        AddEffect(EffectTable.PieceDrop, move.DstSquare);
-                    }
-                    else if (move.ActionType == ActionType.Promote)
-                    {
-                        AddEffect(EffectTable.Promote, move.DstSquare);
-                    }
-
-                    AddMoveEffect(move.DstSquare, move);
+                    AddPieceEffect(move, isUndo);
                 }
             }
         }
