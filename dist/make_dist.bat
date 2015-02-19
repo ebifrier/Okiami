@@ -1,4 +1,4 @@
-set RUBY="C:\Program Files (x86)\ruby-1.8\bin\ruby"
+set SITE_DIR="E:\HP\garnet-alice.net\source\_helpers"
 
-%RUBY% -Ku -I"..\..\Ragnarok\Ragnarok\Update" build.rb make
+ruby -Ku -I%SITE_DIR% build.rb
 pause

@@ -6,3 +6,4 @@ VoteProtocol/obj/
 VoteServer/obj/
 bin/
 *.userprefs
+dist/Okiami_*
