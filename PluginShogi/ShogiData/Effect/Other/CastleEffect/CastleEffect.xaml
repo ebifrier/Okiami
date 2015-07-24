@@ -171,7 +171,7 @@
                         <f:Emitter.Initializers>
                             <f:ParticleImage />
                             <f:Position Zone="{StaticResource startZone}" />
-                            <f:ColorInit Color="0xff00ffff" />
+                            <f:ColorInit Color="#ff00ffff" />
                             <f:Velocity Zone="{StaticResource speedZone}" />
                             <f:ScaleInit Scale="13.0" />
                             <f:Lifetime Value="3.8" />

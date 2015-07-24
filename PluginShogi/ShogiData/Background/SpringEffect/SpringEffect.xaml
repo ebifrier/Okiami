@@ -24,7 +24,7 @@
                     <f:Steady RateMin="2" RateMax="4" />
                 </f:Emitter.Counter>
                 <f:Emitter.Initializers>
-                    <f:SharedImage ImageUri="Sakura.png" MaterialType="Emissive" />
+                    <f:SharedImage ImagePath="Sakura.png" MaterialType="Emissive" />
                     <f:Position Zone="{StaticResource positionZone}" />
                     <f:Velocity Zone="{StaticResource speedZone}" />
                     <f:RotateVelocity MinAngularVelocity="3" MaxAngularVelocity="6" />
