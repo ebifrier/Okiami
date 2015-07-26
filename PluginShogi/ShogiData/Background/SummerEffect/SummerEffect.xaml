@@ -30,7 +30,7 @@
                     <f:Steady RateMin="1" RateMax="2" />
                 </f:Emitter.Counter>
                 <f:Emitter.Initializers>
-                    <f:SharedImage ImageUri="Leaf.png" MaterialType="Emissive" />
+                    <f:SharedImage ImagePath="Leaf.png" MaterialType="Emissive" />
                     <f:Position Zone="{StaticResource positionZone}" />
                     <f:Velocity Zone="{StaticResource speedZone}" />
                     <f:RotateVelocity MinAngularVelocity="3" MaxAngularVelocity="6" />
@@ -48,7 +48,7 @@
                     <f:Steady RateMin="0.5" RateMax="0.7" />
                 </f:Emitter.Counter>
                 <f:Emitter.Initializers>
-                    <f:SharedImage ImageUri="../Image/Cloud.png" MaterialType="Emissive" />
+                    <f:SharedImage ImagePath="../Image/Cloud.png" MaterialType="Emissive" />
                     <f:Position Zone="{StaticResource positionCloudZone}" />
                     <f:Velocity Zone="{StaticResource speedCloudZone}" />
                     <f:AlphaInit MinAlpha="0.3" MaxAlpha="0.5" />

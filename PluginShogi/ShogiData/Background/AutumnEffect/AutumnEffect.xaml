@@ -30,7 +30,7 @@
                     <f:Steady RateMin="1" RateMax="2" />
                 </f:Emitter.Counter>
                 <f:Emitter.Initializers>
-                    <f:SharedImage ImageUri="Momiji.png" MaterialType="Emissive" />
+                    <f:SharedImage ImagePath="Momiji.png" MaterialType="Emissive" />
                     <f:Position Zone="{StaticResource positionZone}" />
                     <f:Velocity Zone="{StaticResource speedZone}" />
                     <f:RotateVelocity MinAngularVelocity="3" MaxAngularVelocity="6" />
@@ -48,7 +48,7 @@
                     <f:Steady RateMin="1.0" RateMax="2.0" />
                 </f:Emitter.Counter>
                 <f:Emitter.Initializers>
-                    <f:SharedImage ImageUri="../Image/Cloud.png" MaterialType="Emissive" />
+                    <f:SharedImage ImagePath="../Image/Cloud.png" MaterialType="Emissive" />
                     <f:Position Zone="{StaticResource positionCloudZone}" />
                     <f:Velocity Zone="{StaticResource speedCloudZone}" />
                     <f:AlphaInit MinAlpha="0.3" MaxAlpha="0.4" />

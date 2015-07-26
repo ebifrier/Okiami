@@ -32,7 +32,7 @@
                 </f:Emitter.Counter>
                 <f:Emitter.Initializers>
                     <f:ParticleImage IsSingle="True" />
-                    <f:ColorInit Color="0xa0ffffff" />
+                    <f:ColorInit Color="#a0ffffff" />
                     <f:Position Zone="{StaticResource positionZone}" />
                     <f:Velocity Zone="{StaticResource speedZone}" />
                     <f:ScaleInit MinScale="10" MaxScale="20" />
@@ -50,7 +50,7 @@
                     <f:Steady RateMin="0.7" RateMax="1.3" />
                 </f:Emitter.Counter>
                 <f:Emitter.Initializers>
-                    <f:SharedImage ImageUri="../Image/Cloud.png" MaterialType="Emissive" />
+                    <f:SharedImage ImagePath="../Image/Cloud.png" MaterialType="Emissive" />
                     <f:Position Zone="{StaticResource positionCloudZone}" />
                     <f:Velocity Zone="{StaticResource speedCloudZone}" />
                     <f:AlphaInit MinAlpha="0.3" MaxAlpha="0.4" />
