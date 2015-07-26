@@ -1,0 +1,18 @@
+﻿{
+  "typeId": "image",
+  "title": "大合神クジラちゃん",
+  "author": "Interlaken",
+  "homepage": "http://garnet-alice.net/character/",
+  "mail": "ebifrier@gmail.com",
+
+  "imageList":
+  [
+    {"image":"naku.png",    "min":-100000, "max": -1500},
+    {"image":"okoru.png",   "min":  -1500, "max":  -700},
+    {"image":"gununu.png",  "min":   -700, "max":  -300},
+    {"image":"default.png", "min":   -300, "max":   300},
+    {"image":"ehehe.png",   "min":    300, "max":   700},
+    {"image":"doya.png",    "min":    700, "max":  1500},
+    {"image":"peace.png",   "min":   1500, "max":100000}
+  ]
+}
