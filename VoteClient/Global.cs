@@ -29,7 +29,7 @@ namespace VoteSystem.Client
         /// アプリの更新用URLです。
         /// </summary>
         public static readonly string UpdateUrl =
-            @"http://garnet-alice.net/programs/votesystem/update/versioninfo.xml";
+            @"http://garnet-alice.net/programs/okiami/update/versioninfo.xml";
 
         /// <summary>
         /// プラグインが読み込まれたときに呼ばれます。
