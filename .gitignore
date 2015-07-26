@@ -1,9 +1,9 @@
-PluginShogi/obj/
-TimeController/obj/
-VoteClient/obj/
-VoteProtocol/bin/
-VoteProtocol/obj/
-VoteServer/obj/
+obj/
 bin/
-*.userprefs
 dist/Okiami_*
+
+*.suo
+*.user
+*.userprefs
+*.o
+*.obj
