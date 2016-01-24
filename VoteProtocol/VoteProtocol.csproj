@@ -72,9 +72,8 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="protobuf-net, Version=1.0.0.280, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Ragnarok\externals\net\protobuf-net.dll</HintPath>
+    <Reference Include="protobuf-net">
+      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -128,6 +127,10 @@
     <Compile Include="Xaml\VoteBackgroundConverter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Ragnarok\Ragnarok.Net.ProtoBuf\Ragnarok.Net.ProtoBuf.csproj">
+      <Project>{d4936bfc-bc3d-4bca-a15c-2f5d173b7513}</Project>
+      <Name>Ragnarok.Net.ProtoBuf</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Ragnarok\Ragnarok.Presentation\Ragnarok.Presentation.csproj">
       <Project>{2E5515A8-7B34-44A2-9C50-F423C5F87798}</Project>
       <Name>Ragnarok.Presentation</Name>
@@ -142,6 +145,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="VoteProtocol.snk" />
   </ItemGroup>
   <ItemGroup>

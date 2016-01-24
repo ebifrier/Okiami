@@ -7,3 +7,4 @@ dist/Okiami_*
 *.userprefs
 *.o
 *.obj
+packages/
